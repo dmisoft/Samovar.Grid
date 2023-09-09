@@ -1,0 +1,89 @@
+﻿@using Microsoft.AspNetCore.Components
+@using Data
+@using System.Threading.Tasks
+@using System.Threading
+
+@if (ForecastData.IsLoaded)
+{
+    <div>@text</div>
+}
+else
+{
+    <div class="d-flex">
+        <button @onclick="cancel" class="mr-4">cancel</button>
+        <div>@text</div>
+    </div>
+}
+
+@code{
+    CancellationTokenSource cancellationTokenSource;
+    string text = "loading...";
+    private WeatherForecast _forecastData;
+
+    [Parameter]
+    public WeatherForecast ForecastData
+    {
+        get { return _forecastData; }
+        set
+        {
+            text = "loading...";
+            _forecastData = value;
+            cancellationTokenSource?.Cancel();
+            cancellationTokenSource = new CancellationTokenSource();
+            var token = cancellationTokenSource.Token;
+
+            Task.Run(() =>
+            {
+                if (!token.IsCancellationRequested)
+                {
+                    try
+                    {
+                        text = SetDataIntern(token);
+                        text += "  ---  " + _forecastData.Position.ToString();
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        text = "OperationCanceledException canceled";
+                    }
+                    catch (Exception)
+                    {
+                        text = "Exception failed";
+                    }
+
+                    if (!token.IsCancellationRequested)
+                    {
+                        cancellationTokenSource = null;
+                    }
+                    InvokeAsync(StateHasChanged);
+
+                }
+                else
+                {
+                }
+            }, token);
+
+        }
+    }
+
+    [Parameter]
+    public EventCallback<WeatherForecast>
+    ForecastDataChanged
+    { get; set; }
+
+    void cancel()
+    {
+        cancellationTokenSource?.Cancel();
+
+    }
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+
+    string SetDataIntern(CancellationToken token)
+    {
+        return ForecastData.LongRunnigTask(token);
+    }
+
+
+}

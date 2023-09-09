@@ -1,0 +1,22 @@
+﻿@typeparam TItem
+@inherits SmDesignComponentBase
+
+<tr>
+    @if (LayoutService.ShowDetailRow.SubjectValue)
+    {
+        <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;">
+            <div class="s-flex s-flex-row s-align-content-center s-justify-content-center"></div>
+        </td>
+    }
+    <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;" colspan="@(ColumnService.AllColumnModels.Where(c => c.ColumnType == DataGridColumnType.Data || c.ColumnType == DataGridColumnType.Command).Count())">
+        <div class="row">
+            <GridRowEditing_Body RowModel=RowModel />
+        </div>
+        <div class="row">
+            <div class="col s-flex justify-content-end">
+                <button class="btn btn-outline-primary mx-1" @onclick="@(() => EditingService.RowEditCommit())">update</button>
+                <button class="btn btn-outline-secondary mx-1" @onclick="@(() => EditingService.RowEditCancel())">cancel</button>
+            </div>
+        </div>
+    </td>
+</tr>

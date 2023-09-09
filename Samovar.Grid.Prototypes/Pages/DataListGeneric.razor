@@ -1,0 +1,32 @@
+﻿@page "/datalistgeneric"
+@using Samovar.Grid.Prototypes.Components
+@using Samovar.Grid.Prototypes.Data
+
+@inject WeatherForecastService ForecastService
+
+<h1>A generic list of Person</h1>
+
+<DataList Data=@mitarbeiterList>
+    @context.ToString()
+</DataList>
+
+@code
+{
+    //private IEnumerable<WeatherForecast> People;
+    private List<Mitarbeiter> mitarbeiterList;
+
+    protected override void OnInitialized()
+    {
+        //People = await ForecastService.GetForecastAsync(DateTime.Now.Date);
+        mitarbeiterList = new List<Mitarbeiter>();
+        mitarbeiterList.Add(new Mitarbeiter { Name = "Name 1", Vorname = "Vorname 1", Abteilung = 1, Team = "Team 11" });
+        mitarbeiterList.Add(new Mitarbeiter { Name = "Name 2", Vorname = "Vorname 2", Abteilung = 1, Team = "Team 11" });
+        mitarbeiterList.Add(new Mitarbeiter { Name = "Name 3", Vorname = "Vorname 3", Abteilung = 1, Team = "Team 12" });
+        mitarbeiterList.Add(new Mitarbeiter { Name = "Name 4", Vorname = "Vorname 4", Abteilung = 2, Team = "Team 21" });
+        mitarbeiterList.Add(new Mitarbeiter { Name = "Name 5", Vorname = "Vorname 5", Abteilung = 2, Team = "Team 21" });
+        mitarbeiterList.Add(new Mitarbeiter { Name = "Name 6", Vorname = "Vorname 6", Abteilung = 3, Team = "Team 31" });
+        mitarbeiterList.Add(new Mitarbeiter { Name = "Name 7", Vorname = "Vorname 7", Abteilung = 4, Team = "Team 41" });
+        mitarbeiterList.Add(new Mitarbeiter { Name = "Name 8", Vorname = "Vorname 8", Abteilung = 4, Team = "Team 41" });
+
+    }
+}

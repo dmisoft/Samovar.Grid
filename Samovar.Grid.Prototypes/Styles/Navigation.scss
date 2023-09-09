@@ -1,0 +1,35 @@
+﻿nav {
+    @extend .navbar;
+    @extend .navbar-expand-lg;
+    @extend .navbar-light;
+    @extend .bg-light;
+}
+
+nav > a {
+    @extend .navbar-brand;
+}
+
+nav > button {
+    @extend .navbar-toggler;
+}
+
+nav > div {
+    @extend .navbar-collapse;
+}
+
+nav > div > ul {
+    @extend .navbar-nav;
+}
+
+nav > div > ul > li {
+    @extend .navbar-item !optional;
+}
+
+nav > div > ul > li > a {
+    @extend .nav-link;
+}
+
+.meincss  {
+    @extend .nav-link;
+    background-color:cadetblue;
+}

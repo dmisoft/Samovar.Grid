@@ -1,0 +1,159 @@
+﻿@page "/griddatasize"
+
+@using System.Linq
+
+@inject WeatherForecastService ForecastService
+
+<h1>Grid data size test (pageable)</h1>
+<div class="row">
+    <button class="btn btn-primary col m-2" @onclick="AddNewRow">add new row</button>
+    <button class="btn btn-primary col m-2" @onclick="CreateNewDataSet">create new data set</button>
+    <button class="btn btn-primary col m-2" @onclick="ClearDataSet">clear data set</button>
+    <button class="btn btn-primary col m-2" @onclick="FiveRowsDataSet">5 rows data set</button>
+    <button class="btn btn-primary col m-2" @onclick="a333RowsDataSet">333 rows data set</button>
+    <button class="btn btn-primary col m-2" @onclick="RowsDataSet_1Row">1 rows data set</button>
+</div>
+
+<div class="row">
+    <div class="form-inline col">
+        <label>Data amount:</label>
+        <input type="number" @bind="dataAmount" />
+        <button class="btn btn-primary" @onclick="RowsDataSet_Amount">create data set</button>
+    </div>
+</div>
+
+<SamovarGrid Data="@forecasts1"
+             OrderFieldByDefault="@nameof(WeatherForecast.Position)"
+             OrderDesc="false"
+             PageSize="20"
+             Height="400px"
+             RowEditBegin="@((WeatherForecast data)=>RowEditBeginHandler(data))"
+             RowEditCommit="@((GridRowEditEventArgs<WeatherForecast> args) => RowEditCommitHandler(args))"
+             RowEditCancel="RowEditCancelHandler"
+             Headless="false"
+             SelectedRowClass="bg-warning" FilterMode="@GridFilterMode.FilterRow">
+    <GridColumns>
+        <GridColumn Title="Pos" Field="@nameof(WeatherForecast.Position)" Width="100px" />
+        <GridColumn Title="Date" Field="@nameof(WeatherForecast.Date)" />
+        <GridColumn Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" />
+        <GridColumn Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" />
+        <GridColumn Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="100px" />
+        <GridCommandColumn Width="110px">
+            
+            
+        </GridCommandColumn>
+    </GridColumns>
+</SamovarGrid>
+@*<SamovarGridProServerTest.Components.WeatherForecastPanel Data="@actionItem">
+
+</SamovarGridProServerTest.Components.WeatherForecastPanel>*@
+<div class="form-group">
+    <label class="mr-2">Grid height</label>
+    <input @bind-value="@gridHeight" @bind-value:event="onchange" />
+</div>
+
+<h4>Datasize</h4>
+<div>@forecasts1.Count()</div>
+
+<h4>Action</h4>
+<div>@selectedAction</div>
+
+<h4>Action row item</h4>
+<div>@actionItem</div>
+
+@code{
+    int dataAmount = 1000;
+    string gridHeight = "600px";
+
+    string selectedAction { set; get; }
+    WeatherForecast actionItem { set; get; }
+
+    List<WeatherForecast> forecasts1 = new List<WeatherForecast>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts1 = (await ForecastService.GetForecastAsync(DateTime.Now, 333)).ToList();
+        StateHasChanged();
+    }
+
+    void RowSelectedHandler(GridRowEventArgs args)
+    {
+        actionItem = (WeatherForecast)args.RowData;
+        selectedAction = "RowSelected";
+    }
+
+    void RowDeleteBeginHandler(GridRowEventArgs args)
+    {
+        actionItem = (WeatherForecast)args.RowData;
+        selectedAction = "RowDeleteBegin";
+    }
+
+    void RowDeleteCancelHandler(GridRowEventArgs args)
+    {
+        actionItem = (WeatherForecast)args.RowData;
+        selectedAction = "RowDeleteCancel";
+    }
+
+    void RowDeleteCommitHandler(GridRowEventArgs args)
+    {
+        actionItem = (WeatherForecast)args.RowData;
+        this.forecasts1.Remove((WeatherForecast)args.RowData);
+        selectedAction = "RowDeleteCommit";
+    }
+
+    void RowEditCommitHandler(GridRowEditEventArgs<WeatherForecast> args)
+    {
+        WeatherForecast item = args.NewData;
+    }
+
+    void RowEditBeginHandler(WeatherForecast item)
+    {
+        actionItem = item;
+        selectedAction = "RowEditBegin";
+    }
+
+    void RowEditCancelHandler()
+    {
+        selectedAction = "RowEditCancel";
+    }
+
+    void AddNewRow()
+    {
+        forecasts1.Add(new WeatherForecast
+        {
+            Date = new DateTime(2019, 1, 1),
+            Summary = "Summary",
+            TemperatureC = 33
+        });
+    }
+
+    async Task CreateNewDataSet()
+    {
+        forecasts1 = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
+    }
+
+    async Task FiveRowsDataSet()
+    {
+        forecasts1 = (await ForecastService.GetFiveForecastAsync(DateTime.Now)).ToList();
+    }
+
+    async Task a333RowsDataSet()
+    {
+        forecasts1 = (await ForecastService.Get333ForecastAsync(DateTime.Now)).ToList();
+    }
+
+    async Task RowsDataSet_1Row()
+    {
+        forecasts1 = (await ForecastService.GetForecastAsync(DateTime.Now, 1)).ToList();
+    }
+
+    async Task RowsDataSet_Amount()
+    {
+        forecasts1 = (await ForecastService.GetForecastAsync(DateTime.Now, this.dataAmount)).ToList();
+    }
+
+    void ClearDataSet()
+    {
+        forecasts1.Clear();
+    }
+}

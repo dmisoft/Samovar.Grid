@@ -1,0 +1,35 @@
+﻿@using Samovar.Grid.ZPrototypes.Data
+@typeparam T
+<h3>DataGridTest</h3>
+
+@foreach (var rowModel in rx.ViewModelSrc.ViewModel)
+{
+	<div>@rowModel.ToString()</div>
+}
+
+@code {
+	[Parameter]
+	public IEnumerable<T> Data
+	{
+		get { return null; }
+		set
+		{
+			rx.rxQueuePubSub.Enqueue(new JobA<T>
+			{
+				Data = value,
+				Grid = this
+			});
+		}
+	}
+
+	Rx<T> rx = new Rx<T>();
+
+	[Parameter]
+	public int StrData { get; set; }
+	
+	internal void Refresh()
+	{
+		InvokeAsync(StateHasChanged);
+	}
+
+}

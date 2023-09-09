@@ -1,0 +1,32 @@
+﻿@page "/TableBasicFullViewportHeight"
+@using System.Linq
+
+@inject WeatherForecastService ForecastService
+
+<h1>Table Basic (Full Viewport Height)</h1>
+
+<SamovarGrid Data="@forecasts1"
+             OrderFieldByDefault="@nameof(WeatherForecast.TemperatureC)"
+             OrderDesc="true"
+             PageSize="20"
+             PagerSize="10"
+             Height="calc(100vh - 200px)"
+             Width="100%">
+    <GridColumns>
+        <GridColumn Title="Date" Field="@nameof(WeatherForecast.Date)" />
+        <GridColumn Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" />
+        <GridColumn Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" />
+        <GridColumn Title="Summary" Field="@nameof(WeatherForecast.Summary)" />
+        <GridCommandColumn />
+    </GridColumns>
+</SamovarGrid>
+
+
+@code{
+    List<WeatherForecast> forecasts1 = new List<WeatherForecast>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts1 = (await ForecastService.GetForecastAsync(DateTime.Now, 1000)).ToList();
+    }
+}

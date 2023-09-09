@@ -1,0 +1,114 @@
+﻿dotnet new razorclasslib -n SamovarGridPro
+
+Feature 2.1.1
+- Virtual loading spinner
+
+Features 2.2.0
+- Pageable-Footer as separate component.	-> DONE
+- Filter row.								-> DONE
+
+Features 2.3.0
+- Columns auto generate							-> IN PROGRESS
+- Virtual Columns								-> must have, performance impact by many cols in virtual scroll mode
+- ScrollToPosition								-> IN PROGRESS, Pageable Handling
+
+Features 2.4.0
+- EventCallback<> to Action<>
+- Selection binding
+- Multiselect
+- Show only selected (multiselect mode)
+- Edit form (incl edit mode switching)
+- Filter over all columns
+- Frozen columns (locked)
+- Command column without spinner during loading
+- Component for default row
+- Column Resizable="false/true"
+- s-noselect after column resizing should be deactivated
+- globalization
+- Ansicht als Spaltenliste
+	-----------------------------
+		Id			1
+		Name		Mustermann
+		Vorname		Max
+	-----------------------------
+		Id			2
+		Name		Mustermann
+		Vorname		Eva
+	-----------------------------
+
+<GridToolBar>
+        <GridCommandButton Command="Add" Icon="add">Add Employee</GridCommandButton>
+</GridToolBar>
+
+- Adding items (depend on edit mode: in-row, in-dialog)
+	- 'Add item' in-row
+	- 'Add item' in-dialog
+- Editing items (depend on edit mode: in-row, in-dialog)
+	- 'Add item' in-row						-> DONE
+	- 'Add item' in-dialog					-> TODO
+
+- Column only read mode
+- Bugs:
+	- 'Page 1 of 0'
+	- after filtering ViewCollection is broken
+
+- Nullable types handling
+- Nullable types handling Tests
+	
+- templated 'no data' panel
+- templated 'data loading' panel
+- SASS variables
+- OrderDesc rename. Schould be with *default
+- Goto page function. 
+	Invoke with @ref
+	Pager with input field for page number
+- Observable Collection
+
+Ideen
+0. Donat service. Paypal, Cryptocurrency, ...
+1. Binding for selected rows
+	for single selection automaticaly raise event OnSelectionChange
+2. Multiselection
+3. Set row not as selected after switch to editmode
+4. default sorting symbol after first rendering
+5. PageSize > 0
+6. Headless mode test
+
+TODO für feature-colwidth-changing
+1. DummyRowModel soll auch die Dummy Commands erhalten. Damit wird das initiale Offset für Preloadzeilen besser berechnet.
+2. Col Width Change in Headless mode
+3. [CascadingParameter(Name = "datagrid-container")]
+        public SamovarGrid DataGrid { get; set; }
+
+		überall gleichen Identifier nutzen. Es gibt im Moment 'grid' und 'DataGrid'
+
+OrderFieldByDefault. Crash beim Verweis auf nicht existierendes Klassenfeld
+
+Features 3.0.0
+Generica für GridRowEventArgs<T>
+Events Namensnomenklatur ändern. Präfix 'On' wegstreichen.
+
+
+## Sample 4. 
+
+```html
+
+```
+```csharp
+@code{
+    
+}
+```
+
+
+Doku für Version 5
+<!--ColumnCellTemplate></!--ColumnCellTemplate-->
+Standard Werte für Doku
+Edit modes für Virtuellen Modus implementieren
+preventDefault um eigenes KontextMenü aufzubauen z.B.
+Keyboard Navigation im Multiselect Modus funkt nicht (gesamte Funktion zuerst deaktivieren)
+
+Styling
+- Load spinner during filtering
+- @DataGrid.FilterToggleButtonClass
+- @DataGrid.PaginationClass

@@ -1,0 +1,21 @@
+﻿$primary-color: #333;
+
+%s-var-table {
+    @extend .table;
+    @extend .table-striped;
+    @extend .table-bordered;
+    @extend .table-sm;
+    @extend .table-dark;
+}
+
+%s-var-thead {
+    @extend .thead-light
+}
+
+.s-table {
+    @extend %s-var-table;
+}
+
+.s-thead {
+    @extend %s-var-thead;
+}

@@ -1,0 +1,7 @@
+﻿@using System.Globalization
+@typeparam TItem
+@inherits DataGridFilterCellBase<TItem, char?>
+
+<div class="s-flex s-flex-row">
+    <input type="text" maxlength="1" style="min-width:10px;" class="flex-grow-1" @bind="InnerValue" @bind:event="onchange" />
+</div>

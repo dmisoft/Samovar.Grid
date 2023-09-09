@@ -1,0 +1,25 @@
+﻿@*@inherits MessageBoxBase
+
+<div class="modal fade" id="@id" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Modal Heading</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div>
+                    Dialog id: @id
+                </div>
+                <div>
+                    @Text
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" @onclick="OnDialogClosed">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>*@

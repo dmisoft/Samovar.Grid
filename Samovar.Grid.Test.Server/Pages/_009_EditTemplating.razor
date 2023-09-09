@@ -1,0 +1,209 @@
+﻿@page "/_009_EditTemplating"
+
+@using System.ComponentModel.DataAnnotations
+
+<h1>Edit template</h1>
+<button @onclick="Refresh">refresh</button>
+
+<form>
+    <div class="form-group row mb-2">
+        <label for="gridEditMode" class="col-2 col-form-label">Edit mode:</label>
+        <div class="col-4">
+            <select id="gridEditMode" @bind="editMode" class="custom-select">
+                <option value="@GridEditMode.Form">Form</option>
+                <option value="@GridEditMode.Popup">Popup</option>
+            </select>
+        </div>
+    </div>
+</form>
+
+<SamovarGrid Data="@data"
+             PageSize="25"
+             SelectedRowClass="bg-warning"
+             FilterMode="@GridFilterMode.FilterRow"
+             AfterFilter="AfterFilter"
+             AfterSort="AfterSort"
+             AfterPageChange="AfterPageChange"
+             Height="600px"
+             EditMode="editMode"
+             RowEditBegin="@((WeatherForecast data) => RowEditBeginHandler(data))"
+             RowInsertBegin="RowInsertBeginHandler"
+             @ref="grid">
+    <GridColumns>
+        <GridCommandColumn Width="110px" NewButtonVisible="true" EditButtonVisible="true" DeleteButtonVisible="true" />
+
+        <GridColumn Title="Pos" Field="@nameof(WeatherForecast.Position)" />
+        <GridColumn Title="Date" Field="@nameof(WeatherForecast.Date)" />
+        <GridColumn Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" />
+        <GridColumn Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" />
+        <GridColumn Title="Summary" Field="@nameof(WeatherForecast.Summary)" />
+    </GridColumns>
+    <InsertDataTemplate>
+        <EditForm Model="@InsertContext" Context="InsertFormContext" OnValidSubmit="@HandleValidInsertingSubmit">
+            <DataAnnotationsValidator />
+            <h5>Insert-Modus</h5>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Summary</label>
+                        <InputText @bind-Value="InsertContext.Summary" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <ValidationSummary />
+            </div>
+            <div class="row">
+                <div class="col s-flex justify-content-end">
+                    <button type="submit" class="btn btn-outline-primary mx-1">hinzufügen</button>
+                    <button type="button" class="btn btn-outline-secondary mx-1" @onclick="OnCancelInsertingButtonClick">abbrechen</button>
+                </div>
+            </div>
+        </EditForm>
+    </InsertDataTemplate>
+    <EditFormTemplate>
+        <EditForm Model="@EditContext"  Context="EditFormContext" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <h5>Edit-Modus</h5>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Temp.C</label>
+                        <InputText @bind-Value="EditContext.Summary" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <ValidationSummary />
+            </div>
+            <div class="row">
+                <div class="col s-flex justify-content-end">
+                    <button type="submit" class="btn btn-outline-primary mx-1">aktuallisieren</button>
+                    <button type="button" class="btn btn-outline-secondary mx-1" @onclick="OnCancelButtonClick">abbrechen</button>
+                </div>
+            </div>
+        </EditForm>
+    </EditFormTemplate>
+</SamovarGrid>
+
+@code{
+    [Inject]
+    protected IJSRuntime JsRuntime { get; set; }
+
+    [Inject]
+    private WeatherForecastService ForecastService { get; set; }
+
+    List<WeatherForecast> data;
+    FormEditContext EditContext = null;
+    FormInsertContext InsertContext = null;
+    SamovarGrid<WeatherForecast> grid;
+
+    GridEditMode editMode = GridEditMode.Form;
+
+    protected override async Task OnInitializedAsync()
+    {
+        data = (await ForecastService.GetMockData()).ToList();
+    }
+
+    int filtered;
+    string lastSortColumn;
+    int newPage;
+
+    void AfterFilter(GridFilterEventArgs args)
+    {
+        filtered++;
+    }
+
+    void AfterSort(GridSortEventArgs args)
+    {
+        lastSortColumn = args.SortColumn;
+    }
+
+    void AfterPageChange(GridPagingEventArgs args)
+    {
+        newPage = args.NewPageNumber;
+    }
+
+    void RowEditBeginHandler(WeatherForecast item)
+    {
+        EditContext = new FormEditContext(item);
+    }
+
+    void RowInsertBeginHandler()
+    {
+        InsertContext = new FormInsertContext();
+    }
+
+    async Task OnCancelInsertingButtonClick()
+    {
+        await grid.EndRowInserting();
+        EditContext = null;
+    }
+
+    async Task OnCancelButtonClick()
+    {
+        await grid.CancelRowEdit();
+        EditContext = null;
+    }
+
+    async Task HandleValidSubmit()
+    {
+        EditContext.DataItem.Summary = EditContext.Summary;
+        //EditContext.DataItem.Region = EditContext.Region;
+        //EditContext.DataItem.City = EditContext.City;
+        //if (EditContext.IsNewRow)
+        //{
+        //    Vacancies = (new Vacancy[] { EditContext.DataItem }).Concat(Vacancies);
+        //}
+        await grid.CancelRowEdit();
+    }
+
+    async Task HandleValidInsertingSubmit()
+    {
+        data.Insert(0,new WeatherForecast
+        {
+            Position = 10000,
+            Summary = InsertContext.Summary
+        });
+        //grid.ResetOrder();
+        //await grid.RefreshAsync();
+        await grid.EndRowInserting();
+        InsertContext = null;
+    }
+
+    class FormEditContext
+    {
+        public FormEditContext(WeatherForecast dataItem)
+        {
+            DataItem = dataItem;
+            //Summary = DataItem.Summary;
+            //Region = DataItem.Region;
+            //City = DataItem.City;
+        }
+
+        public WeatherForecast DataItem { get; set; }
+
+        [Required]
+        [StringLength(maximumLength: 32, MinimumLength = 4, ErrorMessage = "The description should be 4 to 32 characters.")]
+        public string Summary { get; set; }
+        
+        //public Action StateHasChanged { get; set; }
+    }
+
+    class FormInsertContext
+    {
+        public FormInsertContext()
+        {
+        }
+
+        [Required]
+        [StringLength(maximumLength: 32, MinimumLength = 4, ErrorMessage = "The description should be 4 to 32 characters.")]
+        public string Summary { get; set; }
+        
+        //public Action StateHasChanged { get; set; }
+    }
+
+    void Refresh(){
+        InvokeAsync(StateHasChanged);
+    }
+}

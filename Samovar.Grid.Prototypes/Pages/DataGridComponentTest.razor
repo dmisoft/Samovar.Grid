@@ -1,0 +1,26 @@
+﻿@page "/datagridtest"
+@using Samovar.Grid.Prototypes.Data
+@inject WeatherForecastService DataService
+
+@*<div>
+    
+</div>
+<div>
+
+    
+</div>
+<p>Current count: @currentCount</p>
+*@
+<div class="row">
+<button class="btn btn-primary" @onclick="ChangeElementAt0">Change element at 0</button>
+    
+</div>
+<div class="row">
+<button class="btn btn-primary" @onclick="RemoveElementAt0">Remove element at 0</button>
+    
+</div>
+<div class="row">
+<button class="btn btn-primary" @onclick="LastingTest">Lasting Test</button>
+   
+</div>
+<DataGridTest Data="@data" />

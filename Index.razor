@@ -1,0 +1,91 @@
+﻿@page "/"
+@using Samovar
+@using Samovar.Common
+@using System.Linq
+@using SamovarGridProServerTest.Data
+@inject WeatherForecastService ForecastService
+@*@attribute [Authorize]*@
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SamovarGrid Data="@forecasts"
+             OrderFieldByDefault="@nameof(WeatherForecast.TemperatureC)"
+             OrderDesc="true"
+             Pageable="true"
+             PageSize="25"
+             Height="600px"
+             PagerSize="10" OnRowSelected="@RowSelectedHandler">
+    <SamovarGridColumns>
+        <SamovarGridColumn Title="Date" Field="@nameof(WeatherForecast.Date)" />
+        <SamovarGridColumn Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" />
+        <SamovarGridColumn Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" />
+        <SamovarGridColumn Title="Summary" Field="@nameof(WeatherForecast.Summary)" />
+        <SamovarGridCommandColumn>
+            <SamovarGridCommand CommandName="edit" CommandType=Samovar.Common.GridRowCommandType.Edit />
+            <SamovarGridCommand CommandName="delete" CommandType=Samovar.Common.GridRowCommandType.Delete />
+        </SamovarGridCommandColumn>
+    </SamovarGridColumns>
+    <SamovarGridEventManager OnRowSelected="@RowSelectedHandler" />
+</SamovarGrid>
+
+<h4>Action</h4>
+<div>@selectedAction</div>
+
+<h4>Action row item</h4>
+<div>@actionItem</div>
+
+@code{
+    string selectedAction { set; get; }
+    string actionItem { set; get; }
+
+    List<WeatherForecast> forecasts;// = new List<WeatherForecast>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
+    }
+
+    void RowSelectedHandler(GridRowEventArgs args)
+    {
+        actionItem = ((WeatherForecast)args.RowData).Summary;
+        selectedAction = "RowSelected";
+    }
+
+    //void RowDeleteBeginHandler(GridRowEventArgs args)
+    //{
+    //    actionItem = ((WeatherForecast)args.RowData).Summary;
+    //    selectedAction = "RowDeleteBegin";
+    //}
+
+    //void RowDeleteCancelHandler(GridRowEventArgs args)
+    //{
+    //    actionItem = ((WeatherForecast)args.RowData).Summary;
+    //    selectedAction = "RowDeleteCancel";
+    //}
+
+    //void RowDeleteCommitHandler(GridRowEventArgs args)
+    //{
+    //    actionItem = ((WeatherForecast)args.RowData).Summary;
+    //    this.forecasts.Remove((WeatherForecast)args.RowData);
+    //    selectedAction = "RowDeleteCommit";
+    //}
+
+    //void RowEditBeginHandler(GridRowEventArgs args)
+    //{
+    //    actionItem = ((WeatherForecast)args.RowData).Summary;
+    //    selectedAction = "RowEditBegin";
+    //}
+
+    //void RowEditCancelHandler(GridRowEventArgs args)
+    //{
+    //    actionItem = ((WeatherForecast)args.RowData).Summary;
+    //    selectedAction = "RowEditCancel";
+    //}
+
+    //void RowEditCommitHandler(GridRowEventArgs args)
+    //{
+    //    actionItem = ((WeatherForecast)args.RowData).Summary;
+    //    selectedAction = "RowEditCommit";
+    //}
+}

@@ -1,0 +1,79 @@
+﻿@*@page "/dialog"
+@using SamovarGridProServerTest.Components
+
+@inherits PageComponent
+@implements IDialogablePage
+
+@DialogRender
+@MessageBoxRender
+
+@if (show)
+{
+    <MessageBox DialogClosed="((val)=> { show = false; StateHasChanged(); })" />
+}
+
+<button type="button" @onclick="ShowDialog">Create Dialog component</button>
+<button type="button" @onclick="ShowDialogFromBase">Create Dialog from base component</button>
+<div class="form-group">
+    <label>Int Property</label>
+    <input @bind="IntProperty" />
+</div>
+<EditForm Model="@editFormModel">
+    <DataAnnotationsValidator />
+    
+    <div class="form-group">
+        <InputText id="name" @bind-Value="@editFormModel.Name" />
+        <ValidationSummary />
+    </div>
+    <button type="submit">Submit</button>
+</EditForm>
+@code {
+
+    public int IntProperty { get; set; } = 123;
+    public bool show { set; get; }
+
+    public RenderFragment DialogRender { get; set; }
+
+    private void ShowDialog()
+    {
+        //show = !show;
+        MessageBox dialog = new MessageBox();
+        DialogRender = dialog.Show("Hallo aus MessageBox!");
+    }
+
+    private void ShowDialogFromBase()
+    {
+     
+     
+     this.ShowMessageBox("Hallo aus MessageBox!");
+    }
+
+    private RenderFragment RenderContent(ComponentBase instance)
+    {
+        var fragmentField = GetPrivateField(instance.GetType(), "_renderFragment");
+        var value = (RenderFragment)fragmentField.GetValue(instance);
+        return value;
+    }
+
+    private static System.Reflection.FieldInfo GetPrivateField(Type t, String name)
+    {
+        const System.Reflection.BindingFlags bf = System.Reflection.BindingFlags.Instance |
+                                System.Reflection.BindingFlags.NonPublic |
+                                System.Reflection.BindingFlags.DeclaredOnly;
+        System.Reflection.FieldInfo fi;
+        while ((fi = t.GetField(name, bf)) == null && (t = t.BaseType) != null) ;
+        return fi;
+    }
+
+    //private void dialogClosed(bool val) {
+    //    show = false;
+    //    StateHasChanged();
+    //}
+
+    private EditFormModel editFormModel = new EditFormModel();
+
+    private void HandleValidSubmit()
+    {
+        Console.WriteLine("OnValidSubmit");
+    }
+}*@

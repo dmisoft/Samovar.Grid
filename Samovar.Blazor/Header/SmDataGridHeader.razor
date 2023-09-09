@@ -1,0 +1,39 @@
+﻿@using  System.Globalization
+@typeparam TItem
+@inherits SmDesignComponentBase
+
+<table @ref="GridHeaderRef" style="margin:0;border:0;table-layout:fixed; @(GridLayoutService.MinGridWidth.SubjectValue > 0 ? "min-width:" + GridLayoutService.MinGridWidth.SubjectValue.ToString(CultureInfo.InvariantCulture) + "px;" : "")" class="@GridLayoutService.TableTagClass.SubjectValue">
+	<thead class="@GridLayoutService.TheadTagClass.SubjectValue">
+		<tr>
+			@{
+				@if (GridLayoutService.ShowDetailRow.SubjectValue)
+				{
+					<th style="@(GridColumnService.DetailExpanderColumnModel.VisibleWidthStyle + "padding-right:0;")" id="@(GridColumnService.DetailExpanderColumnModel.VisibleGridColumnCellId)"></th>
+				}
+
+				<!--listing by column order only for columntypes Data and Command -->
+				foreach (var colMeta in GridColumnService.AllColumnModels)
+				{
+					switch (colMeta.ColumnType)
+					{
+						case DataGridColumnType.Data:
+							<SmDataGridHeaderCell Model=@((IDataColumnModel)colMeta) />
+							break;
+						case DataGridColumnType.Command:
+							<th style="@(colMeta.VisibleWidthStyle)" id="@(colMeta.VisibleGridColumnCellId)">
+								@if (((ICommandColumnModel)colMeta).NewButtonVisible.SubjectValue)
+								{
+									<div class="s-flex s-flex-row s-align-content-center s-justify-content-center">
+										<button class="btn btn-primary btn-sm" @onclick="@RowInsering">new</button>
+									</div>
+								}
+							</th>
+							break;
+					}
+				}
+
+				<th style="@(GridColumnService.EmptyColumnModel.VisibleWidthStyle)" id="@(GridColumnService.EmptyColumnModel.VisibleGridColumnCellId)"></th>
+			}
+		</tr>
+	</thead>
+</table>

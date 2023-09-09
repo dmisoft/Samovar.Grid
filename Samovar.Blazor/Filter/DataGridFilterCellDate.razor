@@ -1,0 +1,32 @@
+﻿@using System.Globalization
+@typeparam TItem
+@inherits DataGridFilterCellBase<TItem, DateTime?>
+@*
+<div class="s-flex s-flex-row">
+    <button class="@(LayoutService.FilterToggleButtonClass.SubjectValue)" @onclick="ShowMenu" id="@DropdownMenuButtonId" style="padding-right:3px;padding-left:3px;">
+        @switch (_menuMode)
+        {
+            case 0:
+                @("=")
+                break;
+            case 1:
+                @(">")
+                break;
+            case 2:
+                @(">=")
+                break;
+            case 3:
+                @("<")
+                break;
+            case 4:
+                @("<=")
+                break;
+            default:
+                break;
+        }
+    </button>
+    <input style="min-width:10px;" type="date" class="flex-grow-1" @bind="InnerValue" @bind:event="onchange" @bind:format="yyyy-MM-dd" />
+</div>*@
+<div class="s-flex s-flex-row">
+    <input style="min-width:10px;" type="date" class="flex-grow-1 form-control" @bind="InnerValue" @bind:event="onchange" @bind:format="yyyy-MM-dd" />
+</div>

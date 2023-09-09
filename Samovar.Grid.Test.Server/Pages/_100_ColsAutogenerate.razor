@@ -1,0 +1,20 @@
+﻿@page "/_100_AutoGenerateColumns"
+
+@inject WeatherForecastService ForecastService
+
+<h1>Autogenerate columns</h1>
+
+<h3>Standard column width 150px</h3>
+<SamovarGrid Data="@data" AutoGenerateColumns="true" />
+
+<h3 class="my-2">User defined column width</h3>
+<SamovarGrid Data="@data" AutoGenerateColumns="true" AutoGenerateColumnsWidth="250px" />
+
+@code{
+    IEnumerable<WeatherForecastMinViewModel> data;
+
+    protected override async Task OnInitializedAsync()
+    {
+        data = await ForecastService.GetForecastAsyncMinViewModel(DateTime.Now, 100);
+    }
+}

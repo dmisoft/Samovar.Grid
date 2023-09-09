@@ -1,0 +1,18 @@
+﻿@using  System.Globalization
+
+@inherits SmDesignComponentBase
+
+<th style="@(Model.VisibleWidthStyle + "padding-right:0;")" id="@(Model.VisibleGridColumnCellId)" data-toggle="tooltip" data-placement="top" title="@(Model.Title.SubjectValue)">
+	<div class="s-flex" style="margin:0px;padding:0px;">
+
+
+		<div @onclick=ColumnCellClick style="flex-grow:1;text-overflow:ellipsis;overflow:hidden;white-space: nowrap;cursor:pointer;display:block;"
+dropzone="DropZoneGridHeader" draggable="true" @ondragstart="@(()=>DragStartHandler(Model))" @ondrop="@(()=>DropHandler(Model))" ondragover="event.preventDefault()">
+			@(Model.Title.SubjectValue)
+		</div>
+		<div class="flex-grow">@((MarkupString)SortSymbol)</div>
+
+		<div style="cursor:ew-resize;float:right;width:7px" @onmousedown="((args) => OnMouseDown(args, Model))" draggable="false" ondrag="event.stopPropagation()" ondragover="event.stopPropagation()"></div>
+	</div>
+</th>
+

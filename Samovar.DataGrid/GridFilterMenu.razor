@@ -1,0 +1,69 @@
+﻿
+@using System.Globalization
+@using Microsoft.JSInterop
+
+@typeparam TItem
+
+<div class="s-popup" style="position:absolute;" id="@FilterMenuContainerId">
+    <div class="s-popuptext" id="@FilterMenuId">
+        <div>
+            @foreach (FilterOperand operand in OperandDictionary[FilterMenuDataType])
+            {
+                <a class="list-group-item list-group-item-action list-group-item-secondary" @onclick="(()=>OnMenuClick(operand.FilterMode))">@operand.Operand</a>
+            }
+        </div>
+    </div>
+</div>
+
+@code{
+    [Inject]
+    protected IJSRuntime JsRuntime { get; set; }
+
+    [CascadingParameter(Name = "datagrid-container")]
+    protected SamovarGrid<TItem> DataGrid { get; set; }
+
+    [Parameter]
+    public string FilterMenuContainerId { get; set; }
+    [Parameter]
+    public string FilterMenuId { get; set; }
+    [Parameter]
+    public FilterMenuDataTypeGroup FilterMenuDataType { get; set; }
+
+    Dictionary<FilterMenuDataTypeGroup, List<FilterOperand>> OperandDictionary = new Dictionary<FilterMenuDataTypeGroup, List<FilterOperand>>();
+    protected override void OnInitialized()
+    {
+        OperandDictionary.Add(FilterMenuDataTypeGroup.NumericFilterMenu, new List<FilterOperand> {
+            new FilterOperand { FilterMode = (byte)0, Operand = "=" },
+            new FilterOperand { FilterMode = (byte)1, Operand = ">" },
+            new FilterOperand { FilterMode = (byte)2, Operand = ">=" },
+            new FilterOperand { FilterMode = (byte)3, Operand = "<" },
+            new FilterOperand { FilterMode = (byte)4, Operand = "<=" },
+            });
+
+        OperandDictionary.Add(FilterMenuDataTypeGroup.StringFilterMenu, new List<FilterOperand> {
+            new FilterOperand { FilterMode = (byte)0, Operand = "*a*" },
+            new FilterOperand { FilterMode = (byte)1, Operand = "=" },
+            new FilterOperand { FilterMode = (byte)2, Operand = "a*" },
+            new FilterOperand { FilterMode = (byte)3, Operand = "*a" },
+            });
+        OperandDictionary.Add(FilterMenuDataTypeGroup.DateFilterMenu, new List<FilterOperand> {
+            new FilterOperand { FilterMode = (byte)0, Operand = "=" },
+            new FilterOperand { FilterMode = (byte)1, Operand = ">" },
+            new FilterOperand { FilterMode = (byte)2, Operand = ">=" },
+            new FilterOperand { FilterMode = (byte)3, Operand = "<" },
+            new FilterOperand { FilterMode = (byte)4, Operand = "<=" },
+            });
+        OperandDictionary.Add(FilterMenuDataTypeGroup.BooleanFilterMenu, new List<FilterOperand> {
+            new FilterOperand { FilterMode = (byte)0, Operand = "none" },
+            new FilterOperand { FilterMode = (byte)1, Operand = "true" },
+            new FilterOperand { FilterMode = (byte)2, Operand = "false" },
+            });
+
+        base.OnInitialized();
+    }
+
+    async Task OnMenuClick(byte filterMode)
+    {
+        await DataGrid.NotifierService.OnFilterModeChange(filterMode, FilterMenuContainerId);
+    }
+}

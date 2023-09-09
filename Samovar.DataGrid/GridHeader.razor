@@ -1,0 +1,63 @@
+﻿@using  System.Globalization
+@typeparam TItem
+
+@if (GridColumnService.Columns != null)
+{
+    <table @ref="GridHeaderRef" style="margin:0;border:0;table-layout:fixed; @(DataGrid.MinGridWidth > 0 ? "min-width:" + DataGrid.MinGridWidth.ToString(CultureInfo.InvariantCulture) + "px;" : "")" class="@DataGrid.TableTagClass">
+        <thead class="@DataGrid.TheadTagClass">
+            <tr>
+                @{
+                    @if (DataGrid.ShowDetailRow)
+                    {
+                        <th style="@(GridColumnService.DetailExpanderColumn.Value.VisibleWidthStyle + "padding-right:0;")" id="@(GridColumnService.DetailExpanderColumn.Value.VisibleGridColumnCellId)"></th>
+                    }
+
+                    <!--listing by column order only for columntypes Data and Command -->
+                    foreach (var colMeta in GridColumnService.Columns.Values.Where(c => c.ColumnType == GridColumnType.Data || c.ColumnType == GridColumnType.Command).OrderBy(c => c.ColumnOrder))
+                    {
+                        switch (colMeta.ColumnType)
+                        {
+                            case GridColumnType.Data:
+                                <th style="@(colMeta.VisibleWidthStyle + "padding-right:0;")" id="@(colMeta.VisibleGridColumnCellId)" data-toggle="tooltip" data-placement="top" title="@(colMeta.Title)">
+                                    <div class="s-flex" style="margin:0px;padding:0px;">
+                                        @if (!colMeta.SortingAscending.HasValue)
+                                        {
+                                            <div class="flex-grow"></div>
+                                        }
+                                        else if (colMeta.SortingAscending.Value)
+                                        {
+                                            <div class="flex-grow">&#x2BC5;</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="flex-grow">&#x2BC6;</div>
+                                        }
+
+                                        <div @onclick="@(() => DataGrid.ColumnCellClick(colMeta.Field))" style="flex-grow:1;text-overflow:ellipsis;overflow:hidden;white-space: nowrap;cursor:pointer;display:block;"
+                                             dropzone="DropZoneGridHeader" draggable="true" @ondragstart="@(()=>DragStartHandler(colMeta))" @ondrop="@(()=>DropHandler(colMeta))" ondragover="event.preventDefault()">@(colMeta.Title)</div>
+                                        <div style="cursor:ew-resize;float:right;width:3px" @onmousedown="((args) => OnMouseDown(args, colMeta))"></div>
+                                    </div>
+                                </th>
+                                break;
+                            case GridColumnType.Command:
+                                <th style="@(colMeta.VisibleWidthStyle)" id="@(colMeta.VisibleGridColumnCellId)">
+                                    @if (colMeta.NewButtonVisible)
+                                    {
+                                        <div class="s-flex s-flex-row s-align-content-center s-justify-content-center">
+                                            <button class="btn btn-primary btn-sm" @onclick="@RowInsering">new</button>
+                                        </div>
+                                    }
+                                </th>
+                                break;
+                        }
+                    }
+
+                    foreach (var colMeta in GridColumnService.Columns.Values.Where(c => c.ColumnType == GridColumnType.EmptyColumn))
+                    {
+                        <th style="@(colMeta.VisibleWidthStyle)" id="@(colMeta.VisibleGridColumnCellId)"></th>
+                    }
+                }
+            </tr>
+        </thead>
+    </table>
+}

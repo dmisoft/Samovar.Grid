@@ -1,0 +1,29 @@
+﻿@using  System.Globalization
+@typeparam TItem
+@inherits DataGridFilterCellBase<TItem, string>
+
+@*<div class="s-flex s-flex-row">
+    <button class="@LayoutService.FilterToggleButtonClass.SubjectValue" @onclick="ShowMenu" id="@DropdownMenuButtonId" style="padding-right:3px;padding-left:3px;">
+        @switch (_menuMode)
+        {
+            case 0:
+                @("*a*")
+                break;
+            case 1:
+                @("=")
+                break;
+            case 2:
+                @("a*")
+                break;
+            case 3:
+                @("*a")
+                break;
+            default:
+                break;
+        }
+    </button>
+    <input type="text" style="min-width:10px;" class="flex-grow-1" @bind="InnerValue" @bind:event="onchange" />
+</div>*@
+<div class="s-flex s-flex-row">
+    <input type="text" style="min-width:10px;" class="flex-grow-1 form-control" @bind="InnerValue" @bind:event="onchange" />
+</div>

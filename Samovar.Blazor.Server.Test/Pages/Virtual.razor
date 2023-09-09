@@ -1,0 +1,167 @@
+﻿@page "/virtual"
+
+@using Samovar.Blazor.Server.Test.Data
+@using System.ComponentModel.DataAnnotations
+@using System
+
+@inject WeatherForecastService ForecastService
+
+<h1>Weather forecast Test</h1>
+<div class="card" aria-hidden="true">
+  <div class="card-body">
+    <h5 class="card-title placeholder-glow">
+      <span class="placeholder col-6"></span>
+    </h5>
+    <p class="card-text placeholder-glow">
+      <span class="placeholder col-7"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-6"></span>
+      <span class="placeholder col-8"></span>
+    </p>
+    <a href="#" tabindex="-1" class="btn btn-primary disabled placeholder col-6"></a>
+  </div>
+</div>
+@if (false)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <button class="btn btn-primary" @onclick="loadData">load data</button>
+    <button class="btn btn-primary" @onclick="changeStyle">change style</button>
+    <button class="btn btn-primary" @onclick="changeFirstDataItem">change first data item</button>
+    <button class="btn btn-primary" @onclick="deselectSingleSelectedItem">deselct single selected item</button>
+    <div class="row">
+        <div class="col-10">
+            <SmDataGrid 
+                Data="forecasts1" 
+                FilterMode=DataGridFilterMode.FilterRow 
+                Height="450px" ShowDetailRow=true 
+                EditMode=GridEditMode.Popup
+                DataNavigationMode=DataGridNavigationMode.VirtualScrolling
+                SelectionMode=GridSelectionMode.SingleSelectedDataRow
+                RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
+                RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))"
+                @bind-SingleSelectedDataRow=selectedRow >
+        <Columns>
+            <SmDataGridColumn Title="Date1" Field="@nameof(WeatherForecast.Date)" Width="100px">
+                <CellShowTemplate>
+                    @{
+                        WeatherForecast data = context as WeatherForecast;
+                        <div>Template @data.Summary</div>
+                    }
+				</CellShowTemplate>
+			</SmDataGridColumn>
+            <SmDataGridColumn Title="Pos." Field="@nameof(WeatherForecast.Position)" Width="20px"/>
+            <SmDataGridColumn Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="200px"/>
+            <SmDataGridColumn Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="200px"/>
+            <SmDataGridColumn Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="200px"/>
+            <SmDataGridCommandColumn EditButtonVisible=true NewButtonVisible=true Width="250px"/>
+        </Columns>
+        <DetailRowTemplate Context="mydata">
+        @{
+            WeatherForecast data = mydata as WeatherForecast;
+                <div>@data.Date</div>
+                <div>@data.TemperatureC</div>
+                <div>@data.TemperatureF</div>
+        }
+    </DetailRowTemplate>
+    </SmDataGrid>
+        </div>
+        <div class="col-2">
+        @if(selectedRow != null)
+            {
+                <div>@("Summary " + selectedRow.Summary + " Temp. " + selectedRow.TemperatureC)</div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private List<WeatherForecast> forecasts1;
+    FormEditContext EditContext = null;
+    SmDataGrid<WeatherForecast> grid;
+
+    WeatherForecast selectedRow = null;
+    IEnumerable<WeatherForecast> selectedRows = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //forecasts1 = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
+        //selectedRow = forecasts1.First();
+    }
+
+    async Task loadData()
+    {
+        forecasts1 = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
+    }
+
+    string height = "450px";
+    Task changeStyle()
+    {
+        height = "800px";
+        return Task.CompletedTask;
+    }
+
+    Task changeFirstDataItem()
+    {
+        forecasts1[0].Summary = "my summary 1";
+        return Task.CompletedTask;
+    }
+
+    void RowEditBeginHandler(WeatherForecast item)
+    {
+        EditContext = new FormEditContext(item);
+    }
+
+    Task RowInsertingHandler(WeatherForecast item)
+    {
+        forecasts1 ??=new List<WeatherForecast>();
+        forecasts1 = ((new WeatherForecast[] { item }).Concat(forecasts1)).ToList();
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    Task RowRemovingHandler(WeatherForecast item)
+    {
+        forecasts1 = forecasts1.Except(new List<WeatherForecast> { item }).ToList();
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    async Task HandleValidSubmit()
+    {
+        EditContext.DataItem.Summary = EditContext.Summary;
+        await grid.CancelRowEdit();
+    }
+    async Task OnCancelButtonClick()
+    {
+        await grid.CancelRowEdit();
+        EditContext = null;
+    }
+    Task deselectSingleSelectedItem()
+    {
+        selectedRow = null;
+        return Task.CompletedTask;
+    }
+
+    class FormEditContext
+    {
+        public FormEditContext(WeatherForecast dataItem)
+        {
+            DataItem = dataItem;
+            //Summary = DataItem.Summary;
+            //Region = DataItem.Region;
+            //City = DataItem.City;
+        }
+
+        public WeatherForecast DataItem { get; set; }
+
+        [Required]
+        [StringLength(maximumLength: 32, MinimumLength = 4, ErrorMessage = "The description should be 4 to 32 characters.")]
+        public string Summary { get; set; }
+        
+        //public Action StateHasChanged { get; set; }
+    }
+}

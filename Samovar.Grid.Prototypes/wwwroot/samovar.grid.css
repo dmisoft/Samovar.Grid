@@ -1,0 +1,49 @@
+﻿/*
+    This file is to show how CSS and other static resources (such as images) can be
+    used from a library project/package.
+*/
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+.s-th-hidden {
+    padding: 0px !important;
+    height: 0px;
+    border-width: 0px !important;
+}
+
+.s-grid {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.s-grid .s-grid-container {
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex: 1 1 auto;
+	flex: 1 1 auto;
+	overflow: hidden;
+	position: relative;
+}
+
+.s-grid-content {
+    width: 100%;
+    min-height: 0;
+    overflow: auto;
+    overflow-x: auto;
+    overflow-y: scroll;
+    position: relative;
+    -ms-flex: 1;
+    flex: 1
+}
+
+.s-grid-content::after {
+	content: "";
+	display: block;
+	clear: both
+}

@@ -1,0 +1,30 @@
+﻿@using System.Globalization
+@typeparam TEntity
+@typeparam TValue
+
+<div class="s-flex s-flex-row">
+    <button class="@DataGrid.FilterToggleButtonClass" @onclick="ShowMenu" id="@DropdownMenuButtonId" style="padding-right:3px;padding-left:3px;">
+        @switch (mode)
+        {
+            case 0:
+                @("=")
+                break;
+            case 1:
+                @(">")
+                break;
+            case 2:
+                @(">=")
+                break;
+            case 3:
+                @("<")
+                break;
+            case 4:
+                @("<=")
+                break;
+            default:
+                break;
+        }
+    </button>
+    <input type="number" style="min-width:10px;" class="flex-grow-1" @bind-value="InnerValue" @bind-value:event="onchange" />
+    @*<button class="btn btn-secondary px-2" @onclick="ValueReset">x</button>*@
+</div>

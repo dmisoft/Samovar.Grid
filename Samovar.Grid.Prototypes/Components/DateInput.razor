@@ -1,0 +1,44 @@
+﻿@using Microsoft.AspNetCore.Components
+@using System.Globalization;
+
+<input type="text" id="@id" @onchange="OnDateChanged" value="@(date.ToString("dd . MM . yy"))" />
+
+@code
+{
+    [Inject]
+    protected IJSRuntime JsRuntime { get; set; }
+
+    private DateTime date;
+
+    [Parameter]
+    public DateTime Date
+    {
+        get { return date; }
+        set {  date = value; }
+    }
+
+
+    [Parameter]
+    public EventCallback<DateTime> DateChanged { get; set; }
+
+    string id = Guid.NewGuid().ToString();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JsRuntime.InvokeVoidAsync("ProtoFunctions.handleDateInput", id);
+        }
+    }
+
+    private Task OnDateChanged(ChangeEventArgs e)
+    {
+        CultureInfo ci = CultureInfo.InvariantCulture;
+        if (!DateTime.TryParseExact(e.Value.ToString().Replace(" ",""), "dd.MM.yy",ci, System.Globalization.DateTimeStyles.None, out DateTime date))
+        {
+
+        }
+
+        return DateChanged.InvokeAsync(date);
+    }
+}

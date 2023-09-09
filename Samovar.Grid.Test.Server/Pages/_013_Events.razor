@@ -1,0 +1,101 @@
+﻿@page "/_013_Events"
+@using System.Linq
+@using System.Threading
+
+@inject WeatherForecastService ForecastService
+
+<h1>Events</h1>
+<h3>Filter counter @filtered.ToString()</h3>
+<h3>Sort column @lastSortColumn</h3>
+<h3>New page number @newPage</h3>
+
+<button @onclick="onClick">click me</button>
+
+@if (isBusy)
+{
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+}
+else
+{
+    <SamovarGrid Data="@forecasts"
+                 OrderFieldByDefault="@nameof(WeatherForecast.TemperatureC)"
+                 OrderDesc="true"
+                 PageSize="25"
+                 SelectedRowClass="bg-warning"
+                 FilterMode="@GridFilterMode.FilterRow"
+                 AfterFilter="AfterFilter"
+                 AfterSort="AfterSort"
+                 AfterPageChange="AfterPageChange"
+                 RowDoubleClickAsync="OnRowDoubleClickAsync">
+        <GridColumns>
+            <GridColumn Title="Pos" Field="@nameof(WeatherForecast.Position)" />
+            <GridColumn Title="Date" Field="@nameof(WeatherForecast.Date)" />
+            <GridColumn Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" />
+            <GridColumn Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" />
+            <GridCommandColumn Width="110px" />
+        </GridColumns>
+    </SamovarGrid>
+}
+
+@code{
+    bool isBusy;
+
+    List<WeatherForecast> forecasts = new List<WeatherForecast>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = (await ForecastService.GetForecastAsync(DateTime.Now, 1000)).ToList();
+    }
+
+    int filtered;
+    string lastSortColumn;
+    int newPage;
+
+
+    void AfterFilter(GridFilterEventArgs args)
+    {
+        filtered++;
+    }
+
+    void AfterSort(GridSortEventArgs args)
+    {
+        lastSortColumn = args.SortColumn;
+    }
+
+    void AfterPageChange(GridPagingEventArgs args)
+    {
+        newPage = args.NewPageNumber;
+    }
+
+    void OnRowDoubleClick(WeatherForecast item)
+    {
+       
+    }
+
+    async Task OnRowDoubleClickAsync(WeatherForecast item)
+    {
+        isBusy = true;
+        StateHasChanged();
+        await Task.Delay(3000);
+        isBusy = false;
+        StateHasChanged();
+    }
+
+    async Task onClick() {
+        isBusy = true;
+        await Task.Delay(3000);
+        isBusy = false;
+
+        //await Task.Run(() =>
+        //{
+        //    Thread.Sleep(3000);
+        //    isBusy = false;
+
+        //});
+
+    }
+}

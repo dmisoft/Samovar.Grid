@@ -1,0 +1,22 @@
+﻿@typeparam TItem
+
+<tr>
+    <td style="height:@(containerHeight)px;text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;" colspan="@(GridColumnService.Columns.Where(c => c.Value.ColumnType == GridColumnType.Data || c.Value.ColumnType == GridColumnType.Command).Count())">
+        <div class="s-flex s-align-content-center s-justify-content-center" style="height:100%;">
+            <div class="s-align-self-center">no data</div>
+        </div>
+    </td>
+</tr>
+@code{
+    [CascadingParameter(Name = "datagrid-container")]
+    protected SamovarGrid<TItem> DataGrid { get; set; }
+
+    [CascadingParameter(Name = "datagrid-gridcolumnservice")]
+    GridColumnService GridColumnService { get; set; }
+
+    double containerHeight = 0;
+    protected override async Task OnInitializedAsync()
+    {
+        containerHeight = await DataGrid.jsModule.InvokeAsync<double>("getElementHeight", new[] { DataGrid.rx.GridModelService.innerGridId });
+    }
+}

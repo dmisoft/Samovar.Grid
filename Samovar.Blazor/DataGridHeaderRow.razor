@@ -1,0 +1,27 @@
+﻿@using System.Globalization
+@typeparam T
+@inherits SmDesignComponentBase
+
+@if (GridLayoutService.ShowColumnHeader.SubjectValue)
+{
+	@if (Style.ActualScrollbarWidth > 0)
+	{
+		<div style="position:relative;display:flex;flex-direction:row;">
+			<div style="overflow:hidden;position:relative;flex-grow:1;" id="@ConstantService.GridHeaderContainerId">
+				<div style="position:absolute;" class="s-noselect">
+					<SmDataGridHeader TItem=T />
+				</div>
+			</div>
+
+			<div style="width:@(Style.ActualScrollbarWidth.ToString(CultureInfo.InvariantCulture)+"px;")">
+				<SmDataGridHeaderScrollbar T=T />
+			</div>
+		</div>
+	}
+	else
+	{
+		<div style="position:relative;overflow:hidden;" id="@ConstantService.GridHeaderContainerId">
+			<SmDataGridHeader TItem=T />
+		</div>
+	}
+}

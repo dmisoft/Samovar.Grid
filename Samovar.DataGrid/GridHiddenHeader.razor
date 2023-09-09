@@ -1,0 +1,33 @@
+﻿
+@using  System.Globalization
+@typeparam TItem
+
+@if (GridColumnService.Columns != null)
+{
+    <thead class="@grid.TheadTagClass" style="visibility:hidden;">
+        <tr style="height:0px !important;">
+            @{
+                @if (grid.ShowDetailRow)
+                {
+                    <th style="@(GridColumnService.DetailExpanderColumn.Value.VisibleWidthStyle + "padding-right:0;border-bottom-width: 0px;border-top-width:0px;")" id="@(GridColumnService.DetailExpanderColumn.Value.HiddenGridColumnCellId)" class="s-th-hidden p-0">
+                        <div style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;cursor:pointer;" />
+                    </th>
+                }
+
+                foreach (var colMeta in GridColumnService.Columns.Values.Where(c => c.ColumnType == GridColumnType.Data || c.ColumnType == GridColumnType.Command).OrderBy(c => c.ColumnOrder))
+                {
+                    <th style="@(colMeta.VisibleWidthStyle + "padding-right:0;border-bottom-width: 0px;border-top-width:0px;")" id="@(colMeta.HiddenGridColumnCellId)" class="s-th-hidden p-0">
+                        <div style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;cursor:pointer;" />
+                    </th>
+                }
+
+                foreach (var colMeta in GridColumnService.Columns.Values.Where(c => c.ColumnType == GridColumnType.EmptyColumn))
+                {
+                    <th style="@(colMeta.VisibleWidthStyle + "padding-right:0;border-bottom-width: 0px;border-top-width:0px;")" id="@(colMeta.HiddenGridColumnCellId)" class="s-th-hidden p-0">
+                        <div style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;cursor:pointer;" />
+                    </th>
+                }
+            }
+        </tr>
+    </thead>
+}

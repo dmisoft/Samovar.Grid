@@ -1,0 +1,39 @@
+﻿
+@typeparam TItem
+
+@foreach (ColumnMetadata colMeta in GridColumnService.Columns.Values.Where(md => md.ColumnType == GridColumnType.Data))
+{
+
+    @if (colMeta.Field != null && DataGrid.rx.GridModelService.PropInfo.ContainsKey(colMeta.Field))
+    {
+        @switch (DataGrid.rx.GridModelService.PropInfo[colMeta.Field].PropertyType)
+        {
+            case var t when t == typeof(DateTime) || t == typeof(DateTime?):
+                <GridFilterMenu TItem=TItem FilterMenuDataType="FilterMenuDataTypeGroup.DateFilterMenu" FilterMenuContainerId="@colMeta.FilterMenuContainerId" FilterMenuId="@colMeta.FilterMenuId" />
+                break;
+            case var t when t == typeof(string):
+                <GridFilterMenu TItem=TItem FilterMenuDataType="FilterMenuDataTypeGroup.StringFilterMenu" FilterMenuContainerId="@colMeta.FilterMenuContainerId" FilterMenuId="@colMeta.FilterMenuId" />
+                break;
+            case var t when t == typeof(char):
+                break;
+            case var t when t == typeof(bool):
+                <GridFilterMenu TItem=TItem FilterMenuDataType="FilterMenuDataTypeGroup.BooleanFilterMenu" FilterMenuContainerId="@colMeta.FilterMenuContainerId" FilterMenuId="@colMeta.FilterMenuId" />
+                break;
+            case var t when t == typeof(byte) || t == typeof(byte?)
+                      || t == typeof(sbyte) || t == typeof(sbyte?)
+                      || t == typeof(short) || t == typeof(short?)
+                      || t == typeof(ushort) || t == typeof(ushort?)
+                      || t == typeof(int) || t == typeof(int?)
+                      || t == typeof(uint) || t == typeof(uint?)
+                      || t == typeof(long) || t == typeof(long?)
+                      || t == typeof(ulong) || t == typeof(ulong?)
+                      || t == typeof(float) || t == typeof(float?)
+                      || t == typeof(double) || t == typeof(double?)
+                      || t == typeof(decimal) || t == typeof(decimal?):
+                <GridFilterMenu TItem=TItem FilterMenuDataType="FilterMenuDataTypeGroup.NumericFilterMenu" FilterMenuContainerId="@colMeta.FilterMenuContainerId" FilterMenuId="@colMeta.FilterMenuId" />
+                break;
+            default:
+                break;
+        }
+    }
+}

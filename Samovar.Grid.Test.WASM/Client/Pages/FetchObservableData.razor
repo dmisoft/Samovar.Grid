@@ -1,0 +1,63 @@
+﻿@page "/fetchobservabledata"
+@using Samovar.Grid.Test.WASM.Shared
+@using System.Collections.ObjectModel
+@inject HttpClient Http
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (forecasts == null)
+{
+    <p><em>wird geladen...</em></p>
+}
+else
+{
+    <button class="btn btn-primary mb-2" @onclick="changeDataProgramatically">Den zweiten DS ändern</button>
+    <button class="btn btn-primary mb-2" @onclick="changeDataProgramatically2">Verschieben</button>
+
+    <SamovarGrid Data="forecasts"
+                 FilterMode="GridFilterMode.FilterRow"
+                 Height="600px"
+                 EditMode="GridEditMode.Form"
+                 @ref="grid" TableTagClass="table table-sm table-striped">
+        <GridColumns>
+            <GridColumn Field="@nameof(WeatherForecast.Date)" />
+            <GridColumn Field="@nameof(WeatherForecast.TemperatureC)" />
+            <GridColumn Field="@nameof(WeatherForecast.TemperatureF)" />
+            <GridColumn Field="@nameof(WeatherForecast.Summary)" />
+            <GridCommandColumn Width="150px" />
+        </GridColumns>
+    </SamovarGrid>
+}
+
+@code {
+    private ObservableCollection<WeatherForecast> forecasts;
+
+    SamovarGrid<WeatherForecast> grid;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await Http.GetFromJsonAsync<ObservableCollection<WeatherForecast>>("WeatherForecast");
+    }
+
+    async Task RowEditCommitHandlerAsync(GridRowEditEventArgs<WeatherForecast> args)
+    {
+        WeatherForecast oldData = args.OldData;
+        WeatherForecast newData = args.NewData;
+        var i = forecasts.IndexOf(oldData);
+        forecasts[i] = newData;
+    }
+
+    async Task changeDataProgramatically()
+    {
+        forecasts[1].Summary = "Geändert aus dem Quellcode";
+        await grid.RefreshAsync();
+        //StateHasChanged();
+    }
+    void changeDataProgramatically2()
+    {
+        forecasts.Move(0,5);
+    }
+
+}

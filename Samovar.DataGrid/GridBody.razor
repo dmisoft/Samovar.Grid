@@ -1,0 +1,43 @@
+﻿@typeparam TItem
+
+<tbody @ref="GridBodyRef" tabindex="0" @onkeydown:preventDefault="@(!(DataGrid.GridEditingService.GridState == GridState.Editing || DataGrid.GridEditingService.GridState == GridState.Inserting))" @onkeydown="() => { }" id="@DataGrid.gridBodyId">
+    @if (DataGrid.Data.Count() == 0 && DataGrid.GridEditingService.GridState == GridState.Idle)
+    {
+        <GridRowNoData TItem=TItem />
+    }
+    else
+    {
+        @if (DataGrid.GridEditingService.GridState == GridState.Inserting)
+        {
+            @if (DataGrid.InsertDataTemplate != null)
+            {
+                @switch (DataGrid.EditMode)
+                {
+                    case GridEditMode.Form:
+                        <GridRowInserting_FormTemplate TItem=TItem  />
+                        break;
+                    case GridEditMode.Popup:
+                        <GridRowInserting_PopupTemplate TItem=TItem Template="@DataGrid.InsertDataTemplate" />
+                        break;
+                }
+            }
+            else
+            {
+                @switch (DataGrid.EditMode)
+                {
+                    case GridEditMode.Form:
+                        <GridRowInserting_Form TItem=TItem />
+                        break;
+                    case GridEditMode.Popup:
+                        <GridRowInserting_Popup TItem=TItem />
+                        break;
+                }
+            }
+        }
+
+        @foreach (var rowModel in DataGrid.rx.GridModelService.ViewCollection)
+        {
+            <GridRow RowModel="rowModel" />
+        }
+    }
+</tbody>

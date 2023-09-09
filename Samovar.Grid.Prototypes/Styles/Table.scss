@@ -1,0 +1,25 @@
+﻿table {
+    @extend .table;
+    @extend .table-striped;
+    @extend .table-bordered;
+    @extend .table-sm;
+    @extend .table-dark;
+}
+table > thead {
+    @extend .thead-light;
+}
+table > tfoot {
+    @extend .table-dark;
+}
+table > tfoot ul {
+    @extend .pagination;
+}
+
+table > tfoot ul > li {
+    @extend .page-item;
+}
+
+table > tfoot ul > li > a {
+    @extend .page-link;
+    color:black !important;
+}

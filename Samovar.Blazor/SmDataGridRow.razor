@@ -1,0 +1,6 @@
+﻿@typeparam TItem
+@inherits SmDesignComponentBase
+
+<CascadingValue Value=this Name="datagrid-row">
+	@ComponentBuilderService.GetRow(RowModel)
+</CascadingValue>

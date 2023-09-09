@@ -1,0 +1,15 @@
+﻿@*@using Microsoft.AspNetCore.Components.Web
+@inherits Microsoft.AspNetCore.Components.ComponentBase
+@using Data
+@if (Data != null)
+{
+    <div class="row form-group">
+        <div class="col form-control-plaintext">@Data.Position</div>
+        <div class="col form-control-plaintext">@Data.Date</div>
+    </div>
+}
+
+@code{
+    [Parameter]
+    public WeatherForecast Data { set; get; }
+}*@

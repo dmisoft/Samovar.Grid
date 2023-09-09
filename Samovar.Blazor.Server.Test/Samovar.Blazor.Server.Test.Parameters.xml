@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="SignalRTest" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^D:\\Projekte\\Weiterbildung\\samovargridpro\\Samovar\.Blazor\.Server\.Test\\obj\\Release\\net6\.0\\win-x64\\PubTmp\\Out\\$" />
+  </parameter>
+</parameters>

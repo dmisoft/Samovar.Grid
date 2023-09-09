@@ -1,0 +1,19 @@
+﻿@typeparam TItem
+@inherits DataGridFilterCellBase<TItem, bool?>
+<div class="s-flex s-flex-row">
+@*    <button class="@(LayoutService.FilterToggleButtonClass) dropdown-toggle" @onclick="ShowMenu" id="@DropdownMenuButtonId" style="padding-right:3px;padding-left:3px;" />*@    @if (!InnerValue.HasValue)
+    {
+        <input type="text" disabled style="min-width:10px;" class="flex-grow-1" value="" />
+    }
+    else
+    {
+        if (InnerValue.Value)
+        {
+            <input type="text" disabled style="min-width:10px;" class="flex-grow-1" value="=true" />
+        }
+        else
+        {
+            <input type="text" disabled style="min-width:10px;" class="flex-grow-1" value="=false" />
+        }
+    }
+</div>

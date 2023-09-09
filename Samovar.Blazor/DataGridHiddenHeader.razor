@@ -1,0 +1,28 @@
+﻿@using  System.Globalization
+@typeparam TItem
+@inherits SmDesignComponentBase
+
+
+<thead class="@GridLayoutService.TheadTagClass.SubjectValue" style="visibility:hidden;">
+	<tr style="height:0px !important;">
+		@{
+			@if (GridLayoutService.ShowDetailRow.SubjectValue)
+			{
+			    <th style="@(GridColumnService.DetailExpanderColumnModel.VisibleWidthStyle + "padding-right:0;border-bottom-width: 0px;border-top-width:0px;")" id="@(GridColumnService.DetailExpanderColumnModel.HiddenGridColumnCellId)" class="s-th-hidden p-0">
+			        <div style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;cursor:pointer;" />
+			    </th>
+			}
+
+			foreach (var colMeta in GridColumnService.AllColumnModels)
+			{
+				<th style="@(colMeta.VisibleWidthStyle + "padding-right:0;border-bottom-width: 0px;border-top-width:0px;")" id="@(colMeta.HiddenGridColumnCellId)" class="s-th-hidden p-0">
+					<div style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;cursor:pointer;" />
+				</th>
+			}
+
+			<th style="@(GridColumnService.EmptyColumnModel.VisibleWidthStyle + "padding-right:0;border-bottom-width: 0px;border-top-width:0px;")" id="@(GridColumnService.EmptyColumnModel.HiddenGridColumnCellId)" class="s-th-hidden p-0">
+				<div style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;" />
+			</th>
+		}
+	</tr>
+</thead>

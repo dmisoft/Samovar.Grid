@@ -1,0 +1,4 @@
+﻿readme.md aktualisieren
+readme.md nach readme.txt kopieren
+Convert Markdown File to Html -> https://dillinger.io/
+Paypal Donate Button hinzufügen

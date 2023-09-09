@@ -1,0 +1,38 @@
+﻿@using Microsoft.AspNetCore.Components
+@using System.Linq.Dynamic.Core
+@typeparam TItem
+<button @onclick="GroupData">group data</button>
+<ul>
+    @foreach (TItem item in Data ?? Array.Empty<TItem>())
+    {
+        <li>@ChildContent(item)</li>
+    }
+</ul>
+@code
+{
+    [Parameter]
+    public IEnumerable<TItem> Data { get; set; }
+
+    [Parameter]
+    public RenderFragment<TItem> ChildContent { get; set; }
+
+    public void GroupData()
+    {
+        //Console.WriteLine(nameof(GroupBy_MultiKey));
+
+        var result = Data.AsQueryable().GroupBy("new (Abteilung, Team)").ToDynamicArray();
+
+        for (int i = 0; i < result.Length; i++)
+        {
+            var expectedRow = result[i];
+
+            // The DynamicBinder doesn't allow us to access values of the Group object, so we have to cast first
+            var testRow = (IGrouping<DynamicClass, TItem>)result[i];
+
+            Console.WriteLine("Key.Abteilung   = {0}", ((dynamic)testRow.Key).Abteilung);
+            Console.WriteLine("Key.Team = {0}", ((dynamic)testRow.Key).TEam);
+            Console.WriteLine("Mitarbeiter   = {0}", string.Join(", ", testRow.Select(x => $"'{x.ToString()}'")));
+            Console.WriteLine();
+        }
+    }
+}

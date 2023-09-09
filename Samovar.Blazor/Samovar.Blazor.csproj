@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <PackageId>$(AssemblyName)</PackageId>
+    <Authors>Dimi</Authors>
+    <Company>DmiSoft</Company>
+    <PackageIcon>SamovarGrid_Logo.png</PackageIcon>
+    <Version>6.0.0-alpha.1</Version>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Product>SamovarGrid</Product>
+    <Description>Data grid component for Blazor. Sorting, paging, editing, deleting. Filter. Row single and multiple selection. Cell show/edit templating. Row edit templating.</Description>
+    <PackageTags>DataGrid, Blazor, BlazorGrid, BlazorDataGrid, Blazor-Component, Virtual scrolling, Filter</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="compilerconfig.json.defaults" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.0" />
+    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\samovar.blazor.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Styles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="SamovarGrid_Logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

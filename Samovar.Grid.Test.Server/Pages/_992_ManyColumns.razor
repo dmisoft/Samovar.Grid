@@ -1,0 +1,226 @@
+﻿@page "/_992_manycolumns"
+
+@using System.Linq
+
+@inject WeatherForecastService ForecastService
+
+<h1>Table basic</h1>
+<button class="btn btn-primary" @onclick="AddNewRow">add new row</button>
+<button class="btn btn-primary" @onclick="CreateNewDataSet">create new data set</button>
+<button class="btn btn-primary" @onclick="ClearDataSet">clear data set</button>
+<SamovarGrid Data="@forecasts"
+             OrderFieldByDefault="@nameof(WeatherForecast.TemperatureC)"
+             OrderDesc="true"
+             PageSize="25"
+             Height="@gridHeight"
+             PagerSize="10"
+             RowSelected="RowSelectedHandler"
+             RowEditBegin="@((WeatherForecast data)=>RowEditBeginHandler(data))"
+             RowEditCancel="RowEditCancelHandler"
+             Headless="false"
+             SelectedRowClass="bg-warning" FilterMode="@GridFilterMode.FilterRow" >
+    <GridColumns>
+        <GridColumn Title="Pos" Field="@nameof(WeatherForecast.Position)" Width="100px" />
+        <GridColumn Title="Date" Field="@nameof(WeatherForecast.Date)" Width="100px">
+            <CellShowTemplate>
+                @{
+                    WeatherForecast data = context as WeatherForecast;
+                    <div>@data.Date.ToShortDateString()</div>
+                }
+            </CellShowTemplate>
+        </GridColumn>
+        <GridColumn Title="Date2" Field="@nameof(WeatherForecast.Date)" Width="100px" />
+        <GridColumn Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="100px" />
+        <GridColumn Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="100px" />
+        <GridColumn Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="100px">
+            <CellEditTemplate>
+                @{
+                    WeatherForecast data = context as WeatherForecast;
+                    <input style="width:100%;" type="text" @bind="@data.Summary" @oninput="onInput" />
+
+                    void onInput(ChangeEventArgs args)
+                    {
+                    }
+
+                }
+            </CellEditTemplate>
+            <CellShowTemplate>
+                @{
+                    WeatherForecast data = context as WeatherForecast;
+                    <div style="word-break:break-all;">@data.Summary</div>
+                }
+            </CellShowTemplate>
+        </GridColumn>
+        <GridColumn Title="SummaryStd" Field="@nameof(WeatherForecast.Summary)" Width="100px" />
+        <GridColumn Title="SummaryDbl" Field="@nameof(WeatherForecast.SummaryDbl)" Width="100px" />
+        <GridColumn Title="SummaryDblNull" Field="@nameof(WeatherForecast.SummaryDblNullable)" Width="100px" />
+        <GridColumn Title="Boolean" Field="@nameof(WeatherForecast.YesNo)" Width="100px" />
+        <GridColumn Title="SByte" Field="@nameof(WeatherForecast.SByteValue)" Width="100px" />
+        <GridColumn Title="Char" Field="@nameof(WeatherForecast.CharValue)" Width="100px" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary01)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary02)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary03)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary04)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary05)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary06)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary07)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary08)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary09)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary10)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary11)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary12)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary13)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary14)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary15)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary16)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary17)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary18)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary19)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary20)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary21)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary22)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary23)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary24)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary25)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary26)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary27)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary28)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary29)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary30)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary31)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary32)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary33)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary34)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary35)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary36)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary37)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary38)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary39)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary40)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary41)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary42)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary43)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary44)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary45)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary46)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary47)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary48)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary49)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary50)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary51)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary52)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary53)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary54)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary55)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary56)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary57)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary58)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary59)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary60)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary61)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary62)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary63)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary64)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary65)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary66)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary67)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary68)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary69)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary70)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary71)" />
+        <GridColumn Width="100px" Title="Summary" Field="@nameof(WeatherForecast.Summary72)" />
+        <GridCommandColumn Width="110px">
+            
+            
+        </GridCommandColumn>
+    </GridColumns>
+</SamovarGrid>
+
+<div class="form-group">
+    <label class="mr-2">Grid height</label>
+    <input @bind-value="@gridHeight" @bind-value:event="onchange" />
+</div>
+
+<h4>Datasize</h4>
+<div>@forecasts.Count()</div>
+
+<h4>Action</h4>
+<div>@selectedAction</div>
+
+<h4>Action row item</h4>
+<div>@actionItem</div>
+
+@code{
+    string gridHeight = "600px";
+
+    string selectedAction { set; get; }
+    string actionItem { set; get; }
+
+    List<WeatherForecast> forecasts = new List<WeatherForecast>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = (await ForecastService.GetForecastAsync(DateTime.Now, 20000)).ToList();
+    }
+
+    void RowSelectedHandler(WeatherForecast data)
+    {
+        actionItem = data.Summary;
+        selectedAction = "RowSelected";
+    }
+
+    void RowDeleteBeginHandler(GridRowEventArgs args)
+    {
+        actionItem = ((WeatherForecast)args.RowData).Summary;
+        selectedAction = "RowDeleteBegin";
+    }
+
+    void RowDeleteCancelHandler(GridRowEventArgs args)
+    {
+        actionItem = ((WeatherForecast)args.RowData).Summary;
+        selectedAction = "RowDeleteCancel";
+    }
+
+    void RowDeleteCommitHandler(GridRowEventArgs args)
+    {
+        actionItem = ((WeatherForecast)args.RowData).Summary;
+        this.forecasts.Remove((WeatherForecast)args.RowData);
+        selectedAction = "RowDeleteCommit";
+    }
+
+    void RowEditCommitHandler(GridRowEditEventArgs<WeatherForecast> args)
+    {
+        WeatherForecast item = args.NewData;
+    }
+
+    void RowEditBeginHandler(WeatherForecast item)
+    {
+        actionItem = item.Summary;
+        selectedAction = "RowEditBegin";
+    }
+
+    void RowEditCancelHandler()
+    {
+        selectedAction = "RowEditCancel";
+    }
+
+    void AddNewRow()
+    {
+        forecasts.Add(new WeatherForecast
+        {
+            Date = new DateTime(2019, 1, 1),
+            Summary = "Summary",
+            TemperatureC = 33
+        });
+    }
+
+    async Task CreateNewDataSet()
+    {
+        forecasts = (await ForecastService.GetForecastAsync(DateTime.Now,20000)).ToList();
+    }
+
+    void ClearDataSet()
+    {
+        forecasts.Clear();
+    }
+}

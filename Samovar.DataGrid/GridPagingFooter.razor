@@ -1,0 +1,34 @@
+﻿
+@using  System.Globalization
+@typeparam TItem
+<!--button @onclick="@(() => Common.Starter.MichelService.MyValue = "hihihih")">click mich/-->
+<div>@srv.GetHashCode().ToString()</div>
+
+<table @ref="DataGrid.GridFooterRef" style="width:100%;" class="@DataGrid.TableTagClass">
+    <tfoot>
+        <tr>
+            <td>
+                <div class="s-flex s-flex-row s-justify-content-between s-align-items-center">
+                    <div>
+                        <!--SASS var for pagination-->
+                        <ul class="@DataGrid.PaginationClass" style="margin:10px 0">
+                            <!--SASS var for page-item-->
+                            <li class="page-item s-noselect" style="cursor:pointer;" @onclick=@(()=>DataGrid.SetPagerSize("back"))><a class="page-link">&laquo;</a></li>
+                            <li class="page-item s-noselect" style="cursor: pointer;" @onclick=@(()=>DataGrid.NavigateToPage("previous"))><a class="page-link">&lsaquo;</a></li>
+                            @for (int i = DataGrid.NavigationService.StartPage; i <= DataGrid.NavigationService.EndPage; i++)
+                            {
+                                var currentPage = i;
+                                <li class="page-item s-noselect @(currentPage==DataGrid.NavigationService.CurrentPage?"active":"")" style="cursor: pointer;" @onclick=@(()=>DataGrid.UpdateItemsForActualPage(currentPage))><a class="page-link">@currentPage</a></li>
+                            }
+                            <li class="page-item s-noselect" style="cursor: pointer;" @onclick=@(()=>DataGrid.NavigateToPage("next"))><a class="page-link">&rsaquo;</a></li>
+                            <li class="page-item s-noselect" style="cursor: pointer;" @onclick=@(()=>DataGrid.SetPagerSize("forward"))><a class="page-link">&raquo;</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <span class="btn disabled">Page @DataGrid.NavigationService.CurrentPage of @DataGrid.NavigationService.TotalPages</span>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
