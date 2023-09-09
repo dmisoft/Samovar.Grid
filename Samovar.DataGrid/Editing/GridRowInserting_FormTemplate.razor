@@ -1,8 +1,0 @@
-﻿@typeparam TItem
-@namespace Samovar.DataGrid
-
-<tr>
-    <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;" colspan="@(DataGrid.GridColumnService.Columns.Where(c => c.Value.ColumnType == GridColumnType.Data || c.Value.ColumnType == GridColumnType.Command).Count())">
-        @DataGrid.InsertDataTemplate
-    </td>
-</tr>
