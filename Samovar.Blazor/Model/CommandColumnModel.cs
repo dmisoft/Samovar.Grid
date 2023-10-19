@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace Samovar.Blazor
+﻿namespace Samovar.Blazor
 {
     public class CommandColumnModel
         : ColumnModelBase, ICommandColumnModel

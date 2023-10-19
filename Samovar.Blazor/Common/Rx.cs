@@ -87,18 +87,9 @@ namespace Samovar.Blazor
             //}
 
         }
-        //public static Subscription Subscribe<T>(this IObservable<T> observable, Action<T> action)
-        //{
-        //    observable.
-        //    return new SubjectBase(observable, action);
-        //}
+
         public static void Subscribe1<T>(this IObservable<T> observable, Action<T> action)
         {
-            
-            //IObserver1<int, Action> o = new MyObserver();
-            
-            //var subject = new ActionSubject<T>(observable, action);
-            //subject.Subscribe(o);
         }
         public static Task<IDisposable> Subscribe<T>(this IObservable<T> observable, Func<T, Task> action)
         {
@@ -111,64 +102,5 @@ namespace Samovar.Blazor
             IDisposable unsubscriber = observable.Subscribe(new SmObserver<T>(new SmObserverDispatcher<T>(action)));
             return Task.FromResult(unsubscriber);
         }
-
-        //public static Task<IDisposable> Subscribe<T>(this IObservable<T> observable, Func<T, EventCallback<T>, Task> action)
-        //{
-        //    IDisposable unsubscriber = observable.Subscribe(new SmObserverFunc2<T>(new SmObserverDispatcherFunc2<T>(action)));
-        //    return Task.FromResult(unsubscriber);
-        //}
-
-        //public static Task OnNext<T>(this IObserver<T> observer, T nextValue, EventCallback<T> callback)
-        //{
-        //    observer.OnNext(nextValue, callback);
-        //    //callback.InvokeAsync(nextValue);
-        //    return Task.CompletedTask;
-        //}
-
-        //public static IObservable<TMap> Map<T1, T2, TMap>(this IObservable<T1, T2> obs, Func<T1, T2, TMap> callback)
-        //{
-        //    return new ObservableMap2<T1, T2, TMap>(obs, callback);
-        //}
-        //public static IObservable<T1, T2> Observe<T1, T2>(IObservable<T1> o1, IObservable<T2> o2)
-        //{
-        //    return new Observable2<T1, T2>(o1, o2);
-        //}
-        //private class ObservableMap2<T1, T2, TOut> : IObservable<TOut>
-        //{
-        //    private readonly Func<T1, T2, TOut> _map;
-
-        //    private readonly IObservable<T1, T2> _source;
-
-        //    public ObservableMap2(IObservable<T1, T2> source, Func<T1, T2, TOut> map)
-        //    {
-        //        _source = source;
-        //        _map = map;
-        //    }
-
-        //    IDisposable IObservable<TOut>.Subscribe(IObserver<TOut> observer)
-        //    {
-        //        return _source.Subscribe(new ObserverMap2<T1, T2, TOut>(observer, _map));
-        //    }
-        //}
-
-        //private class ObserverMap2<T1, T2, TOut> : IObserver<T1, T2>
-        //{
-        //    private readonly IObserver<TOut> _target;
-
-        //    private readonly Func<T1, T2, TOut> _map;
-
-        //    public ObserverMap2(IObserver<TOut> target, Func<T1, T2, TOut> map)
-        //    {
-        //        _target = target;
-        //        _map = map;
-        //    }
-
-        //    public void OnNext(T1 v1, T2 v2)
-        //    {
-        //        _target.OnNext(_map(v1, v2));
-        //    }
-        //}
-
     }
-
 }

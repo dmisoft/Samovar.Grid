@@ -52,19 +52,19 @@
               "schema": {
                 "$ref": "#/components/schemas/WeatherForecast"
               },
-              "example": {"date":"2023-09-09T18:46:18.1668222+02:00","temperatureC":100,"temperatureF":211,"summary":"Example text f6f8224e-f1ff-44fd-b0d6-a855656c7c0e"}
+              "example": {"date":"2023-10-19T19:45:50.966033+02:00","temperatureC":100,"temperatureF":211,"summary":"Example text b3277e9b-ecb5-4737-a004-361d8fd7345d"}
             },
             "text/json": {
               "schema": {
                 "$ref": "#/components/schemas/WeatherForecast"
               },
-              "example": {"date":"2023-09-09T18:46:18.1668222+02:00","temperatureC":100,"temperatureF":211,"summary":"Example text f6f8224e-f1ff-44fd-b0d6-a855656c7c0e"}
+              "example": {"date":"2023-10-19T19:45:50.966033+02:00","temperatureC":100,"temperatureF":211,"summary":"Example text b3277e9b-ecb5-4737-a004-361d8fd7345d"}
             },
             "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/WeatherForecast"
               },
-              "example": {"date":"2023-09-09T18:46:18.1668222+02:00","temperatureC":100,"temperatureF":211,"summary":"Example text f6f8224e-f1ff-44fd-b0d6-a855656c7c0e"}
+              "example": {"date":"2023-10-19T19:45:50.966033+02:00","temperatureC":100,"temperatureF":211,"summary":"Example text b3277e9b-ecb5-4737-a004-361d8fd7345d"}
             }
           }
         },
