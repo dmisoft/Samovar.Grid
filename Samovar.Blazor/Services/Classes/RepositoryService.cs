@@ -4,9 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Reflection.Emit;
-using System.Runtime.InteropServices;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Samovar.Blazor
@@ -144,8 +141,6 @@ namespace Samovar.Blazor
                     //TODO extra Idle state for virtual scrolling???
                     _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.Idle);
                 }
-
-
             }
 
             await OnViewCollectionChanged(ViewCollection);

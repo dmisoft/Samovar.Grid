@@ -34,7 +34,6 @@ namespace Samovar.Grid.Test.WebApi
                 c.ExampleFilters();
             });
             services.AddSwaggerExamplesFromAssemblyOf(typeof(WeatherForecastExample));
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
