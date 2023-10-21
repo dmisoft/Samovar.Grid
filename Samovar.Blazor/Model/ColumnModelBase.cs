@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Subjects;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -13,9 +14,10 @@ namespace Samovar.Blazor
 
         public abstract DataGridColumnType ColumnType { get; }
 
-        public ISubject<string> Title { get; } = new ParameterSubject<string>();
+        public ISubject<string> Title { get; } = new Subject<string>();
 
-        public ISubject<string> Width { get; } = new ParameterSubject<string>("");
+        //TODO std. value new Subject<string>("");
+        public ISubject<string> Width { get; } = new Subject<string>();
 
         public int ColumnOrder { get; set; }
 
@@ -73,7 +75,8 @@ namespace Samovar.Blazor
 
         public ColumnModelBase()
         {
-            Width.Subscribe(new SmObserver<string>(new SmObserverDispatcher<string>(WidthSubjectCallback)));
+            //Width.Subscribe(new SmObserver<string>(new SmObserverDispatcher<string>(WidthSubjectCallback)));
+            Width.Subscribe(WidthSubjectCallback);
         }
 
         private void WidthSubjectCallback(string widthValue)

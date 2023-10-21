@@ -47,23 +47,9 @@ namespace Samovar.Blazor
 			return EqualityComparer<NavigationStrategyDataLoadingSettings>.Default.Equals(settings, Empty);
 		}
 
-		//public static DataGridPagerSettings Create(IDataNavigationStrategy strategy)
-		//{
-		//	return FromOffsets(strategy.DataBindingSkipItems, strategy.DataBindingTakeItems);
-		//}
-
 		public static NavigationStrategyDataLoadingSettings FromOffsets(int skip, int take)
 		{
 			return new NavigationStrategyDataLoadingSettings(skip, take);
 		}
-
-		//public static DataGridPagerSettings FromPager(int index, int size, DataGridNavigationMode mode)
-		//{
-		//	if (mode != DataGridNavigationMode.ShowAllDataRows)
-		//	{
-		//		return FromOffsets(index * size, size);
-		//	}
-		//	return FetchAll;
-		//}
 	}
 }

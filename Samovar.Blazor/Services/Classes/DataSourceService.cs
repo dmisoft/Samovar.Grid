@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reactive.Subjects;
 using System.Reflection;
 
 namespace Samovar.Blazor
@@ -12,12 +13,15 @@ namespace Samovar.Blazor
     {
         private readonly IFilterService _filterService;
         private readonly ISortingService _orderService;
-        public ISubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; set; } = new ParameterSubject<NavigationStrategyDataLoadingSettings>(new NavigationStrategyDataLoadingSettings());
 
-        public ISubject<IEnumerable<T>> Data { get; private set; } = new ParameterSubject<IEnumerable<T>>(new List<T>());
+        //TODO std. value in Subject ctor new NavigationStrategyDataLoadingSettings()
+        public ISubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; set; } = new Subject<NavigationStrategyDataLoadingSettings>();
+
+        //TODO std. value in Subject ctor new List<T>()
+        public ISubject<IEnumerable<T>> Data { get; private set; } = new Subject<IEnumerable<T>>();
 
         Subscription3<IEnumerable<DataGridFilterCellInfo>, DataGridColumnOrderInfo, IEnumerable<T>, IQueryable<T>> DataQuerySubscription;
-        public ISubject<IQueryable<T>> DataQuery { get; private set; } = new ParameterSubject<IQueryable<T>>();
+        //public ISubject<IQueryable<T>> DataQuery { get; private set; } = new ParameterSubject<IQueryable<T>>();
 
             
         public DataSourceService(IFilterService filterService, ISortingService orderService)
@@ -27,7 +31,7 @@ namespace Samovar.Blazor
             
             DataQuerySubscription = new Subscription3<IEnumerable<DataGridFilterCellInfo>, DataGridColumnOrderInfo, IEnumerable<T>, IQueryable<T>>(_filterService.FilterInfo, _orderService.ColumnOrderInfo, Data, myfunc3);
 
-            DataQuery = DataQuerySubscription.CreateMap();
+            //DataQuery = DataQuerySubscription.CreateMap();
         }
 
         private IQueryable<T> myfunc3(IEnumerable<DataGridFilterCellInfo> filterInfo, DataGridColumnOrderInfo orderInfo, IEnumerable<T> data)
