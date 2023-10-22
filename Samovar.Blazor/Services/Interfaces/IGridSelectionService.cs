@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
     public interface IGridSelectionService<T>
     {
-        ISubject<GridSelectionMode> SelectionMode { get; }
+        BehaviorSubject<GridSelectionMode> SelectionMode { get; }
 
-        ISubject<T> SingleSelectedDataRow { get; }
+        BehaviorSubject<T> SingleSelectedDataRow { get; }
         
-        ISubject<IEnumerable<T>> MultipleSelectedDataRows { get; }
+        BehaviorSubject<IEnumerable<T>> MultipleSelectedDataRows { get; }
         
         Task OnRowSelected(T dataItem);
 

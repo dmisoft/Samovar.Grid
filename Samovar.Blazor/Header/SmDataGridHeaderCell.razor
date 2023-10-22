@@ -2,13 +2,13 @@
 
 @inherits SmDesignComponentBase
 
-<th style="@(Model.VisibleWidthStyle + "padding-right:0;")" id="@(Model.VisibleGridColumnCellId)" data-toggle="tooltip" data-placement="top" title="@(Model.Title.SubjectValue)">
+<th style="@(Model.VisibleWidthStyle + "padding-right:0;")" id="@(Model.VisibleGridColumnCellId)" data-toggle="tooltip" data-placement="top" title="@(Model.Title.Value)">
 	<div class="s-flex" style="margin:0px;padding:0px;">
 
 
 		<div @onclick=ColumnCellClick style="flex-grow:1;text-overflow:ellipsis;overflow:hidden;white-space: nowrap;cursor:pointer;display:block;"
 dropzone="DropZoneGridHeader" draggable="true" @ondragstart="@(()=>DragStartHandler(Model))" @ondrop="@(()=>DropHandler(Model))" ondragover="event.preventDefault()">
-			@(Model.Title.SubjectValue)
+			@(Model.Title.Value)
 		</div>
 		<div class="flex-grow">@((MarkupString)SortSymbol)</div>
 

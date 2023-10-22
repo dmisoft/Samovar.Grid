@@ -23,9 +23,8 @@ namespace Samovar.Blazor
         private readonly IGridStateService _stateService;
         private readonly ILayoutService _layoutService;
 
-        //TODO set default subject value new new Subject<HashSet<T>>(HashSet<T>())
-        public ISubject<HashSet<T>> Data { get; private set; } = new Subject<HashSet<T>>();
-        
+        public BehaviorSubject<HashSet<T>> Data { get; private set; } = new BehaviorSubject<HashSet<T>>(new HashSet<T>());
+
         public Dictionary<string, PropertyInfo> PropInfo { get; } = new Dictionary<string, PropertyInfo>();
         //public static Dictionary<string, PropertyInfo> PropInfoStatic { get; } = new Dictionary<string, PropertyInfo>();
         public static Dictionary<string, Func<T, int>> PropInfoDelegateInt { get; } = new Dictionary<string, Func<T, int>>();
@@ -83,7 +82,7 @@ namespace Samovar.Blazor
         {
             if (query == null)
             {
-                _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.NoData);
+                _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
                 return;
             }
 
@@ -167,7 +166,7 @@ namespace Samovar.Blazor
                 foreach (var keyDataPair in gridData.ToHashSet())
                 {
                     rowPosition++;
-                    retVal.Add(new SmDataGridRowModel<T>(keyDataPair, ColumnMetadataList, rowPosition, PropInfo, _rowDetailService.ExpandedRowDetails.SubjectValue.Any(r => r.Equals(keyDataPair))));
+                    retVal.Add(new SmDataGridRowModel<T>(keyDataPair, ColumnMetadataList, rowPosition, PropInfo, _rowDetailService.ExpandedRowDetails.Value.Any(r => r.Equals(keyDataPair))));
                     //await Task.Delay(5);
                 }
             }

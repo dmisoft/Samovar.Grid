@@ -1,9 +1,9 @@
-﻿using Microsoft.JSInterop;
+﻿using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
 {
     public interface IInitService
     {
-        ISubject<bool> IsInitialized { get; set; }
+        BehaviorSubject<bool> IsInitialized { get; set; }
     }
 }

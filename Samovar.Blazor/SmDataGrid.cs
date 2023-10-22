@@ -67,7 +67,7 @@ namespace Samovar.Blazor
             }
             set
             {
-                DataSourceService.Data.OnNextParameterValue(value);
+                DataSourceService.Data.OnNext(value);
             }
         }
 
@@ -80,7 +80,7 @@ namespace Samovar.Blazor
             }
             set
             {
-                LayoutService.FilterMode.OnNextParameterValue(value);
+                LayoutService.FilterMode.OnNext(value);
             }
         }
 
@@ -93,7 +93,7 @@ namespace Samovar.Blazor
             }
             set
             {
-                PagingNavigationStrategy.PageSize.OnNextParameterValue(value);
+                PagingNavigationStrategy.PageSize.OnNext(value);
             }
         }
 
@@ -106,7 +106,7 @@ namespace Samovar.Blazor
             }
             set
             {
-                PagingNavigationStrategy.PagerSize.OnNextParameterValue(value);
+                PagingNavigationStrategy.PagerSize.OnNext(value);
             }
         }
 
@@ -119,7 +119,7 @@ namespace Samovar.Blazor
             }
             set
             {
-                LayoutService.Height.OnNextParameterValue(value);
+                LayoutService.Height.OnNext(value);
             }
         }
 
@@ -132,7 +132,7 @@ namespace Samovar.Blazor
             }
             set
             {
-                LayoutService.Width.OnNextParameterValue(value);
+                LayoutService.Width.OnNext(value);
             }
         }
 
@@ -145,7 +145,7 @@ namespace Samovar.Blazor
             }
             set
             {
-                LayoutService.FilterToggleButtonClass.OnNextParameterValue(value);
+                LayoutService.FilterToggleButtonClass.OnNext(value);
             }
         }
 
@@ -158,7 +158,7 @@ namespace Samovar.Blazor
             }
             set
             {
-                LayoutService.TableTagClass.OnNextParameterValue(value);
+                LayoutService.TableTagClass.OnNext(value);
             }
         }
 
@@ -171,7 +171,7 @@ namespace Samovar.Blazor
             }
             set
             {
-                LayoutService.ShowColumnHeader.OnNextParameterValue(value);
+                LayoutService.ShowColumnHeader.OnNext(value);
             }
         }
 
@@ -184,7 +184,7 @@ namespace Samovar.Blazor
             }
             set
             {
-                LayoutService.ShowDetailRow.OnNextParameterValue(value);
+                LayoutService.ShowDetailRow.OnNext(value);
             }
         }
 
@@ -193,67 +193,67 @@ namespace Samovar.Blazor
         {
             get
             {
-                return NavigationService.NavigationMode.SubjectValue;
+                return NavigationService.NavigationMode.Value;
             }
             set
             {
-                NavigationService.NavigationMode.OnNextParameterValue(value);
+                NavigationService.NavigationMode.OnNext(value);
             }
         }
 
         [Parameter]
-        public RenderFragment<T> DetailRowTemplate { get { return null; } set { TemplateService.DetailRowTemplate.OnNextParameterValue(value); } }
+        public RenderFragment<T> DetailRowTemplate { get { return null; } set { TemplateService.DetailRowTemplate.OnNext(value); } }
 
         [Parameter]
-        public RenderFragment<T> EditFormTemplate { get { return null; } set { TemplateService.EditFormTemplate.OnNextParameterValue(value); } }
+        public RenderFragment<T> EditFormTemplate { get { return null; } set { TemplateService.EditFormTemplate.OnNext(value); } }
 
         [Parameter]
-        public RenderFragment<T> InsertFormTemplate { get { return null; } set { TemplateService.InsertFormTemplate.OnNextParameterValue(value); } }
+        public RenderFragment<T> InsertFormTemplate { get { return null; } set { TemplateService.InsertFormTemplate.OnNext(value); } }
 
         [Parameter]
-        public GridEditMode EditMode { get { return GridEditMode.None; } set { EditingService.EditMode.OnNextParameterValue(value); } }
+        public GridEditMode EditMode { get { return GridEditMode.None; } set { EditingService.EditMode.OnNext(value); } }
 
         [Parameter]
         public EventCallback<T> RowEditBegin
         {
-            get { return EditingService.OnRowEditBegin.SubjectValue; }
-            set { EditingService.OnRowEditBegin.OnNextParameterValue(value); }
+            get { return EditingService.OnRowEditBegin.Value; }
+            set { EditingService.OnRowEditBegin.OnNext(value); }
         }
 
         [Parameter]
         public EventCallback RowInsertBegin
         {
-            get { return EditingService.OnRowInsertBegin.SubjectValue; }
-            set { EditingService.OnRowInsertBegin.OnNextParameterValue(value); }
+            get { return EditingService.OnRowInsertBegin.Value; }
+            set { EditingService.OnRowInsertBegin.OnNext(value); }
         }
 
         //[Parameter]
         //public EventCallback<Dictionary<string, object>> InitializeNewRow
         //{
-        //    get { return EditingService.OnInitializeNewRow.SubjectValue; }
-        //    set { EditingService.OnInitializeNewRow.OnNextParameterValue(value); }
+        //    get { return EditingService.OnInitializeNewRow.Value; }
+        //    set { EditingService.OnInitializeNewRow.OnNext(value); }
         //}
 
         
         [Parameter]
         public EventCallback<T> RowInserting
         {
-            get { return EditingService.OnRowInserting.SubjectValue; }
-            set { EditingService.OnRowInserting.OnNextParameterValue(value); }
+            get { return EditingService.OnRowInserting.Value; }
+            set { EditingService.OnRowInserting.OnNext(value); }
         }
 
         [Parameter]
         public EventCallback<T> RowRemoving
         {
-            get { return EditingService.OnRowRemoving.SubjectValue; }
-            set { EditingService.OnRowRemoving.OnNextParameterValue(value); }
+            get { return EditingService.OnRowRemoving.Value; }
+            set { EditingService.OnRowRemoving.OnNext(value); }
         }
 
         [Parameter]
         public GridSelectionMode SelectionMode
         {
             get { return GridSelectionMode.None; }
-            set { GridSelectionService.SelectionMode.OnNextParameterValue(value); }
+            set { GridSelectionService.SelectionMode.OnNext(value); }
         }
 
         [Parameter]
@@ -262,8 +262,8 @@ namespace Samovar.Blazor
             get { return default(T); }
             set
             {
-                //GridSelectionService.SingleSelectedDataRow.OnNextParameterValue(value, SingleSelectedDataRowChanged);
-                GridSelectionService.SingleSelectedDataRow.OnNextParameterValue(value);//, SingleSelectedDataRowChanged);
+                //GridSelectionService.SingleSelectedDataRow.OnNext(value, SingleSelectedDataRowChanged);
+                GridSelectionService.SingleSelectedDataRow.OnNext(value);//, SingleSelectedDataRowChanged);
             }
         }
 
@@ -276,7 +276,7 @@ namespace Samovar.Blazor
             get { return default(IEnumerable<T>); }
             set
             {
-                GridSelectionService.MultipleSelectedDataRows.OnNextParameterValue(value);
+                GridSelectionService.MultipleSelectedDataRows.OnNext(value);
             }
         }
 
@@ -305,9 +305,9 @@ namespace Samovar.Blazor
         protected override Task OnInitializedAsync()
         {
 
-            GridSelectionService.SingleSelectedRowCallback = async () => { await SingleSelectedDataRowChanged.InvokeAsync(GridSelectionService.SingleSelectedDataRow.SubjectValue); };
+            GridSelectionService.SingleSelectedRowCallback = async () => { await SingleSelectedDataRowChanged.InvokeAsync(GridSelectionService.SingleSelectedDataRow.Value); };
             
-            GridSelectionService.MultipleSelectedRowsCallback = async () => { await MultipleSelectedDataRowsChanged.InvokeAsync(GridSelectionService.MultipleSelectedDataRows.SubjectValue); };
+            GridSelectionService.MultipleSelectedRowsCallback = async () => { await MultipleSelectedDataRowsChanged.InvokeAsync(GridSelectionService.MultipleSelectedDataRows.Value); };
 
             return base.OnInitializedAsync();
         }
@@ -329,7 +329,7 @@ namespace Samovar.Blazor
 
                 await LayoutService.InitHeader();
 
-                InitService.IsInitialized.OnNextParameterValue(true);
+                InitService.IsInitialized.OnNext(true);
 
                 StateHasChanged();
             }

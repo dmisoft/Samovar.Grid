@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 namespace Samovar.Blazor
@@ -12,7 +13,7 @@ namespace Samovar.Blazor
     {
         public ObservableCollection<DataGridFilterCellInfo> ColumnFilters { get; } = new ObservableCollection<DataGridFilterCellInfo>();
 
-        public ISubject<IEnumerable<DataGridFilterCellInfo>> FilterInfo { get; } = new ParameterSubject<IEnumerable<DataGridFilterCellInfo>>(new List<DataGridFilterCellInfo>());
+        public BehaviorSubject<IEnumerable<DataGridFilterCellInfo>> FilterInfo { get; } = new BehaviorSubject<IEnumerable<DataGridFilterCellInfo>>(new List<DataGridFilterCellInfo>());
 
         public FilterService()
         {
@@ -51,7 +52,7 @@ namespace Samovar.Blazor
                     break;
             }
 
-            FilterInfo.OnNextParameterValue(ColumnFilters.ToList());
+            FilterInfo.OnNext(ColumnFilters.ToList());
         }
 
         public void Dispose()

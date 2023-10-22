@@ -5,11 +5,11 @@
     @foreach (var cellModel in RowModel.EditingGridCellModels.OrderBy(cm => cm.ColumnMetadata.ColumnOrder))
     {
         <div class="col-6 mb-2">
-            <label class="form-label">@cellModel.ColumnMetadata.Title.SubjectValue</label>
-            @if (cellModel.ColumnMetadata.CellEditTemplate.SubjectValue != null)
+            <label class="form-label">@cellModel.ColumnMetadata.Title.Value</label>
+            @if (cellModel.ColumnMetadata.CellEditTemplate.Value != null)
             {
                 <div style="overflow:hidden !important;width:100%;">
-                    @cellModel.ColumnMetadata.CellEditTemplate.SubjectValue(RowModel.EditingDataItem)
+                    @cellModel.ColumnMetadata.CellEditTemplate.Value(RowModel.EditingDataItem)
                 </div>
             }
             else
@@ -75,9 +75,9 @@
                 }
                 else
                 {
-                    @if (cellModel.ColumnMetadata.CellShowTemplate.SubjectValue != null)
+                    @if (cellModel.ColumnMetadata.CellShowTemplate.Value != null)
                     {
-                        @cellModel.ColumnMetadata.CellShowTemplate.SubjectValue(RowModel.DataItem)
+                        @cellModel.ColumnMetadata.CellShowTemplate.Value(RowModel.DataItem)
                     }
                     else
                     {

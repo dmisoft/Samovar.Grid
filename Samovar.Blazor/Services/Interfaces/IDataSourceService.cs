@@ -6,8 +6,8 @@ namespace Samovar.Blazor
 {
     public interface IDataSourceService<T>
     {
-        ISubject<IEnumerable<T>> Data { get; }
+        BehaviorSubject<IEnumerable<T>> Data { get; }
         ISubject<IQueryable<T>> DataQuery { get; }
-        ISubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; }
+        BehaviorSubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; }
     }
 }

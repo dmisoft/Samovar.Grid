@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 namespace Samovar.Blazor
@@ -8,17 +9,17 @@ namespace Samovar.Blazor
     public interface ILayoutService
     {
         DotNetObjectReference<ILayoutService> DataGridDotNetRef { get; }
-        ISubject<string> SelectedRowClass { get; }
-        ISubject<string> TableTagClass { get; }
-        ISubject<string> TheadTagClass { get; }
-        ISubject<string> PaginationClass { get; }
+        BehaviorSubject<string> SelectedRowClass { get; }
+        BehaviorSubject<string> TableTagClass { get; }
+        BehaviorSubject<string> TheadTagClass { get; }
+        BehaviorSubject<string> PaginationClass { get; }
 
-        ISubject<string> FilterToggleButtonClass { get; }
+        BehaviorSubject<string> FilterToggleButtonClass { get; }
 
-        ISubject<double> MinGridWidth { get; }
-        ISubject<bool> ShowDetailRow { get; }
-        ISubject<DataGridFilterMode> FilterMode { get; }
-        IObservable<bool> ShowFilterRow { get; }
+        BehaviorSubject<double> MinGridWidth { get; }
+        BehaviorSubject<bool> ShowDetailRow { get; }
+        BehaviorSubject<DataGridFilterMode> FilterMode { get; }
+        BehaviorSubject<bool> ShowFilterRow { get; }
         
         double ScrollbarWidth { get; }
         Task<double> ScrollbarWidth2();
@@ -27,11 +28,11 @@ namespace Samovar.Blazor
 
         Task<double> TableRowHeight();
 
-        ISubject<string> Height { get; }
-        ISubject<string> Width {  get; }
+        BehaviorSubject<string> Height { get; }
+        BehaviorSubject<string> Width {  get; }
 
-        ISubject<string> OuterStyle { get; }
-        ISubject<string> FooterStyle { get; }
+        BehaviorSubject<string> OuterStyle { get; }
+        BehaviorSubject<string> FooterStyle { get; }
 
         ElementReference GridFilterRef { get; set; }
         ElementReference GridOuterRef { get; set; }
@@ -41,8 +42,8 @@ namespace Samovar.Blazor
         double ActualScrollbarWidth { get; set; }
         //string innerGridBodyId { get; }
 
-        ISubject<bool> ShowColumnHeader { get; }
-        ISubject<bool> ShowDetailHeader { get; }
+        BehaviorSubject<bool> ShowColumnHeader { get; }
+        BehaviorSubject<bool> ShowDetailHeader { get; }
 
         Task InitHeader();
 

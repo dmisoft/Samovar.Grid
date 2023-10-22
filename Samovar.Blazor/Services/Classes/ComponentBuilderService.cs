@@ -26,13 +26,13 @@ namespace Samovar.Blazor
         {
             RenderFragment rf = null;
 
-            if (_templateService.EditFormTemplate.SubjectValue != null)
+            if (_templateService.EditFormTemplate.Value != null)
             {
                 rf = (builder) =>
                 {
                     builder.OpenComponent(0, typeof(GridRowInserting_PopupTemplate<U>));
                     builder.AddAttribute(1, "RowModel", model);
-                    builder.AddAttribute(2, "Template", _templateService.InsertFormTemplate.SubjectValue);
+                    builder.AddAttribute(2, "Template", _templateService.InsertFormTemplate.Value);
                     builder.CloseComponent();
                 };
             }
@@ -53,13 +53,13 @@ namespace Samovar.Blazor
         {
             RenderFragment rf = null;
 
-            if (_templateService.EditFormTemplate.SubjectValue != null)
+            if (_templateService.EditFormTemplate.Value != null)
             {
                 rf = (builder) =>
                 {
                     builder.OpenComponent(0, typeof(GridRowEditing_PopupTemplate<U>));
                     builder.AddAttribute(1, "RowModel", model);
-                    builder.AddAttribute(2, "Template", _templateService.EditFormTemplate.SubjectValue);
+                    builder.AddAttribute(2, "Template", _templateService.EditFormTemplate.Value);
                     builder.CloseComponent();
                 };
             }
@@ -94,16 +94,16 @@ namespace Samovar.Blazor
             switch (model.RowState)
             {
                 case SmDataGridRowState.Editing:
-                    if (_navigationService.NavigationMode.SubjectValue == DataGridNavigationMode.VirtualScrolling)
+                    if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
                     {
                         rf = GetDefaultRow(model);
                     }
-                    else if (_navigationService.NavigationMode.SubjectValue == DataGridNavigationMode.Paging)
+                    else if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
                     {
-                        switch (_editingService.EditMode.SubjectValue)
+                        switch (_editingService.EditMode.Value)
                         {
                             case GridEditMode.Form:
-                                if (_templateService.EditFormTemplate.SubjectValue != null)
+                                if (_templateService.EditFormTemplate.Value != null)
                                 {
                                     rf = (builder) =>
                                     {

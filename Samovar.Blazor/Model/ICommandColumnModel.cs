@@ -5,12 +5,12 @@ namespace Samovar.Blazor
     public interface ICommandColumnModel
         : IColumnModel
     {
-		public ISubject<bool> NewButtonVisible { get; }
+		public BehaviorSubject<bool> NewButtonVisible { get; }
 
-		public ISubject<bool> EditButtonVisible { get; }
+		public BehaviorSubject<bool> EditButtonVisible { get; }
 
-		public ISubject<bool> DeleteButtonVisible { get; }
-		public ISubject<string> Title { get; }
+		public BehaviorSubject<bool> DeleteButtonVisible { get; }
+		public BehaviorSubject<string> Title { get; }
 
 
 		//ISubject<bool> NewButtonVisible { get; }

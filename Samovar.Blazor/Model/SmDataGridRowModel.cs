@@ -63,8 +63,8 @@ namespace Samovar.Blazor {
 
             foreach (var cm in columnMetadata.Where(c => c.ColumnType == DataGridColumnType.Data))
             {
-                if (!string.IsNullOrEmpty(cm.Field.SubjectValue))
-                    gridCellModelCollection.Add(new DataGridRowCellModel<T>(dataItem, PropDict[cm.Field.SubjectValue], cm));
+                if (!string.IsNullOrEmpty(cm.Field.Value))
+                    gridCellModelCollection.Add(new DataGridRowCellModel<T>(dataItem, PropDict[cm.Field.Value], cm));
                 else
                     gridCellModelCollection.Add(new DataGridRowCellModel<T>(dataItem, cm));
             }
@@ -80,8 +80,8 @@ namespace Samovar.Blazor {
 
             foreach (var cm in ColumnMetadata)
             {
-                if (!string.IsNullOrEmpty(cm.Field.SubjectValue))
-                    gridCellModelCollection.Add(new DataGridRowCellModel<T>(dataItem, PropDict[cm.Field.SubjectValue], cm));
+                if (!string.IsNullOrEmpty(cm.Field.Value))
+                    gridCellModelCollection.Add(new DataGridRowCellModel<T>(dataItem, PropDict[cm.Field.Value], cm));
                 else
                     gridCellModelCollection.Add(new DataGridRowCellModel<T>(dataItem, cm));
             }

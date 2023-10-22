@@ -3,10 +3,10 @@
 @inherits SmDesignComponentBase
 
 
-<thead class="@GridLayoutService.TheadTagClass.SubjectValue" style="visibility:hidden;">
+<thead class="@GridLayoutService.TheadTagClass.Value" style="visibility:hidden;">
 	<tr style="height:0px !important;">
 		@{
-			@if (GridLayoutService.ShowDetailRow.SubjectValue)
+			@if (GridLayoutService.ShowDetailRow.Value)
 			{
 			    <th style="@(GridColumnService.DetailExpanderColumnModel.VisibleWidthStyle + "padding-right:0;border-bottom-width: 0px;border-top-width:0px;")" id="@(GridColumnService.DetailExpanderColumnModel.HiddenGridColumnCellId)" class="s-th-hidden p-0">
 			        <div style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;cursor:pointer;" />

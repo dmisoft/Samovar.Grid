@@ -14,10 +14,10 @@ namespace Samovar.Blazor
 
         public abstract DataGridColumnType ColumnType { get; }
 
-        public ISubject<string> Title { get; } = new Subject<string>();
+        public BehaviorSubject<string> Title { get; } = new BehaviorSubject<string>("");
 
         //TODO std. value new Subject<string>("");
-        public ISubject<string> Width { get; } = new Subject<string>();
+        public Subject<string> Width { get; } = new Subject<string>();
 
         public int ColumnOrder { get; set; }
 

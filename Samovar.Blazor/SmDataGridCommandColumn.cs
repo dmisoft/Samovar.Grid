@@ -7,7 +7,7 @@ namespace Samovar.Blazor
         : SmDataGridColumnBase<ICommandColumnModel>
     {
         [Parameter]
-        public string Width { get { return null; } set { Model.Width.OnNextParameterValue(value); } }
+        public string Width { get { return null; } set { Model.Width.OnNext(value); } }
 
         [Parameter]
         public bool NewButtonVisible
@@ -19,7 +19,7 @@ namespace Samovar.Blazor
             set
             {
                 //Lazy loading
-                Model.NewButtonVisible.OnNextParameterValue(value);
+                Model.NewButtonVisible.OnNext(value);
             }
         }
 
@@ -33,7 +33,7 @@ namespace Samovar.Blazor
             set
             {
                 //Lazy loading
-                Model.EditButtonVisible.OnNextParameterValue(value);
+                Model.EditButtonVisible.OnNext(value);
             }
         }
 
@@ -47,7 +47,7 @@ namespace Samovar.Blazor
             set
             {
                 //Lazy loading
-                Model.DeleteButtonVisible.OnNextParameterValue(value);
+                Model.DeleteButtonVisible.OnNext(value);
             }
         }
 

@@ -2,6 +2,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 namespace Samovar.Blazor
@@ -39,9 +40,9 @@ namespace Samovar.Blazor
             return translatableDivHeight;
         }
 
-        public ISubject<string> TranslatableDivHeightValue { get; } = new ParameterSubject<string>("");
+        public BehaviorSubject<string> TranslatableDivHeightValue { get; } = new BehaviorSubject<string>("");
 
-        public ISubject<DataGridVirtualScrollingInfo> VirtualScrollingInfo { get; } = new ParameterSubject<DataGridVirtualScrollingInfo>(DataGridVirtualScrollingInfo.Empty);
+        public BehaviorSubject<DataGridVirtualScrollingInfo> VirtualScrollingInfo { get; } = new BehaviorSubject<DataGridVirtualScrollingInfo>(DataGridVirtualScrollingInfo.Empty);
 
         public ISubject<IQueryable> Query { get; }
 
@@ -61,8 +62,9 @@ namespace Samovar.Blazor
             _dataSourceService = dataSourceService;
             _constantService = constantService;
 
-            var sub1 = new Subscription1TaskVoid<bool>(_initService.IsInitialized, myfunc1);
-            sub1.CreateMap();
+            //TODO refactoring 10/2023
+            //var sub1 = new Subscription1TaskVoid<bool>(_initService.IsInitialized, myfunc1);
+            //sub1.CreateMap();
         }
 
         private async Task myfunc1(bool arg)
@@ -113,9 +115,9 @@ namespace Samovar.Blazor
             int visibleItems = (int)Math.Round(innerGridHeight / rowHeight, 2, MidpointRounding.AwayFromZero) + 1;
             int skip = (int)(scrollTop / rowHeight);
 
-            _dataSourceService.DataLoadingSettings.OnNextParameterValue(new NavigationStrategyDataLoadingSettings(skip: skip, take: visibleItems));
+            _dataSourceService.DataLoadingSettings.OnNext(new NavigationStrategyDataLoadingSettings(skip: skip, take: visibleItems));
 
-            VirtualScrollingInfo.OnNextParameterValue(new DataGridVirtualScrollingInfo(0d, skip * rowHeight, TranslatableDivHeightValue.SubjectValue));
+            VirtualScrollingInfo.OnNext(new DataGridVirtualScrollingInfo(0d, skip * rowHeight, TranslatableDivHeightValue.Value));
         }
 
         public async Task Activate()
@@ -143,7 +145,7 @@ namespace Samovar.Blazor
 
             string divHeight = $"{Math.Max(divHeightValue, innerGridHeight).ToString(CultureInfo.InvariantCulture)}px";
 
-            TranslatableDivHeightValue.OnNextParameterValue(divHeight);
+            TranslatableDivHeightValue.OnNext(divHeight);
 
             await ProcessVirtualScrolling(0);
         }

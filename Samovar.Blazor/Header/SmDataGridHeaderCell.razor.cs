@@ -37,14 +37,14 @@ namespace Samovar.Blazor.Header
         }
 
         public string SortSymbol;
-        private Task OnOrderInfoChanged(DataGridColumnOrderInfo args)
+        private void OnOrderInfoChanged(DataGridColumnOrderInfo args)
         {
             string sortSymbol = "";
 
-            if (args.Field == Model.Field.SubjectValue && args.Asc) {
+            if (args.Field == Model.Field.Value && args.Asc) {
                 sortSymbol = "&#x2BC5;";
             }
-            else if (args.Field == Model.Field.SubjectValue && !args.Asc)
+            else if (args.Field == Model.Field.Value && !args.Asc)
             {
                 sortSymbol = "&#x2BC6;";
             }
@@ -53,7 +53,7 @@ namespace Samovar.Blazor.Header
             
             StateHasChanged();
 
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
         }
 
         internal Task ColumnCellClick()

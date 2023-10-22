@@ -34,12 +34,13 @@ namespace Samovar.Blazor
 
         protected override Task OnInitializedAsync()
         {
-            var sub1 = new Subscription1TaskVoid<DataGridVirtualScrollingInfo>(VirtualScrollingService.VirtualScrollingInfo, myfunc1);
-            sub1.CreateMap();
+            //TODO refactoring 10/2023
+            //var sub1 = new Subscription1TaskVoid<DataGridVirtualScrollingInfo>(VirtualScrollingService.VirtualScrollingInfo, myfunc1);
+            //sub1.CreateMap();
 
             Style = new DataGridStyleInfo
             {
-                CssStyle = LayoutService.OuterStyle.SubjectValue,
+                CssStyle = LayoutService.OuterStyle.Value,
                 ActualScrollbarWidth = LayoutService.ActualScrollbarWidth
             };
             

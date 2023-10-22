@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 namespace Samovar.Blazor
@@ -8,8 +9,8 @@ namespace Samovar.Blazor
     {
         private readonly INavigationService _navigationService;
 
-        public ISubject<DataSourceStateEnum> DataSourceState { get; } = new ParameterSubject<DataSourceStateEnum>(DataSourceStateEnum.NoData);
-        public ISubject<DataEditStateEnum> DataEditState { get; } = new ParameterSubject<DataEditStateEnum>(DataEditStateEnum.Idle);
+        public BehaviorSubject<DataSourceStateEnum> DataSourceState { get; } = new BehaviorSubject<DataSourceStateEnum>(DataSourceStateEnum.NoData);
+        public BehaviorSubject<DataEditStateEnum> DataEditState { get; } = new BehaviorSubject<DataEditStateEnum>(DataEditStateEnum.Idle);
 
         public Func<Task> ShowDataPanelDelegate { get; set; }
         public Func<Task> CloseDataPanelDelegate { get; set; }
@@ -27,14 +28,14 @@ namespace Samovar.Blazor
 
         public GridStateService(INavigationService navigationService)
         {
-            var querySubscription = new Subscription1TaskVoid<DataSourceStateEnum>(DataSourceState, ProcessDataSourceState).CreateMap();
-            var querySubscription1 = new Subscription1TaskVoid<DataEditStateEnum>(DataEditState, ProcessDataEditState).CreateMap();
+            //TODO refactoring
+            //var querySubscription = new Subscription1TaskVoid<DataSourceStateEnum>(DataSourceState, ProcessDataSourceState).CreateMap();
+            //var querySubscription1 = new Subscription1TaskVoid<DataEditStateEnum>(DataEditState, ProcessDataEditState).CreateMap();
             _navigationService = navigationService;
         }
 
         private Task ProcessDataEditState(DataEditStateEnum arg)
         {
-            //throw new NotImplementedException();
             return Task.CompletedTask;
         }
 
@@ -51,7 +52,7 @@ namespace Samovar.Blazor
             {
                 case DataSourceStateEnum.Idle:
                     t += ShowDataPanelDelegate;
-                    if(_navigationService.NavigationMode.SubjectValue == DataGridNavigationMode.Paging)
+                    if(_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
                         t += ShowPagingPanelDelegate;
                     break;
                 case DataSourceStateEnum.Loading:

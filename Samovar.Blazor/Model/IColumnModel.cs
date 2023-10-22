@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Subjects;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
 {
@@ -11,7 +6,7 @@ namespace Samovar.Blazor
     {
         public string Id { get; }
         public DataGridColumnType ColumnType { get; }
-        public ISubject<string> Width { get; }
+        public Subject<string> Width { get; }
         public ColumnMetadataWidthInfo WidthInfo { get; set; }
 
         public int ColumnOrder { get; set; }

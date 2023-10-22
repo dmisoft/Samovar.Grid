@@ -2,13 +2,13 @@
 @inherits SmDesignComponentBase
 
 <tr>
-    @if (LayoutService.ShowDetailRow.SubjectValue)
+    @if (LayoutService.ShowDetailRow.Value)
     {
         <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;">
             <div class="s-flex s-flex-row s-align-content-center s-justify-content-center"></div>
         </td>
     }
     <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;" colspan="@(ColumnService.AllColumnModels.Where(c => c.ColumnType == DataGridColumnType.Data || c.ColumnType == DataGridColumnType.Command).Count())">
-        @TemplateService.EditFormTemplate.SubjectValue(RowModel.DataItem)
+        @TemplateService.EditFormTemplate.Value(RowModel.DataItem)
     </td>
 </tr>

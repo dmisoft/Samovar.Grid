@@ -44,15 +44,15 @@ namespace Samovar.Blazor
 
                 _rowModel.RowSelected = false;//TODO die Konstruktion hier ist nicht elegant. Man braucht eine Model Factrory
 
-                switch (GridSelectionService.SelectionMode.SubjectValue)
+                switch (GridSelectionService.SelectionMode.Value)
                 {
                     case GridSelectionMode.None:
                         break;
                     case GridSelectionMode.SingleSelectedDataRow:
-                        _rowModel.RowSelected = GridSelectionService.SingleSelectedDataRow.SubjectValue != null && GridSelectionService.SingleSelectedDataRow.SubjectValue.Equals(_rowModel.DataItem);
+                        _rowModel.RowSelected = GridSelectionService.SingleSelectedDataRow.Value != null && GridSelectionService.SingleSelectedDataRow.Value.Equals(_rowModel.DataItem);
                         break;
                     case GridSelectionMode.MultipleSelectedDataRows:
-                        _rowModel.RowSelected = GridSelectionService.MultipleSelectedDataRows.SubjectValue != null && GridSelectionService.MultipleSelectedDataRows.SubjectValue.Any(a => a.Equals(_rowModel.DataItem));
+                        _rowModel.RowSelected = GridSelectionService.MultipleSelectedDataRows.Value != null && GridSelectionService.MultipleSelectedDataRows.Value.Any(a => a.Equals(_rowModel.DataItem));
                         break;
                     default:
                         break;
@@ -80,7 +80,7 @@ namespace Samovar.Blazor
         //Row editing
         protected async Task RowEditBegin(SmDataGridRowModel<T> rowMainModel)
         {
-            if (GridStateService.DataSourceState.SubjectValue != DataSourceStateEnum.Idle)
+            if (GridStateService.DataSourceState.Value != DataSourceStateEnum.Idle)
                 await EditingService.RowEditCancel();
 
             await EditingService.RowEditBegin(rowMainModel);
@@ -189,22 +189,22 @@ namespace Samovar.Blazor
             return Task.CompletedTask;
         }
 
-        private Task MultipleSelectedDataRowsChanged(IEnumerable<T> arg)
+        private void MultipleSelectedDataRowsChanged(IEnumerable<T> arg)
         {
             _rowModel.RowSelected = arg != null && arg.Any(a => a.Equals(_rowModel.DataItem));
 
             StateHasChanged();
 
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
         }
 
-        private Task SingleSelectedDataRowsChanged(T arg)
+        private void SingleSelectedDataRowsChanged(T arg)
         {
             _rowModel.RowSelected = arg != null && arg.Equals(_rowModel.DataItem);
 
             StateHasChanged();
             
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
         }
     }
 }

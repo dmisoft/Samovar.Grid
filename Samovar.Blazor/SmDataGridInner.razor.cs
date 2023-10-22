@@ -55,7 +55,7 @@ namespace Samovar.Blazor
 
             Style = new DataGridStyleInfo
             {
-                CssStyle = LayoutService.OuterStyle.SubjectValue,
+                CssStyle = LayoutService.OuterStyle.Value,
                 ActualScrollbarWidth = LayoutService.ActualScrollbarWidth
             };
 

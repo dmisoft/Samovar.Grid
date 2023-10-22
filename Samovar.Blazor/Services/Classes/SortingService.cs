@@ -1,7 +1,5 @@
-﻿
-
-using Microsoft.AspNetCore.Components;
-using System;
+﻿using System;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 namespace Samovar.Blazor
@@ -9,7 +7,7 @@ namespace Samovar.Blazor
     public class SortingService
         : ISortingService, IDisposable
     {
-        public ISubject<DataGridColumnOrderInfo> ColumnOrderInfo { get; } = new ParameterSubject<DataGridColumnOrderInfo>(DataGridColumnOrderInfo.Empty);
+        public BehaviorSubject<DataGridColumnOrderInfo> ColumnOrderInfo { get; } = new BehaviorSubject<DataGridColumnOrderInfo>(DataGridColumnOrderInfo.Empty);
 
         string _currenSortingField;
         bool _ascSorting;
@@ -24,11 +22,11 @@ namespace Samovar.Blazor
             DataGridColumnOrderInfo orderInfo = DataGridColumnOrderInfo.Empty;
 
             if (string.IsNullOrEmpty(_currenSortingField)) {//initial setting
-                _currenSortingField = columnModel.Field.SubjectValue;
+                _currenSortingField = columnModel.Field.Value;
                 _ascSorting = true;
             }
             else {
-                if (_currenSortingField == columnModel.Field.SubjectValue)
+                if (_currenSortingField == columnModel.Field.Value)
                 {
                     if (!_ascSorting) {//reset to original sorting state of data source
                         _currenSortingField = "";
@@ -39,7 +37,7 @@ namespace Samovar.Blazor
                     }
                 }
                 else {//column change
-                    _currenSortingField = columnModel.Field.SubjectValue;
+                    _currenSortingField = columnModel.Field.Value;
                     _ascSorting = true;
                 }
             }
@@ -47,7 +45,7 @@ namespace Samovar.Blazor
             if (!string.IsNullOrEmpty(_currenSortingField))
                 orderInfo = new DataGridColumnOrderInfo { Field = _currenSortingField, Asc = _ascSorting };
 
-            ColumnOrderInfo.OnNextParameterValue(orderInfo);
+            ColumnOrderInfo.OnNext(orderInfo);
 
 
             //RenderFragment<object> fragment = new RenderFragment<object>();

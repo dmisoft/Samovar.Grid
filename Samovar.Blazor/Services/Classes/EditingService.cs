@@ -73,7 +73,7 @@ namespace Samovar.Blazor
                     ShowEditingPopupDelegate?.Invoke(_editingRowModel);
             }
 
-            _stateService.DataEditState.OnNextParameterValue(DataEditStateEnum.Editing);
+            _stateService.DataEditState.OnNext(DataEditStateEnum.Editing);
         }
 
         public Task RowEditCancel()
@@ -130,7 +130,7 @@ namespace Samovar.Blazor
             else if (EditMode.Value == GridEditMode.Form)
                 ShowInsertingFormDelegate?.Invoke(rowModel);
 
-            _stateService.DataEditState.OnNextParameterValue(DataEditStateEnum.Inserting);
+            _stateService.DataEditState.OnNext(DataEditStateEnum.Inserting);
         }
 
         public async Task RowInsertCommit(T dataItem)

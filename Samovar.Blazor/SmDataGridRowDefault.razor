@@ -5,8 +5,8 @@
 <tr id="@RowModel.HtmlElementId" style="cursor:pointer;"
 	@onmousedown="@(()=>RowSelectedIntern(new GridRowEventArgs(RowModel.DataItem, RowModel.DataItemPosition), RowModel))"
 	@ondblclick="@(()=>FireRowDoubleClick(new GridRowEventArgs(RowModel.DataItem, RowModel.DataItemPosition), RowModel))"
-	class="@(_rowModel.RowSelected?$"{LayoutService.SelectedRowClass.SubjectValue}":"")">
-	@if (LayoutService.ShowDetailRow.SubjectValue)
+	class="@(_rowModel.RowSelected?$"{LayoutService.SelectedRowClass.Value}":"")">
+	@if (LayoutService.ShowDetailRow.Value)
 	{
 		<td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;"  @onmousedown="()=> { }" @onmousedown:stopPropagation @onclick="GridRow.DetailExpanderClick">
 			<div class="s-flex s-flex-row s-align-content-center s-justify-content-center">
@@ -23,11 +23,11 @@
 				if (cellModel != null)
 				{
 					<td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;padding-right:0;">
-						@if (((IDataColumnModel)colModel).CellShowTemplate.SubjectValue != null)
+						@if (((IDataColumnModel)colModel).CellShowTemplate.Value != null)
 						{
 							<div class="s-flex" style="margin:0px;padding:0px;">
 								<div style="flex-grow:1;" class="ml-1 mr-0">
-									@(((IDataColumnModel)colModel).CellShowTemplate.SubjectValue(RowModel.DataItem))
+									@(((IDataColumnModel)colModel).CellShowTemplate.Value(RowModel.DataItem))
 								</div>
 								<div style="cursor:ew-resize;float:right;width:3px" @onmousedown="((args)=>MouseDownOnResizeColumnGrip(args, cellModel.ColumnMetadata))"></div>
 							</div>
@@ -46,12 +46,12 @@
 			case DataGridColumnType.Command:
 				<td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;">
 					<div class="s-flex s-flex-row s-align-content-center s-justify-content-center">
-						@if (((ICommandColumnModel)colModel).EditButtonVisible.SubjectValue)
+						@if (((ICommandColumnModel)colModel).EditButtonVisible.Value)
 						{
 							<button style="margin-left:2px;margin-right:2px;" class="btn btn-primary btn-sm" @onclick="@(()=>RowEditBegin(RowModel))" @onmousedown="()=> { }" @onmousedown:stopPropagation>edit</button>
 						}
 
-						@if (((ICommandColumnModel)colModel).DeleteButtonVisible.SubjectValue)
+						@if (((ICommandColumnModel)colModel).DeleteButtonVisible.Value)
 						{
 							<button style="margin-left:2px;margin-right:2px;" class="btn btn-danger btn-sm" @onclick="@(() => RowDeleteBegin(RowModel))" @onmousedown="()=> { }" @onmousedown:stopPropagation>delete</button>
 						}
@@ -64,7 +64,7 @@
 		<div style="margin:0px;padding:0px;overflow:hidden;display:block;">&nbsp;</div>
 	</th>
 </tr>
-@if (TemplateService.DetailRowTemplate.SubjectValue != null && RowDetailService.ExpandedRowDetails.SubjectValue.Contains(RowModel.DataItem))
+@if (TemplateService.DetailRowTemplate.Value != null && RowDetailService.ExpandedRowDetails.Value.Contains(RowModel.DataItem))
 {
 	<tr>
 		<td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;">
@@ -72,7 +72,7 @@
 			</div>
 		</td>
 		<td colspan="@ColumnService.AllColumnModels.Where(c => c.ColumnType == DataGridColumnType.Data || c.ColumnType == DataGridColumnType.Command).Count()">
-			@TemplateService.DetailRowTemplate.SubjectValue(RowModel.DataItem)
+			@TemplateService.DetailRowTemplate.Value(RowModel.DataItem)
 		</td>
 	</tr>
 }

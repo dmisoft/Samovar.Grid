@@ -1,5 +1,6 @@
 ﻿using Microsoft.JSInterop;
 using System;
+using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
 {
@@ -8,10 +9,10 @@ namespace Samovar.Blazor
     {
         public IJSObjectReference jsModule { get; private set; }
 
-        public ISubject<bool> IsInitialized { get; set; }
+        public BehaviorSubject<bool> IsInitialized { get; set; }
         public InitService()
         {
-            IsInitialized = new ParameterSubject<bool>(false);
+            IsInitialized = new BehaviorSubject<bool>(false);
         }
 
         public void Dispose()

@@ -1,7 +1,7 @@
 ﻿@using System.Globalization
 @typeparam TItem
 @inherits SmDesignComponentBase
-<table id="@ConstantService.InnerGridBodyTableId" class="@LayoutService.TableTagClass.SubjectValue" style="table-layout:fixed;@(LayoutService.MinGridWidth.SubjectValue > 0 ? "min-width:" + LayoutService.MinGridWidth.SubjectValue.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
+<table id="@ConstantService.InnerGridBodyTableId" class="@LayoutService.TableTagClass.Value" style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
     <DataGridHiddenHeader TItem=TItem />
     <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
         @if (View != null) {

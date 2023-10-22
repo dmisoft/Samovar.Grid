@@ -26,12 +26,12 @@ namespace Samovar.Blazor
         
         protected override void OnInitialized()
         {
-            //VirtualScrollingService.TranslatableDivHeightValue.Subscribe(this);
-            var sub1 = new Subscription1TaskVoid<DataGridVirtualScrollingInfo>(VirtualScrollingService.VirtualScrollingInfo, myfunc1);
-            sub1.CreateMap();
+            //TODO refactoring 10/2023
+            //var sub1 = new Subscription1TaskVoid<DataGridVirtualScrollingInfo>(VirtualScrollingService.VirtualScrollingInfo, myfunc1);
+            //sub1.CreateMap();
 
             Style = new DataGridStyleInfo { 
-                CssStyle = GridLayoutService.OuterStyle.SubjectValue,
+                CssStyle = GridLayoutService.OuterStyle.Value,
                 ActualScrollbarWidth = GridLayoutService.ActualScrollbarWidth
             };
             GridLayoutService.DataGridInnerCssStyleChanged += GridLayoutService_DataGridInnerCssStyleChanged;

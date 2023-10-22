@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 namespace Samovar.Blazor
@@ -7,17 +8,18 @@ namespace Samovar.Blazor
     internal class PagingNavigationStrategy<T>
         : IPagingNavigationStrategy
     {
-        public ISubject<int> PageSize { get; } = new ParameterSubject<int>(50);
+        public BehaviorSubject<int> PageSize { get; } = new BehaviorSubject<int>(50);
 
-        public ISubject<int> PagerSize { get; } = new ParameterSubject<int>(10);
+        public BehaviorSubject<int> PagerSize { get; } = new BehaviorSubject<int>(10);
 
-        public ISubject<int> PageCount { get; set; } = new ParameterSubject<int>(0);
+        public BehaviorSubject<int> PageCount { get; set; } = new BehaviorSubject<int>(0);
 
-        public ISubject<int> CurrentPage { get; private set; } = new ParameterSubject<int>(0);
+        public BehaviorSubject<int> CurrentPage { get; private set; } = new BehaviorSubject<int>(0);
 
-        public ISubject<DataGridPagerInfo> PagerInfo { get; private set; } = new ParameterSubject<DataGridPagerInfo>(DataGridPagerInfo.Empty);
+        public BehaviorSubject<DataGridPagerInfo> PagerInfo { get; private set; } = new BehaviorSubject<DataGridPagerInfo>(DataGridPagerInfo.Empty);
 
-        Subscription2<int, int, NavigationStrategyDataLoadingSettings> pagingSettingsSubscription;
+        //TODO Refactoring 10/2023
+        //Subscription2<int, int, NavigationStrategyDataLoadingSettings> pagingSettingsSubscription;
         private readonly IInitService _initService;
         private readonly IDataSourceService<T> _dataSourceService;
 
@@ -27,20 +29,21 @@ namespace Samovar.Blazor
             _dataSourceService = dataSourceService;
             _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
 
-            PagerInfo = new Subscription3<int, int, int, DataGridPagerInfo>(PagerSize, PageCount, CurrentPage, PagerInfoChanged).CreateMap();
-            var querySubscription = new Subscription2TaskVoid<int, int>(PageSize, CurrentPage, CalculatePagingSettings).CreateMap();
+            //TODO Refactoring 10/2023
+            //PagerInfo = new Subscription3<int, int, int, DataGridPagerInfo>(PagerSize, PageCount, CurrentPage, PagerInfoChanged).CreateMap();
+            //var querySubscription = new Subscription2TaskVoid<int, int>(PageSize, CurrentPage, CalculatePagingSettings).CreateMap();
 
-            _dataSourceService.DataLoadingSettings.OnNextParameterValue(NavigationStrategyDataLoadingSettings.Empty);
+            _dataSourceService.DataLoadingSettings.OnNext(NavigationStrategyDataLoadingSettings.Empty);
         }
 
         private void DataGridInitializerCallback(bool obj)
         {
-            CurrentPage.OnNextParameterValue(1);
+            CurrentPage.OnNext(1);
         }
 
         private Task CalculatePagingSettings(int pageSize, int currentPage)
         {
-            _dataSourceService.DataLoadingSettings.OnNextParameterValue(new NavigationStrategyDataLoadingSettings(skip: (currentPage - 1) * pageSize, take: pageSize));
+            _dataSourceService.DataLoadingSettings.OnNext(new NavigationStrategyDataLoadingSettings(skip: (currentPage - 1) * pageSize, take: pageSize));
             return Task.CompletedTask;
         }
 
@@ -66,21 +69,21 @@ namespace Samovar.Blazor
 
         public Task NavigateToNextPage()
         {
-            int newPage = CurrentPage.SubjectValue < PageCount.SubjectValue ? CurrentPage.SubjectValue + 1 : CurrentPage.SubjectValue;
-            CurrentPage.OnNextParameterValue(newPage);
+            int newPage = CurrentPage.Value < PageCount.Value ? CurrentPage.Value + 1 : CurrentPage.Value;
+            CurrentPage.OnNext(newPage);
             return Task.CompletedTask;
         }
 
         public Task NavigateToPage(int newPage)
         {
-            CurrentPage.OnNextParameterValue(newPage);
+            CurrentPage.OnNext(newPage);
             return Task.CompletedTask;
         }
 
         public Task NavigateToPreviousPage()
         {
-            int newPage = PagerInfo.SubjectValue.CurrentPage > 1 ? PagerInfo.SubjectValue.CurrentPage - 1 : 1;
-            CurrentPage.OnNextParameterValue(newPage);
+            int newPage = PagerInfo.Value.CurrentPage > 1 ? PagerInfo.Value.CurrentPage - 1 : 1;
+            CurrentPage.OnNext(newPage);
             return Task.CompletedTask;
         }
 
@@ -108,12 +111,12 @@ namespace Samovar.Blazor
         {
             int items = data.Count();
 
-            int pages = (int)Math.Ceiling(items / (decimal)PageSize.SubjectValue);
-            PageCount.OnNextParameterValue(pages);
+            int pages = (int)Math.Ceiling(items / (decimal)PageSize.Value);
+            PageCount.OnNext(pages);
 
-            int currentPage = CurrentPage.SubjectValue == 0 ? 1: Math.Min(pages, CurrentPage.SubjectValue);
+            int currentPage = CurrentPage.Value == 0 ? 1: Math.Min(pages, CurrentPage.Value);
             
-            CurrentPage.OnNextParameterValue(currentPage);
+            CurrentPage.OnNext(currentPage);
             return Task.CompletedTask;
         }
     }

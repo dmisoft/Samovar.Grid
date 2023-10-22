@@ -2,7 +2,7 @@
 @typeparam T
 @inherits SmDesignComponentBase
 
-@if (NavigationService.NavigationMode.SubjectValue == DataGridNavigationMode.VirtualScrolling)
+@if (NavigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
 {
 	<div style="@ScrollStyle">
 		<div translate_y_offset="@VirtualScrollingService.TranslateYOffset" id="@ConstantService.InnerGridBodyId" style="transform:translateY(@(OffsetY.ToString(CultureInfo.InvariantCulture)+"px"))">

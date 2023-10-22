@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
     public interface IGridStateService
     {
-        ISubject<DataSourceStateEnum> DataSourceState { get; }
-        ISubject<DataEditStateEnum> DataEditState { get; }
+        BehaviorSubject<DataSourceStateEnum> DataSourceState { get; }
+        BehaviorSubject<DataEditStateEnum> DataEditState { get; }
 
         Func<Task> ShowDataPanelDelegate { get; set; }
         Func<Task> CloseDataPanelDelegate { get; set; }

@@ -9,8 +9,8 @@ namespace Samovar.Blazor
     public interface IRepositoryService<T>
     {
         IEnumerable<SmDataGridRowModel<T>> ViewCollection { get; }
-        
-        ISubject<HashSet<T>> Data { get; }
+
+        BehaviorSubject<HashSet<T>> Data { get; }
         
         event Func<IEnumerable<SmDataGridRowModel<T>>, Task> ViewCollectionChanged;
         

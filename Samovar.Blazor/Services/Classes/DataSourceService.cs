@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
@@ -16,11 +15,9 @@ namespace Samovar.Blazor
         private readonly IFilterService _filterService;
         private readonly ISortingService _orderService;
 
-        //TODO std. value in Subject ctor new NavigationStrategyDataLoadingSettings()
-        public ISubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; set; } = new Subject<NavigationStrategyDataLoadingSettings>();
+        public BehaviorSubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; set; } = new BehaviorSubject<NavigationStrategyDataLoadingSettings>(new NavigationStrategyDataLoadingSettings());
 
-        //TODO std. value in Subject ctor new List<T>()
-        public ISubject<IEnumerable<T>> Data { get; private set; } = new Subject<IEnumerable<T>>();
+        public BehaviorSubject<IEnumerable<T>> Data { get; private set; } = new BehaviorSubject<IEnumerable<T>>(new List<T>());
 
         //Observable<IEnumerable<DataGridFilterCellInfo>, DataGridColumnOrderInfo, IEnumerable<T>, IQueryable<T>> DataQuerySubscription;
         //Observable<IQueryable<T>> DataQuerySubscription;
@@ -44,17 +41,20 @@ namespace Samovar.Blazor
 
         private void dataObserver(IEnumerable<T> enumerable)
         {
-            throw new NotImplementedException();
+            //TODO refactoring 10/2023
+            //throw new NotImplementedException();
         }
 
         private void columnOrderObserver(DataGridColumnOrderInfo info)
         {
-            throw new NotImplementedException();
+            //TODO refactoring 10/2023
+            //throw new NotImplementedException();
         }
 
         private void filterObserver(IEnumerable<DataGridFilterCellInfo> enumerable)
         {
-            throw new NotImplementedException();
+            //TODO refactoring 10/2023
+            //throw new NotImplementedException();
         }
 
         private IQueryable<T> myfunc3(IEnumerable<DataGridFilterCellInfo> filterInfo, DataGridColumnOrderInfo orderInfo, IEnumerable<T> data)
@@ -118,7 +118,7 @@ namespace Samovar.Blazor
 
             foreach (var pair in filterInfo)
             {
-                string field = pair.ColumnMetadata.Field.SubjectValue;
+                string field = pair.ColumnMetadata.Field.Value;
                 DataGridFilterCellInfo filterCellInfo = pair;
 
                 MemberExpression memberExp = Expression.Property(obj, field);

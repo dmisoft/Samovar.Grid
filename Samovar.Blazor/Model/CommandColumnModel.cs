@@ -7,10 +7,10 @@ namespace Samovar.Blazor
     {
         public override DataGridColumnType ColumnType { get; } = DataGridColumnType.Command;
 
-        public ISubject<bool> NewButtonVisible { get; } = new BehaviorSubject<bool>(true);
+        public BehaviorSubject<bool> NewButtonVisible { get; } = new BehaviorSubject<bool>(true);
 
-        public ISubject<bool> EditButtonVisible { get; } = new BehaviorSubject<bool>(true);
+        public BehaviorSubject<bool> EditButtonVisible { get; } = new BehaviorSubject<bool>(true);
 
-        public ISubject<bool> DeleteButtonVisible { get; } = new BehaviorSubject<bool>(true);
+        public BehaviorSubject<bool> DeleteButtonVisible { get; } = new BehaviorSubject<bool>(true);
     }
 }

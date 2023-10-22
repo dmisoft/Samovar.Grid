@@ -17,7 +17,7 @@ namespace Samovar.Blazor
         protected override void OnInitialized()
         {
             Style = new DataGridStyleInfo { 
-                CssStyle = GridLayoutService.OuterStyle.SubjectValue,
+                CssStyle = GridLayoutService.OuterStyle.Value,
                 ActualScrollbarWidth = GridLayoutService.ActualScrollbarWidth
             };
             GridLayoutService.DataGridInnerCssStyleChanged += GridLayoutService_DataGridInnerCssStyleChanged;

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 namespace Samovar.Blazor
@@ -11,22 +12,22 @@ namespace Samovar.Blazor
     public class LayoutService
         : ILayoutService, IDisposable
     {
-        public ISubject<string> SelectedRowClass { get; } = new ParameterSubject<string>("bg-warning");
+        public BehaviorSubject<string> SelectedRowClass { get; } = new BehaviorSubject<string>("bg-warning");
 
-        public ISubject<string> TableTagClass { get; } = new ParameterSubject<string>("table table-bordered");
+        public BehaviorSubject<string> TableTagClass { get; } = new BehaviorSubject<string>("table table-bordered");
 
-        public ISubject<string> TheadTagClass { get; } = new ParameterSubject<string>("table-light");
+        public BehaviorSubject<string> TheadTagClass { get; } = new BehaviorSubject<string>("table-light");
 
-        public ISubject<double> MinGridWidth { get; } = new ParameterSubject<double>(0d);
+        public BehaviorSubject<double> MinGridWidth { get; } = new BehaviorSubject<double>(0d);
 
-        public ISubject<bool> ShowDetailRow { get; } = new ParameterSubject<bool>(false);
+        public BehaviorSubject<bool> ShowDetailRow { get; } = new BehaviorSubject<bool>(false);
 
-        public ISubject<string> PaginationClass { get; } = new ParameterSubject<string>("pagination");
-        public ISubject<string> FilterToggleButtonClass { get; } = new ParameterSubject<string>("btn btn-secondary");
+        public BehaviorSubject<string> PaginationClass { get; } = new BehaviorSubject<string>("pagination");
+        public BehaviorSubject<string> FilterToggleButtonClass { get; } = new BehaviorSubject<string>("btn btn-secondary");
 
-        public IObservable<bool> ShowFilterRow { get; } = new ParameterSubject<bool>(false);
+        public BehaviorSubject<bool> ShowFilterRow { get; } = new BehaviorSubject<bool>(false);
 
-        public ISubject<DataGridFilterMode> FilterMode { get; } = new ParameterSubject<DataGridFilterMode>(DataGridFilterMode.None);
+        public BehaviorSubject<DataGridFilterMode> FilterMode { get; } = new BehaviorSubject<DataGridFilterMode>(DataGridFilterMode.None);
 
         public ElementReference GridFilterRef { get; set; }
         public ElementReference GridOuterRef { get; set; }
@@ -56,24 +57,24 @@ namespace Samovar.Blazor
             _initService = initService;
             _columnService = columnService;
 
-            _initService.IsInitialized.Subscribe(new SmObserver<bool>(new SmObserverDispatcher<bool>(DataGridInitializerCallback)));
+            //_initService.IsInitialized.Subscribe(new SmObserver<bool>(new SmObserverDispatcher<bool>(DataGridInitializerCallback)));
+            _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
 
             DataGridDotNetRef = DotNetObjectReference.Create(this as ILayoutService);
 
             ScrollbarWidthLazy = new(() => _jsService.MeasureScrollbar().AsTask());
 
-            TableRowHeightLazy = new(() => _jsService.MeasureTableRowHeight(TableTagClass.SubjectValue).AsTask());
+            TableRowHeightLazy = new(() => _jsService.MeasureTableRowHeight(TableTagClass.Value).AsTask());
         }
 
         private void DataGridInitializerCallback(bool obj)
         {
-            var sub1 = new Subscription2TaskVoid<string, string>(Height, Width, HeightWidthChanged);
-            sub1.CreateMap();
+            //TODO refactoring 10/2023
+            //var sub1 = new Subscription2TaskVoid<string, string>(Height, Width, HeightWidthChanged);
+            //sub1.CreateMap();
 
             //Standard values
-            Task.Run(async () => await HeightWidthChanged(height: Height.SubjectValue, width: Width.SubjectValue));
-            //Height.OnNextParameterValue("400px");
-            //Width.OnNextParameterValue("");
+            Task.Run(async () => await HeightWidthChanged(height: Height.Value, width: Width.Value));
         }
 
         public bool FitColumnsToTableWidth { get; set; } = false;
@@ -93,17 +94,17 @@ namespace Samovar.Blazor
         public double ActualScrollbarWidth { get; set; }
 
 
-        public ISubject<string> OuterStyle { get; } = new ParameterSubject<string>("");
+        public BehaviorSubject<string> OuterStyle { get; } = new BehaviorSubject<string>("");
 
-        public ISubject<string> FooterStyle { get; } = new ParameterSubject<string>("");
+        public BehaviorSubject<string> FooterStyle { get; } = new BehaviorSubject<string>("");
 
-        public ISubject<string> Height { get; } = new ParameterSubject<string>("400px");
+        public BehaviorSubject<string> Height { get; } = new BehaviorSubject<string>("400px");
 
-        public ISubject<string> Width { get; } = new ParameterSubject<string>("");
+        public BehaviorSubject<string> Width { get; } = new BehaviorSubject<string>("");
 
-        public ISubject<bool> ShowColumnHeader { get; } = new ParameterSubject<bool>(true);
+        public BehaviorSubject<bool> ShowColumnHeader { get; } = new BehaviorSubject<bool>(true);
 
-        public ISubject<bool> ShowDetailHeader => throw new NotImplementedException();
+        public BehaviorSubject<bool> ShowDetailHeader => throw new NotImplementedException();
 
         public double ScrollbarWidth { get; private set; }
 
@@ -117,8 +118,8 @@ namespace Samovar.Blazor
                 footerStyle = $"width:{width};";
             }
 
-            OuterStyle.OnNextParameterValue(outerStyle);
-            FooterStyle.OnNextParameterValue(footerStyle);
+            OuterStyle.OnNext(outerStyle);
+            FooterStyle.OnNext(footerStyle);
             await OnDataGridInnerCssStyleChanged();
         }
 
@@ -135,20 +136,20 @@ namespace Samovar.Blazor
         public async Task InitHeader()
         {
             await GridInnerRef.SynchronizeGridHeaderScroll(await _jsService.JsModule(), _constantService.GridHeaderContainerId);
-            if (FilterMode.SubjectValue == DataGridFilterMode.FilterRow)
+            if (FilterMode.Value == DataGridFilterMode.FilterRow)
             {
                 await GridInnerRef.SynchronizeGridHeaderScroll(await _jsService.JsModule(), _constantService.GridFilterContainerId);
             }
 
             ScrollbarWidth = await _jsService.MeasureScrollbar();
-            FilterRowHeight = await _jsService.MeasureTableFilterHeight(TableTagClass.SubjectValue, TheadTagClass.SubjectValue, FilterToggleButtonClass.SubjectValue);
+            FilterRowHeight = await _jsService.MeasureTableFilterHeight(TableTagClass.Value, TheadTagClass.Value, FilterToggleButtonClass.Value);
 
             GridColWidthSum = 0;
-            MinGridWidth.OnNextParameterValue(0);
+            MinGridWidth.OnNext(0);
 
-            var allCols = _columnService.AllColumnModels.Count() + (ShowDetailRow.SubjectValue ? 1 : 0);
+            var allCols = _columnService.AllColumnModels.Count() + (ShowDetailRow.Value ? 1 : 0);
             
-            var absCols = _columnService.AllColumnModels.Where(c => c.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Absolute).Count() + (ShowDetailRow.SubjectValue ? 1 : 0); ;
+            var absCols = _columnService.AllColumnModels.Where(c => c.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Absolute).Count() + (ShowDetailRow.Value ? 1 : 0); ;
             
             var relCols = _columnService.AllColumnModels.Where(c => c.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Relative).Count();
 
@@ -157,15 +158,15 @@ namespace Samovar.Blazor
                 FitColumnsToTableWidth = true;
                 var absColsWidthSum = _columnService.AllColumnModels
                     .Where(c => c.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Absolute).Sum(c => c.WidthInfo.WidthValue) +
-                    (ShowDetailRow.SubjectValue ? _columnService.DetailExpanderColumnModel.WidthInfo.WidthValue : 0d);
+                    (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.WidthInfo.WidthValue : 0d);
 
-                MinGridWidth.OnNextParameterValue(absColsWidthSum + _columnService.AllColumnModels
+                MinGridWidth.OnNext(absColsWidthSum + _columnService.AllColumnModels
                     .Where(c => c.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Relative).Sum(c => c.WidthInfo.MinWidthValue));
             }
             else
             {
                 GridColWidthSum = _columnService.AllColumnModels.Sum(c => c.WidthInfo.WidthValue) +
-                    (ShowDetailRow.SubjectValue ? _columnService.DetailExpanderColumnModel.WidthInfo.WidthValue : 0d);
+                    (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.WidthInfo.WidthValue : 0d);
             }
 
             if (FitColumnsToTableWidth)
@@ -181,13 +182,13 @@ namespace Samovar.Blazor
                 CultureInfo ci = CultureInfo.InvariantCulture;
 
                 double gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule());
-                gridInnerWidth = Math.Max(gridInnerWidth, MinGridWidth.SubjectValue);
+                gridInnerWidth = Math.Max(gridInnerWidth, MinGridWidth.Value);
 
                 Dictionary<IColumnModel, TempColumnMetadata> widthList = new Dictionary<IColumnModel, TempColumnMetadata>();
 
                 var absoluteWidthSum = _columnService.AllColumnModels.
                     Where(cmt => cmt.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Absolute).Sum(cmt => cmt.WidthInfo.WidthValue) +
-                    (ShowDetailRow.SubjectValue ? _columnService.DetailExpanderColumnModel.WidthInfo.WidthValue : 0d);
+                    (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.WidthInfo.WidthValue : 0d);
 
                 var relativeWidthSum = _columnService.AllColumnModels.Where(cmt => cmt.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Relative).Sum(cmt => cmt.WidthInfo.WidthValue);
 
@@ -272,7 +273,7 @@ namespace Samovar.Blazor
                 emptyColWidth = Math.Max(0, emptyColWidth);
             }
 
-            emptyColWidth = emptyColWidth - (ShowDetailRow.SubjectValue ? _columnService.DetailExpanderColumnModel.WidthInfo.WidthValue : 0d);
+            emptyColWidth = emptyColWidth - (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.WidthInfo.WidthValue : 0d);
 
             _columnService.EmptyColumnModel.VisibleAbsoluteWidthValue = emptyColWidth;
 
@@ -311,7 +312,7 @@ namespace Samovar.Blazor
             {
                 DataGridStyleInfo info = new DataGridStyleInfo
                 {
-                    CssStyle = OuterStyle.SubjectValue,
+                    CssStyle = OuterStyle.Value,
                     ActualScrollbarWidth = ActualScrollbarWidth
                 };
                 await DataGridInnerCssStyleChanged.Invoke(info);

@@ -3,10 +3,10 @@
 @typeparam TItem
 @inherits SmDesignComponentBase
 
-<table style="margin:0;padding:0;table-layout:fixed;@(LayoutService.MinGridWidth.SubjectValue > 0 ? "min-width:" + LayoutService.MinGridWidth.SubjectValue.ToString(CultureInfo.InvariantCulture) + "px;" : "")" class="@LayoutService.TableTagClass.SubjectValue">
-	<thead class="@LayoutService.TheadTagClass.SubjectValue">
+<table style="margin:0;padding:0;table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")" class="@LayoutService.TableTagClass.Value">
+	<thead class="@LayoutService.TheadTagClass.Value">
 		<tr @ref="LayoutService.GridFilterRef">
-			@if (LayoutService.ShowDetailRow.SubjectValue)
+			@if (LayoutService.ShowDetailRow.Value)
 			{
 				<th style="@(ColumnService.DetailExpanderColumnModel.VisibleWidthStyle)" id="@(ColumnService.DetailExpanderColumnModel.FilterGridColumnCellId)">
 					<div style="margin:0px;padding:0px;overflow:hidden;cursor:pointer;display:block;">&nbsp;</div>
@@ -17,10 +17,10 @@
 				switch (colMeta.ColumnType)
 				{
 					case DataGridColumnType.Data:
-						<th style="@(((IDataColumnModel)colMeta).VisibleWidthStyle)" class="px-1" id="@(((IDataColumnModel)colMeta).FilterGridColumnCellId)" data-toggle="tooltip" data-placement="top" title="@(((IDataColumnModel)colMeta).Title.SubjectValue)">
-							@if (((IDataColumnModel)colMeta).Field.SubjectValue != null && RepositoryService.PropInfo.ContainsKey(((IDataColumnModel)colMeta).Field.SubjectValue))
+						<th style="@(((IDataColumnModel)colMeta).VisibleWidthStyle)" class="px-1" id="@(((IDataColumnModel)colMeta).FilterGridColumnCellId)" data-toggle="tooltip" data-placement="top" title="@(((IDataColumnModel)colMeta).Title.Value)">
+							@if (((IDataColumnModel)colMeta).Field.Value != null && RepositoryService.PropInfo.ContainsKey(((IDataColumnModel)colMeta).Field.Value))
 							{
-								@switch (RepositoryService.PropInfo[((IDataColumnModel)colMeta).Field.SubjectValue].PropertyType)
+								@switch (RepositoryService.PropInfo[((IDataColumnModel)colMeta).Field.Value].PropertyType)
 								{
 									case var t when t == typeof(DateTime) || t == typeof(DateTime?):
 										<DataGridFilterCellDate TItem=TItem ColMetadata="(IDataColumnModel)colMeta" />

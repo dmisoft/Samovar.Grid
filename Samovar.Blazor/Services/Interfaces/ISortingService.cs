@@ -5,7 +5,7 @@ namespace Samovar.Blazor
 {
     public interface ISortingService
     {
-        ISubject<DataGridColumnOrderInfo> ColumnOrderInfo { get; }
+        BehaviorSubject<DataGridColumnOrderInfo> ColumnOrderInfo { get; }
         Task OnColumnClick(IDataColumnModel columnModel);
     }
 }

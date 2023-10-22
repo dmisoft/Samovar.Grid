@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 namespace Samovar.Blazor
@@ -17,8 +18,8 @@ namespace Samovar.Blazor
         int StartGridItemPosition { get; set; }
         int EndGridItemPosition { get; set; }
 
-        ISubject<string> TranslatableDivHeightValue { get; }
-        ISubject<DataGridVirtualScrollingInfo> VirtualScrollingInfo { get; }
+        BehaviorSubject<string> TranslatableDivHeightValue { get; }
+        BehaviorSubject<DataGridVirtualScrollingInfo> VirtualScrollingInfo { get; }
         Task<double> TranslatableDivHeight(int itemCount);
         double TranslateYOffset { get; }
     }

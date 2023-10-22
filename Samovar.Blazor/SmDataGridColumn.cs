@@ -14,7 +14,7 @@ namespace Samovar.Blazor
             get { return null; }
             set
             {
-                Model.Field.OnNextParameterValue(value);
+                Model.Field.OnNext(value);
             }
         }
 
@@ -24,18 +24,18 @@ namespace Samovar.Blazor
             get { return null; }
             set
             {
-                Model.Title.OnNextParameterValue(value);
+                Model.Title.OnNext(value);
             }
         }
 
         [Parameter]
-        public string Width { get { return null; } set { Model.Width.OnNextParameterValue(value); } }
+        public string Width { get { return null; } set { Model.Width.OnNext(value); } }
 
         [Parameter]
         public RenderFragment<object> CellShowTemplate
         {
             get { return null; }
-            set { Model.CellShowTemplate.OnNextParameterValue(value); }
+            set { Model.CellShowTemplate.OnNext(value); }
         }
 
         [Parameter]

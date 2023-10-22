@@ -12,13 +12,13 @@ namespace Samovar.Blazor
 
         PropertyInfo ColumnDataItemPropertyInfo { get; }//TODO?
 
-        public ISubject<RenderFragment<object>> CellShowTemplate { get; }
+        public BehaviorSubject<RenderFragment<object>> CellShowTemplate { get; }
 
-        public ISubject<RenderFragment<object>> CellEditTemplate { get; }
+        public BehaviorSubject<RenderFragment<object>> CellEditTemplate { get; }
         
-        public ISubject<string> Field { get; }
+        public BehaviorSubject<string> Field { get; }
 
-        public ISubject<string> Title { get; }
+        public BehaviorSubject<string> Title { get; }
 
         public bool? SortingAscending { get; set; }
     }
