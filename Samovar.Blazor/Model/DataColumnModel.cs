@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
 {
@@ -7,10 +8,10 @@ namespace Samovar.Blazor
     {
         public override DataGridColumnType ColumnType { get; } = DataGridColumnType.Data;
 
-        public ISubject<RenderFragment<object>> CellShowTemplate { get; } = new ParameterSubject<RenderFragment<object>>(null);
+        public ISubject<RenderFragment<object>> CellShowTemplate { get; } = new BehaviorSubject<RenderFragment<object>>(null);
 
-        public ISubject<RenderFragment<object>> CellEditTemplate { get; } = new ParameterSubject<RenderFragment<object>>(null);
+        public ISubject<RenderFragment<object>> CellEditTemplate { get; } = new BehaviorSubject<RenderFragment<object>>(null);
 
-        public ISubject<string> Field { get; } = new ParameterSubject<string>();
+        public ISubject<string> Field { get; } = new Subject<string>();
     }
 }

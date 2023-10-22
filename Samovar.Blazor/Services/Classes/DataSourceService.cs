@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
 
@@ -20,18 +22,39 @@ namespace Samovar.Blazor
         //TODO std. value in Subject ctor new List<T>()
         public ISubject<IEnumerable<T>> Data { get; private set; } = new Subject<IEnumerable<T>>();
 
-        Subscription3<IEnumerable<DataGridFilterCellInfo>, DataGridColumnOrderInfo, IEnumerable<T>, IQueryable<T>> DataQuerySubscription;
-        //public ISubject<IQueryable<T>> DataQuery { get; private set; } = new ParameterSubject<IQueryable<T>>();
+        //Observable<IEnumerable<DataGridFilterCellInfo>, DataGridColumnOrderInfo, IEnumerable<T>, IQueryable<T>> DataQuerySubscription;
+        //Observable<IQueryable<T>> DataQuerySubscription;
+        public ISubject<IQueryable<T>> DataQuery { get; private set; } = new Subject<IQueryable<T>>();
 
             
         public DataSourceService(IFilterService filterService, ISortingService orderService)
         {
             _filterService = filterService;
             _orderService = orderService;
+            _filterService.FilterInfo.Subscribe(filterObserver);
+            _orderService.ColumnOrderInfo.Subscribe(columnOrderObserver);
+            Data.Subscribe(dataObserver);
             
-            DataQuerySubscription = new Subscription3<IEnumerable<DataGridFilterCellInfo>, DataGridColumnOrderInfo, IEnumerable<T>, IQueryable<T>>(_filterService.FilterInfo, _orderService.ColumnOrderInfo, Data, myfunc3);
+            
+            //DataQuerySubscription = new  Subscription3<IEnumerable<DataGridFilterCellInfo>, DataGridColumnOrderInfo, IEnumerable<T>, IQueryable<T>>(_filterService.FilterInfo, _orderService.ColumnOrderInfo, Data, myfunc3);
+            
 
             //DataQuery = DataQuerySubscription.CreateMap();
+        }
+
+        private void dataObserver(IEnumerable<T> enumerable)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void columnOrderObserver(DataGridColumnOrderInfo info)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void filterObserver(IEnumerable<DataGridFilterCellInfo> enumerable)
+        {
+            throw new NotImplementedException();
         }
 
         private IQueryable<T> myfunc3(IEnumerable<DataGridFilterCellInfo> filterInfo, DataGridColumnOrderInfo orderInfo, IEnumerable<T> data)

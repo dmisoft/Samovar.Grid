@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 namespace Samovar.Blazor
@@ -7,7 +8,7 @@ namespace Samovar.Blazor
     public class NavigationService<T>
         : INavigationService
     {
-        public ISubject<DataGridNavigationMode> NavigationMode { get; } = new ParameterSubject<DataGridNavigationMode>(DataGridNavigationMode.Paging);
+        public BehaviorSubject<DataGridNavigationMode> NavigationMode { get; } = new BehaviorSubject<DataGridNavigationMode>(DataGridNavigationMode.Paging);
 
         public INavigationStrategy NavigationStrategy { get; private set; }
 
@@ -32,17 +33,13 @@ namespace Samovar.Blazor
             _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
             
              NavigationStrategy = pagingNavigationStrategy;
-
-            //var subscription = new Subscription1TaskVoid<DataGridNavigationMode>(NavigationMode, SetNavigationStrategy).CreateMap();
-            //var dataQuerySubscription = new Subscription1TaskVoid<IQueryable<T>>(_dataSourceService.DataQuery, ProcessDataQuery).CreateMap();
         }
 
         private void DataGridInitializerCallback(bool obj)
         {
-            var subscription = new Subscription1TaskVoid<DataGridNavigationMode>(NavigationMode, SetNavigationStrategy).CreateMap();
-            var dataQuerySubscription = new Subscription1TaskVoid<IQueryable<T>>(_dataSourceService.DataQuery, ProcessDataQuery).CreateMap();
-            SetNavigationStrategy(NavigationMode.SubjectValue);
-            //NavigationStrategy.ProcessDataPrequery(_dataSourceService.DataQuery.SubjectValue);
+            //var subscription = new Subscription1TaskVoid<DataGridNavigationMode>(NavigationMode, SetNavigationStrategy).CreateMap();
+            //var dataQuerySubscription = new Subscription1TaskVoid<IQueryable<T>>(_dataSourceService.DataQuery, ProcessDataQuery).CreateMap();
+            //SetNavigationStrategy(NavigationMode.SubjectValue);
         }
 
         private Task ProcessDataQuery(IQueryable<T> prequery)
@@ -63,8 +60,8 @@ namespace Samovar.Blazor
             
             NavigationStrategy?.Activate();
             
-            if(_dataSourceService.DataQuery.SubjectValue != null)
-                NavigationStrategy.ProcessDataPrequery(_dataSourceService.DataQuery.SubjectValue);
+            //if(_dataSourceService.DataQuery.SubjectValue != null)
+            //    NavigationStrategy.ProcessDataPrequery(_dataSourceService.DataQuery.SubjectValue);
 
             return Task.CompletedTask;
         }

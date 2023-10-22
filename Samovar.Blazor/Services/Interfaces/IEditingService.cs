@@ -1,22 +1,21 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using System;
-using System.Collections.Generic;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
     public interface IEditingService<T>
     {
-        ISubject<GridEditMode> EditMode { get; }
+        BehaviorSubject<GridEditMode> EditMode { get; }
 
-        public ISubject<EventCallback<T>> OnRowEditBegin { get; }
+        public BehaviorSubject<EventCallback<T>> OnRowEditBegin { get; }
 
-        public ISubject<EventCallback> OnRowInsertBegin { get; }
+        public BehaviorSubject<EventCallback> OnRowInsertBegin { get; }
 
-        public ISubject<EventCallback<T>> OnRowInserting { get; }
+        public BehaviorSubject<EventCallback<T>> OnRowInserting { get; }
         
-        public ISubject<EventCallback<T>> OnRowRemoving { get; }
+        public BehaviorSubject<EventCallback<T>> OnRowRemoving { get; }
 
         Task RowEditCancel();
 

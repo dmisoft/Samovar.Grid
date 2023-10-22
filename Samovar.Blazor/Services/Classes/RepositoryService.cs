@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reactive.Subjects;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -22,7 +23,8 @@ namespace Samovar.Blazor
         private readonly IGridStateService _stateService;
         private readonly ILayoutService _layoutService;
 
-        public ISubject<HashSet<T>> Data { get; private set; } = new ParameterSubject<HashSet<T>>(new HashSet<T>());
+        //TODO set default subject value new new Subject<HashSet<T>>(HashSet<T>())
+        public ISubject<HashSet<T>> Data { get; private set; } = new Subject<HashSet<T>>();
         
         public Dictionary<string, PropertyInfo> PropInfo { get; } = new Dictionary<string, PropertyInfo>();
         //public static Dictionary<string, PropertyInfo> PropInfoStatic { get; } = new Dictionary<string, PropertyInfo>();
@@ -49,9 +51,6 @@ namespace Samovar.Blazor
 
             Type t = typeof(T);
 
-            //Func<object, string>> emit = Func<object, string>.DynamicMethod
-            //DynamicMethod
-            //Expression.Property
             foreach (PropertyInfo pi in typeof(T).GetProperties())
             {
                 PropInfo.Add(pi.Name, pi);
@@ -73,14 +72,11 @@ namespace Samovar.Blazor
                     default:
                         break;
                 }
-
-                //PropInfoDelegate.Add(pi.Name, (Func<T, object>)Delegate.CreateDelegate(typeof(Func<T, object>), pi.GetGetMethod(true)!));
-                //PropInfoDelegate.Add(pi.Name, (Func<T, int>)Delegate.CreateDelegate(typeof(Func<T, int>), pi.CreateGetPropertyDelegate()));//CreateGetPropertyDelegate
             }
 
             _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
 
-            var querySubscription = new Subscription2TaskVoid<IQueryable<T>, NavigationStrategyDataLoadingSettings>(_dataSourceService.DataQuery, _dataSourceService.DataLoadingSettings, DataLoadingSettingsCallback2).CreateMap();
+            //var querySubscription = new Subscription2TaskVoid<IQueryable<T>, NavigationStrategyDataLoadingSettings>(_dataSourceService.DataQuery, _dataSourceService.DataLoadingSettings, DataLoadingSettingsCallback2).CreateMap();
         }
 
         private async Task DataLoadingSettingsCallback2(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
@@ -93,55 +89,55 @@ namespace Samovar.Blazor
 
             query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
 
-            if (_navigationService.NavigationMode.SubjectValue == DataGridNavigationMode.Paging)
-            {
-                _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.Loading);
-                Stopwatch stopWatch = new Stopwatch();
-                stopWatch.Start();
-                ViewCollection = await CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
-                stopWatch.Stop();
+            //if (_navigationService.NavigationMode.SubjectValue == DataGridNavigationMode.Paging)
+            //{
+            //    _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.Loading);
+            //    Stopwatch stopWatch = new Stopwatch();
+            //    stopWatch.Start();
+            //    ViewCollection = await CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+            //    stopWatch.Stop();
 
-                if (ViewCollection.Count() == 0)
-                {
-                    _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.NoData);
-                }
-                else
-                {
-                    _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.Idle);
-                }
-            }
-            else if (_navigationService.NavigationMode.SubjectValue == DataGridNavigationMode.VirtualScrolling && !repositoryForVirtualScrollingInitialized)
-            {
-                _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.Idle);
-                repositoryForVirtualScrollingInitialized = true;
-            }
-            else if (_navigationService.NavigationMode.SubjectValue == DataGridNavigationMode.VirtualScrolling && repositoryForVirtualScrollingInitialized)
-            {
-                Stopwatch stopWatch = new Stopwatch();
-                stopWatch.Start();
+            //    if (ViewCollection.Count() == 0)
+            //    {
+            //        _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.NoData);
+            //    }
+            //    else
+            //    {
+            //        _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.Idle);
+            //    }
+            //}
+            //else if (_navigationService.NavigationMode.SubjectValue == DataGridNavigationMode.VirtualScrolling && !repositoryForVirtualScrollingInitialized)
+            //{
+            //    _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.Idle);
+            //    repositoryForVirtualScrollingInitialized = true;
+            //}
+            //else if (_navigationService.NavigationMode.SubjectValue == DataGridNavigationMode.VirtualScrolling && repositoryForVirtualScrollingInitialized)
+            //{
+            //    Stopwatch stopWatch = new Stopwatch();
+            //    stopWatch.Start();
 
-                ViewCollection = await CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+            //    ViewCollection = await CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
 
-                stopWatch.Stop();
-                // Get the elapsed time as a TimeSpan value.
-                TimeSpan ts = stopWatch.Elapsed;
+            //    stopWatch.Stop();
+            //    // Get the elapsed time as a TimeSpan value.
+            //    TimeSpan ts = stopWatch.Elapsed;
 
-                // Format and display the TimeSpan value.
-                string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-                    ts.Hours, ts.Minutes, ts.Seconds,
-                    ts.Milliseconds / 10);
-                Console.WriteLine("RunTime " + elapsedTime);
+            //    // Format and display the TimeSpan value.
+            //    string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+            //        ts.Hours, ts.Minutes, ts.Seconds,
+            //        ts.Milliseconds / 10);
+            //    Console.WriteLine("RunTime " + elapsedTime);
 
-                if (ViewCollection.Count() == 0)
-                {
-                    _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.NoData);
-                }
-                else
-                {
-                    //TODO extra Idle state for virtual scrolling???
-                    _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.Idle);
-                }
-            }
+            //    if (ViewCollection.Count() == 0)
+            //    {
+            //        _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.NoData);
+            //    }
+            //    else
+            //    {
+            //        //TODO extra Idle state for virtual scrolling???
+            //        _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.Idle);
+            //    }
+            //}
 
             await OnViewCollectionChanged(ViewCollection);
         }
@@ -155,7 +151,7 @@ namespace Samovar.Blazor
             }
         }
 
-        public Subscription1<IEnumerable<T>, int> DataChangeSubscription { get; }
+        //public Subscription1<IEnumerable<T>, int> DataChangeSubscription { get; }
 
         private void DataGridInitializerCallback(bool obj)
         {

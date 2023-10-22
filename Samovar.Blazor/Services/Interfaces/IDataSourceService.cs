@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
 {
@@ -11,6 +9,5 @@ namespace Samovar.Blazor
         ISubject<IEnumerable<T>> Data { get; }
         ISubject<IQueryable<T>> DataQuery { get; }
         ISubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; }
-
     }
 }
