@@ -7,8 +7,6 @@ namespace Samovar.Blazor
     //}
     public interface INavigationStrategy//<T> : INavigationStrategy
     {
-        //ISubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; }
-
         Task ProcessDataPrequery<T>(IQueryable<T> data);
         
         Task Activate();

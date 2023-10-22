@@ -37,14 +37,20 @@ namespace Samovar.Blazor
 
         private void DataGridInitializerCallback(bool obj)
         {
+            //TODO refactoring 10/2023
             //var subscription = new Subscription1TaskVoid<DataGridNavigationMode>(NavigationMode, SetNavigationStrategy).CreateMap();
             //var dataQuerySubscription = new Subscription1TaskVoid<IQueryable<T>>(_dataSourceService.DataQuery, ProcessDataQuery).CreateMap();
             //SetNavigationStrategy(NavigationMode.SubjectValue);
+
+            _dataSourceService.DataQuery.Subscribe(ProcessDataQuery);
+            SetNavigationStrategy(NavigationMode.Value);
         }
 
-        private Task ProcessDataQuery(IQueryable<T> prequery)
+        //TODO refactoring 10/2023 Task als return value type
+        private void ProcessDataQuery(IQueryable<T> prequery)
         {
-            return NavigationStrategy.ProcessDataPrequery(prequery);
+            //return 
+                NavigationStrategy.ProcessDataPrequery(prequery);
         }
 
         Task SetNavigationStrategy(DataGridNavigationMode strategy)
