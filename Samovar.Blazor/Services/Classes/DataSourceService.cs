@@ -56,9 +56,8 @@ namespace Samovar.Blazor
 
             if (_orderService.ColumnOrderInfo != null && !_orderService.ColumnOrderInfo.Equals(DataGridColumnOrderInfo.Empty))
             {
-                var pr = typeof(T).GetProperty(_orderService.ColumnOrderInfo.Value.Field);
-
-                query = _orderService.ColumnOrderInfo.Value.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
+                //var pr = typeof(T).GetProperty(_orderService.ColumnOrderInfo.Value.Field);
+                //query = _orderService.ColumnOrderInfo.Value.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
             }
             DataQuery.OnNext(query);
             //TODO refactoring 10/2023

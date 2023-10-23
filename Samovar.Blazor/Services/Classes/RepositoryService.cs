@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -75,7 +77,20 @@ namespace Samovar.Blazor
 
             _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
 
+            //TODO refactoring 10/2023
             //var querySubscription = new Subscription2TaskVoid<IQueryable<T>, NavigationStrategyDataLoadingSettings>(_dataSourceService.DataQuery, _dataSourceService.DataLoadingSettings, DataLoadingSettingsCallback2).CreateMap();
+            _dataSourceService.DataQuery.Subscribe(dataQueryObserver);
+            _dataSourceService.DataLoadingSettings.Subscribe(dataLoadingSettingsObserver);
+        }
+
+        private void dataLoadingSettingsObserver(NavigationStrategyDataLoadingSettings settings)
+        {
+//            throw new NotImplementedException();
+        }
+
+        private void dataQueryObserver(IQueryable<T> queryable)
+        {
+            DataLoadingSettingsCallback2(queryable, new NavigationStrategyDataLoadingSettings(0, 1000, false)); //_dataSourceService.DataLoadingSettings.Value);// ; ;
         }
 
         private async Task DataLoadingSettingsCallback2(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
@@ -88,55 +103,55 @@ namespace Samovar.Blazor
 
             query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
 
-            //if (_navigationService.NavigationMode.SubjectValue == DataGridNavigationMode.Paging)
-            //{
-            //    _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.Loading);
-            //    Stopwatch stopWatch = new Stopwatch();
-            //    stopWatch.Start();
-            //    ViewCollection = await CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
-            //    stopWatch.Stop();
+            if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+            {
+                _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
+                Stopwatch stopWatch = new Stopwatch();
+                stopWatch.Start();
+                ViewCollection = await CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+                stopWatch.Stop();
 
-            //    if (ViewCollection.Count() == 0)
-            //    {
-            //        _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.NoData);
-            //    }
-            //    else
-            //    {
-            //        _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.Idle);
-            //    }
-            //}
-            //else if (_navigationService.NavigationMode.SubjectValue == DataGridNavigationMode.VirtualScrolling && !repositoryForVirtualScrollingInitialized)
-            //{
-            //    _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.Idle);
-            //    repositoryForVirtualScrollingInitialized = true;
-            //}
-            //else if (_navigationService.NavigationMode.SubjectValue == DataGridNavigationMode.VirtualScrolling && repositoryForVirtualScrollingInitialized)
-            //{
-            //    Stopwatch stopWatch = new Stopwatch();
-            //    stopWatch.Start();
+                if (ViewCollection.Count() == 0)
+                {
+                    _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+                }
+                else
+                {
+                    _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
+                }
+            }
+            else if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling && !repositoryForVirtualScrollingInitialized)
+            {
+                _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
+                repositoryForVirtualScrollingInitialized = true;
+            }
+            else if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling && repositoryForVirtualScrollingInitialized)
+            {
+                Stopwatch stopWatch = new Stopwatch();
+                stopWatch.Start();
 
-            //    ViewCollection = await CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+                ViewCollection = await CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
 
-            //    stopWatch.Stop();
-            //    // Get the elapsed time as a TimeSpan value.
-            //    TimeSpan ts = stopWatch.Elapsed;
+                stopWatch.Stop();
+                // Get the elapsed time as a TimeSpan value.
+                TimeSpan ts = stopWatch.Elapsed;
 
-            //    // Format and display the TimeSpan value.
-            //    string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-            //        ts.Hours, ts.Minutes, ts.Seconds,
-            //        ts.Milliseconds / 10);
-            //    Console.WriteLine("RunTime " + elapsedTime);
+                // Format and display the TimeSpan value.
+                string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                    ts.Hours, ts.Minutes, ts.Seconds,
+                    ts.Milliseconds / 10);
+                Console.WriteLine("RunTime " + elapsedTime);
 
-            //    if (ViewCollection.Count() == 0)
-            //    {
-            //        _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.NoData);
-            //    }
-            //    else
-            //    {
-            //        //TODO extra Idle state for virtual scrolling???
-            //        _stateService.DataSourceState.OnNextParameterValue(DataSourceStateEnum.Idle);
-            //    }
-            //}
+                if (ViewCollection.Count() == 0)
+                {
+                    _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+                }
+                else
+                {
+                    //TODO extra Idle state for virtual scrolling???
+                    _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
+                }
+            }
 
             await OnViewCollectionChanged(ViewCollection);
         }

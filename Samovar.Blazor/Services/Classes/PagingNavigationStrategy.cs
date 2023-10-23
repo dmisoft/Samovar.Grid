@@ -33,7 +33,7 @@ namespace Samovar.Blazor
             //PagerInfo = new Subscription3<int, int, int, DataGridPagerInfo>(PagerSize, PageCount, CurrentPage, PagerInfoChanged).CreateMap();
             //var querySubscription = new Subscription2TaskVoid<int, int>(PageSize, CurrentPage, CalculatePagingSettings).CreateMap();
 
-            _dataSourceService.DataLoadingSettings.OnNext(NavigationStrategyDataLoadingSettings.Empty);
+            _dataSourceService.DataLoadingSettings.OnNext(NavigationStrategyDataLoadingSettings.FetchAll);
         }
 
         private void DataGridInitializerCallback(bool obj)
