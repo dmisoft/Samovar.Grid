@@ -1,7 +1,6 @@
 ﻿using Samovar.Blazor.Filter;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
@@ -22,8 +21,8 @@ namespace Samovar.Blazor
 
         //Observable<IEnumerable<DataGridFilterCellInfo>, DataGridColumnOrderInfo, IEnumerable<T>, IQueryable<T>> DataQuerySubscription;
         //Observable<IQueryable<T>> DataQuerySubscription;
-        public BehaviorSubject<IQueryable<T>> DataQuery { get; private set; } = new BehaviorSubject<IQueryable<T>>(null);
-        public IObservable<IQueryable<T>> DataQueryObservable { get; private set; }
+        public IObservable<IQueryable<T>> DataQuery { get; private set; } 
+        //public IObservable<IQueryable<T>> DataQueryObservable { get; private set; }
 
             
         public DataSourceService(IFilterService filterService, ISortingService orderService)
@@ -35,7 +34,7 @@ namespace Samovar.Blazor
             //Data.Subscribe(dataObserver);
 
             //combine
-            DataQueryObservable = Observable.CombineLatest(
+            DataQuery = Observable.CombineLatest(
                 _filterService.FilterInfo,
                 _orderService.ColumnOrderInfo,
                 Data,
@@ -45,29 +44,29 @@ namespace Samovar.Blazor
             //DataQuery = DataQuerySubscription.CreateMap();
         }
 
-        private void dataObserver(IEnumerable<T> data)
-        {
-            if (data == null)
-            {
-                data = new List<T>();
-                //Data = new ParameterSubject<IEnumerable<T>>(new List<T>());
-            }
+        //private void dataObserver(IEnumerable<T> data)
+        //{
+        //    if (data == null)
+        //    {
+        //        data = new List<T>();
+        //        //Data = new ParameterSubject<IEnumerable<T>>(new List<T>());
+        //    }
 
-            IQueryable<T> query = data.AsQueryable();
+        //    IQueryable<T> query = data.AsQueryable();
 
-            //apply filter
-            if (_filterService.FilterInfo.Value.Count() > 0)
-                query = ApplyFilter(query, _filterService.FilterInfo.Value);
+        //    //apply filter
+        //    if (_filterService.FilterInfo.Value.Count() > 0)
+        //        query = ApplyFilter(query, _filterService.FilterInfo.Value);
 
-            if (_orderService.ColumnOrderInfo != null && !_orderService.ColumnOrderInfo.Equals(DataGridColumnOrderInfo.Empty))
-            {
-                //var pr = typeof(T).GetProperty(_orderService.ColumnOrderInfo.Value.Field);
-                //query = _orderService.ColumnOrderInfo.Value.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
-            }
-            DataQuery.OnNext(query);
-            //TODO refactoring 10/2023
-            //throw new NotImplementedException();
-        }
+        //    if (_orderService.ColumnOrderInfo != null && !_orderService.ColumnOrderInfo.Equals(DataGridColumnOrderInfo.Empty))
+        //    {
+        //        //var pr = typeof(T).GetProperty(_orderService.ColumnOrderInfo.Value.Field);
+        //        //query = _orderService.ColumnOrderInfo.Value.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
+        //    }
+        //    DataQuery.OnNext(query);
+        //    //TODO refactoring 10/2023
+        //    //throw new NotImplementedException();
+        //}
 
         //private void columnOrderObserver(DataGridColumnOrderInfo info)
         //{

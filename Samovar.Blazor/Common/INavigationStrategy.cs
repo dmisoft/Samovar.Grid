@@ -7,7 +7,7 @@ namespace Samovar.Blazor
     //}
     public interface INavigationStrategy//<T> : INavigationStrategy
     {
-        Task ProcessDataPrequery<T>(IQueryable<T> data);
+        //Task ProcessDataPrequery<T>(IQueryable<T> data);
         
         Task Activate();
         

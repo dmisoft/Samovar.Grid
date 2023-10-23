@@ -8,8 +8,7 @@ namespace Samovar.Blazor
     public interface IDataSourceService<T>
     {
         BehaviorSubject<IEnumerable<T>> Data { get; }
-        BehaviorSubject<IQueryable<T>> DataQuery { get; }
-        IObservable<IQueryable<T>> DataQueryObservable { get; }
+        IObservable<IQueryable<T>> DataQuery { get; }
         BehaviorSubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; }
     }
 }

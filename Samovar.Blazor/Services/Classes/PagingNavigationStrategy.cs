@@ -24,13 +24,13 @@ namespace Samovar.Blazor
         private readonly IInitService _initService;
         private readonly IDataSourceService<T> _dataSourceService;
 
-        public PagingNavigationStrategy(IInitService initService, IDataSourceService<T> dataSourceService)
+        public PagingNavigationStrategy(
+              IInitService initService
+            , IDataSourceService<T> dataSourceService)
         {
             _initService = initService;
             _dataSourceService = dataSourceService;
             _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
-
-            
         }
 
         private void DataGridInitializerCallback(bool obj)
@@ -42,22 +42,32 @@ namespace Samovar.Blazor
                 PagerSize,
                 PageCount,
                 CurrentPage,
-                PagerInfoChanged);
+                PagerInfoChanged).Subscribe(PagerInfoSubscriber);
 
             var loadingSettingsObservable = Observable.CombineLatest(
                 PageSize,
                 CurrentPage,
-                CalculatePagingSetting);
-            
+                CalculatePagingSetting).Subscribe(LoadingSettingsSubscriber);
+
+            _dataSourceService.DataQuery.Where(x => x != null).Subscribe(ProcessDataPrequery);
             //_dataSourceService.DataLoadingSettings.OnNext(NavigationStrategyDataLoadingSettings.FetchAll);
 
             CurrentPage.OnNext(1);
         }
 
-        private bool CalculatePagingSetting(int pageSize, int currentPage)
+        private void PagerInfoSubscriber(DataGridPagerInfo info)
         {
-            _dataSourceService.DataLoadingSettings.OnNext(new NavigationStrategyDataLoadingSettings(skip: (currentPage - 1) * pageSize, take: pageSize));
-            return true;
+            PagerInfo.OnNext(info);
+        }
+
+        private void LoadingSettingsSubscriber(NavigationStrategyDataLoadingSettings obj)
+        {
+            _dataSourceService.DataLoadingSettings.OnNext(obj);
+        }
+
+        private NavigationStrategyDataLoadingSettings CalculatePagingSetting(int pageSize, int currentPage)
+        {
+            return new NavigationStrategyDataLoadingSettings(skip: (currentPage - 1) * pageSize, take: pageSize);
         }
 
         //private object CalculatePagingSettings(object source1, object source2)
@@ -136,7 +146,7 @@ namespace Samovar.Blazor
             throw new NotImplementedException();
         }
 
-        public Task ProcessDataPrequery<T1>(IQueryable<T1> data)
+        public void ProcessDataPrequery<T1>(IQueryable<T1> data)
         {
             int items = data.Count();
 
@@ -146,7 +156,7 @@ namespace Samovar.Blazor
             int currentPage = CurrentPage.Value == 0 ? 1: Math.Min(pages, CurrentPage.Value);
             
             CurrentPage.OnNext(currentPage);
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
         }
     }
 }
