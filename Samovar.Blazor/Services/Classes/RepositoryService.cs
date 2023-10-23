@@ -30,7 +30,7 @@ namespace Samovar.Blazor
         public Dictionary<string, PropertyInfo> PropInfo { get; } = new Dictionary<string, PropertyInfo>();
         //public static Dictionary<string, PropertyInfo> PropInfoStatic { get; } = new Dictionary<string, PropertyInfo>();
         public static Dictionary<string, Func<T, int>> PropInfoDelegateInt { get; } = new Dictionary<string, Func<T, int>>();
-        public static Dictionary<string, Func<T, string>> PropInfoDelegateString{ get; } = new Dictionary<string, Func<T, string>>();
+        public static Dictionary<string, Func<T, string>> PropInfoDelegateString { get; } = new Dictionary<string, Func<T, string>>();
         public static Dictionary<string, Func<T, DateTime>> PropInfoDelegateDate { get; } = new Dictionary<string, Func<T, DateTime>>();
 
         public RepositoryService(
@@ -67,7 +67,7 @@ namespace Samovar.Blazor
                             PropInfoDelegateDate.Add(pi.Name, (Func<T, DateTime>)Delegate.CreateDelegate(typeof(Func<T, DateTime>), pi.GetGetMethod(true)!));
                         break;
                     case var ts when ts == typeof(int):
-                        if(!PropInfoDelegateInt.ContainsKey(pi.Name))
+                        if (!PropInfoDelegateInt.ContainsKey(pi.Name))
                             PropInfoDelegateInt.Add(pi.Name, (Func<T, int>)Delegate.CreateDelegate(typeof(Func<T, int>), pi.GetGetMethod(true)!));
                         break;
                     default:
@@ -77,20 +77,17 @@ namespace Samovar.Blazor
 
             _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
 
-            //TODO refactoring 10/2023
-            //var querySubscription = new Subscription2TaskVoid<IQueryable<T>, NavigationStrategyDataLoadingSettings>(_dataSourceService.DataQuery, _dataSourceService.DataLoadingSettings, DataLoadingSettingsCallback2).CreateMap();
-            _dataSourceService.DataQuery.Subscribe(dataQueryObserver);
-            _dataSourceService.DataLoadingSettings.Subscribe(dataLoadingSettingsObserver);
+
         }
 
         private void dataLoadingSettingsObserver(NavigationStrategyDataLoadingSettings settings)
         {
-//            throw new NotImplementedException();
+            //            throw new NotImplementedException();
         }
 
         private void dataQueryObserver(IQueryable<T> queryable)
         {
-            DataLoadingSettingsCallback2(queryable, new NavigationStrategyDataLoadingSettings(0, 1000, false)); //_dataSourceService.DataLoadingSettings.Value);// ; ;
+            DataLoadingSettingsCallback2(queryable, _dataSourceService.DataLoadingSettings.Value);// new NavigationStrategyDataLoadingSettings(0, 1000, false)); //_dataSourceService.DataLoadingSettings.Value);
         }
 
         private async Task DataLoadingSettingsCallback2(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
@@ -169,6 +166,16 @@ namespace Samovar.Blazor
 
         private void DataGridInitializerCallback(bool obj)
         {
+            //TODO refactoring 10/2023
+            //var querySubscription = new Subscription2TaskVoid<IQueryable<T>, NavigationStrategyDataLoadingSettings>(_dataSourceService.DataQuery, _dataSourceService.DataLoadingSettings, DataLoadingSettingsCallback2).CreateMap();
+            var combined = Observable.CombineLatest(
+                _dataSourceService.DataQuery,
+                _dataSourceService.DataLoadingSettings,
+                DataLoadingSettingsCallback2
+            );
+
+            _dataSourceService.DataQuery.Subscribe(dataQueryObserver);
+            _dataSourceService.DataLoadingSettings.Subscribe(dataLoadingSettingsObserver);
         }
 
         private async Task<List<SmDataGridRowModel<T>>> CreateRowModelList(IQueryable<T> gridData, IEnumerable<IDataColumnModel> ColumnMetadataList, Dictionary<string, PropertyInfo> PropInfo)

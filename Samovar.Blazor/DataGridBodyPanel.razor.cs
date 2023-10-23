@@ -37,6 +37,7 @@ namespace Samovar.Blazor
             //TODO refactoring 10/2023
             //var sub1 = new Subscription1TaskVoid<DataGridVirtualScrollingInfo>(VirtualScrollingService.VirtualScrollingInfo, myfunc1);
             //sub1.CreateMap();
+            VirtualScrollingService.VirtualScrollingInfo.Subscribe(myfunc1);
 
             Style = new DataGridStyleInfo
             {
@@ -48,12 +49,14 @@ namespace Samovar.Blazor
 
             return base.OnInitializedAsync();   
         }
-        private Task myfunc1(DataGridVirtualScrollingInfo arg)
+        private void myfunc1(DataGridVirtualScrollingInfo arg)
         {
             ScrollStyle = $"height:{arg.TranslatableDivHeight};overflow:hidden;position:absolute;";
             OffsetY = arg.OffsetY;
             StateHasChanged();
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
+            
+            
             //await InvokeAsync(() => {
             //    ScrollStyle = $"height:{arg.TranslatableDivHeight};overflow:hidden;position:absolute;";
             //    OffsetY = arg.OffsetY;

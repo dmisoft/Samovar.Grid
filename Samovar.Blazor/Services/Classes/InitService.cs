@@ -9,10 +9,10 @@ namespace Samovar.Blazor
     {
         public IJSObjectReference jsModule { get; private set; }
 
-        public BehaviorSubject<bool> IsInitialized { get; set; }
+        public Subject<bool> IsInitialized { get; set; }
         public InitService()
         {
-            IsInitialized = new BehaviorSubject<bool>(false);
+            IsInitialized = new Subject<bool>();
         }
 
         public void Dispose()

@@ -22,21 +22,26 @@ namespace Samovar.Blazor
 
         //Observable<IEnumerable<DataGridFilterCellInfo>, DataGridColumnOrderInfo, IEnumerable<T>, IQueryable<T>> DataQuerySubscription;
         //Observable<IQueryable<T>> DataQuerySubscription;
-        public Subject<IQueryable<T>> DataQuery { get; private set; } = new Subject<IQueryable<T>>();
+        public BehaviorSubject<IQueryable<T>> DataQuery { get; private set; } = new BehaviorSubject<IQueryable<T>>(null);
+        public IObservable<IQueryable<T>> DataQueryObservable { get; private set; }
 
             
         public DataSourceService(IFilterService filterService, ISortingService orderService)
         {
             _filterService = filterService;
             _orderService = orderService;
-            _filterService.FilterInfo.Subscribe(filterObserver);
-            _orderService.ColumnOrderInfo.Subscribe(columnOrderObserver);
-            Data.Subscribe(dataObserver);
-            
-            
-            //DataQuerySubscription = new  Subscription3<IEnumerable<DataGridFilterCellInfo>, DataGridColumnOrderInfo, IEnumerable<T>, IQueryable<T>>(_filterService.FilterInfo, _orderService.ColumnOrderInfo, Data, myfunc3);
-            
+            //_filterService.FilterInfo.Subscribe(filterObserver);
+            //_orderService.ColumnOrderInfo.Subscribe(columnOrderObserver);
+            //Data.Subscribe(dataObserver);
 
+            //combine
+            DataQueryObservable = Observable.CombineLatest(
+                _filterService.FilterInfo,
+                _orderService.ColumnOrderInfo,
+                Data,
+                myfunc3
+             );//.Subscribe(mysubscr3);
+            //DataQuerySubscription = new  Subscription3<IEnumerable<DataGridFilterCellInfo>, DataGridColumnOrderInfo, IEnumerable<T>, IQueryable<T>>(_filterService.FilterInfo, _orderService.ColumnOrderInfo, Data, myfunc3);
             //DataQuery = DataQuerySubscription.CreateMap();
         }
 
@@ -64,17 +69,17 @@ namespace Samovar.Blazor
             //throw new NotImplementedException();
         }
 
-        private void columnOrderObserver(DataGridColumnOrderInfo info)
-        {
-            //TODO refactoring 10/2023
-            //throw new NotImplementedException();
-        }
+        //private void columnOrderObserver(DataGridColumnOrderInfo info)
+        //{
+        //    //TODO refactoring 10/2023
+        //    //throw new NotImplementedException();
+        //}
 
-        private void filterObserver(IEnumerable<DataGridFilterCellInfo> enumerable)
-        {
-            //TODO refactoring 10/2023
-            //throw new NotImplementedException();
-        }
+        //private void filterObserver(IEnumerable<DataGridFilterCellInfo> enumerable)
+        //{
+        //    //TODO refactoring 10/2023
+        //    //throw new NotImplementedException();
+        //}
 
         private IQueryable<T> myfunc3(IEnumerable<DataGridFilterCellInfo> filterInfo, DataGridColumnOrderInfo orderInfo, IEnumerable<T> data)
         {
@@ -96,9 +101,10 @@ namespace Samovar.Blazor
 
                 query = orderInfo.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
             }
-
+            //DataQuery.OnNext(query);
             return query;
         }
+
         List<Type> numericTypeList = new List<Type>
                 {
                     typeof(byte),

@@ -4,6 +4,6 @@ namespace Samovar.Blazor
 {
     public interface IInitService
     {
-        BehaviorSubject<bool> IsInitialized { get; set; }
+        Subject<bool> IsInitialized { get; set; }
     }
 }

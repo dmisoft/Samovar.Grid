@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
@@ -29,22 +30,50 @@ namespace Samovar.Blazor
             _dataSourceService = dataSourceService;
             _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
 
-            //TODO Refactoring 10/2023
-            //PagerInfo = new Subscription3<int, int, int, DataGridPagerInfo>(PagerSize, PageCount, CurrentPage, PagerInfoChanged).CreateMap();
-            //var querySubscription = new Subscription2TaskVoid<int, int>(PageSize, CurrentPage, CalculatePagingSettings).CreateMap();
-
-            _dataSourceService.DataLoadingSettings.OnNext(NavigationStrategyDataLoadingSettings.FetchAll);
+            
         }
 
         private void DataGridInitializerCallback(bool obj)
         {
+            //TODO Refactoring 10/2023
+            //PagerInfo = new Subscription3<int, int, int, DataGridPagerInfo>(PagerSize, PageCount, CurrentPage, PagerInfoChanged).CreateMap();
+            //var querySubscription = new Subscription2TaskVoid<int, int>(PageSize, CurrentPage, CalculatePagingSettings).CreateMap();
+            var pagingInfoObservable = Observable.CombineLatest(
+                PagerSize,
+                PageCount,
+                CurrentPage,
+                PagerInfoChanged);
+
+            var loadingSettingsObservable = Observable.CombineLatest(
+                PageSize,
+                CurrentPage,
+                CalculatePagingSetting);
+            
+            //_dataSourceService.DataLoadingSettings.OnNext(NavigationStrategyDataLoadingSettings.FetchAll);
+
             CurrentPage.OnNext(1);
         }
 
-        private Task CalculatePagingSettings(int pageSize, int currentPage)
+        private bool CalculatePagingSetting(int pageSize, int currentPage)
         {
             _dataSourceService.DataLoadingSettings.OnNext(new NavigationStrategyDataLoadingSettings(skip: (currentPage - 1) * pageSize, take: pageSize));
-            return Task.CompletedTask;
+            return true;
+        }
+
+        //private object CalculatePagingSettings(object source1, object source2)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //private int CalculatePagingSettings(int source1, int source2)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        private void CalculatePagingSettings(int pageSize, int currentPage)
+        {
+            _dataSourceService.DataLoadingSettings.OnNext(new NavigationStrategyDataLoadingSettings(skip: (currentPage - 1) * pageSize, take: pageSize));
+            //return Task.CompletedTask;
         }
 
         private DataGridPagerInfo PagerInfoChanged(int pagerSize, int pageCount, int currentPage)

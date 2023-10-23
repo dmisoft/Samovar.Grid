@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
@@ -7,6 +8,7 @@ namespace Samovar.Blazor
     public class GridStateService
         : IGridStateService, IDisposable
     {
+        private readonly IInitService _initService;
         private readonly INavigationService _navigationService;
 
         public BehaviorSubject<DataSourceStateEnum> DataSourceState { get; } = new BehaviorSubject<DataSourceStateEnum>(DataSourceStateEnum.NoData);
@@ -17,29 +19,38 @@ namespace Samovar.Blazor
 
         public Func<Task> ShowNoDataPanelDelegate { get; set; }
         public Func<Task> CloseNoDataPanelDelegate { get; set; }
-        
+
         public Func<Task> ShowNoDataFoundPanelDelegate { get; set; }
         public Func<Task> CloseNoDataFoundPanelDelegate { get; set; }
-        
+
         public Func<Task> ShowProcessingDataPanelDelegate { get; set; }
         public Func<Task> CloseProcessingDataPanelDelegate { get; set; }
         public Func<Task> ShowPagingPanelDelegate { get; set; }
         public Func<Task> HidePagingPanelDelegate { get; set; }
 
-        public GridStateService(INavigationService navigationService)
+        public GridStateService(IInitService initService, INavigationService navigationService)
         {
             //TODO refactoring
             //var querySubscription = new Subscription1TaskVoid<DataSourceStateEnum>(DataSourceState, ProcessDataSourceState).CreateMap();
             //var querySubscription1 = new Subscription1TaskVoid<DataEditStateEnum>(DataEditState, ProcessDataEditState).CreateMap();
+            _initService = initService;
             _navigationService = navigationService;
+
+            _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
         }
 
-        private Task ProcessDataEditState(DataEditStateEnum arg)
+        private void DataGridInitializerCallback(bool obj)
         {
-            return Task.CompletedTask;
+            DataSourceState.Subscribe(ProcessDataSourceState);
+            DataEditState.Subscribe(ProcessDataEditState);
         }
 
-        private async Task ProcessDataSourceState(DataSourceStateEnum arg)
+        private void ProcessDataEditState(DataEditStateEnum arg)
+        {
+            //return Task.CompletedTask;
+        }
+
+        private void ProcessDataSourceState(DataSourceStateEnum arg)
         {
             CloseDataPanelDelegate?.Invoke();
             CloseNoDataPanelDelegate?.Invoke();
@@ -52,7 +63,7 @@ namespace Samovar.Blazor
             {
                 case DataSourceStateEnum.Idle:
                     t += ShowDataPanelDelegate;
-                    if(_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+                    if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
                         t += ShowPagingPanelDelegate;
                     break;
                 case DataSourceStateEnum.Loading:
@@ -66,25 +77,28 @@ namespace Samovar.Blazor
                 default:
                     break;
             }
-            
-            await t?.Invoke();
-            
-            Delegate[] delList = t.GetInvocationList();
 
-            if (delList != null)
-            {
-                foreach (Delegate del in delList)
+            t?.Invoke();
+            
+            if (t != null) {
+                Delegate[] delList = t.GetInvocationList();
+
+                if (delList != null)
                 {
-                    t -= (Func<Task>)del;
+                    foreach (Delegate del in delList)
+                    {
+                        t -= (Func<Task>)del;
+                    }
                 }
             }
+            
 
             //return Task.CompletedTask;
         }
 
         public void Dispose()
         {
-            
+
         }
     }
 }

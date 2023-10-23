@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
@@ -42,8 +43,13 @@ namespace Samovar.Blazor
             //var dataQuerySubscription = new Subscription1TaskVoid<IQueryable<T>>(_dataSourceService.DataQuery, ProcessDataQuery).CreateMap();
             //SetNavigationStrategy(NavigationMode.SubjectValue);
 
-            _dataSourceService.DataQuery.Subscribe(ProcessDataQuery);
-            SetNavigationStrategy(NavigationMode.Value);
+            NavigationMode.Subscribe(SetNavigationStrategy);
+            //_dataSourceService.DataQuery.Where(x=>x!=null).Subscribe(ProcessDataQuery);
+            _dataSourceService.DataQueryObservable.Where(x=>x!=null).Subscribe(ProcessDataQuery);
+            
+            NavigationMode.OnNext(NavigationMode.Value);
+
+            //SetNavigationStrategy(NavigationMode.Value);
         }
 
         //TODO refactoring 10/2023 Task als return value type
@@ -53,7 +59,7 @@ namespace Samovar.Blazor
                 NavigationStrategy.ProcessDataPrequery(prequery);
         }
 
-        Task SetNavigationStrategy(DataGridNavigationMode strategy)
+        void SetNavigationStrategy(DataGridNavigationMode strategy)
         {
             NavigationStrategy?.Deactivate();
             
@@ -66,10 +72,10 @@ namespace Samovar.Blazor
             
             NavigationStrategy?.Activate();
             
-            //if(_dataSourceService.DataQuery.SubjectValue != null)
-            //    NavigationStrategy.ProcessDataPrequery(_dataSourceService.DataQuery.SubjectValue);
+            if(_dataSourceService.DataQuery.Value != null)
+                NavigationStrategy.ProcessDataPrequery(_dataSourceService.DataQuery.Value);
 
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
         }
     }
 }
