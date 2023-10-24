@@ -50,7 +50,6 @@ namespace Samovar.Blazor
                 CalculatePagingSetting).Subscribe(LoadingSettingsSubscriber);
 
             _dataSourceService.DataQuery.Where(x => x != null).Subscribe(ProcessDataPrequery);
-            //_dataSourceService.DataLoadingSettings.OnNext(NavigationStrategyDataLoadingSettings.FetchAll);
 
             CurrentPage.OnNext(1);
         }
@@ -69,17 +68,7 @@ namespace Samovar.Blazor
         {
             return new NavigationStrategyDataLoadingSettings(skip: (currentPage - 1) * pageSize, take: pageSize);
         }
-
-        //private object CalculatePagingSettings(object source1, object source2)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //private int CalculatePagingSettings(int source1, int source2)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
+        
         private void CalculatePagingSettings(int pageSize, int currentPage)
         {
             _dataSourceService.DataLoadingSettings.OnNext(new NavigationStrategyDataLoadingSettings(skip: (currentPage - 1) * pageSize, take: pageSize));
