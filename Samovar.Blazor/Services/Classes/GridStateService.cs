@@ -62,19 +62,22 @@ namespace Samovar.Blazor
             switch (dataSourceState)
             {
                 case DataSourceStateEnum.Idle:
+                    //t += ShowDataPanelDelegate;
+                    await ShowDataPanelDelegate.Invoke();
                     t += ShowDataPanelDelegate;
                     if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
-                        t += ShowPagingPanelDelegate;
+                        await ShowPagingPanelDelegate.Invoke();
+                        //t += ShowPagingPanelDelegate;
                     break;
                 case DataSourceStateEnum.Loading:
                     //t += ShowProcessingDataPanelDelegate;
-                    //await ShowProcessingDataPanelDelegate.Invoke();
+                    await ShowProcessingDataPanelDelegate.Invoke();
                     //return;
                     break;
                 case DataSourceStateEnum.NoData:
                     //t += ShowNoDataPanelDelegate;
                     //await ShowNoDataPanelDelegate.Invoke();
-                    await ShowProcessingDataPanelDelegate.Invoke();
+                    //await ShowProcessingDataPanelDelegate.Invoke();
 
                     break;
                 default:
