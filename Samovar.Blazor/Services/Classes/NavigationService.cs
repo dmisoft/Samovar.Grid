@@ -28,7 +28,6 @@ namespace Samovar.Blazor
             _virtualScrollingService = virtualScrollingService;
             _pagingNavigationStrategy = pagingNavigationStrategy;
             
-            
             _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
             
              NavigationStrategy = pagingNavigationStrategy;

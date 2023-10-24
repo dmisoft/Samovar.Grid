@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -15,6 +14,7 @@ namespace Samovar.Blazor
         : IRepositoryService<T>
     {
         public IEnumerable<SmDataGridRowModel<T>> ViewCollection { get; private set; }
+        public IObservable<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservable { get; private set; }
 
         private readonly IDataSourceService<T> _dataSourceService;
         INavigationService _navigationService;
@@ -76,26 +76,34 @@ namespace Samovar.Blazor
             }
 
             _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
-
-
         }
 
-        private void dataLoadingSettingsObserver(NavigationStrategyDataLoadingSettings settings)
+        private void DataGridInitializerCallback(bool obj)
         {
-            //            throw new NotImplementedException();
+            //TODO refactoring 10/2023
+            //var querySubscription = new Subscription2TaskVoid<IQueryable<T>, NavigationStrategyDataLoadingSettings>(_dataSourceService.DataQuery, _dataSourceService.DataLoadingSettings, DataLoadingSettingsCallback2).CreateMap();
+            ViewCollectionObservable = Observable.CombineLatest(
+                _dataSourceService.DataQuery,
+                _dataSourceService.DataLoadingSettings,
+                ViewCollectionObservableMap
+            );
+            ViewCollectionObservable.Subscribe(dummy);
+            //_dataSourceService.DataQuery.Subscribe(dataQueryObserver);
+            //_dataSourceService.DataLoadingSettings.Subscribe(dataLoadingSettingsObserver);
         }
 
-        private void dataQueryObserver(IQueryable<T> queryable)
+        private void dummy(IEnumerable<SmDataGridRowModel<T>> enumerable)
         {
-            DataLoadingSettingsCallback2(queryable, _dataSourceService.DataLoadingSettings.Value);// new NavigationStrategyDataLoadingSettings(0, 1000, false)); //_dataSourceService.DataLoadingSettings.Value);
+            //throw new NotImplementedException();
         }
 
-        private async Task DataLoadingSettingsCallback2(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
+        //bundle data query and loading settngs to common observable row model collection
+        private IEnumerable<SmDataGridRowModel<T>> ViewCollectionObservableMap(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
         {
             if (query == null)
             {
                 _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
-                return;
+                return null;
             }
 
             query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
@@ -105,7 +113,7 @@ namespace Samovar.Blazor
                 _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
                 Stopwatch stopWatch = new Stopwatch();
                 stopWatch.Start();
-                ViewCollection = await CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+                ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
                 stopWatch.Stop();
 
                 if (ViewCollection.Count() == 0)
@@ -127,7 +135,7 @@ namespace Samovar.Blazor
                 Stopwatch stopWatch = new Stopwatch();
                 stopWatch.Start();
 
-                ViewCollection = await CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+                ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
 
                 stopWatch.Stop();
                 // Get the elapsed time as a TimeSpan value.
@@ -150,35 +158,21 @@ namespace Samovar.Blazor
                 }
             }
 
-            await OnViewCollectionChanged(ViewCollection);
+            //await OnViewCollectionChanged(ViewCollection);
+
+            return ViewCollection;
         }
 
-        public event Func<IEnumerable<SmDataGridRowModel<T>>, Task> ViewCollectionChanged;
-        internal async Task OnViewCollectionChanged(IEnumerable<SmDataGridRowModel<T>> data)
-        {
-            if (ViewCollectionChanged != null)
-            {
-                await ViewCollectionChanged.Invoke(data);
-            }
-        }
+        //public event Func<IEnumerable<SmDataGridRowModel<T>>, Task> ViewCollectionChanged;
+        //internal async Task OnViewCollectionChanged(IEnumerable<SmDataGridRowModel<T>> data)
+        //{
+        //    if (ViewCollectionChanged != null)
+        //    {
+        //        await ViewCollectionChanged.Invoke(data);
+        //    }
+        //}
 
-        //public Subscription1<IEnumerable<T>, int> DataChangeSubscription { get; }
-
-        private void DataGridInitializerCallback(bool obj)
-        {
-            //TODO refactoring 10/2023
-            //var querySubscription = new Subscription2TaskVoid<IQueryable<T>, NavigationStrategyDataLoadingSettings>(_dataSourceService.DataQuery, _dataSourceService.DataLoadingSettings, DataLoadingSettingsCallback2).CreateMap();
-            var combined = Observable.CombineLatest(
-                _dataSourceService.DataQuery,
-                _dataSourceService.DataLoadingSettings,
-                DataLoadingSettingsCallback2
-            );
-
-            _dataSourceService.DataQuery.Subscribe(dataQueryObserver);
-            _dataSourceService.DataLoadingSettings.Subscribe(dataLoadingSettingsObserver);
-        }
-
-        private async Task<List<SmDataGridRowModel<T>>> CreateRowModelList(IQueryable<T> gridData, IEnumerable<IDataColumnModel> ColumnMetadataList, Dictionary<string, PropertyInfo> PropInfo)
+        private List<SmDataGridRowModel<T>> CreateRowModelList(IQueryable<T> gridData, IEnumerable<IDataColumnModel> ColumnMetadataList, Dictionary<string, PropertyInfo> PropInfo)
         {
             var retVal = new List<SmDataGridRowModel<T>>();
             int rowPosition = 0;
@@ -189,7 +183,7 @@ namespace Samovar.Blazor
                 {
                     rowPosition++;
                     retVal.Add(new SmDataGridRowModel<T>(keyDataPair, ColumnMetadataList, rowPosition, PropInfo, _rowDetailService.ExpandedRowDetails.Value.Any(r => r.Equals(keyDataPair))));
-                    //await Task.Delay(5);
+                    Task.Delay(100).Wait();
                 }
             }
             catch (Exception ex)

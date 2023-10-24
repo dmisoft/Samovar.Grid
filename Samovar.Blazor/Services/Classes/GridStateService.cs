@@ -41,7 +41,7 @@ namespace Samovar.Blazor
 
         private void DataGridInitializerCallback(bool obj)
         {
-            DataSourceState.Subscribe(ProcessDataSourceState);
+            DataSourceState.Subscribe(async dataSourceState => await ProcessDataSourceState(dataSourceState));
             DataEditState.Subscribe(ProcessDataEditState);
         }
 
@@ -50,16 +50,16 @@ namespace Samovar.Blazor
             //return Task.CompletedTask;
         }
 
-        private void ProcessDataSourceState(DataSourceStateEnum arg)
+        private async Task ProcessDataSourceState(DataSourceStateEnum dataSourceState)
         {
-            CloseDataPanelDelegate?.Invoke();
-            CloseNoDataPanelDelegate?.Invoke();
-            CloseNoDataFoundPanelDelegate?.Invoke();
-            CloseProcessingDataPanelDelegate?.Invoke();
-            HidePagingPanelDelegate?.Invoke();
+            await CloseDataPanelDelegate?.Invoke();
+            await CloseNoDataPanelDelegate?.Invoke();
+            await CloseNoDataFoundPanelDelegate?.Invoke();
+            await CloseProcessingDataPanelDelegate?.Invoke();
+            await HidePagingPanelDelegate?.Invoke();
 
             Func<Task> t = null;
-            switch (arg)
+            switch (dataSourceState)
             {
                 case DataSourceStateEnum.Idle:
                     t += ShowDataPanelDelegate;
@@ -67,33 +67,33 @@ namespace Samovar.Blazor
                         t += ShowPagingPanelDelegate;
                     break;
                 case DataSourceStateEnum.Loading:
-                    t += ShowProcessingDataPanelDelegate;
+                    //t += ShowProcessingDataPanelDelegate;
                     //await ShowProcessingDataPanelDelegate.Invoke();
                     //return;
                     break;
                 case DataSourceStateEnum.NoData:
-                    t += ShowNoDataPanelDelegate;
+                    //t += ShowNoDataPanelDelegate;
+                    //await ShowNoDataPanelDelegate.Invoke();
+                    await ShowProcessingDataPanelDelegate.Invoke();
+
                     break;
                 default:
                     break;
             }
 
-            t?.Invoke();
+            //await t?.Invoke();
             
-            if (t != null) {
-                Delegate[] delList = t.GetInvocationList();
+            //if (t != null) {
+            //    Delegate[] delList = t.GetInvocationList();
 
-                if (delList != null)
-                {
-                    foreach (Delegate del in delList)
-                    {
-                        t -= (Func<Task>)del;
-                    }
-                }
-            }
-            
-
-            //return Task.CompletedTask;
+            //    if (delList != null)
+            //    {
+            //        foreach (Delegate del in delList)
+            //        {
+            //            t -= (Func<Task>)del;
+            //        }
+            //    }
+            //}
         }
 
         public void Dispose()

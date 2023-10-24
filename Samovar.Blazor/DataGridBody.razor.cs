@@ -30,29 +30,36 @@ namespace Samovar.Blazor
         public ElementReference GridBodyRef;
         protected override Task OnInitializedAsync()
         {
-            RepositoryService.ViewCollectionChanged += RepositoryService_ViewCollectionChanged;
-            
-            if(RepositoryService.ViewCollection != null)
-                View = RepositoryService.ViewCollection;
+            RepositoryService.ViewCollectionObservable.Subscribe(ViewCollectionObserver);
+            //RepositoryService.ViewCollectionChanged += RepositoryService_ViewCollectionChanged;
+
+            //if(RepositoryService.ViewCollection != null)
+            //    View = RepositoryService.ViewCollection;
 
             return base.OnInitializedAsync();
         }
 
-		protected override async Task OnAfterRenderAsync(bool firstRender)
+        private void ViewCollectionObserver(IEnumerable<SmDataGridRowModel<TItem>> viewCollection)
+        {
+            View = viewCollection;
+            StateHasChanged();
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
 		{
             if(!firstRender)
                 await LayoutService.CheckScrollBarWidth();
 		}
 
-		private async Task RepositoryService_ViewCollectionChanged(IEnumerable<SmDataGridRowModel<TItem>> arg)
-        {
-            View = arg;
-            await InvokeAsync(StateHasChanged);
-        }
+		//private async Task RepositoryService_ViewCollectionChanged(IEnumerable<SmDataGridRowModel<TItem>> arg)
+  //      {
+  //          View = arg;
+  //          await InvokeAsync(StateHasChanged);
+  //      }
 
         public ValueTask DisposeAsync()
         {
-            RepositoryService.ViewCollectionChanged -= RepositoryService_ViewCollectionChanged;
+            //RepositoryService.ViewCollectionChanged -= RepositoryService_ViewCollectionChanged;
             return ValueTask.CompletedTask;
         }
     }
