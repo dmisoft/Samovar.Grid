@@ -31,18 +31,11 @@ namespace Samovar.Blazor
         protected override Task OnInitializedAsync()
         {
             RepositoryService.ViewCollectionObservable.Subscribe(ViewCollectionObserver);
-            //RepositoryService.ViewCollectionChanged += RepositoryService_ViewCollectionChanged;
-
-            //if(RepositoryService.ViewCollection != null)
-            //    View = RepositoryService.ViewCollection;
-
             return base.OnInitializedAsync();
         }
 
         private void ViewCollectionObserver(IEnumerable<SmDataGridRowModel<TItem>> collection)
         {
-            //if (task.Result == null)
-            //    return;
             View = collection;
             StateHasChanged();
         }

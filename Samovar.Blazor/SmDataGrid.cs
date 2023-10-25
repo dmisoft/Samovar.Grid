@@ -8,7 +8,6 @@ namespace Samovar.Blazor
     public class SmDataGrid<T>
         : SmDataGridBase<T>
     {
-        
         [SmInject]
         public IInitService InitService { get; set; }
 

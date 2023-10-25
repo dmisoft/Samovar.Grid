@@ -96,7 +96,7 @@ namespace Samovar.Blazor
             StateService.HidePagingPanelDelegate = () => { PagingPanel = null; StateHasChanged(); return Task.CompletedTask; };
 
             StateService.DataSourceState.Subscribe(state =>
-            InvokeAsync(() => 
+            InvokeAsync(() =>
             {
                 DataProcessingPanel = null;
                 DataPanel = null;

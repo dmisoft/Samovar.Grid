@@ -50,7 +50,7 @@ namespace Samovar.Blazor
 
         protected override void OnInitialized()
         {
-            StateService.DataSourceState.Subscribe(this);
+            //StateService.DataSourceState.Subscribe(this);
             //DataGrid.NotifierService.NotifyAfterSort += NotifierService_ResetDetailPanel;
             //DataGrid.NotifierService.NotifyAfterFilter += NotifierService_ResetDetailPanel;
             //DataGrid.NotifierService.NotifyAfterPagingChange += NotifierService_ResetDetailPanel;

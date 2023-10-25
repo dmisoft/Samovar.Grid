@@ -15,7 +15,7 @@ namespace Samovar.Blazor
         public IJsService JsService { get; set; }
 
         //private readonly Lazy<IServiceProvider> _serviceProviderLazy;
-        public SmComponentServiceProvider ServiceProvider { get; set; } = new SmComponentServiceProvider();
+        public SmComponentServiceProvider ServiceProvider { get; set; }
         
         [Parameter]
         public RenderFragment ChildContent { get; set; }

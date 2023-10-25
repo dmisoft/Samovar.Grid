@@ -13,7 +13,7 @@ namespace Samovar.Blazor
         BehaviorSubject<HashSet<T>> Data { get; }
         
         //event Func<IEnumerable<SmDataGridRowModel<T>>, Task> ViewCollectionChanged;
-        AsyncSubject<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservable { get; }
+        BehaviorSubject<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservable { get; }
         public Dictionary<string, PropertyInfo> PropInfo { get; }
 
         //ISubject<int> PageSize { get; }
