@@ -111,15 +111,15 @@ namespace Samovar.Blazor
 
         private void dummy(IEnumerable<SmDataGridRowModel<T>> enumerable)
         {
-            //if (enumerable.Count() == 0)
-            //{
-            //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
-            //}
-            //else
-            //{
-            //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
-            //    ViewCollectionObservable.OnNext(enumerable);
-            //}
+            if (enumerable.Count() == 0)
+            {
+                _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+            }
+            else
+            {
+                _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
+                ViewCollectionObservable.OnNext(enumerable);
+            }
         }
 
         private void dummyTask(Task<IEnumerable<SmDataGridRowModel<T>>> task)
@@ -229,9 +229,49 @@ namespace Samovar.Blazor
             //return Task.FromResult(ViewCollection);
 
         }
+        
+        private IEnumerable<SmDataGridRowModel<T>> ViewCollectionObservableMap(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
+        {
+            if (query == null)
+            {
+                _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+                //_stateService.DataSourceState.OnCompleted();
+                return null;
+            }
+
+            query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
+
+            if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+            {
+                _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
+                //_stateService.DataSourceState.OnCompleted();
+                //Stopwatch stopWatch = new Stopwatch();
+                //stopWatch.Start();
+
+                ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+
+                //stopWatch.Stop();
+
+                //if (ViewCollection.Count() == 0)
+                //{
+                //    ViewCollectionObservable.OnNext(ViewCollection);
+                //    ViewCollectionObservable.OnCompleted();
+                //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+                //    _stateService.DataSourceState.OnCompleted();
+                //}
+                //else
+                //{
+                //    ViewCollectionObservable.OnNext(ViewCollection);
+                //    ViewCollectionObservable.OnCompleted();
+                //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
+                //    _stateService.DataSourceState.OnCompleted();
+                //}
+            }
+            return ViewCollection;
+        }
 
         //bundle data query and loading settngs to common observable row model collection
-        private IEnumerable<SmDataGridRowModel<T>> ViewCollectionObservableMap(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
+        private IEnumerable<SmDataGridRowModel<T>> ViewCollectionObservableMapAsync(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
         {
             //if (query == null)
             //{
@@ -269,6 +309,7 @@ namespace Samovar.Blazor
             //    //}
             //}
             //return ViewCollection;
+            
             Task.Run(async () =>
             {
                 await Task.Delay(1);

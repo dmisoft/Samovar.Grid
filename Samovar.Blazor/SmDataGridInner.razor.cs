@@ -108,8 +108,8 @@ namespace Samovar.Blazor
                 {
                     case DataSourceStateEnum.Idle:
                         DataPanel = ComponentBuilderService.GetDataPanel<T>();
-                        //if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
-                        //    await ShowPagingPanelDelegate.Invoke();
+                        if (NavigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+                            PagingPanel = ComponentBuilderService.GetPagingPanel<T>();
                         break;
                     case DataSourceStateEnum.Loading:
                         DataProcessingPanel = ComponentBuilderService.GetProcessingDataPanel();
