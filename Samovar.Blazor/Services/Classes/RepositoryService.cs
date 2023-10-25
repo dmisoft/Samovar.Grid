@@ -1,10 +1,14 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reactive.Threading.Tasks;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -14,7 +18,7 @@ namespace Samovar.Blazor
         : IRepositoryService<T>
     {
         public IEnumerable<SmDataGridRowModel<T>> ViewCollection { get; private set; }
-        public IObservable<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservable { get; private set; }
+        public IObservable<Task<IEnumerable<SmDataGridRowModel<T>>>> ViewCollectionObservable { get; private set; }
 
         private readonly IDataSourceService<T> _dataSourceService;
         INavigationService _navigationService;
@@ -85,16 +89,132 @@ namespace Samovar.Blazor
             ViewCollectionObservable = Observable.CombineLatest(
                 _dataSourceService.DataQuery,
                 _dataSourceService.DataLoadingSettings,
-                ViewCollectionObservableMap
+                async (x,y) => {
+                    return await ViewCollectionObservableMap11(x, y);
+                }
             );
+            //var merged = Observable.Merge(
+            //    _dataSourceService.DataQuery.Select(x => (1, (object)x )),
+            //    _dataSourceService.DataLoadingSettings.Select(x => (2, (object)x))
+            //    );
+
+            //// Subscribe to the merged observable and execute a void handler when any observable produces a value
+            //var subscription = merged.Subscribe(HandleEvent);
             ViewCollectionObservable.Subscribe(dummy);
-            //_dataSourceService.DataQuery.Subscribe(dataQueryObserver);
-            //_dataSourceService.DataLoadingSettings.Subscribe(dataLoadingSettingsObserver);
+
+        //    var source1 = Observable.Interval(TimeSpan.FromSeconds(1));
+        //var source2 = Observable.Interval(TimeSpan.FromSeconds(2));
+
+        //var combined = source1.CombineLatest(source2, (x, y) => (x, y));
         }
 
-        private void dummy(IEnumerable<SmDataGridRowModel<T>> enumerable)
+        
+
+        private void dummy(Task<IEnumerable<SmDataGridRowModel<T>>> task)
         {
             //throw new NotImplementedException();
+        }
+
+        private void HandleEvent((int source, object value) message)
+        {
+            switch (message.source)
+            {
+                case 1:
+                    //Console.WriteLine($"Received from Observable 1: {message.value}");
+                    // Handle type-specific processing for Observable 1
+                    break;
+
+                case 2:
+                    //Console.WriteLine($"Received from Observable 2: {message.value}");
+                    // Handle type-specific processing for Observable 2
+                    break;
+
+                default:
+                    Console.WriteLine($"Received from an unknown source: {message.value}");
+                    // Handle unknown source or type
+                    break;
+            }
+        }
+
+
+
+        private async Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
+        {
+            return await Task.Run(() => {
+                if (query == null)
+                {
+                    _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+                    return null;
+                }
+
+                query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
+
+                if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+                {
+                    _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
+                    Stopwatch stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                    ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+                    stopWatch.Stop();
+
+                    if (ViewCollection.Count() == 0)
+                    {
+                        _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+                    }
+                    else
+                    {
+                        _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
+                    }
+                }
+                else if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling && !repositoryForVirtualScrollingInitialized)
+                {
+                    _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
+                    repositoryForVirtualScrollingInitialized = true;
+                }
+                else if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling && repositoryForVirtualScrollingInitialized)
+                {
+                    Stopwatch stopWatch = new Stopwatch();
+                    stopWatch.Start();
+
+                    ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+
+                    stopWatch.Stop();
+                    // Get the elapsed time as a TimeSpan value.
+                    TimeSpan ts = stopWatch.Elapsed;
+
+                    // Format and display the TimeSpan value.
+                    string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                        ts.Hours, ts.Minutes, ts.Seconds,
+                        ts.Milliseconds / 10);
+                    Console.WriteLine("RunTime " + elapsedTime);
+
+                    if (ViewCollection.Count() == 0)
+                    {
+                        _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+                    }
+                    else
+                    {
+                        //TODO extra Idle state for virtual scrolling???
+                        _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
+                    }
+                }
+                //ViewCollectionObservable = Observable.Create<IEnumerable<SmDataGridRowModel<T>>>(observer => {
+                //    observer.OnNext(ViewCollection);
+                //    observer.OnCompleted();
+                //    return Disposable.Empty;
+                //});
+                //ViewCollectionObservable = ViewCollection.ToObservable().Subscribe(hohoho);
+                //ViewCollectionObservable.OnNext(ViewCollection);
+
+                return ViewCollection;
+            });
+            //return Task.FromResult(ViewCollection);
+
+        }
+
+        private void hohoho(SmDataGridRowModel<T> model)
+        {
+            throw new NotImplementedException();
         }
 
         //bundle data query and loading settngs to common observable row model collection
@@ -113,7 +233,9 @@ namespace Samovar.Blazor
                 _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
                 Stopwatch stopWatch = new Stopwatch();
                 stopWatch.Start();
+
                 ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+
                 stopWatch.Stop();
 
                 if (ViewCollection.Count() == 0)
@@ -157,8 +279,6 @@ namespace Samovar.Blazor
                     _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
                 }
             }
-
-            //await OnViewCollectionChanged(ViewCollection);
 
             return ViewCollection;
         }

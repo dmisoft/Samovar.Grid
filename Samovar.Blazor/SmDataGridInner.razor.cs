@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace Samovar.Blazor
 {
     public partial class SmDataGridInner<T>
-        : SmDesignComponentBase , IAsyncDisposable
+        : SmDesignComponentBase, IAsyncDisposable
     {
         [SmInject]
         public IGridStateService StateService { get; set; }
@@ -25,7 +25,7 @@ namespace Samovar.Blazor
 
         [SmInject]
         public INavigationService NavigationService { get; set; }
-        
+
         [SmInject]
         public IComponentBuilderService ComponentBuilderService { get; set; }
 
@@ -43,11 +43,11 @@ namespace Samovar.Blazor
 
         public RenderFragment NoDataFoundPanel { get; set; }
         public RenderFragment PagingPanel { get; set; }
-        
+
         public RenderFragment DataProcessingPanel { get; set; }
 
         public DataGridStyleInfo Style { get; set; } //Default style
-        
+
         protected override Task OnInitializedAsync()
         {
             //var sub1 = new Subscription1TaskVoid<DataGridVirtualScrollingInfo>(VirtualScrollingService.VirtualScrollingInfo, myfunc1);
@@ -62,8 +62,8 @@ namespace Samovar.Blazor
             LayoutService.DataGridInnerCssStyleChanged += GridLayoutService_DataGridInnerCssStyleChanged;
 
             //Popup editing
-            EditingService.ShowEditingPopupDelegate = (SmDataGridRowModel<T> model) => { EditingPopup = ComponentBuilderService.GetEditingPopup(model); StateHasChanged(); return Task.CompletedTask;  };
-            EditingService.CloseEditingPopupDelegate = () => { EditingPopup = null; StateHasChanged(); return Task.CompletedTask;  };
+            EditingService.ShowEditingPopupDelegate = (SmDataGridRowModel<T> model) => { EditingPopup = ComponentBuilderService.GetEditingPopup(model); StateHasChanged(); return Task.CompletedTask; };
+            EditingService.CloseEditingPopupDelegate = () => { EditingPopup = null; StateHasChanged(); return Task.CompletedTask; };
 
             //Popup inserting
             EditingService.ShowInsertingPopupDelegate = (SmDataGridRowModel<T> model) => { InsertingPopup = ComponentBuilderService.GetInsertingPopup<T>(model); StateHasChanged(); return Task.CompletedTask; };
@@ -95,7 +95,33 @@ namespace Samovar.Blazor
             StateService.ShowPagingPanelDelegate = () => { PagingPanel = ComponentBuilderService.GetPagingPanel<T>(); StateHasChanged(); return Task.CompletedTask; };
             StateService.HidePagingPanelDelegate = () => { PagingPanel = null; StateHasChanged(); return Task.CompletedTask; };
 
+            StateService.DataSourceState.Subscribe(state =>
+            InvokeAsync(() => 
+            {
+                DataProcessingPanel = null;
+                DataPanel = null;
+                PagingPanel = null;
+                NoDataPanel = null;
+                StateHasChanged();
 
+                switch (state)
+                {
+                    case DataSourceStateEnum.Idle:
+                        DataPanel = ComponentBuilderService.GetDataPanel<T>();
+                        //if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+                        //    await ShowPagingPanelDelegate.Invoke();
+                        break;
+                    case DataSourceStateEnum.Loading:
+                        DataProcessingPanel = ComponentBuilderService.GetProcessingDataPanel();
+                        break;
+                    case DataSourceStateEnum.NoData:
+                        NoDataPanel = ComponentBuilderService.GetNoDataPanel();
+                        break;
+                    default:
+                        break;
+                }
+                StateHasChanged();
+            }));
             base.OnInitializedAsync();
 
             return Task.CompletedTask;
