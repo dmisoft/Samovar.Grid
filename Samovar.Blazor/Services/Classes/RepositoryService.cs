@@ -1,14 +1,10 @@
-﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Reactive.Threading.Tasks;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -18,7 +14,9 @@ namespace Samovar.Blazor
         : IRepositoryService<T>
     {
         public IEnumerable<SmDataGridRowModel<T>> ViewCollection { get; private set; }
-        public IObservable<Task<IEnumerable<SmDataGridRowModel<T>>>> ViewCollectionObservable { get; private set; }
+        public AsyncSubject<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservable { get; private set; } = new AsyncSubject<IEnumerable<SmDataGridRowModel<T>>>();
+        private IObservable<Task<IEnumerable<SmDataGridRowModel<T>>>> ViewCollectionObservableInternTask;
+        private IObservable<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableIntern;
 
         private readonly IDataSourceService<T> _dataSourceService;
         INavigationService _navigationService;
@@ -86,13 +84,19 @@ namespace Samovar.Blazor
         {
             //TODO refactoring 10/2023
             //var querySubscription = new Subscription2TaskVoid<IQueryable<T>, NavigationStrategyDataLoadingSettings>(_dataSourceService.DataQuery, _dataSourceService.DataLoadingSettings, DataLoadingSettingsCallback2).CreateMap();
-            ViewCollectionObservable = Observable.CombineLatest(
+            //ViewCollectionObservableInternTask = Observable.CombineLatest(
+            //    _dataSourceService.DataQuery,
+            //    _dataSourceService.DataLoadingSettings,
+            //    async (x,y) => {
+            //        return await ViewCollectionObservableMap11(x, y);
+            //    }
+            //);
+            ViewCollectionObservableIntern = Observable.CombineLatest(
                 _dataSourceService.DataQuery,
                 _dataSourceService.DataLoadingSettings,
-                async (x,y) => {
-                    return await ViewCollectionObservableMap11(x, y);
-                }
+                ViewCollectionObservableMap
             );
+
             //var merged = Observable.Merge(
             //    _dataSourceService.DataQuery.Select(x => (1, (object)x )),
             //    _dataSourceService.DataLoadingSettings.Select(x => (2, (object)x))
@@ -100,7 +104,8 @@ namespace Samovar.Blazor
 
             //// Subscribe to the merged observable and execute a void handler when any observable produces a value
             //var subscription = merged.Subscribe(HandleEvent);
-            ViewCollectionObservable.Subscribe(dummy);
+            //ViewCollectionObservableInternTask.Subscribe(dummyTask);
+            ViewCollectionObservableIntern.Subscribe(dummy);
 
         //    var source1 = Observable.Interval(TimeSpan.FromSeconds(1));
         //var source2 = Observable.Interval(TimeSpan.FromSeconds(2));
@@ -108,10 +113,18 @@ namespace Samovar.Blazor
         //var combined = source1.CombineLatest(source2, (x, y) => (x, y));
         }
 
-        
-
-        private void dummy(Task<IEnumerable<SmDataGridRowModel<T>>> task)
+        private void dummy(IEnumerable<SmDataGridRowModel<T>> enumerable)
         {
+            //throw new NotImplementedException();
+        }
+
+        private void dummyTask(Task<IEnumerable<SmDataGridRowModel<T>>> task)
+        {
+            var res = task.Result;
+            if (res == null)
+                return;
+            ViewCollectionObservable.OnNext(res);
+            ViewCollectionObservable.OnCompleted();
             //throw new NotImplementedException();
         }
 
@@ -197,6 +210,7 @@ namespace Samovar.Blazor
                         //TODO extra Idle state for virtual scrolling???
                         _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
                     }
+                    
                 }
                 //ViewCollectionObservable = Observable.Create<IEnumerable<SmDataGridRowModel<T>>>(observer => {
                 //    observer.OnNext(ViewCollection);
@@ -212,14 +226,11 @@ namespace Samovar.Blazor
 
         }
 
-        private void hohoho(SmDataGridRowModel<T> model)
-        {
-            throw new NotImplementedException();
-        }
-
         //bundle data query and loading settngs to common observable row model collection
         private IEnumerable<SmDataGridRowModel<T>> ViewCollectionObservableMap(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
         {
+            _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
+            return new List<SmDataGridRowModel<T>>();
             if (query == null)
             {
                 _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);

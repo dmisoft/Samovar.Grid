@@ -39,11 +39,11 @@ namespace Samovar.Blazor
             return base.OnInitializedAsync();
         }
 
-        private void ViewCollectionObserver(Task<IEnumerable<SmDataGridRowModel<TItem>>> task)
+        private void ViewCollectionObserver(IEnumerable<SmDataGridRowModel<TItem>> collection)
         {
-            if (task.Result == null)
-                return;
-            View = task.Result;
+            //if (task.Result == null)
+            //    return;
+            View = collection;
             StateHasChanged();
         }
 
