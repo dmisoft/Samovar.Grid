@@ -98,10 +98,14 @@ namespace Samovar.Blazor
                 ViewCollectionObservableMap
             );
 
-            ViewCollectionObservableIntern.Subscribe(dummy);
+            ViewCollectionObservableIntern.Subscribe(dummydummy);
         }
 
-        private void dummy(IEnumerable<SmDataGridRowModel<T>> enumerable)
+        private void dummydummy(IEnumerable<SmDataGridRowModel<T>> enumerable)
+        {
+        }
+
+        private void viewCollectionObserverHandler(IEnumerable<SmDataGridRowModel<T>> enumerable)
         {
             if (enumerable.Count() == 0)
             {
@@ -112,6 +116,8 @@ namespace Samovar.Blazor
                 _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
                 ViewCollectionObservable.OnNext(enumerable);
             }
+            // Dispose of the subscription when you're done.
+            viewCollectionObserverSubscription.Dispose();
         }
 
         private void dummyTask(Task<IEnumerable<SmDataGridRowModel<T>>> task)
@@ -134,7 +140,7 @@ namespace Samovar.Blazor
                 }
 
                 query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
-
+                
                 if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
                 {
                     _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
@@ -198,7 +204,7 @@ namespace Samovar.Blazor
             //return Task.FromResult(ViewCollection);
 
         }
-        
+        IDisposable viewCollectionObserverSubscription;
         private IEnumerable<SmDataGridRowModel<T>> ViewCollectionObservableMap(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
         {
             IObservable<IEnumerable<SmDataGridRowModel<T>>> customObservable = Observable.Create<IEnumerable<SmDataGridRowModel<T>>>(async (observer, cancellationToken) =>
@@ -212,7 +218,7 @@ namespace Samovar.Blazor
                 }
 
                 query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
-
+                var rrr = query.ToHashSet();
                 if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
                 {
                     _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
@@ -230,7 +236,7 @@ namespace Samovar.Blazor
             //    error => Console.WriteLine($"Error: {error.Message}"),
             //    () => Console.WriteLine("Observable completed")
             //);
-            IDisposable subscription = customObservable.Subscribe(dummy);
+            viewCollectionObserverSubscription = customObservable.Subscribe(viewCollectionObserverHandler);
 
             // Dispose of the subscription when you're done.
             //subscription.Dispose();
