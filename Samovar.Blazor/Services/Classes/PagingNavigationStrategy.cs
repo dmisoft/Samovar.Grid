@@ -51,7 +51,7 @@ namespace Samovar.Blazor
 
             _dataSourceService.DataQuery.Where(x => x != null).Subscribe(ProcessDataPrequery);
 
-            CurrentPage.OnNext(1);
+            //CurrentPage.OnNext(1);
         }
 
         private void PagerInfoSubscriber(DataGridPagerInfo info)
@@ -143,9 +143,9 @@ namespace Samovar.Blazor
             PageCount.OnNext(pages);
 
             int currentPage = CurrentPage.Value == 0 ? 1: Math.Min(pages, CurrentPage.Value);
-            
-            CurrentPage.OnNext(currentPage);
-            //return Task.CompletedTask;
+
+            if (CurrentPage.Value != currentPage)
+                CurrentPage.OnNext(currentPage);
         }
     }
 }
