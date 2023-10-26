@@ -95,33 +95,33 @@ namespace Samovar.Blazor
             StateService.ShowPagingPanelDelegate = () => { PagingPanel = ComponentBuilderService.GetPagingPanel<T>(); StateHasChanged(); return Task.CompletedTask; };
             StateService.HidePagingPanelDelegate = () => { PagingPanel = null; StateHasChanged(); return Task.CompletedTask; };
 
-            StateService.DataSourceState.Subscribe(state =>
-            InvokeAsync(() =>
-            {
-                DataProcessingPanel = null;
-                DataPanel = null;
-                PagingPanel = null;
-                NoDataPanel = null;
-                StateHasChanged();
+            //StateService.DataSourceState.Subscribe(state =>
+            //InvokeAsync(() =>
+            //{
+            //    DataProcessingPanel = null;
+            //    DataPanel = null;
+            //    PagingPanel = null;
+            //    NoDataPanel = null;
+            //    StateHasChanged();
 
-                switch (state)
-                {
-                    case DataSourceStateEnum.Idle:
-                        DataPanel = ComponentBuilderService.GetDataPanel<T>();
-                        if (NavigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
-                            PagingPanel = ComponentBuilderService.GetPagingPanel<T>();
-                        break;
-                    case DataSourceStateEnum.Loading:
-                        DataProcessingPanel = ComponentBuilderService.GetProcessingDataPanel();
-                        break;
-                    case DataSourceStateEnum.NoData:
-                        NoDataPanel = ComponentBuilderService.GetNoDataPanel();
-                        break;
-                    default:
-                        break;
-                }
-                StateHasChanged();
-            }));
+            //    switch (state)
+            //    {
+            //        case DataSourceStateEnum.Idle:
+            //            DataPanel = ComponentBuilderService.GetDataPanel<T>();
+            //            if (NavigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+            //                PagingPanel = ComponentBuilderService.GetPagingPanel<T>();
+            //            break;
+            //        case DataSourceStateEnum.Loading:
+            //            DataProcessingPanel = ComponentBuilderService.GetProcessingDataPanel();
+            //            break;
+            //        case DataSourceStateEnum.NoData:
+            //            NoDataPanel = ComponentBuilderService.GetNoDataPanel();
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //    StateHasChanged();
+            //}));
             base.OnInitializedAsync();
 
             return Task.CompletedTask;

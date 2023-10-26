@@ -35,9 +35,6 @@ namespace Samovar.Blazor
 
         private void DataGridInitializerCallback(bool obj)
         {
-            //TODO Refactoring 10/2023
-            //PagerInfo = new Subscription3<int, int, int, DataGridPagerInfo>(PagerSize, PageCount, CurrentPage, PagerInfoChanged).CreateMap();
-            //var querySubscription = new Subscription2TaskVoid<int, int>(PageSize, CurrentPage, CalculatePagingSettings).CreateMap();
             var pagingInfoObservable = Observable.CombineLatest(
                 PagerSize,
                 PageCount,

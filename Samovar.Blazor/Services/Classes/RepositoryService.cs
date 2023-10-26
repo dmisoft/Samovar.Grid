@@ -120,15 +120,6 @@ namespace Samovar.Blazor
             viewCollectionObserverSubscription.Dispose();
         }
 
-        private void dummyTask(Task<IEnumerable<SmDataGridRowModel<T>>> task)
-        {
-            task.Wait();
-            var res = task.Result;
-            if (res == null)
-                return;
-            ViewCollectionObservable.OnNext(res);
-        }
-
         private Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
         {
             return Task.Run(async () => {
@@ -214,11 +205,10 @@ namespace Samovar.Blazor
                 {
                     _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
                     observer.OnNext(null);
-                    //return Task.CompletedTask;
                 }
 
                 query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
-                var rrr = query.ToHashSet();
+
                 if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
                 {
                     _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
@@ -227,6 +217,38 @@ namespace Samovar.Blazor
                     ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
                     stopWatch.Stop();
                 }
+                //else if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling && !repositoryForVirtualScrollingInitialized)
+                //{
+                //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
+                //    repositoryForVirtualScrollingInitialized = true;
+                //}
+                //else if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling && repositoryForVirtualScrollingInitialized)
+                //{
+                //    Stopwatch stopWatch = new Stopwatch();
+                //    stopWatch.Start();
+
+                //    ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+
+                //    stopWatch.Stop();
+                //    // Get the elapsed time as a TimeSpan value.
+                //    TimeSpan ts = stopWatch.Elapsed;
+
+                //    // Format and display the TimeSpan value.
+                //    string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                //        ts.Hours, ts.Minutes, ts.Seconds,
+                //        ts.Milliseconds / 10);
+                //    Console.WriteLine("RunTime " + elapsedTime);
+
+                //    if (ViewCollection.Count() == 0)
+                //    {
+                //        _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+                //    }
+                //    else
+                //    {
+                //        //TODO extra Idle state for virtual scrolling???
+                //        _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
+                //    }
+                //}
                 observer.OnNext(ViewCollection);
             });
 
@@ -353,15 +375,6 @@ namespace Samovar.Blazor
             return new List<SmDataGridRowModel<T>>();
         }
 
-        //public event Func<IEnumerable<SmDataGridRowModel<T>>, Task> ViewCollectionChanged;
-        //internal async Task OnViewCollectionChanged(IEnumerable<SmDataGridRowModel<T>> data)
-        //{
-        //    if (ViewCollectionChanged != null)
-        //    {
-        //        await ViewCollectionChanged.Invoke(data);
-        //    }
-        //}
-
         private List<SmDataGridRowModel<T>> CreateRowModelList(IQueryable<T> gridData, IEnumerable<IDataColumnModel> ColumnMetadataList, Dictionary<string, PropertyInfo> PropInfo)
         {
             var retVal = new List<SmDataGridRowModel<T>>();
@@ -373,7 +386,7 @@ namespace Samovar.Blazor
                 {
                     rowPosition++;
                     retVal.Add(new SmDataGridRowModel<T>(keyDataPair, ColumnMetadataList, rowPosition, PropInfo, _rowDetailService.ExpandedRowDetails.Value.Any(r => r.Equals(keyDataPair))));
-                    Task.Delay(100).Wait();
+                    //Task.Delay(100).Wait();
                 }
             }
             catch (Exception ex)

@@ -30,9 +30,6 @@ namespace Samovar.Blazor
 
         public GridStateService(IInitService initService, INavigationService navigationService)
         {
-            //TODO refactoring
-            //var querySubscription = new Subscription1TaskVoid<DataSourceStateEnum>(DataSourceState, ProcessDataSourceState).CreateMap();
-            //var querySubscription1 = new Subscription1TaskVoid<DataEditStateEnum>(DataEditState, ProcessDataEditState).CreateMap();
             _initService = initService;
             _navigationService = navigationService;
 
@@ -52,50 +49,28 @@ namespace Samovar.Blazor
 
         private async Task ProcessDataSourceState(DataSourceStateEnum dataSourceState)
         {
-            return;
             await CloseDataPanelDelegate?.Invoke();
             await CloseNoDataPanelDelegate?.Invoke();
             await CloseNoDataFoundPanelDelegate?.Invoke();
             await CloseProcessingDataPanelDelegate?.Invoke();
             await HidePagingPanelDelegate?.Invoke();
 
-            Func<Task> t = null;
             switch (dataSourceState)
             {
                 case DataSourceStateEnum.Idle:
-                    //t += ShowDataPanelDelegate;
-                    //await ShowDataPanelDelegate.Invoke();
-                    //t += ShowDataPanelDelegate;
-                    //if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
-                    //    await ShowPagingPanelDelegate.Invoke();
-                        //t += ShowPagingPanelDelegate;
+                    await ShowDataPanelDelegate.Invoke();
+                    if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+                        await ShowPagingPanelDelegate.Invoke();
                     break;
                 case DataSourceStateEnum.Loading:
-                    //t += ShowProcessingDataPanelDelegate;
-                    //await ShowProcessingDataPanelDelegate.Invoke();
-                    //return;
+                    await ShowProcessingDataPanelDelegate.Invoke();
                     break;
                 case DataSourceStateEnum.NoData:
-                    //t += ShowNoDataPanelDelegate;
-                    //await ShowNoDataPanelDelegate.Invoke();
+                    await ShowNoDataPanelDelegate.Invoke();
                     break;
                 default:
                     break;
             }
-
-            //await t?.Invoke();
-            
-            //if (t != null) {
-            //    Delegate[] delList = t.GetInvocationList();
-
-            //    if (delList != null)
-            //    {
-            //        foreach (Delegate del in delList)
-            //        {
-            //            t -= (Func<Task>)del;
-            //        }
-            //    }
-            //}
         }
 
         public void Dispose()
