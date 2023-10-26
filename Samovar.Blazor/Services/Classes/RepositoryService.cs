@@ -82,31 +82,23 @@ namespace Samovar.Blazor
 
         private void DataGridInitializerCallback(bool obj)
         {
-            //TODO refactoring 10/2023
-            //var querySubscription = new Subscription2TaskVoid<IQueryable<T>, NavigationStrategyDataLoadingSettings>(_dataSourceService.DataQuery, _dataSourceService.DataLoadingSettings, DataLoadingSettingsCallback2).CreateMap();
-            //ViewCollectionObservableInternTask = Observable.CombineLatest(
-            //    _dataSourceService.DataQuery,
-            //    _dataSourceService.DataLoadingSettings,
-            //    async (x,y) => {
-            //        return await ViewCollectionObservableMap11(x, y);
-            //    }
-            //);
-            ViewCollectionObservableIntern = Observable.CombineLatest(
+            ViewCollectionObservableInternTask = Observable.CombineLatest(
                 _dataSourceService.DataQuery,
                 _dataSourceService.DataLoadingSettings,
-                ViewCollectionObservableMap
+                async (x, y) =>
+                {
+                    return await ViewCollectionObservableMap11(x, y);
+                }
             );
+            ViewCollectionObservableInternTask.Subscribe(dummyTask);
 
-            //var merged = Observable.Merge(
-            //    _dataSourceService.DataQuery.Select(x => (1, (object)x )),
-            //    _dataSourceService.DataLoadingSettings.Select(x => (2, (object)x))
-            //    );
+            //ViewCollectionObservableIntern = Observable.CombineLatest(
+            //    _dataSourceService.DataQuery,
+            //    _dataSourceService.DataLoadingSettings,
+            //    ViewCollectionObservableMap
+            //);
 
-            //// Subscribe to the merged observable and execute a void handler when any observable produces a value
-            //var subscription = merged.Subscribe(HandleEvent);
-            //ViewCollectionObservableInternTask.Subscribe(dummyTask);
-            ViewCollectionObservableIntern.Subscribe(dummy);
-            //ViewCollectionObservable.Subscribe(dummy);
+            //ViewCollectionObservableIntern.Subscribe(dummy);
         }
 
         private void dummy(IEnumerable<SmDataGridRowModel<T>> enumerable)
@@ -124,12 +116,11 @@ namespace Samovar.Blazor
 
         private void dummyTask(Task<IEnumerable<SmDataGridRowModel<T>>> task)
         {
+            task.Wait();
             var res = task.Result;
             if (res == null)
                 return;
             ViewCollectionObservable.OnNext(res);
-            //ViewCollectionObservable.OnCompleted();
-            //throw new NotImplementedException();
         }
 
         private void HandleEvent((int source, object value) message)
@@ -155,9 +146,10 @@ namespace Samovar.Blazor
 
 
 
-        private async Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
+        private Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
         {
-            return await Task.Run(() => {
+            return Task.Run(async () => {
+                await Task.Delay(1);
                 if (query == null)
                 {
                     _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
