@@ -82,23 +82,23 @@ namespace Samovar.Blazor
 
         private void DataGridInitializerCallback(bool obj)
         {
-            ViewCollectionObservableInternTask = Observable.CombineLatest(
-                _dataSourceService.DataQuery,
-                _dataSourceService.DataLoadingSettings,
-                async (x, y) =>
-                {
-                    return await ViewCollectionObservableMap11(x, y);
-                }
-            );
-            ViewCollectionObservableInternTask.Subscribe(dummyTask);
-
-            //ViewCollectionObservableIntern = Observable.CombineLatest(
+            //ViewCollectionObservableInternTask = Observable.CombineLatest(
             //    _dataSourceService.DataQuery,
             //    _dataSourceService.DataLoadingSettings,
-            //    ViewCollectionObservableMap
+            //    async (x, y) =>
+            //    {
+            //        return await ViewCollectionObservableMap11(x, y);
+            //    }
             //);
+            //ViewCollectionObservableInternTask.Subscribe(dummyTask);
 
-            //ViewCollectionObservableIntern.Subscribe(dummy);
+            ViewCollectionObservableIntern = Observable.CombineLatest(
+                _dataSourceService.DataQuery,
+                _dataSourceService.DataLoadingSettings,
+                ViewCollectionObservableMap
+            );
+
+            ViewCollectionObservableIntern.Subscribe(dummy);
         }
 
         private void dummy(IEnumerable<SmDataGridRowModel<T>> enumerable)
@@ -122,29 +122,6 @@ namespace Samovar.Blazor
                 return;
             ViewCollectionObservable.OnNext(res);
         }
-
-        private void HandleEvent((int source, object value) message)
-        {
-            switch (message.source)
-            {
-                case 1:
-                    //Console.WriteLine($"Received from Observable 1: {message.value}");
-                    // Handle type-specific processing for Observable 1
-                    break;
-
-                case 2:
-                    //Console.WriteLine($"Received from Observable 2: {message.value}");
-                    // Handle type-specific processing for Observable 2
-                    break;
-
-                default:
-                    Console.WriteLine($"Received from an unknown source: {message.value}");
-                    // Handle unknown source or type
-                    break;
-            }
-        }
-
-
 
         private Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
         {
@@ -224,42 +201,41 @@ namespace Samovar.Blazor
         
         private IEnumerable<SmDataGridRowModel<T>> ViewCollectionObservableMap(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
         {
-            if (query == null)
+            IObservable<IEnumerable<SmDataGridRowModel<T>>> customObservable = Observable.Create<IEnumerable<SmDataGridRowModel<T>>>(async (observer, cancellationToken) =>
             {
-                _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
-                //_stateService.DataSourceState.OnCompleted();
-                return null;
-            }
+                await Task.Delay(1);
+                if (query == null)
+                {
+                    _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+                    observer.OnNext(null);
+                    //return Task.CompletedTask;
+                }
 
-            query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
+                query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
 
-            if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
-            {
-                _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
-                //_stateService.DataSourceState.OnCompleted();
-                //Stopwatch stopWatch = new Stopwatch();
-                //stopWatch.Start();
+                if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+                {
+                    _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
+                    Stopwatch stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                    ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+                    stopWatch.Stop();
+                }
+                observer.OnNext(ViewCollection);
+            });
 
-                ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+            // Subscribe to the custom observable.
+            //IDisposable subscription = customObservable.Subscribe(
+            //    value => ViewCollectionObservable.OnNext(value),
+            //    error => Console.WriteLine($"Error: {error.Message}"),
+            //    () => Console.WriteLine("Observable completed")
+            //);
+            IDisposable subscription = customObservable.Subscribe(dummy);
 
-                //stopWatch.Stop();
+            // Dispose of the subscription when you're done.
+            //subscription.Dispose();
 
-                //if (ViewCollection.Count() == 0)
-                //{
-                //    ViewCollectionObservable.OnNext(ViewCollection);
-                //    ViewCollectionObservable.OnCompleted();
-                //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
-                //    _stateService.DataSourceState.OnCompleted();
-                //}
-                //else
-                //{
-                //    ViewCollectionObservable.OnNext(ViewCollection);
-                //    ViewCollectionObservable.OnCompleted();
-                //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
-                //    _stateService.DataSourceState.OnCompleted();
-                //}
-            }
-            return ViewCollection;
+            return new List<SmDataGridRowModel<T>>();
         }
 
         //bundle data query and loading settngs to common observable row model collection
