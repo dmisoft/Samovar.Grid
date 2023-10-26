@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -282,6 +283,12 @@ namespace Samovar.Blazor
         [Parameter]
         public EventCallback<IEnumerable<T>> MultipleSelectedDataRowsChanged { get; set; }
 
+        [Parameter]
+        public Func<T, Task<string>> EditingFormTitleDelegate
+        {
+            get { return EditingService.EditingFormTitleDelegate; }
+            set { EditingService.EditingFormTitleDelegate = value; }
+        }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {

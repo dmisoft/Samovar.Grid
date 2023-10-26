@@ -40,7 +40,7 @@ namespace Samovar.Blazor
 
         public Func<SmDataGridRowModel<T>, Task> ShowInsertingFormDelegate { get; set; }
         public Func<Task> CloseInsertingFormDelegate { get; set; }
-		public Func<T, Task<string>> GetEditingFormTitleDelegate { get; set; }
+		public Func<T, Task<string>> EditingFormTitleDelegate { get; set; }
 
 		public EditingService(
               IGridStateService stateService

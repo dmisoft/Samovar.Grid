@@ -39,6 +39,7 @@ else
                     FilterMode=DataGridFilterMode.FilterRow
                     Height="450px" ShowDetailRow=true
                     EditMode=GridEditMode.Popup
+                    EditingFormTitleDelegate="@((WeatherForecast data) => Task.FromResult(data.TemperatureC.ToString()))"
                     DataNavigationMode=DataGridNavigationMode.Paging
                     SelectionMode=GridSelectionMode.SingleSelectedDataRow
                     RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
@@ -76,7 +77,7 @@ else
         </div>
     </div>
 
-    <div class="row">
+    @*<div class="row">
         <div class="col-10">
             <SmDataGrid Data="forecasts2"
                         FilterMode=DataGridFilterMode.FilterRow
@@ -114,7 +115,7 @@ else
         <div class="col-2">
             
         </div>
-    </div>
+    </div>*@
 }
 
 @code {
@@ -142,7 +143,7 @@ else
         //stopWatch.Start();
 
         //var ret3 = forecasts3.Where(x => x.Summary.Contains("ild")).OrderByDescending(p => p.TemperatureC);//.Skip(20000).Take(100);//.Where(x => x.Position <= 5000);
-        
+
         //stopWatch.Stop();
         //var time2 = stopWatch.Elapsed;
 
@@ -170,6 +171,11 @@ else
     void RowEditBeginHandler(WeatherForecast item)
     {
         EditContext = new FormEditContext(item);
+    }
+
+    Task<string> EditingFormTitle(WeatherForecast item)
+    {
+        return Task.FromResult(item.TemperatureC.ToString());
     }
 
     Task RowInsertingHandler(WeatherForecast item)

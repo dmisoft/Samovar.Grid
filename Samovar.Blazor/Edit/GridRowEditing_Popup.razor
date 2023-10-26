@@ -6,7 +6,7 @@
 	<div class="modal-dialog">
 		<div class="modal-content" style="resize:both;overflow: auto;">
 			<div class="modal-header" id=@($"{Id}header") style="cursor: move;">
-				<h5 class="modal-title" id="staticBackdropLabel">EditingService.GetEditingFormTitle(RowModel.DataItem)</h5>
+				<h5 class="modal-title" id="staticBackdropLabel">@(EditingService.EditingFormTitleDelegate==null?"Edit item":EditingService.EditingFormTitleDelegate(RowModel.DataItem).Result)</h5>
 				<button type="button" class="btn-close" aria-label="Close" @onclick="@(() => EditingService.RowEditCancel())"></button>
 			</div>
 			<div class="modal-body">
