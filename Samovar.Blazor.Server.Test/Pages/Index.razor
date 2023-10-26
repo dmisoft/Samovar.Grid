@@ -189,15 +189,15 @@ else
 
     Task RowInsertingHandler2(WeatherForecast item)
     {
-        forecasts1 ??= new List<WeatherForecast>();
-        forecasts1 = ((new WeatherForecast[] { item }).Concat(forecasts2)).ToList();
+        forecasts2 ??= new List<WeatherForecast>();
+        forecasts2 = ((new WeatherForecast[] { item }).Concat(forecasts2)).ToList();
         StateHasChanged();
         return Task.CompletedTask;
     }
 
     Task RowRemovingHandler2(WeatherForecast item)
     {
-        forecasts1 = forecasts2.Except(new List<WeatherForecast> { item }).ToList();
+        forecasts2 = forecasts2.Except(new List<WeatherForecast> { item }).ToList();
         StateHasChanged();
         return Task.CompletedTask;
     }
