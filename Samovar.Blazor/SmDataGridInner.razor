@@ -9,11 +9,11 @@
 	</div>
 
 	<div id="@ConstantService.InnerGridId" class="s-grid-content" @ref="@LayoutService.GridInnerRef" style="overflow:auto;">
-		@if (InsertingForm != null){ @InsertingForm }
-		@if (DataPanel != null){ @DataPanel }
+		@if (InsertingForm != null){ @InsertingForm }@*ist hier inline inserting form gemeint?*@
+		@if (DataPanel != null){ @DataPanel }@*DataGridBodyPanel.razor*@
 		@if (NoDataPanel != null){ @NoDataPanel }
 		@if (NoDataFoundPanel != null){ @NoDataFoundPanel }
-		@if (DataProcessingPanel != null){ @DataProcessingPanel }
+		@*@if (DataProcessingPanel != null){ @DataProcessingPanel }*@
 	</div>
 		@if (PagingPanel != null){ @PagingPanel }
 

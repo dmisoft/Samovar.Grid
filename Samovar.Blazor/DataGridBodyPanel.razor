@@ -3,19 +3,26 @@
 @typeparam T
 @inherits SmDesignComponentBase
 
-@if (NavigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
+@if (_loading)
 {
-	<div style="@ScrollStyle">
-		<div translate_y_offset="@VirtualScrollingService.TranslateYOffset" id="@ConstantService.InnerGridBodyId" style="transform:translateY(@(OffsetY.ToString(CultureInfo.InvariantCulture)+"px"))">
-			<DataGridBody TItem=T />
-		</div>
-	</div>
+	<SmDataGridLoadingSpinner/>
 }
 else
 {
-	<div style="position:relative;">
-		<div style="position:absolute;">
-			<DataGridBody TItem=T />
+	@if (NavigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
+	{
+		<div style="@ScrollStyle">
+			<div translate_y_offset="@VirtualScrollingService.TranslateYOffset" id="@ConstantService.InnerGridBodyId" style="transform:translateY(@(OffsetY.ToString(CultureInfo.InvariantCulture)+"px"))">
+				<DataGridBody TItem=T />
+			</div>
 		</div>
-	</div>
+	}
+	else
+	{
+		<div style="position:relative;">
+			<div style="position:absolute;">
+				<DataGridBody TItem=T />
+			</div>
+		</div>
+	}
 }

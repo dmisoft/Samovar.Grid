@@ -6,7 +6,9 @@ namespace Samovar.Blazor
     public partial class DataGridBodyPanel<T>
         : SmDesignComponentBase, IDisposable
     {
-        [SmInject]
+		protected bool _loading;
+
+		[SmInject]
         public IRepositoryService<T> RepositoryService { get; set; }
 
         [SmInject]
@@ -27,7 +29,10 @@ namespace Samovar.Blazor
         [SmInject]
         public IVirtualScrollingService VirtualScrollingService { get; set; }
 
-        public DataGridStyleInfo Style { get; set; } //Default style
+		[SmInject]
+		public IGridStateService GridStateService { get; set; }
+
+		public DataGridStyleInfo Style { get; set; } //Default style
         
         public string ScrollStyle { get; set; }
         public double OffsetY { get; set; }
@@ -46,10 +51,24 @@ namespace Samovar.Blazor
             };
             
             LayoutService.DataGridInnerCssStyleChanged += LayoutService_DataGridInnerCssStyleChanged;
+			GridStateService.DataSourceState.Subscribe(async dataSourceState => await ProcessDataSourceState(dataSourceState));
 
-            return base.OnInitializedAsync();   
+			return base.OnInitializedAsync();   
         }
-        private void myfunc1(DataGridVirtualScrollingInfo arg)
+
+		private Task ProcessDataSourceState(DataSourceStateEnum dataSourceState)
+		{
+			_loading = dataSourceState switch
+			{
+				DataSourceStateEnum.Idle => false,
+				DataSourceStateEnum.Loading => true,
+				_ => throw new NotImplementedException()
+			};
+
+            return Task.CompletedTask;
+		}
+
+		private void myfunc1(DataGridVirtualScrollingInfo arg)
         {
             ScrollStyle = $"height:{arg.TranslatableDivHeight};overflow:hidden;position:absolute;";
             OffsetY = arg.OffsetY;

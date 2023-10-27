@@ -49,7 +49,7 @@ namespace Samovar.Blazor
 
         private async Task ProcessDataSourceState(DataSourceStateEnum dataSourceState)
         {
-            await CloseDataPanelDelegate?.Invoke();
+            //await CloseDataPanelDelegate?.Invoke();
             await CloseNoDataPanelDelegate?.Invoke();
             await CloseNoDataFoundPanelDelegate?.Invoke();
             await CloseProcessingDataPanelDelegate?.Invoke();
@@ -58,12 +58,12 @@ namespace Samovar.Blazor
             switch (dataSourceState)
             {
                 case DataSourceStateEnum.Idle:
-                    await ShowDataPanelDelegate.Invoke();
-                    if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
-                        await ShowPagingPanelDelegate.Invoke();
+                    //await ShowDataPanelDelegate.Invoke();
+                    //if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+                    //    await ShowPagingPanelDelegate.Invoke();
                     break;
                 case DataSourceStateEnum.Loading:
-                    await ShowProcessingDataPanelDelegate.Invoke();
+                    //await ShowProcessingDataPanelDelegate.Invoke();
                     break;
                 case DataSourceStateEnum.NoData:
                     await ShowNoDataPanelDelegate.Invoke();
