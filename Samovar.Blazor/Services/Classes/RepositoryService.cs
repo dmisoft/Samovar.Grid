@@ -82,16 +82,6 @@ namespace Samovar.Blazor
 
         private void DataGridInitializerCallback(bool obj)
         {
-            //ViewCollectionObservableInternTask = Observable.CombineLatest(
-            //    _dataSourceService.DataQuery,
-            //    _dataSourceService.DataLoadingSettings,
-            //    async (x, y) =>
-            //    {
-            //        return await ViewCollectionObservableMap11(x, y);
-            //    }
-            //);
-            //ViewCollectionObservableInternTask.Subscribe(dummyTask);
-
             ViewCollectionObservableIntern = Observable.CombineLatest(
                 _dataSourceService.DataQuery,
                 _dataSourceService.DataLoadingSettings,
@@ -110,10 +100,12 @@ namespace Samovar.Blazor
             if (enumerable.Count() == 0)
             {
                 _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+                _stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.NoData);
             }
             else
             {
                 _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
+                _stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.Idle);
                 ViewCollectionObservable.OnNext(enumerable);
             }
             // Dispose of the subscription when you're done.
@@ -127,6 +119,7 @@ namespace Samovar.Blazor
                 if (query == null)
                 {
                     _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+                    await _stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.NoData);
                     return null;
                 }
 
@@ -135,6 +128,8 @@ namespace Samovar.Blazor
                 if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
                 {
                     _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
+                    await _stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.Loading);
+
                     Stopwatch stopWatch = new Stopwatch();
                     stopWatch.Start();
                     ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
@@ -204,6 +199,7 @@ namespace Samovar.Blazor
                 if (query == null)
                 {
                     _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+                    await _stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.NoData);
                     observer.OnNext(null);
                 }
 
@@ -212,6 +208,8 @@ namespace Samovar.Blazor
                 if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
                 {
                     _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
+                    await _stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.Loading);
+
                     Stopwatch stopWatch = new Stopwatch();
                     stopWatch.Start();
                     ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
@@ -386,7 +384,7 @@ namespace Samovar.Blazor
                 {
                     rowPosition++;
                     retVal.Add(new SmDataGridRowModel<T>(keyDataPair, ColumnMetadataList, rowPosition, PropInfo, _rowDetailService.ExpandedRowDetails.Value.Any(r => r.Equals(keyDataPair))));
-                    //Task.Delay(100).Wait();
+                    //Task.Delay(30).Wait();
                 }
             }
             catch (Exception ex)

@@ -10,17 +10,18 @@
 
 	<div id="@ConstantService.InnerGridId" class="s-grid-content" @ref="@LayoutService.GridInnerRef" style="overflow:auto;">
 		@if (InsertingForm != null){ @InsertingForm }@*ist hier inline inserting form gemeint?*@
-		@if (DataPanel != null){ @DataPanel }@*DataGridBodyPanel.razor*@
-		@if (NoDataPanel != null){ @NoDataPanel }
+		@*@if (DataPanel != null){ @DataPanel }*@
+		<DataGridBodyPanel T=T />
+		@*@if (NoDataPanel != null){ @NoDataPanel }*@
 		@if (NoDataFoundPanel != null){ @NoDataFoundPanel }
 		@*@if (DataProcessingPanel != null){ @DataProcessingPanel }*@
 	</div>
-		@if (PagingPanel != null){ @PagingPanel }
-
-@*	@if (NavigationService.NavigationMode.SubjectValue == DataGridNavigationMode.Paging)
+	@if (NavigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
 	{
-		@if (PagingPanel != null){ @PagingPanel }
-	}*@
+		<DataGridPagingFooter TItem=T />
+	}
+
+@*		@if (PagingPanel != null){ @PagingPanel }*@
 </div>
 
 @if (EditingPopup != null){	@EditingPopup }

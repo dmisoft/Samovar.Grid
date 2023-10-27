@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using System;
 using System.Threading.Tasks;
 
 namespace Samovar.Blazor
@@ -6,7 +7,7 @@ namespace Samovar.Blazor
     public partial class DataGridBodyPanel<T>
         : SmDesignComponentBase, IDisposable
     {
-		protected bool _loading;
+		protected DataSourceStateEnum _dataSourceState = DataSourceStateEnum.NoData;
 
 		[SmInject]
         public IRepositoryService<T> RepositoryService { get; set; }
@@ -32,13 +33,21 @@ namespace Samovar.Blazor
 		[SmInject]
 		public IGridStateService GridStateService { get; set; }
 
-		public DataGridStyleInfo Style { get; set; } //Default style
+        [Parameter]
+        public EventCallback<DataSourceStateEnum> DataSourceStateEv { get; set; }
+
+        public DataGridStyleInfo Style { get; set; } //Default style
         
         public string ScrollStyle { get; set; }
         public double OffsetY { get; set; }
 
+        protected void _dataSourceStateEv(DataSourceStateEnum dataSourceState) { 
+            _dataSourceState = dataSourceState;
+        }
+
         protected override Task OnInitializedAsync()
         {
+            
             //TODO refactoring 10/2023
             //var sub1 = new Subscription1TaskVoid<DataGridVirtualScrollingInfo>(VirtualScrollingService.VirtualScrollingInfo, myfunc1);
             //sub1.CreateMap();
@@ -51,22 +60,21 @@ namespace Samovar.Blazor
             };
             
             LayoutService.DataGridInnerCssStyleChanged += LayoutService_DataGridInnerCssStyleChanged;
-			GridStateService.DataSourceState.Subscribe(async dataSourceState => await ProcessDataSourceState(dataSourceState));
+			//GridStateService.DataSourceState.Subscribe(async dataSourceState => await ProcessDataSourceState(dataSourceState));
+            
+            DataSourceStateEv = new EventCallbackFactory().Create<DataSourceStateEnum>(this, _dataSourceStateEv);
+            GridStateService.DataSourceStateEv = DataSourceStateEv;
 
-			return base.OnInitializedAsync();   
+            return base.OnInitializedAsync();   
         }
 
-		private Task ProcessDataSourceState(DataSourceStateEnum dataSourceState)
-		{
-			_loading = dataSourceState switch
-			{
-				DataSourceStateEnum.Idle => false,
-				DataSourceStateEnum.Loading => true,
-				_ => throw new NotImplementedException()
-			};
+        
 
-            return Task.CompletedTask;
-		}
+  //      private Task ProcessDataSourceState(DataSourceStateEnum dataSourceState)
+		//{
+  //          _dataSourceState = dataSourceState;
+  //          return Task.CompletedTask;
+		//}
 
 		private void myfunc1(DataGridVirtualScrollingInfo arg)
         {

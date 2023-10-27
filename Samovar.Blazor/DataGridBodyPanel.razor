@@ -3,26 +3,33 @@
 @typeparam T
 @inherits SmDesignComponentBase
 
-@if (_loading)
+@switch (_dataSourceState)
 {
-	<SmDataGridLoadingSpinner/>
-}
-else
-{
-	@if (NavigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
-	{
-		<div style="@ScrollStyle">
-			<div translate_y_offset="@VirtualScrollingService.TranslateYOffset" id="@ConstantService.InnerGridBodyId" style="transform:translateY(@(OffsetY.ToString(CultureInfo.InvariantCulture)+"px"))">
-				<DataGridBody TItem=T />
-			</div>
-		</div>
-	}
-	else
-	{
-		<div style="position:relative;">
-			<div style="position:absolute;">
-				<DataGridBody TItem=T />
-			</div>
-		</div>
-	}
+    case DataSourceStateEnum.NoData:
+        <NoDataPanel />
+        break;
+    case DataSourceStateEnum.Loading:
+        <SmDataGridLoadingSpinner />
+        break;
+    case DataSourceStateEnum.Idle:
+        @if (NavigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
+        {
+            <div style="@ScrollStyle">
+                <div translate_y_offset="@VirtualScrollingService.TranslateYOffset" id="@ConstantService.InnerGridBodyId" style="transform:translateY(@(OffsetY.ToString(CultureInfo.InvariantCulture)+"px"))">
+                    <DataGridBody TItem=T />
+                </div>
+            </div>
+        }
+        else
+        {
+            <div style="position:relative;">
+                <div style="position:absolute;">
+                    <DataGridBody TItem=T />
+                </div>
+            </div>
+        }
+        break;
+    default:
+        <NoDataPanel />
+        break;
 }

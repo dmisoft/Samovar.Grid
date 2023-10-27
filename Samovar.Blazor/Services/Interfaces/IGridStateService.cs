@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using System;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
@@ -7,6 +8,7 @@ namespace Samovar.Blazor
     public interface IGridStateService
     {
         BehaviorSubject<DataSourceStateEnum> DataSourceState { get; }
+        EventCallback<DataSourceStateEnum> DataSourceStateEv { get; set; }
         BehaviorSubject<DataEditStateEnum> DataEditState { get; }
 
         Func<Task> ShowDataPanelDelegate { get; set; }
