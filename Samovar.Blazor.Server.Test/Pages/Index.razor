@@ -36,15 +36,21 @@ else
     <div class="row">
         <div class="col-10">
             <SmDataGrid Data="forecasts1"
+                    Height="450px"
                     FilterMode=DataGridFilterMode.FilterRow
-                    Height="450px" ShowDetailRow=true
+                    
+                    ShowDetailRow=false
+                    
                     EditMode=GridEditMode.Popup
                     EditingFormTitleDelegate="@((WeatherForecast data) => Task.FromResult(data.TemperatureC.ToString()))"
+                    
                     DataNavigationMode=DataGridNavigationMode.Paging
+                    
                     SelectionMode=GridSelectionMode.SingleSelectedDataRow
+                    @bind-SingleSelectedDataRow=selectedRow
+                    
                     RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
-                    RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))"
-                    @bind-SingleSelectedDataRow=selectedRow>
+                    RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))">
                 <Columns>
                     <SmDataGridColumn Title="Date1" Field="@nameof(WeatherForecast.Date)" Width="100px">
                         <CellShowTemplate>
