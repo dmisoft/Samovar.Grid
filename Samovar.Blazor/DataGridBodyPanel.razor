@@ -8,9 +8,9 @@
     case DataSourceStateEnum.NoData:
         <NoDataPanel />
         break;
-    case DataSourceStateEnum.Loading:
+    @*case DataSourceStateEnum.Loading:
         <SmDataGridLoadingSpinner />
-        break;
+        break;*@
     case DataSourceStateEnum.Idle:
         @if (NavigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
         {

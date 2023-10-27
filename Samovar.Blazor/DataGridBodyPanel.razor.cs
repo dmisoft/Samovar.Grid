@@ -41,8 +41,10 @@ namespace Samovar.Blazor
         public string ScrollStyle { get; set; }
         public double OffsetY { get; set; }
 
-        protected void _dataSourceStateEv(DataSourceStateEnum dataSourceState) { 
+        protected Task _dataSourceStateEv(DataSourceStateEnum dataSourceState) { 
             _dataSourceState = dataSourceState;
+            //StateHasChanged();
+            return Task.CompletedTask;
         }
 
         protected override Task OnInitializedAsync()
@@ -60,15 +62,16 @@ namespace Samovar.Blazor
             };
             
             LayoutService.DataGridInnerCssStyleChanged += LayoutService_DataGridInnerCssStyleChanged;
-			//GridStateService.DataSourceState.Subscribe(async dataSourceState => await ProcessDataSourceState(dataSourceState));
+            //GridStateService.DataSourceState.Subscribe(async dataSourceState => await ProcessDataSourceState(dataSourceState));
             
-            DataSourceStateEv = new EventCallbackFactory().Create<DataSourceStateEnum>(this, _dataSourceStateEv);
-            GridStateService.DataSourceStateEv = DataSourceStateEv;
+            DataSourceStateEv = new EventCallbackFactory().Create<DataSourceStateEnum>(this, async (data) => await _dataSourceStateEv(data));
+
+            //GridStateService.DataSourceStateEv = DataSourceStateEv;
+            //GridStateService.DataSourceStateEv = _dataSourceStateEv;
+            GridStateService.DataSourceStateEvList.Add(DataSourceStateEv);
 
             return base.OnInitializedAsync();   
         }
-
-        
 
   //      private Task ProcessDataSourceState(DataSourceStateEnum dataSourceState)
 		//{
@@ -81,14 +84,6 @@ namespace Samovar.Blazor
             ScrollStyle = $"height:{arg.TranslatableDivHeight};overflow:hidden;position:absolute;";
             OffsetY = arg.OffsetY;
             StateHasChanged();
-            //return Task.CompletedTask;
-            
-            
-            //await InvokeAsync(() => {
-            //    ScrollStyle = $"height:{arg.TranslatableDivHeight};overflow:hidden;position:absolute;";
-            //    OffsetY = arg.OffsetY;
-            //    StateHasChanged();
-            //});
         }
 
         private async Task LayoutService_DataGridInnerCssStyleChanged(DataGridStyleInfo arg)

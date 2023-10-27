@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
@@ -29,6 +30,7 @@ namespace Samovar.Blazor
         public Func<Task> CloseProcessingDataPanelDelegate { get; set; }
         public Func<Task> ShowPagingPanelDelegate { get; set; }
         public Func<Task> HidePagingPanelDelegate { get; set; }
+        public List<EventCallback<DataSourceStateEnum>> DataSourceStateEvList { get; set; } = new List<EventCallback<DataSourceStateEnum>>();
 
         public GridStateService(IInitService initService, INavigationService navigationService)
         {

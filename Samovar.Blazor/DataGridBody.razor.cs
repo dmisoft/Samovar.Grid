@@ -8,6 +8,8 @@ namespace Samovar.Blazor
     public partial class DataGridBody<TItem>
         : SmDesignComponentBase, IAsyncDisposable
     {
+        protected DataSourceStateEnum _dataSourceState = DataSourceStateEnum.NoData;
+
         [SmInject]
         public IRepositoryService<TItem> RepositoryService { get; set; }
 
@@ -23,6 +25,11 @@ namespace Samovar.Blazor
         [SmInject]
         public IConstantService ConstantService { get; set; }
 
+        [SmInject]
+        public IGridStateService GridStateService { get; set; }
+
+        [Parameter]
+        public Action<IEnumerable<SmDataGridRowModel<TItem>>> CollectionViewChanged { get; set; }
 
         protected IEnumerable<SmDataGridRowModel<TItem>> View { get; set; }
 
@@ -30,18 +37,51 @@ namespace Samovar.Blazor
 
         private IDisposable viewCollectionObserverHandler;
 
+        [Parameter]
+        public EventCallback<DataSourceStateEnum> DataSourceStateEv { get; set; }
+
+        protected Task _dataSourceStateEv(DataSourceStateEnum dataSourceState)
+        {
+            _dataSourceState = dataSourceState;
+            //StateHasChanged();
+            return Task.CompletedTask;
+        }
+
         protected override Task OnInitializedAsync()
         {
-            viewCollectionObserverHandler = RepositoryService.ViewCollectionObservable.Subscribe(async (viewCollection)=> await ViewCollectionObserver(viewCollection));
+            //CollectionViewChanged = new EventCallbackFactory().Create<IEnumerable<SmDataGridRowModel<TItem>>>(this, _collectionViewChangedEv);
+            //RepositoryService.ViewCollectionChanged = CollectionViewChanged;
+            RepositoryService.ViewCollectionChanged += async (data) => await _collectionViewChangedEv(data);
+
+            DataSourceStateEv = new EventCallbackFactory().Create<DataSourceStateEnum>(this, async (data) => await _dataSourceStateEv(data));
+            //GridStateService.DataSourceStateEv += foo;
+            //GridStateService.DataSourceState.Subscribe( DataSourceStateEv);
+            //GridStateService.DataSourceStateEv = DataSourceStateEv;
+            
+            GridStateService.DataSourceStateEvList.Add(DataSourceStateEv);
+
             return base.OnInitializedAsync();
         }
 
-        private Task ViewCollectionObserver(IEnumerable<SmDataGridRowModel<TItem>> collection)
+        private Task foo(EventCallback<DataSourceStateEnum> callback)
         {
-            View = collection;
-            StateHasChanged();
+            callback.InvokeAsync();
             return Task.CompletedTask;
         }
+
+        private Task _collectionViewChangedEv(IEnumerable<SmDataGridRowModel<TItem>> collectionView)
+        {
+            View = collectionView;
+            //StateHasChanged();
+            return Task.CompletedTask;
+        }
+
+        //private Task ViewCollectionObserver(IEnumerable<SmDataGridRowModel<TItem>> collection)
+        //{
+        //    View = collection;
+        //    //StateHasChanged();
+        //    return Task.CompletedTask;
+        //}
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
 		{
@@ -51,7 +91,7 @@ namespace Samovar.Blazor
 
         public ValueTask DisposeAsync()
         {
-            viewCollectionObserverHandler.Dispose();
+            viewCollectionObserverHandler?.Dispose();
             return ValueTask.CompletedTask;
         }
     }

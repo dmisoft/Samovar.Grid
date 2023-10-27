@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -14,7 +15,9 @@ namespace Samovar.Blazor
         : IRepositoryService<T>
     {
         public IEnumerable<SmDataGridRowModel<T>> ViewCollection { get; private set; }
-        public BehaviorSubject<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservable { get; private set; } = new BehaviorSubject<IEnumerable<SmDataGridRowModel<T>>>(new List<SmDataGridRowModel<T>>());
+        //public BehaviorSubject<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservable { get; private set; } = new BehaviorSubject<IEnumerable<SmDataGridRowModel<T>>>(new List<SmDataGridRowModel<T>>());
+        public Func<IEnumerable<SmDataGridRowModel<T>>, Task> ViewCollectionChanged { get; set; }
+
         private IObservable<Task<IEnumerable<SmDataGridRowModel<T>>>> ViewCollectionObservableInternTask;
         private IObservable<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableIntern;
 
@@ -101,12 +104,18 @@ namespace Samovar.Blazor
             {
                 _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
                 _stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.NoData);
+                _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync());
+
             }
             else
             {
                 _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
                 _stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.Idle);
-                ViewCollectionObservable.OnNext(enumerable);
+                _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync());
+
+                ViewCollectionChanged?.Invoke(enumerable);
+
+                //ViewCollectionObservable.OnNext(enumerable);
             }
             // Dispose of the subscription when you're done.
             viewCollectionObserverSubscription.Dispose();
@@ -200,6 +209,8 @@ namespace Samovar.Blazor
                 {
                     _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
                     await _stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.NoData);
+                    _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync());
+
                     observer.OnNext(null);
                 }
 
@@ -209,6 +220,7 @@ namespace Samovar.Blazor
                 {
                     _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
                     await _stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.Loading);
+                    _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync());
 
                     Stopwatch stopWatch = new Stopwatch();
                     stopWatch.Start();
@@ -265,113 +277,113 @@ namespace Samovar.Blazor
         }
 
         //bundle data query and loading settngs to common observable row model collection
-        private IEnumerable<SmDataGridRowModel<T>> ViewCollectionObservableMapAsync(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
-        {
-            //if (query == null)
-            //{
-            //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
-            //    //_stateService.DataSourceState.OnCompleted();
-            //    return null;
-            //}
+        //private IEnumerable<SmDataGridRowModel<T>> ViewCollectionObservableMapAsync(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
+        //{
+        //    //if (query == null)
+        //    //{
+        //    //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+        //    //    //_stateService.DataSourceState.OnCompleted();
+        //    //    return null;
+        //    //}
 
-            //query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
+        //    //query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
 
-            //if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
-            //{
-            //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
-            //    //_stateService.DataSourceState.OnCompleted();
-            //    //Stopwatch stopWatch = new Stopwatch();
-            //    //stopWatch.Start();
+        //    //if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+        //    //{
+        //    //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
+        //    //    //_stateService.DataSourceState.OnCompleted();
+        //    //    //Stopwatch stopWatch = new Stopwatch();
+        //    //    //stopWatch.Start();
 
-            //    ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+        //    //    ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
 
-            //    //stopWatch.Stop();
+        //    //    //stopWatch.Stop();
 
-            //    //if (ViewCollection.Count() == 0)
-            //    //{
-            //    //    ViewCollectionObservable.OnNext(ViewCollection);
-            //    //    ViewCollectionObservable.OnCompleted();
-            //    //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
-            //    //    _stateService.DataSourceState.OnCompleted();
-            //    //}
-            //    //else
-            //    //{
-            //    //    ViewCollectionObservable.OnNext(ViewCollection);
-            //    //    ViewCollectionObservable.OnCompleted();
-            //    //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
-            //    //    _stateService.DataSourceState.OnCompleted();
-            //    //}
-            //}
-            //return ViewCollection;
+        //    //    //if (ViewCollection.Count() == 0)
+        //    //    //{
+        //    //    //    ViewCollectionObservable.OnNext(ViewCollection);
+        //    //    //    ViewCollectionObservable.OnCompleted();
+        //    //    //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+        //    //    //    _stateService.DataSourceState.OnCompleted();
+        //    //    //}
+        //    //    //else
+        //    //    //{
+        //    //    //    ViewCollectionObservable.OnNext(ViewCollection);
+        //    //    //    ViewCollectionObservable.OnCompleted();
+        //    //    //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
+        //    //    //    _stateService.DataSourceState.OnCompleted();
+        //    //    //}
+        //    //}
+        //    //return ViewCollection;
             
-            Task.Run(async () =>
-            {
-                await Task.Delay(1);
-                if (query == null)
-                {
-                    _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
-                    return;
-                }
+        //    Task.Run(async () =>
+        //    {
+        //        await Task.Delay(1);
+        //        if (query == null)
+        //        {
+        //            _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+        //            return;
+        //        }
 
-                query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
+        //        query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
 
-                if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
-                {
-                    _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
-                    //Stopwatch stopWatch = new Stopwatch();
-                    //stopWatch.Start();
+        //        if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+        //        {
+        //            _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
+        //            //Stopwatch stopWatch = new Stopwatch();
+        //            //stopWatch.Start();
 
-                    ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
-                    //stopWatch.Stop();
+        //            ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+        //            //stopWatch.Stop();
 
-                    if (ViewCollection.Count() == 0)
-                    {
+        //            if (ViewCollection.Count() == 0)
+        //            {
                         
-                        _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+        //                _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
                         
-                    }
-                    else
-                    {
-                        _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
-                        ViewCollectionObservable.OnNext(ViewCollection);
-                    }
-                }
-                //else if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling && !repositoryForVirtualScrollingInitialized)
-                //{
-                //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
-                //    repositoryForVirtualScrollingInitialized = true;
-                //}
-                //else if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling && repositoryForVirtualScrollingInitialized)
-                //{
-                //    Stopwatch stopWatch = new Stopwatch();
-                //    stopWatch.Start();
+        //            }
+        //            else
+        //            {
+        //                _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
+        //                ViewCollectionObservable.OnNext(ViewCollection);
+        //            }
+        //        }
+        //        //else if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling && !repositoryForVirtualScrollingInitialized)
+        //        //{
+        //        //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
+        //        //    repositoryForVirtualScrollingInitialized = true;
+        //        //}
+        //        //else if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling && repositoryForVirtualScrollingInitialized)
+        //        //{
+        //        //    Stopwatch stopWatch = new Stopwatch();
+        //        //    stopWatch.Start();
 
-                //    ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+        //        //    ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
 
-                //    stopWatch.Stop();
-                //    // Get the elapsed time as a TimeSpan value.
-                //    TimeSpan ts = stopWatch.Elapsed;
+        //        //    stopWatch.Stop();
+        //        //    // Get the elapsed time as a TimeSpan value.
+        //        //    TimeSpan ts = stopWatch.Elapsed;
 
-                //    // Format and display the TimeSpan value.
-                //    string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-                //        ts.Hours, ts.Minutes, ts.Seconds,
-                //        ts.Milliseconds / 10);
-                //    Console.WriteLine("RunTime " + elapsedTime);
+        //        //    // Format and display the TimeSpan value.
+        //        //    string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+        //        //        ts.Hours, ts.Minutes, ts.Seconds,
+        //        //        ts.Milliseconds / 10);
+        //        //    Console.WriteLine("RunTime " + elapsedTime);
 
-                //    if (ViewCollection.Count() == 0)
-                //    {
-                //        _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
-                //    }
-                //    else
-                //    {
-                //        //TODO extra Idle state for virtual scrolling???
-                //        _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
-                //    }
-                //}
+        //        //    if (ViewCollection.Count() == 0)
+        //        //    {
+        //        //        _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+        //        //    }
+        //        //    else
+        //        //    {
+        //        //        //TODO extra Idle state for virtual scrolling???
+        //        //        _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
+        //        //    }
+        //        //}
 
-            });
-            return new List<SmDataGridRowModel<T>>();
-        }
+        //    });
+        //    return new List<SmDataGridRowModel<T>>();
+        //}
 
         private List<SmDataGridRowModel<T>> CreateRowModelList(IQueryable<T> gridData, IEnumerable<IDataColumnModel> ColumnMetadataList, Dictionary<string, PropertyInfo> PropInfo)
         {

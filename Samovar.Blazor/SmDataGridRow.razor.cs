@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Samovar.Blazor
 {
     public partial class SmDataGridRow<TItem>
-        : SmDesignComponentBase, IDisposable, IObserver<DataSourceStateEnum>
+        : SmDesignComponentBase, IDisposable
     {
         [SmInject]
         protected IColumnService GridColumnService { get; set; }
@@ -29,6 +29,10 @@ namespace Samovar.Blazor
         [SmInject]
         public IComponentBuilderService ComponentBuilderService { get; set; }
 
+        private SmDataGridRowModel<TItem> _rowModel;
+
+        [Parameter]
+        public EventCallback<SmDataGridRowModel<TItem>> RowModelChanged { get; set; }
 
         int dataHashCode = 0;
         [Parameter]
@@ -40,9 +44,6 @@ namespace Samovar.Blazor
                 _rowModel = value;
                 if (dataHashCode != value.GetHashCode())
                 {
-                    //_rowModel.NotifyAfterLoadData -= Value_NotifyAfterLoadData;
-                    //value.NotifyAfterLoadData -= Value_NotifyAfterLoadData;
-                    //value.NotifyAfterLoadData += Value_NotifyAfterLoadData;
                     dataHashCode = value.GetHashCode();
                 }
             }
@@ -50,33 +51,8 @@ namespace Samovar.Blazor
 
         protected override void OnInitialized()
         {
-            //StateService.DataSourceState.Subscribe(this);
-            //DataGrid.NotifierService.NotifyAfterSort += NotifierService_ResetDetailPanel;
-            //DataGrid.NotifierService.NotifyAfterFilter += NotifierService_ResetDetailPanel;
-            //DataGrid.NotifierService.NotifyAfterPagingChange += NotifierService_ResetDetailPanel;
-            //DataGrid.NotifierService.NotifyAfterEditingEnd += NotifierService_NotifyAfterEditingEnd;
         }
 
-        private async Task NotifierService_NotifyAfterEditingEnd()
-        {
-            await InvokeAsync(StateHasChanged);
-        }
-
-        private Task NotifierService_ResetDetailPanel()
-        {
-            RowModel.RowDetailExpanded = false;
-            return Task.CompletedTask;
-        }
-
-        private async Task Value_NotifyAfterLoadData()
-        {
-            await InvokeAsync(StateHasChanged);
-        }
-
-        private SmDataGridRowModel<TItem> _rowModel;
-
-        [Parameter]
-        public EventCallback<SmDataGridRowModel<TItem>> RowModelChanged { get; set; }
 
         
         protected async Task MouseDownOnResizeColumnGrip(MouseEventArgs args, DataColumnModel colMeta)
@@ -135,21 +111,6 @@ namespace Samovar.Blazor
 
             //_rowModel.NotifyAfterLoadData -= Value_NotifyAfterLoadData;
             GC.Collect();
-        }
-
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnNext(DataSourceStateEnum value)
-        {
-            InvokeAsync(StateHasChanged);
         }
     }
 }

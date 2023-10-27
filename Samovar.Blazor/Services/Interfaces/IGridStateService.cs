@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
+using System.Collections.Generic;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
@@ -9,6 +10,7 @@ namespace Samovar.Blazor
     {
         BehaviorSubject<DataSourceStateEnum> DataSourceState { get; }
         EventCallback<DataSourceStateEnum> DataSourceStateEv { get; set; }
+        List<EventCallback<DataSourceStateEnum>> DataSourceStateEvList { get; set; }
         BehaviorSubject<DataEditStateEnum> DataEditState { get; }
 
         Func<Task> ShowDataPanelDelegate { get; set; }
