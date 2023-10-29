@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace Samovar.Blazor
 {
     public partial class DataGridBodyPanel<T>
-        : SmDesignComponentBase, IDisposable
+        : SmDesignComponentBase, IAsyncDisposable
     {
 		protected DataSourceStateEnum _dataSourceState = DataSourceStateEnum.NoData;
 
@@ -91,9 +91,11 @@ namespace Samovar.Blazor
             Style = arg;
             await InvokeAsync(StateHasChanged);
         }
-        public void Dispose()
+        public ValueTask DisposeAsync()
         {
+            GridStateService.DataSourceStateEvList.Remove(DataSourceStateEv);
             LayoutService.DataGridInnerCssStyleChanged -= LayoutService_DataGridInnerCssStyleChanged;
+            return ValueTask.CompletedTask;
         }
     }
 }

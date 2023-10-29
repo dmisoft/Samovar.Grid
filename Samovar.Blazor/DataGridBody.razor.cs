@@ -40,6 +40,9 @@ namespace Samovar.Blazor
         [Parameter]
         public EventCallback<DataSourceStateEnum> DataSourceStateEv { get; set; }
 
+        [Parameter]
+        public EventCallback<IEnumerable<SmDataGridRowModel<TItem>>> CollectionViewChangedEv { get; set; }
+
         protected Task _dataSourceStateEv(DataSourceStateEnum dataSourceState)
         {
             _dataSourceState = dataSourceState;
@@ -51,14 +54,16 @@ namespace Samovar.Blazor
         {
             //CollectionViewChanged = new EventCallbackFactory().Create<IEnumerable<SmDataGridRowModel<TItem>>>(this, _collectionViewChangedEv);
             //RepositoryService.ViewCollectionChanged = CollectionViewChanged;
-            RepositoryService.ViewCollectionChanged += async (data) => await _collectionViewChangedEv(data);
+            //RepositoryService.ViewCollectionChanged += async (data) => await _collectionViewChangedEv(data);
 
             DataSourceStateEv = new EventCallbackFactory().Create<DataSourceStateEnum>(this, async (data) => await _dataSourceStateEv(data));
+            CollectionViewChangedEv = new EventCallbackFactory().Create<IEnumerable<SmDataGridRowModel<TItem>>>(this, async (data) => await _collectionViewChangedEv(data));
             //GridStateService.DataSourceStateEv += foo;
             //GridStateService.DataSourceState.Subscribe( DataSourceStateEv);
             //GridStateService.DataSourceStateEv = DataSourceStateEv;
-            
+
             GridStateService.DataSourceStateEvList.Add(DataSourceStateEv);
+            RepositoryService.CollectionViewChangedEvList.Add(CollectionViewChangedEv);
 
             return base.OnInitializedAsync();
         }
@@ -72,7 +77,6 @@ namespace Samovar.Blazor
         private Task _collectionViewChangedEv(IEnumerable<SmDataGridRowModel<TItem>> collectionView)
         {
             View = collectionView;
-            //StateHasChanged();
             return Task.CompletedTask;
         }
 
@@ -92,6 +96,8 @@ namespace Samovar.Blazor
         public ValueTask DisposeAsync()
         {
             viewCollectionObserverHandler?.Dispose();
+            GridStateService.DataSourceStateEvList.Remove(DataSourceStateEv);
+            RepositoryService.CollectionViewChangedEvList.Remove(CollectionViewChangedEv);
             return ValueTask.CompletedTask;
         }
     }

@@ -20,6 +20,8 @@ namespace Samovar.Blazor
         void DetachViewCollectionSubscription();
 
         //Component events
-        Func<IEnumerable<SmDataGridRowModel<T>>, Task> ViewCollectionChanged { get; set; }
+        //Func<IEnumerable<SmDataGridRowModel<T>>, Task> ViewCollectionChanged { get; set; }
+        List<EventCallback<IEnumerable<SmDataGridRowModel<T>>>> CollectionViewChangedEvList { get; set; }
+
     }
 }

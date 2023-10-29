@@ -55,7 +55,7 @@ namespace Samovar.Blazor
                         }
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
                     throw;
                 }

@@ -14,7 +14,7 @@ namespace Samovar.Blazor
         private readonly INavigationService _navigationService;
 
         public BehaviorSubject<DataSourceStateEnum> DataSourceState { get; } = new BehaviorSubject<DataSourceStateEnum>(DataSourceStateEnum.NoData);
-        public EventCallback<DataSourceStateEnum> DataSourceStateEv { get; set; }
+        //public EventCallback<DataSourceStateEnum> DataSourceStateEv { get; set; }
         public BehaviorSubject<DataEditStateEnum> DataEditState { get; } = new BehaviorSubject<DataEditStateEnum>(DataEditStateEnum.Idle);
 
         public Func<Task> ShowDataPanelDelegate { get; set; }
