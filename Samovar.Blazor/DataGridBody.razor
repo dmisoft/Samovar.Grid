@@ -10,7 +10,9 @@
 @*    case DataSourceStateEnum.Loading:
         <SmDataGridLoadingSpinner />
         break;
-*@    case DataSourceStateEnum.Idle:
+*@    
+    case DataSourceStateEnum.Loading:
+    case DataSourceStateEnum.Idle:
     default:
         <table id="@ConstantService.InnerGridBodyTableId" class="@LayoutService.TableTagClass.Value" style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
             <DataGridHiddenHeader TItem=TItem />
