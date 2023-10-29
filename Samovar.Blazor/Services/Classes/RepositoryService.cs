@@ -106,19 +106,17 @@ namespace Samovar.Blazor
                 _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
                 //_stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.NoData);
                 _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.NoData));
-
             }
             else
             {
                 _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
                 //_stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.Idle);
                 _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.Idle));
-                CollectionViewChangedEvList.ForEach(x => x.InvokeAsync(enumerable));
-
                 //ViewCollectionChanged?.Invoke(enumerable);
-
                 //ViewCollectionObservable.OnNext(enumerable);
             }
+            CollectionViewChangedEvList.ForEach(x => x.InvokeAsync(enumerable));
+
             // Dispose of the subscription when you're done.
             viewCollectionObserverSubscription.Dispose();
         }
@@ -212,8 +210,8 @@ namespace Samovar.Blazor
                 {
                     _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
                     //await _stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.NoData);
-                    _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync());
-                    CollectionViewChangedEvList.ForEach(x => x.InvokeAsync(null));
+                    _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.NoData));
+                    //CollectionViewChangedEvList.ForEach(x => x.InvokeAsync(null));
 
                     observer.OnNext(null);
                 }
@@ -224,13 +222,13 @@ namespace Samovar.Blazor
                 {
                     _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
                     //await _stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.Loading);
-                    _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync());
+                    _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.Loading));
 
                     Stopwatch stopWatch = new Stopwatch();
                     stopWatch.Start();
                     ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
                     stopWatch.Stop();
-                    CollectionViewChangedEvList.ForEach(x => x.InvokeAsync(ViewCollection));
+                    //CollectionViewChangedEvList.ForEach(x => x.InvokeAsync(ViewCollection));
 
                 }
                 //else if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling && !repositoryForVirtualScrollingInitialized)

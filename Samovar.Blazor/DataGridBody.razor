@@ -2,30 +2,28 @@
 @typeparam TItem
 @inherits SmDesignComponentBase
 
-@*@switch (_dataSourceState)
+@switch (_dataSourceState)
 {
     case DataSourceStateEnum.NoData:
         <NoDataPanel />
         break;
-    case DataSourceStateEnum.Loading:
+@*    case DataSourceStateEnum.Loading:
         <SmDataGridLoadingSpinner />
         break;
-    case DataSourceStateEnum.Idle:
-
-        break;
+*@    case DataSourceStateEnum.Idle:
     default:
-        <NoDataPanel />
+        <table id="@ConstantService.InnerGridBodyTableId" class="@LayoutService.TableTagClass.Value" style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
+            <DataGridHiddenHeader TItem=TItem />
+            <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
+                @if (View != null)
+                {
+                    @foreach (var rowModel in View)
+                    {
+                        <SmDataGridRow RowModel="rowModel" />
+                    }
+                }
+            </tbody>
+        </table>
         break;
-}*@
-<table id="@ConstantService.InnerGridBodyTableId" class="@LayoutService.TableTagClass.Value" style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
-    <DataGridHiddenHeader TItem=TItem />
-    <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
-        @if (View != null)
-        {
-            @foreach (var rowModel in View)
-            {
-                <SmDataGridRow RowModel="rowModel" />
-            }
-        }
-    </tbody>
-</table>
+}
+

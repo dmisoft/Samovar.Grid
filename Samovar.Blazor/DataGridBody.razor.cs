@@ -37,10 +37,10 @@ namespace Samovar.Blazor
 
         private IDisposable viewCollectionObserverHandler;
 
-        [Parameter]
+        //[Parameter]
         public EventCallback<DataSourceStateEnum> DataSourceStateEv { get; set; }
 
-        [Parameter]
+        //[Parameter]
         public EventCallback<IEnumerable<SmDataGridRowModel<TItem>>> CollectionViewChangedEv { get; set; }
 
         protected Task _dataSourceStateEv(DataSourceStateEnum dataSourceState)

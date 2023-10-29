@@ -42,7 +42,7 @@ namespace Samovar.Blazor
 
         private void DataGridInitializerCallback(bool obj)
         {
-            DataSourceState.Subscribe(async dataSourceState => await ProcessDataSourceState(dataSourceState));
+            //DataSourceState.Subscribe(async dataSourceState => await ProcessDataSourceState(dataSourceState));
             DataEditState.Subscribe(ProcessDataEditState);
         }
 

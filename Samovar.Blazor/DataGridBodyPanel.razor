@@ -5,14 +5,14 @@
 
 @switch (_dataSourceState)
 {
-    case DataSourceStateEnum.NoData:
+    @*case DataSourceStateEnum.NoData:
         <NoDataPanel />
-        break;
+        break;*@
     @*case DataSourceStateEnum.Loading:
         <SmDataGridLoadingSpinner />
         break;*@
     case DataSourceStateEnum.Idle:
-        @if (NavigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
+        @*@if (NavigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
         {
             <div style="@ScrollStyle">
                 <div translate_y_offset="@VirtualScrollingService.TranslateYOffset" id="@ConstantService.InnerGridBodyId" style="transform:translateY(@(OffsetY.ToString(CultureInfo.InvariantCulture)+"px"))">
@@ -27,9 +27,25 @@
                     <DataGridBody TItem=T />
                 </div>
             </div>
-        }
+        }*@
         break;
     default:
-        <NoDataPanel />
+        @*<NoDataPanel />*@
         break;
+}
+@if (NavigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
+{
+    <div style="@ScrollStyle">
+        <div translate_y_offset="@VirtualScrollingService.TranslateYOffset" id="@ConstantService.InnerGridBodyId" style="transform:translateY(@(OffsetY.ToString(CultureInfo.InvariantCulture)+"px"))">
+            <DataGridBody TItem=T />
+        </div>
+    </div>
+}
+else
+{
+    <div style="position:relative;">
+        <div style="position:absolute;">
+            <DataGridBody TItem=T />
+        </div>
+    </div>
 }

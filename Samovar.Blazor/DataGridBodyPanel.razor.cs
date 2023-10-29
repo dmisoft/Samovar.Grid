@@ -33,7 +33,7 @@ namespace Samovar.Blazor
 		[SmInject]
 		public IGridStateService GridStateService { get; set; }
 
-        [Parameter]
+        //[Parameter]
         public EventCallback<DataSourceStateEnum> DataSourceStateEv { get; set; }
 
         public DataGridStyleInfo Style { get; set; } //Default style
