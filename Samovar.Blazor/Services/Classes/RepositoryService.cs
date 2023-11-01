@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
@@ -86,6 +87,16 @@ namespace Samovar.Blazor
 
         private void DataGridInitializerCallback(bool obj)
         {
+            var res = from dataQuery in _dataSourceService.DataQuery
+                      from loadingSettings in _dataSourceService.DataLoadingSettings
+                      select new { d = dataQuery, l = loadingSettings };
+            res.Subscribe(test1);
+            //var res = Observable.SelectMany(
+            //    _dataSourceService.DataQuery,
+            //    _dataSourceService.DataLoadingSettings, (s1, s2) => new { s1, s2 }
+            //);
+            //res.Subscribe(test);
+
             ViewCollectionObservableIntern = Observable.CombineLatest(
                 _dataSourceService.DataQuery,
                 _dataSourceService.DataLoadingSettings,
@@ -95,9 +106,19 @@ namespace Samovar.Blazor
             ViewCollectionObservableIntern.Subscribe(dummydummy);
         }
 
+        private void test1(object obj)
+        {
+            
+        }
+
+        private void test(NavigationStrategyDataLoadingSettings settings)
+        {
+            throw new NotImplementedException();
+        }
+
         private void dummydummy(IEnumerable<SmDataGridRowModel<T>> enumerable)
         {
-        }
+        } 
 
         private void viewCollectionObserverHandler(IEnumerable<SmDataGridRowModel<T>> enumerable)
         {
@@ -118,7 +139,7 @@ namespace Samovar.Blazor
             CollectionViewChangedEvList.ForEach(x => x.InvokeAsync(enumerable));
 
             // Dispose of the subscription when you're done.
-            viewCollectionObserverSubscription.Dispose();
+            viewCollectionObserverSubscription?.Dispose();
         }
 
         //private Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
@@ -201,11 +222,41 @@ namespace Samovar.Blazor
         //}
         
         IDisposable viewCollectionObserverSubscription;
+        IObservable<IEnumerable<SmDataGridRowModel<T>>> customObservable;
         private IEnumerable<SmDataGridRowModel<T>> ViewCollectionObservableMap(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
         {
-            IObservable<IEnumerable<SmDataGridRowModel<T>>> customObservable = Observable.Create<IEnumerable<SmDataGridRowModel<T>>>(async (observer, cancellationToken) =>
+            //if (query == null)
+            //{
+            //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+            //    //await _stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.NoData);
+            //    _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.NoData));
+            //    //CollectionViewChangedEvList.ForEach(x => x.InvokeAsync(null));
+
+            //    return null;;
+            //}
+
+            //query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
+
+            //if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+            //{
+            //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
+            //    //await _stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.Loading);
+            //    _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.Loading));
+
+            //    Stopwatch stopWatch = new Stopwatch();
+            //    stopWatch.Start();
+            //    ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+            //    stopWatch.Stop();
+            //    //CollectionViewChangedEvList.ForEach(x => x.InvokeAsync(ViewCollection));
+
+            //}
+            //return ViewCollection;
+
+            customObservable = Observable.Create<IEnumerable<SmDataGridRowModel<T>>>(async (observer) =>
             {
-                await Task.Delay(1);
+                await Task.Run(async () => {
+                    await Task.Delay(1);
+                });
                 if (query == null)
                 {
                     _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
@@ -264,6 +315,8 @@ namespace Samovar.Blazor
                 //    }
                 //}
                 observer.OnNext(ViewCollection);
+                observer.OnCompleted();
+                //customObservable.Subscribe(viewCollectionObserverHandler);
             });
 
             // Subscribe to the custom observable.

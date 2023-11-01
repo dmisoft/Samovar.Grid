@@ -63,13 +63,8 @@ namespace Samovar.Blazor
 
         private NavigationStrategyDataLoadingSettings CalculatePagingSetting(int pageSize, int currentPage)
         {
-            return new NavigationStrategyDataLoadingSettings(skip: (currentPage - 1) * pageSize, take: pageSize);
-        }
-        
-        private void CalculatePagingSettings(int pageSize, int currentPage)
-        {
-            _dataSourceService.DataLoadingSettings.OnNext(new NavigationStrategyDataLoadingSettings(skip: (currentPage - 1) * pageSize, take: pageSize));
-            //return Task.CompletedTask;
+            var skip = currentPage - 1 < 0 ? 0 : currentPage - 1;
+            return new NavigationStrategyDataLoadingSettings(skip: skip * pageSize, take: pageSize);
         }
 
         private DataGridPagerInfo PagerInfoChanged(int pagerSize, int pageCount, int currentPage)
@@ -79,17 +74,6 @@ namespace Samovar.Blazor
             int startPage = (int)Math.Ceiling((decimal)currentPage / (decimal)pagerSize) * pagerSize - pagerSize + 1;
             int endPage = Math.Min(startPage + pagerSize - 1, pageCount);
             return new DataGridPagerInfo(startPage: startPage, endPage: endPage, currentPage: currentPage, totalPages: pageCount);
-        }
-
-        public Task Activate()
-        {
-            //TODO NavigationStrategyBase implementieren und die Funktion virtual markieren
-            return Task.CompletedTask;
-        }
-
-        public Task Deactivate()
-        {
-            return Task.CompletedTask;
         }
 
         public Task NavigateToNextPage()

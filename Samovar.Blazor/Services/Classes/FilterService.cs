@@ -62,7 +62,8 @@ namespace Samovar.Blazor
 
         public async Task ClearFilter()
         {
-            ColumnFilters.Clear();//TODO Task
+            ColumnFilters.Clear();
+            FilterInfo.OnNext(ColumnFilters.ToList());
             await OnFilterCleared();
         }
         

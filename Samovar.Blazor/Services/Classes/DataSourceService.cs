@@ -12,37 +12,43 @@ namespace Samovar.Blazor
     public class DataSourceService<T>
         : IDataSourceService<T>
     {
+        private readonly IInitService _initService;
         private readonly IFilterService _filterService;
         private readonly ISortingService _orderService;
+        private readonly INavigationService _navigationService;
 
         public BehaviorSubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; set; } = new BehaviorSubject<NavigationStrategyDataLoadingSettings>(new NavigationStrategyDataLoadingSettings());
 
         public BehaviorSubject<IEnumerable<T>> Data { get; private set; } = new BehaviorSubject<IEnumerable<T>>(new List<T>());
 
-        //Observable<IEnumerable<DataGridFilterCellInfo>, DataGridColumnOrderInfo, IEnumerable<T>, IQueryable<T>> DataQuerySubscription;
-        //Observable<IQueryable<T>> DataQuerySubscription;
-        public IObservable<IQueryable<T>> DataQuery { get; private set; } 
-        //public IObservable<IQueryable<T>> DataQueryObservable { get; private set; }
+        public IObservable<IQueryable<T>> DataQuery { get; private set; }
 
-            
-        public DataSourceService(IFilterService filterService, ISortingService orderService)
+        public DataSourceService(
+              IFilterService filterService
+            , ISortingService orderService
+            , IInitService initService
+            //, INavigationService navigationService
+
+            )
         {
             _filterService = filterService;
             _orderService = orderService;
-            //_filterService.FilterInfo.Subscribe(filterObserver);
-            //_orderService.ColumnOrderInfo.Subscribe(columnOrderObserver);
-            //Data.Subscribe(dataObserver);
+            _initService = initService;
+            //_navigationService = navigationService;
+            _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
+        }
 
+        private void DataGridInitializerCallback(bool obj)
+        {
             //combine
             DataQuery = Observable.CombineLatest(
                 _filterService.FilterInfo,
                 _orderService.ColumnOrderInfo,
                 Data,
                 myfunc3
-             );//.Subscribe(mysubscr3);
-            //DataQuerySubscription = new  Subscription3<IEnumerable<DataGridFilterCellInfo>, DataGridColumnOrderInfo, IEnumerable<T>, IQueryable<T>>(_filterService.FilterInfo, _orderService.ColumnOrderInfo, Data, myfunc3);
-            //DataQuery = DataQuerySubscription.CreateMap();
+             );
         }
+
 
         //private void dataObserver(IEnumerable<T> data)
         //{
@@ -68,17 +74,7 @@ namespace Samovar.Blazor
         //    //throw new NotImplementedException();
         //}
 
-        //private void columnOrderObserver(DataGridColumnOrderInfo info)
-        //{
-        //    //TODO refactoring 10/2023
-        //    //throw new NotImplementedException();
-        //}
 
-        //private void filterObserver(IEnumerable<DataGridFilterCellInfo> enumerable)
-        //{
-        //    //TODO refactoring 10/2023
-        //    //throw new NotImplementedException();
-        //}
 
         private IQueryable<T> myfunc3(IEnumerable<DataGridFilterCellInfo> filterInfo, DataGridColumnOrderInfo orderInfo, IEnumerable<T> data)
         {
@@ -89,10 +85,10 @@ namespace Samovar.Blazor
             }
 
             IQueryable<T> query = data.AsQueryable();
-
+            
             //apply filter
             if (filterInfo.Count() > 0)
-                query = ApplyFilter(query, filterInfo);
+                query = AttachFilter(query, filterInfo);
 
             if (orderInfo != null && !orderInfo.Equals(DataGridColumnOrderInfo.Empty))
             {
@@ -100,7 +96,6 @@ namespace Samovar.Blazor
 
                 query = orderInfo.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
             }
-            //DataQuery.OnNext(query);
             return query;
         }
 
@@ -131,7 +126,7 @@ namespace Samovar.Blazor
                     typeof(decimal?),
                     typeof(DateTime?)
             };
-        private IQueryable<T> ApplyFilter(IQueryable<T> data, IEnumerable<DataGridFilterCellInfo> filterInfo)
+        private IQueryable<T> AttachFilter(IQueryable<T> data, IEnumerable<DataGridFilterCellInfo> filterInfo)
         {
             Type t = typeof(T);
             ParameterExpression obj = Expression.Parameter(typeof(T));

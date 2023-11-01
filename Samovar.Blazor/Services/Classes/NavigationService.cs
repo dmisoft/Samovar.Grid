@@ -11,7 +11,7 @@ namespace Samovar.Blazor
 
         public INavigationStrategy NavigationStrategy { get; private set; }
 
-        public IDataSourceService<T> _dataSourceService { get; }
+        //public IDataSourceService<T> _dataSourceService { get; }
 
         private IInitService _initService;
         IVirtualScrollingService _virtualScrollingService;
@@ -21,10 +21,11 @@ namespace Samovar.Blazor
               IVirtualScrollingService virtualScrollingService
             , IPagingNavigationStrategy pagingNavigationStrategy
             , IInitService initService
-            , IDataSourceService<T> dataSourceService)
+            //, IDataSourceService<T> dataSourceService
+            )
         {
             _initService = initService;
-            _dataSourceService = dataSourceService;
+            //_dataSourceService = dataSourceService;
             _virtualScrollingService = virtualScrollingService;
             _pagingNavigationStrategy = pagingNavigationStrategy;
             
@@ -54,21 +55,12 @@ namespace Samovar.Blazor
 
         void SetNavigationStrategy(DataGridNavigationMode strategy)
         {
-            NavigationStrategy?.Deactivate();
-            
             NavigationStrategy = strategy switch
             {
                 DataGridNavigationMode.Paging => _pagingNavigationStrategy,
                 DataGridNavigationMode.VirtualScrolling => _virtualScrollingService,
                 _ => throw new NotImplementedException()
             };
-            
-            NavigationStrategy?.Activate();
-            
-            //if(_dataSourceService.DataQuery.Value != null)
-            //    NavigationStrategy.ProcessDataPrequery(_dataSourceService.DataQuery.Value);
-
-            //return Task.CompletedTask;
         }
     }
 }
