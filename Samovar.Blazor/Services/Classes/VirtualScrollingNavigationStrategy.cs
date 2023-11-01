@@ -11,6 +11,7 @@ namespace Samovar.Blazor
         : IVirtualScrollingNavigationStrategy, IAsyncDisposable
     {
         //public ISubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; set; } = new ParameterSubject<NavigationStrategyDataLoadingSettings>(NavigationStrategyDataLoadingSettings.Empty);
+        public IObservable<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; private set; }// = new BehaviorSubject<NavigationStrategyDataLoadingSettings>(new NavigationStrategyDataLoadingSettings());
 
         public DotNetObjectReference<IVirtualScrollingNavigationStrategy> DotNetRef { get; }
 
@@ -115,7 +116,8 @@ namespace Samovar.Blazor
             int visibleItems = (int)Math.Round(innerGridHeight / rowHeight, 2, MidpointRounding.AwayFromZero) + 1;
             int skip = (int)(scrollTop / rowHeight);
 
-            _dataSourceService.DataLoadingSettings.OnNext(new NavigationStrategyDataLoadingSettings(skip: skip, take: visibleItems));
+            //TODO refactoring
+            //DataLoadingSettings.OnNext(new NavigationStrategyDataLoadingSettings(skip: skip, take: visibleItems));
 
             VirtualScrollingInfo.OnNext(new DataGridVirtualScrollingInfo(0d, skip * rowHeight, TranslatableDivHeightValue.Value));
         }

@@ -19,6 +19,8 @@ namespace Samovar.Blazor
 
         public BehaviorSubject<DataGridPagerInfo> PagerInfo { get; private set; } = new BehaviorSubject<DataGridPagerInfo>(DataGridPagerInfo.Empty);
 
+        public IObservable<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; private set; }// = new BehaviorSubject<NavigationStrategyDataLoadingSettings>(new NavigationStrategyDataLoadingSettings());
+
         //TODO Refactoring 10/2023
         //Subscription2<int, int, NavigationStrategyDataLoadingSettings> pagingSettingsSubscription;
         private readonly IInitService _initService;
@@ -41,10 +43,10 @@ namespace Samovar.Blazor
                 CurrentPage,
                 PagerInfoChanged).Subscribe(PagerInfoSubscriber);
 
-            var loadingSettingsObservable = Observable.CombineLatest(
+            DataLoadingSettings = Observable.CombineLatest(
                 PageSize,
                 CurrentPage,
-                CalculateDataLoadingSetting).Subscribe(LoadingSettingsSubscriber);
+                CalculateDataLoadingSetting);//.Subscribe(LoadingSettingsSubscriber);
 
             _dataSourceService.DataQuery.Where(x => x != null).Subscribe(ProcessDataPrequery);
         }
@@ -54,10 +56,10 @@ namespace Samovar.Blazor
             PagerInfo.OnNext(info);
         }
 
-        private void LoadingSettingsSubscriber(NavigationStrategyDataLoadingSettings obj)
-        {
-            _dataSourceService.DataLoadingSettings.OnNext(obj);
-        }
+        //private void LoadingSettingsSubscriber(NavigationStrategyDataLoadingSettings obj)
+        //{
+        //    DataLoadingSettings.OnNext(obj);
+        //}
 
         private NavigationStrategyDataLoadingSettings CalculateDataLoadingSetting(int pageSize, int currentPage)
         {

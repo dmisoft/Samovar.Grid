@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
@@ -87,10 +86,10 @@ namespace Samovar.Blazor
 
         private void DataGridInitializerCallback(bool obj)
         {
-            var res = from dataQuery in _dataSourceService.DataQuery
-                      from loadingSettings in _dataSourceService.DataLoadingSettings
-                      select new { d = dataQuery, l = loadingSettings };
-            res.Subscribe(test1);
+            //var res = from dataQuery in _dataSourceService.DataQuery
+            //          from loadingSettings in _dataSourceService.DataLoadingSettings
+            //          select new { d = dataQuery, l = loadingSettings };
+            //res.Subscribe(test1);
             //var res = Observable.SelectMany(
             //    _dataSourceService.DataQuery,
             //    _dataSourceService.DataLoadingSettings, (s1, s2) => new { s1, s2 }
@@ -99,7 +98,7 @@ namespace Samovar.Blazor
 
             ViewCollectionObservableIntern = Observable.CombineLatest(
                 _dataSourceService.DataQuery,
-                _dataSourceService.DataLoadingSettings,
+                _navigationService.NavigationStrategy.DataLoadingSettings,
                 ViewCollectionObservableMap
             );
 

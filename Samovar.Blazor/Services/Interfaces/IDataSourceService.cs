@@ -9,6 +9,6 @@ namespace Samovar.Blazor
     {
         BehaviorSubject<IEnumerable<T>> Data { get; }
         IObservable<IQueryable<T>> DataQuery { get; }
-        BehaviorSubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; }
+        //BehaviorSubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; }
     }
 }

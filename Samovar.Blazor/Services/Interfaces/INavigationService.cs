@@ -6,5 +6,7 @@ namespace Samovar.Blazor
     {
         BehaviorSubject<DataGridNavigationMode> NavigationMode { get; }
         INavigationStrategy NavigationStrategy { get; }
+        //BehaviorSubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; set; }
+
     }
 }
