@@ -37,13 +37,13 @@ namespace Samovar.Blazor
             await (await JsModule()).InvokeVoidAsync("add_Window_OnResize_EventListener", DataGridId, DataGridDotNetRef);
         }
 
-        public async Task AttachOnScrollollingEvent(string InnerDataGridId, DotNetObjectReference<IVirtualScrollingService> InnerDataGridDotNetRef)
+        public async Task AttachOnScrollollingEvent(string InnerDataGridId, DotNetObjectReference<IVirtualScrollingNavigationStrategy> InnerDataGridDotNetRef)
         {
             await (await JsModule()).InvokeVoidAsync("remove_GridInner_OnScroll_EventListener", InnerDataGridId, InnerDataGridDotNetRef);
             await (await JsModule()).InvokeVoidAsync("add_GridInner_OnScroll_EventListener", InnerDataGridId, InnerDataGridDotNetRef);
         }
 
-        public async Task DetachOnScrollollingEvent(string InnerDataGridId, DotNetObjectReference<IVirtualScrollingService> InnerDataGridDotNetRef)
+        public async Task DetachOnScrollollingEvent(string InnerDataGridId, DotNetObjectReference<IVirtualScrollingNavigationStrategy> InnerDataGridDotNetRef)
         {
             await (await JsModule()).InvokeVoidAsync("remove_GridInner_OnScroll_EventListener", InnerDataGridId, InnerDataGridDotNetRef);
         }

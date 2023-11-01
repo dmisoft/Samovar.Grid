@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
-    public class VirtualScrollingService<T>
-        : IVirtualScrollingService, IAsyncDisposable
+    public class VirtualScrollingNavigationStrategy<T>
+        : IVirtualScrollingNavigationStrategy, IAsyncDisposable
     {
         //public ISubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; set; } = new ParameterSubject<NavigationStrategyDataLoadingSettings>(NavigationStrategyDataLoadingSettings.Empty);
 
-        public DotNetObjectReference<IVirtualScrollingService> DotNetRef { get; }
+        public DotNetObjectReference<IVirtualScrollingNavigationStrategy> DotNetRef { get; }
 
         public int VisibleItems { get; set; }
         public int ItemsToShow { get; set; } = 10;
@@ -46,7 +46,7 @@ namespace Samovar.Blazor
 
         public ISubject<IQueryable> Query { get; }
 
-        public VirtualScrollingService(
+        public VirtualScrollingNavigationStrategy(
               ILayoutService layoutService
             , IJsService jsService
             , IInitService initService
@@ -54,7 +54,7 @@ namespace Samovar.Blazor
             , IConstantService constantService
             )
         {
-            DotNetRef = DotNetObjectReference.Create(this as IVirtualScrollingService);
+            DotNetRef = DotNetObjectReference.Create(this as IVirtualScrollingNavigationStrategy);
 
             _layoutService = layoutService;
             _jsService = jsService;

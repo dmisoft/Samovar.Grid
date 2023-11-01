@@ -13,7 +13,7 @@ namespace Samovar.Blazor
 
         public BehaviorSubject<int> PagerSize { get; } = new BehaviorSubject<int>(10);
 
-        public BehaviorSubject<int> PageCount { get; set; } = new BehaviorSubject<int>(0);
+        public BehaviorSubject<int> TotalPageCount { get; set; } = new BehaviorSubject<int>(0);
 
         public BehaviorSubject<int> CurrentPage { get; private set; } = new BehaviorSubject<int>(0);
 
@@ -37,18 +37,16 @@ namespace Samovar.Blazor
         {
             var pagingInfoObservable = Observable.CombineLatest(
                 PagerSize,
-                PageCount,
+                TotalPageCount,
                 CurrentPage,
                 PagerInfoChanged).Subscribe(PagerInfoSubscriber);
 
             var loadingSettingsObservable = Observable.CombineLatest(
                 PageSize,
                 CurrentPage,
-                CalculatePagingSetting).Subscribe(LoadingSettingsSubscriber);
+                CalculateDataLoadingSetting).Subscribe(LoadingSettingsSubscriber);
 
             _dataSourceService.DataQuery.Where(x => x != null).Subscribe(ProcessDataPrequery);
-
-            //CurrentPage.OnNext(1);
         }
 
         private void PagerInfoSubscriber(DataGridPagerInfo info)
@@ -61,10 +59,13 @@ namespace Samovar.Blazor
             _dataSourceService.DataLoadingSettings.OnNext(obj);
         }
 
-        private NavigationStrategyDataLoadingSettings CalculatePagingSetting(int pageSize, int currentPage)
+        private NavigationStrategyDataLoadingSettings CalculateDataLoadingSetting(int pageSize, int currentPage)
         {
-            var skip = currentPage - 1 < 0 ? 0 : currentPage - 1;
-            return new NavigationStrategyDataLoadingSettings(skip: skip * pageSize, take: pageSize);
+            if (currentPage == 0)
+                return NavigationStrategyDataLoadingSettings.Empty;
+            
+            var skipPages = currentPage - 1;
+            return new NavigationStrategyDataLoadingSettings(skip: skipPages * pageSize, take: pageSize);
         }
 
         private DataGridPagerInfo PagerInfoChanged(int pagerSize, int pageCount, int currentPage)
@@ -78,7 +79,7 @@ namespace Samovar.Blazor
 
         public Task NavigateToNextPage()
         {
-            int newPage = CurrentPage.Value < PageCount.Value ? CurrentPage.Value + 1 : CurrentPage.Value;
+            int newPage = CurrentPage.Value < TotalPageCount.Value ? CurrentPage.Value + 1 : CurrentPage.Value;
             CurrentPage.OnNext(newPage);
             return Task.CompletedTask;
         }
@@ -120,13 +121,13 @@ namespace Samovar.Blazor
         {
             int items = data.Count();
 
-            int pages = (int)Math.Ceiling(items / (decimal)PageSize.Value);
-            PageCount.OnNext(pages);
+            int newTotalPageCount = (int)Math.Ceiling(items / (decimal)PageSize.Value);
+            TotalPageCount.OnNext(newTotalPageCount);
 
-            int currentPage = CurrentPage.Value == 0 ? 1: Math.Min(pages, CurrentPage.Value);
+            int newCurrentPage = CurrentPage.Value == 0 ? 1: Math.Min(newTotalPageCount, CurrentPage.Value);
 
-            if (CurrentPage.Value != currentPage)
-                CurrentPage.OnNext(currentPage);
+            if (CurrentPage.Value != newCurrentPage)
+                CurrentPage.OnNext(newCurrentPage);
         }
     }
 }

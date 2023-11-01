@@ -9,7 +9,7 @@ namespace Samovar.Blazor
         BehaviorSubject<int> PageSize { get; }
         BehaviorSubject<int> PagerSize { get; }
         BehaviorSubject<int> CurrentPage { get; }
-        BehaviorSubject<int> PageCount { get; }
+        BehaviorSubject<int> TotalPageCount { get; }
         BehaviorSubject<DataGridPagerInfo> PagerInfo { get; }
 
         Task NavigateToNextPage();

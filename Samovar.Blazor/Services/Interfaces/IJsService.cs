@@ -13,9 +13,9 @@ namespace Samovar.Blazor
 
         Task AttachWindowResizeEvent(string DataGridId, DotNetObjectReference<ILayoutService> DataGridDotNetRef);
 
-        Task AttachOnScrollollingEvent(string InnerDataGridId, DotNetObjectReference<IVirtualScrollingService> InnerDataGridDotNetRef);
+        Task AttachOnScrollollingEvent(string InnerDataGridId, DotNetObjectReference<IVirtualScrollingNavigationStrategy> InnerDataGridDotNetRef);
 
-        Task DetachOnScrollollingEvent(string InnerDataGridId, DotNetObjectReference<IVirtualScrollingService> InnerDataGridDotNetRef);
+        Task DetachOnScrollollingEvent(string InnerDataGridId, DotNetObjectReference<IVirtualScrollingNavigationStrategy> InnerDataGridDotNetRef);
 
         Task AttachWindowMouseMoveEvent(DotNetObjectReference<ILayoutService> DataGridDotNetRef);
 

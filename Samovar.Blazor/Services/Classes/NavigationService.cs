@@ -10,28 +10,24 @@ namespace Samovar.Blazor
         public BehaviorSubject<DataGridNavigationMode> NavigationMode { get; } = new BehaviorSubject<DataGridNavigationMode>(DataGridNavigationMode.Paging);
 
         public INavigationStrategy NavigationStrategy { get; private set; }
-
-        //public IDataSourceService<T> _dataSourceService { get; }
-
+        private readonly IVirtualScrollingNavigationStrategy _virtualScrollingStrategy;
+        private readonly IPagingNavigationStrategy _pagingStrategy;
         private IInitService _initService;
-        IVirtualScrollingService _virtualScrollingService;
-        private readonly IPagingNavigationStrategy _pagingNavigationStrategy;
 
         public NavigationService(
-              IVirtualScrollingService virtualScrollingService
+              IVirtualScrollingNavigationStrategy virtualScrollingService
             , IPagingNavigationStrategy pagingNavigationStrategy
             , IInitService initService
-            //, IDataSourceService<T> dataSourceService
             )
         {
             _initService = initService;
-            //_dataSourceService = dataSourceService;
-            _virtualScrollingService = virtualScrollingService;
-            _pagingNavigationStrategy = pagingNavigationStrategy;
-            
+            _virtualScrollingStrategy = virtualScrollingService;
+            _pagingStrategy = pagingNavigationStrategy;
+
             _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
-            
-             NavigationStrategy = pagingNavigationStrategy;
+
+            //std. value
+            NavigationStrategy = pagingNavigationStrategy;
         }
 
         private void DataGridInitializerCallback(bool obj)
@@ -43,8 +39,6 @@ namespace Samovar.Blazor
 
             NavigationMode.Subscribe(SetNavigationStrategy);
             //_dataSourceService.DataQuery.Where(x=>x!=null).Subscribe(ProcessDataQuery);
-            
-            NavigationMode.OnNext(NavigationMode.Value);
         }
 
         //TODO refactoring 10/2023 Task als return value type
@@ -57,8 +51,8 @@ namespace Samovar.Blazor
         {
             NavigationStrategy = strategy switch
             {
-                DataGridNavigationMode.Paging => _pagingNavigationStrategy,
-                DataGridNavigationMode.VirtualScrolling => _virtualScrollingService,
+                DataGridNavigationMode.Paging => _pagingStrategy,
+                DataGridNavigationMode.VirtualScrolling => _virtualScrollingStrategy,
                 _ => throw new NotImplementedException()
             };
         }

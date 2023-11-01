@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
-    public interface IVirtualScrollingService
+    public interface IVirtualScrollingNavigationStrategy
         : INavigationStrategy
     {
-        DotNetObjectReference<IVirtualScrollingService> DotNetRef { get; }
+        DotNetObjectReference<IVirtualScrollingNavigationStrategy> DotNetRef { get; }
 
         int VisibleItems { get; set; }
         int ItemsToShow { get; set; }

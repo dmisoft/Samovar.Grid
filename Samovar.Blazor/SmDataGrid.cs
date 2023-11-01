@@ -31,7 +31,7 @@ namespace Samovar.Blazor
         public ILayoutService LayoutService { get; set; }
 
         [SmInject]
-        public IVirtualScrollingService VirtualScrollingService { get; set; }
+        public IVirtualScrollingNavigationStrategy VirtualScrollingService { get; set; }
 
         [SmInject]
         public ITemplateService<T> TemplateService { get; set; }

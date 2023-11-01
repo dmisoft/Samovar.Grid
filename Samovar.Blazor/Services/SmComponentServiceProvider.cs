@@ -28,7 +28,7 @@ namespace Samovar.Blazor
             _services.AddScoped<IModelFactoryService, ModelFactoryService>();
             _services.AddScoped<ITemplateService<T>, TemplateService<T>>();
             
-            _services.AddScoped<IVirtualScrollingService, VirtualScrollingService<T>>();
+            _services.AddScoped<IVirtualScrollingNavigationStrategy, VirtualScrollingNavigationStrategy<T>>();
             _services.AddScoped<IPagingNavigationStrategy, PagingNavigationStrategy<T>>();
 
             _services.AddScoped<IConstantService, ConstantService>();

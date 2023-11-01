@@ -14,7 +14,7 @@ namespace Samovar.Blazor
         public IConstantService ConstantService { get; set; }
 
         [SmInject]
-        public IVirtualScrollingService VirtualScrollingService { get; set; }
+        public IVirtualScrollingNavigationStrategy VirtualScrollingService { get; set; }
 
         [SmInject]
         public IRepositoryService<T> RepositoryService { get; set; }

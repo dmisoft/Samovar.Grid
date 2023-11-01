@@ -6,7 +6,7 @@ namespace Samovar.Blazor
     public readonly struct NavigationStrategyDataLoadingSettings 
 		: IEquatable<NavigationStrategyDataLoadingSettings>
 	{
-		public static readonly NavigationStrategyDataLoadingSettings Empty = new NavigationStrategyDataLoadingSettings(-1, -1);
+		public static readonly NavigationStrategyDataLoadingSettings Empty = new NavigationStrategyDataLoadingSettings(0, 0);
 
 		public static readonly NavigationStrategyDataLoadingSettings FetchAll = new NavigationStrategyDataLoadingSettings(0, -1, showAll: true);
 
@@ -25,11 +25,7 @@ namespace Samovar.Blazor
 
 		public bool Equals(NavigationStrategyDataLoadingSettings other)
 		{
-			if (Skip == other.Skip)
-			{
-				return Take == other.Take;
-			}
-			return false;
+			return Skip == other.Skip && Take == other.Take;
 		}
 
 		public override string ToString()

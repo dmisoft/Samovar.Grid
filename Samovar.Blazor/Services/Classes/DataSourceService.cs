@@ -23,82 +23,6 @@ namespace Samovar.Blazor
 
         public IObservable<IQueryable<T>> DataQuery { get; private set; }
 
-        public DataSourceService(
-              IFilterService filterService
-            , ISortingService orderService
-            , IInitService initService
-            //, INavigationService navigationService
-
-            )
-        {
-            _filterService = filterService;
-            _orderService = orderService;
-            _initService = initService;
-            //_navigationService = navigationService;
-            _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
-        }
-
-        private void DataGridInitializerCallback(bool obj)
-        {
-            //combine
-            DataQuery = Observable.CombineLatest(
-                _filterService.FilterInfo,
-                _orderService.ColumnOrderInfo,
-                Data,
-                myfunc3
-             );
-        }
-
-
-        //private void dataObserver(IEnumerable<T> data)
-        //{
-        //    if (data == null)
-        //    {
-        //        data = new List<T>();
-        //        //Data = new ParameterSubject<IEnumerable<T>>(new List<T>());
-        //    }
-
-        //    IQueryable<T> query = data.AsQueryable();
-
-        //    //apply filter
-        //    if (_filterService.FilterInfo.Value.Count() > 0)
-        //        query = ApplyFilter(query, _filterService.FilterInfo.Value);
-
-        //    if (_orderService.ColumnOrderInfo != null && !_orderService.ColumnOrderInfo.Equals(DataGridColumnOrderInfo.Empty))
-        //    {
-        //        //var pr = typeof(T).GetProperty(_orderService.ColumnOrderInfo.Value.Field);
-        //        //query = _orderService.ColumnOrderInfo.Value.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
-        //    }
-        //    DataQuery.OnNext(query);
-        //    //TODO refactoring 10/2023
-        //    //throw new NotImplementedException();
-        //}
-
-
-
-        private IQueryable<T> myfunc3(IEnumerable<DataGridFilterCellInfo> filterInfo, DataGridColumnOrderInfo orderInfo, IEnumerable<T> data)
-        {
-            if (data == null)
-            {
-                data = new List<T>();
-                //Data = new ParameterSubject<IEnumerable<T>>(new List<T>());
-            }
-
-            IQueryable<T> query = data.AsQueryable();
-            
-            //apply filter
-            if (filterInfo.Count() > 0)
-                query = AttachFilter(query, filterInfo);
-
-            if (orderInfo != null && !orderInfo.Equals(DataGridColumnOrderInfo.Empty))
-            {
-                var pr = typeof(T).GetProperty(orderInfo.Field);
-
-                query = orderInfo.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
-            }
-            return query;
-        }
-
         List<Type> numericTypeList = new List<Type>
                 {
                     typeof(byte),
@@ -126,6 +50,56 @@ namespace Samovar.Blazor
                     typeof(decimal?),
                     typeof(DateTime?)
             };
+
+        public DataSourceService(
+              IFilterService filterService
+            , ISortingService orderService
+            , IInitService initService
+            //, INavigationService navigationService
+
+            )
+        {
+            _filterService = filterService;
+            _orderService = orderService;
+            _initService = initService;
+            //_navigationService = navigationService;
+            _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
+        }
+
+        private void DataGridInitializerCallback(bool obj)
+        {
+            //combine
+            DataQuery = Observable.CombineLatest(
+                _filterService.FilterInfo,
+                _orderService.ColumnOrderInfo,
+                Data,
+                myfunc3
+             );
+        }
+
+        private IQueryable<T> myfunc3(IEnumerable<DataGridFilterCellInfo> filterInfo, DataGridColumnOrderInfo orderInfo, IEnumerable<T> data)
+        {
+            if (data == null)
+            {
+                data = new List<T>();
+                //Data = new ParameterSubject<IEnumerable<T>>(new List<T>());
+            }
+
+            IQueryable<T> query = data.AsQueryable();
+            
+            //apply filter
+            if (filterInfo.Count() > 0)
+                query = AttachFilter(query, filterInfo);
+
+            if (orderInfo != null && !orderInfo.Equals(DataGridColumnOrderInfo.Empty))
+            {
+                var pr = typeof(T).GetProperty(orderInfo.Field);
+
+                query = orderInfo.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
+            }
+            return query;
+        }
+        
         private IQueryable<T> AttachFilter(IQueryable<T> data, IEnumerable<DataGridFilterCellInfo> filterInfo)
         {
             Type t = typeof(T);
