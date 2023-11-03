@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace Samovar.Blazor
         //public BehaviorSubject<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservable { get; private set; } = new BehaviorSubject<IEnumerable<SmDataGridRowModel<T>>>(new List<SmDataGridRowModel<T>>());
         //public Func<IEnumerable<SmDataGridRowModel<T>>, Task> ViewCollectionChanged { get; set; }
 
-        private IObservable<Task<IEnumerable<SmDataGridRowModel<T>>>> ViewCollectionObservableInternTask;
+        private IObservable<Task<IEnumerable<SmDataGridRowModel<T>>>> ViewCollectionObservableTask;
         private IObservable<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableIntern;
 
         private readonly IDataSourceService<T> _dataSourceService;
@@ -86,23 +87,95 @@ namespace Samovar.Blazor
 
         private void DataGridInitializerCallback(bool obj)
         {
-            //var res = from dataQuery in _dataSourceService.DataQuery
-            //          from loadingSettings in _dataSourceService.DataLoadingSettings
-            //          select new { d = dataQuery, l = loadingSettings };
-            //res.Subscribe(test1);
-            //var res = Observable.SelectMany(
+            //ViewCollectionObservableIntern = Observable.CombineLatest(
             //    _dataSourceService.DataQuery,
-            //    _dataSourceService.DataLoadingSettings, (s1, s2) => new { s1, s2 }
+            //    _navigationService.NavigationStrategy.DataLoadingSettings,
+            //    ViewCollectionObservableMap
             //);
-            //res.Subscribe(test);
+            //ViewCollectionObservableIntern.Subscribe(dummydummy);
 
-            ViewCollectionObservableIntern = Observable.CombineLatest(
+            //IObservable<Task<int>> taskObservable = Observable.FromAsync((val) => SomeAsyncMethod(val));
+
+            ViewCollectionObservableTask = Observable.CombineLatest(
                 _dataSourceService.DataQuery,
                 _navigationService.NavigationStrategy.DataLoadingSettings,
-                ViewCollectionObservableMap
+                //async (data, loadingSettings) => await ViewCollectionObservableMap11(data,loadingSettings)
+                ViewCollectionObservableMap11
             );
 
-            ViewCollectionObservableIntern.Subscribe(dummydummy);
+            IDisposable ViewCollectionObservableTaskSubscription = ViewCollectionObservableTask.Subscribe(async task =>
+            {
+                try
+                {
+                    var newCollectionView = await task;
+
+                    if (newCollectionView.Count() == 0)
+                    {
+                        _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+                        _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.NoData));
+                    }
+                    else
+                    {
+                        _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
+                        _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.Idle));
+                    }
+                    CollectionViewChangedEvList.ForEach(x => x.InvokeAsync(newCollectionView));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Task failed with error: {ex.Message}");
+                }
+            });
+
+            //IObservable<Task<IEnumerable<SmDataGridRowModel<T>>>> taskObservable = _dataSourceService.DataQuery.Select(item => SomeAsyncMethod(item));
+            
+            //IDisposable subscription = taskObservable.Subscribe(async task =>
+            //{
+            //    try
+            //    {
+            //        var result = await task;
+            //        Console.WriteLine($"Task completed with result: {result}");
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine($"Task failed with error: {ex.Message}");
+            //    }
+            //});
+        }
+
+        private async Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
+        {
+            //await Task.Run(async () => {
+            //    await Task.Delay(1);
+            //});
+            IEnumerable<SmDataGridRowModel<T>> _retVal = null;
+            await Task.Delay(1);
+            //if (query == null)
+            //{
+            //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
+            //    _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.NoData));
+            //}
+            query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
+
+            if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+            {
+                _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
+                _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.Loading));
+
+                Stopwatch stopWatch = new Stopwatch();
+                stopWatch.Start();
+                _retVal = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+                stopWatch.Stop();
+            }
+
+            return _retVal;
+        }
+
+        private Task<IEnumerable<SmDataGridRowModel<T>>> SomeAsyncMethod(IQueryable<T> query)
+        {
+            return Task.FromResult(new List<SmDataGridRowModel<T>>().AsEnumerable());
+            //Task.Delay(1);
+            //return Task.FromResult(query.ToList().AsEnumerable());
         }
 
         private void test1(object obj)
@@ -117,6 +190,7 @@ namespace Samovar.Blazor
 
         private void dummydummy(IEnumerable<SmDataGridRowModel<T>> enumerable)
         {
+            
         } 
 
         private void viewCollectionObserverHandler(IEnumerable<SmDataGridRowModel<T>> enumerable)
