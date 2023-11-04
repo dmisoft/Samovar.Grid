@@ -526,7 +526,7 @@ namespace Samovar.Blazor
                 {
                     rowPosition++;
                     retVal.Add(new SmDataGridRowModel<T>(keyDataPair, ColumnMetadataList, rowPosition, PropInfo, _rowDetailService.ExpandedRowDetails.Value.Any(r => r.Equals(keyDataPair))));
-                    //Task.Delay(30).Wait();
+                    //Task.Delay(5000).Wait();
                 }
             }
             catch
