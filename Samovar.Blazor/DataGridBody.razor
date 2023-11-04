@@ -7,24 +7,29 @@
     case DataSourceStateEnum.NoData:
         <NoDataPanel />
         break;
-@*    case DataSourceStateEnum.Loading:
-        <SmDataGridLoadingSpinner />
-        break;*@
     case DataSourceStateEnum.Loading:
     case DataSourceStateEnum.Idle:
     default:
-        <table id="@ConstantService.InnerGridBodyTableId" class="@LayoutService.TableTagClass.Value" style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
-            <DataGridHiddenHeader TItem=TItem />
-            <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
-                @if (View != null)
-                {
-                    @foreach (var rowModel in View)
+        <div class="@(_dataSourceState == DataSourceStateEnum.Loading ? "s-visible" : "s-hidden")">
+            <div class="s-flex s-align-content-center s-justify-content-center" style="height:100%;">
+                <div class="spinner-border text-muted s-align-self-center"></div>
+            </div>
+        </div>
+        <div class="@(_dataSourceState == DataSourceStateEnum.Idle ? "s-visible" : "s-hidden")">
+            <table id="@ConstantService.InnerGridBodyTableId" class="@LayoutService.TableTagClass.Value" style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
+                <DataGridHiddenHeader TItem=TItem />
+                <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
+                    @if (View != null)
                     {
-                        <SmDataGridRow RowModel="rowModel" />
+                        @foreach (var rowModel in View)
+                        {
+                            <SmDataGridRow RowModel="rowModel" />
+                        }
                     }
-                }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
+
         break;
 }
 
