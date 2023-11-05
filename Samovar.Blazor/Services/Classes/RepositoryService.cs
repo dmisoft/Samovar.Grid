@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,17 +12,17 @@ using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
-	public class RepositoryService<T>
+    public class RepositoryService<T>
         : IRepositoryService<T>, IAsyncDisposable
     {
         public IEnumerable<SmDataGridRowModel<T>> ViewCollection { get; private set; }
         private IObservable<Task<IEnumerable<SmDataGridRowModel<T>>>> ViewCollectionObservableTask;
 
         private readonly IDataSourceService<T> _dataSourceService;
-		private readonly INavigationService _navigationService;
-		private readonly IColumnService _columnService;
-		private readonly IInitService _initService;
-		private readonly IRowDetailService<T> _rowDetailService;
+        private readonly INavigationService _navigationService;
+        private readonly IColumnService _columnService;
+        private readonly IInitService _initService;
+        private readonly IRowDetailService<T> _rowDetailService;
 
         private bool repositoryForVirtualScrollingInitialized;
         private readonly IGridStateService _stateService;
@@ -81,13 +82,18 @@ namespace Samovar.Blazor
         }
         private IDisposable _viewCollectionObservableTaskSubscription;
 
-		private void DataGridInitializerCallback(bool obj)
+        private void DataGridInitializerCallback(bool obj)
         {
-            ViewCollectionObservableTask = Observable.CombineLatest(
+            if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+            {
+                ViewCollectionObservableTask = Observable.CombineLatest(
                 _dataSourceService.DataQuery,
                 _navigationService.NavigationStrategy.DataLoadingSettings,
-                ViewCollectionObservableMap11
-            );
+                ViewCollectionObservableMap11);
+            }
+            else {
+                _dataSourceService.DataQuery.Subscribe(ViewCollectionObservableMap22);
+            }
 
             _viewCollectionObservableTaskSubscription = ViewCollectionObservableTask.Subscribe(async getNewCollectionViewTask =>
             {
@@ -114,6 +120,24 @@ namespace Samovar.Blazor
             });
         }
 
+        private void ViewCollectionObservableMap22(IQueryable<T> query)
+        {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+            ViewCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+
+            stopWatch.Stop();
+            // Get the elapsed time as a TimeSpan value.
+            TimeSpan ts = stopWatch.Elapsed;
+
+            // Format and display the TimeSpan value.
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                ts.Hours, ts.Minutes, ts.Seconds,
+                ts.Milliseconds / 10);
+            Console.WriteLine("RunTime " + elapsedTime);
+        }
+
         private Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
         {
             IEnumerable<SmDataGridRowModel<T>> _retVal = null;
@@ -130,7 +154,7 @@ namespace Samovar.Blazor
                 _retVal = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
                 stopWatch.Stop();
             }
-
+            
             return Task.FromResult(_retVal);
         }
 
@@ -164,7 +188,7 @@ namespace Samovar.Blazor
         //        }
 
         //        query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
-                
+
         //        if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
         //        {
         //            _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
@@ -215,7 +239,7 @@ namespace Samovar.Blazor
         //                //TODO extra Idle state for virtual scrolling???
         //                _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
         //            }
-                    
+
         //        }
         //        //ViewCollectionObservable = Observable.Create<IEnumerable<SmDataGridRowModel<T>>>(observer => {
         //        //    observer.OnNext(ViewCollection);
@@ -230,7 +254,7 @@ namespace Samovar.Blazor
         //    //return Task.FromResult(ViewCollection);
 
         //}
-        
+
         IDisposable viewCollectionObserverSubscription;
         IObservable<IEnumerable<SmDataGridRowModel<T>>> customObservable;
         private IEnumerable<SmDataGridRowModel<T>> ViewCollectionObservableMap(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
@@ -264,7 +288,8 @@ namespace Samovar.Blazor
 
             customObservable = Observable.Create<IEnumerable<SmDataGridRowModel<T>>>(async (observer) =>
             {
-                await Task.Run(async () => {
+                await Task.Run(async () =>
+                {
                     await Task.Delay(1);
                 });
                 if (query == null)
@@ -382,7 +407,7 @@ namespace Samovar.Blazor
         //    //    //}
         //    //}
         //    //return ViewCollection;
-            
+
         //    Task.Run(async () =>
         //    {
         //        await Task.Delay(1);
@@ -405,9 +430,9 @@ namespace Samovar.Blazor
 
         //            if (ViewCollection.Count() == 0)
         //            {
-                        
+
         //                _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
-                        
+
         //            }
         //            else
         //            {
@@ -474,12 +499,12 @@ namespace Samovar.Blazor
             return retVal;
         }
 
-		public ValueTask DisposeAsync()
-		{
+        public ValueTask DisposeAsync()
+        {
             _viewCollectionObservableTaskSubscription.Dispose();
-			return ValueTask.CompletedTask;
-		}
-	}
+            return ValueTask.CompletedTask;
+        }
+    }
 
     static class MyLocalExtension
     {
