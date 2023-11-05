@@ -103,11 +103,11 @@ namespace Samovar.Blazor
                 ViewCollectionObservableMap11
             );
 
-            IDisposable ViewCollectionObservableTaskSubscription = ViewCollectionObservableTask.Subscribe(async task =>
+            IDisposable ViewCollectionObservableTaskSubscription = ViewCollectionObservableTask.Subscribe(async getNewCollectionViewTask =>
             {
                 try
                 {
-                    var newCollectionView = await task;
+                    var newCollectionView = await getNewCollectionViewTask;
 
                     if (newCollectionView.Count() == 0)
                     {
@@ -143,18 +143,10 @@ namespace Samovar.Blazor
             //});
         }
 
-        private async Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
+        private Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
         {
-            //await Task.Run(async () => {
-            //    await Task.Delay(1);
-            //});
             IEnumerable<SmDataGridRowModel<T>> _retVal = null;
-            await Task.Delay(1);
-            //if (query == null)
-            //{
-            //    _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
-            //    _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.NoData));
-            //}
+
             query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
 
             if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
@@ -168,30 +160,8 @@ namespace Samovar.Blazor
                 stopWatch.Stop();
             }
 
-            return _retVal;
+            return Task.FromResult(_retVal);
         }
-
-        private Task<IEnumerable<SmDataGridRowModel<T>>> SomeAsyncMethod(IQueryable<T> query)
-        {
-            return Task.FromResult(new List<SmDataGridRowModel<T>>().AsEnumerable());
-            //Task.Delay(1);
-            //return Task.FromResult(query.ToList().AsEnumerable());
-        }
-
-        private void test1(object obj)
-        {
-            
-        }
-
-        private void test(NavigationStrategyDataLoadingSettings settings)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void dummydummy(IEnumerable<SmDataGridRowModel<T>> enumerable)
-        {
-            
-        } 
 
         private void viewCollectionObserverHandler(IEnumerable<SmDataGridRowModel<T>> enumerable)
         {

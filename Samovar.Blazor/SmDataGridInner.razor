@@ -13,10 +13,11 @@
 		@*@if (DataPanel != null){ @DataPanel }*@
 		<DataGridBodyPanel T=T />
 		@*@if (NoDataPanel != null){ @NoDataPanel }*@
-		@if (NoDataFoundPanel != null){ @NoDataFoundPanel }
+		@*@if (NoDataFoundPanel != null){ @NoDataFoundPanel }*@
 		@*@if (DataProcessingPanel != null){ @DataProcessingPanel }*@
 	</div>
-	@if (NavigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+	@if (NavigationService.NavigationMode.Value == DataGridNavigationMode.Paging 
+	)
 	{
 		<DataGridPagingFooter TItem=T />
 	}

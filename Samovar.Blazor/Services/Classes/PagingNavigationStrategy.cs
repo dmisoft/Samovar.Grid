@@ -128,10 +128,8 @@ namespace Samovar.Blazor
             int newTotalPageCount = (int)Math.Ceiling(items / (decimal)PageSize.Value);
             TotalPageCount.OnNext(newTotalPageCount);
 
-            int newCurrentPage = CurrentPage.Value == 0 ? 1: Math.Min(newTotalPageCount, CurrentPage.Value);
-
-            if (CurrentPage.Value != newCurrentPage)
-                CurrentPage.OnNext(newCurrentPage);
+            int newCurrentPage = CurrentPage.Value == 0 && newTotalPageCount > 0 ? 1: Math.Min(newTotalPageCount, CurrentPage.Value);
+            CurrentPage.OnNext(newCurrentPage);
         }
     }
 }
