@@ -56,8 +56,6 @@ namespace Samovar.Blazor
 
         public async Task RowEditBegin(SmDataGridRowModel<T> rowModel)
         {
-            _repositoryService.DetachViewCollectionSubscription();
-
             await OnRowEditBegin.Value.InvokeAsync(rowModel.DataItem);
 
             _editingRowModel = rowModel;
@@ -82,8 +80,6 @@ namespace Samovar.Blazor
 
             _editingRowModel = null;
 
-            _repositoryService.AttachViewCollectionSubscription();
-
             if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
             {
                 CloseEditingPopupDelegate?.Invoke();
@@ -100,12 +96,8 @@ namespace Samovar.Blazor
         public async Task RowEditCommit()
         {
             _editingRowModel.RowState = SmDataGridRowState.Idle;
-
             _editingRowModel.CommitEditingModel();
-
             _editingRowModel = null;
-
-            _repositoryService.AttachViewCollectionSubscription();
 
             if (EditMode.Value == GridEditMode.Popup)
                 CloseEditingPopupDelegate?.Invoke();

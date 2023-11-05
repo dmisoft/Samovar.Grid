@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -12,21 +11,18 @@ using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
-    public class RepositoryService<T>
-        : IRepositoryService<T>
+	public class RepositoryService<T>
+        : IRepositoryService<T>, IAsyncDisposable
     {
         public IEnumerable<SmDataGridRowModel<T>> ViewCollection { get; private set; }
-        //public BehaviorSubject<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservable { get; private set; } = new BehaviorSubject<IEnumerable<SmDataGridRowModel<T>>>(new List<SmDataGridRowModel<T>>());
-        //public Func<IEnumerable<SmDataGridRowModel<T>>, Task> ViewCollectionChanged { get; set; }
-
         private IObservable<Task<IEnumerable<SmDataGridRowModel<T>>>> ViewCollectionObservableTask;
-        private IObservable<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableIntern;
 
         private readonly IDataSourceService<T> _dataSourceService;
-        INavigationService _navigationService;
-        IColumnService _columnService;
-        IInitService _initService;
-        IRowDetailService<T> _rowDetailService;
+		private readonly INavigationService _navigationService;
+		private readonly IColumnService _columnService;
+		private readonly IInitService _initService;
+		private readonly IRowDetailService<T> _rowDetailService;
+
         private bool repositoryForVirtualScrollingInitialized;
         private readonly IGridStateService _stateService;
         private readonly ILayoutService _layoutService;
@@ -34,7 +30,6 @@ namespace Samovar.Blazor
         public BehaviorSubject<HashSet<T>> Data { get; private set; } = new BehaviorSubject<HashSet<T>>(new HashSet<T>());
 
         public Dictionary<string, PropertyInfo> PropInfo { get; } = new Dictionary<string, PropertyInfo>();
-        //public static Dictionary<string, PropertyInfo> PropInfoStatic { get; } = new Dictionary<string, PropertyInfo>();
         public static Dictionary<string, Func<T, int>> PropInfoDelegateInt { get; } = new Dictionary<string, Func<T, int>>();
         public static Dictionary<string, Func<T, string>> PropInfoDelegateString { get; } = new Dictionary<string, Func<T, string>>();
         public static Dictionary<string, Func<T, DateTime>> PropInfoDelegateDate { get; } = new Dictionary<string, Func<T, DateTime>>();
@@ -62,7 +57,7 @@ namespace Samovar.Blazor
             foreach (PropertyInfo pi in typeof(T).GetProperties())
             {
                 PropInfo.Add(pi.Name, pi);
-                //pi.PropertyType
+
                 switch (pi.PropertyType)
                 {
                     case var ts when ts == typeof(string):
@@ -84,26 +79,17 @@ namespace Samovar.Blazor
 
             _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
         }
+        private IDisposable _viewCollectionObservableTaskSubscription;
 
-        private void DataGridInitializerCallback(bool obj)
+		private void DataGridInitializerCallback(bool obj)
         {
-            //ViewCollectionObservableIntern = Observable.CombineLatest(
-            //    _dataSourceService.DataQuery,
-            //    _navigationService.NavigationStrategy.DataLoadingSettings,
-            //    ViewCollectionObservableMap
-            //);
-            //ViewCollectionObservableIntern.Subscribe(dummydummy);
-
-            //IObservable<Task<int>> taskObservable = Observable.FromAsync((val) => SomeAsyncMethod(val));
-
             ViewCollectionObservableTask = Observable.CombineLatest(
                 _dataSourceService.DataQuery,
                 _navigationService.NavigationStrategy.DataLoadingSettings,
-                //async (data, loadingSettings) => await ViewCollectionObservableMap11(data,loadingSettings)
                 ViewCollectionObservableMap11
             );
 
-            IDisposable ViewCollectionObservableTaskSubscription = ViewCollectionObservableTask.Subscribe(async getNewCollectionViewTask =>
+            _viewCollectionObservableTaskSubscription = ViewCollectionObservableTask.Subscribe(async getNewCollectionViewTask =>
             {
                 try
                 {
@@ -126,21 +112,6 @@ namespace Samovar.Blazor
                     Console.WriteLine($"Task failed with error: {ex.Message}");
                 }
             });
-
-            //IObservable<Task<IEnumerable<SmDataGridRowModel<T>>>> taskObservable = _dataSourceService.DataQuery.Select(item => SomeAsyncMethod(item));
-            
-            //IDisposable subscription = taskObservable.Subscribe(async task =>
-            //{
-            //    try
-            //    {
-            //        var result = await task;
-            //        Console.WriteLine($"Task completed with result: {result}");
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Console.WriteLine($"Task failed with error: {ex.Message}");
-            //    }
-            //});
         }
 
         private Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
@@ -168,16 +139,12 @@ namespace Samovar.Blazor
             if (enumerable.Count() == 0)
             {
                 _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
-                //_stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.NoData);
                 _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.NoData));
             }
             else
             {
                 _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
-                //_stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.Idle);
                 _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.Idle));
-                //ViewCollectionChanged?.Invoke(enumerable);
-                //ViewCollectionObservable.OnNext(enumerable);
             }
             CollectionViewChangedEvList.ForEach(x => x.InvokeAsync(enumerable));
 
@@ -504,43 +471,15 @@ namespace Samovar.Blazor
                 throw;
             }
 
-            //await Task.Run(() =>
-            //{
-            //    int rowPosition = 0;
-
-            //    try
-            //    {
-            //        foreach (var keyDataPair in gridData.ToHashSet())
-            //        {
-            //            rowPosition++;
-            //            retVal.Add(new SmDataGridRowModel<T>(keyDataPair, ColumnMetadataList, rowPosition, PropInfo, _rowDetailService.ExpandedRowDetails.SubjectValue.Any(r => r.Equals(keyDataPair))));
-            //            //await Task.Delay(5);
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        throw;
-            //    }
-
-            //});
-
             return retVal;
         }
 
-        public void AttachViewCollectionSubscription()
-        {
-            //ViewCollectionSubscription.Attach();
-            //TotalItemsCountSubscription.Attach();
-        }
-
-        public void DetachViewCollectionSubscription()
-        {
-            //ViewCollectionSubscription.Detach();
-            //TotalItemsCountSubscription.Detach();
-        }
-
-
-    }
+		public ValueTask DisposeAsync()
+		{
+            _viewCollectionObservableTaskSubscription.Dispose();
+			return ValueTask.CompletedTask;
+		}
+	}
 
     static class MyLocalExtension
     {

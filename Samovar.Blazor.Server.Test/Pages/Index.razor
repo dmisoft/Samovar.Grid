@@ -33,21 +33,24 @@ else
     <button class="btn btn-primary" @onclick="changeStyle">change style</button>
     <button class="btn btn-primary" @onclick="changeFirstDataItem">change first data item</button>
     <button class="btn btn-primary" @onclick="deselectSingleSelectedItem">deselct single selected item</button>
+    
     <div class="row">
         <div class="col-10">
             <SmDataGrid Data="forecasts1"
                     Height="450px"
+                    Width="900px"
                     FilterMode=DataGridFilterMode.FilterRow
                     
                     ShowDetailRow=true
                     
-                    EditMode=GridEditMode.Popup
+                    EditMode=GridEditMode.Form
                     EditingFormTitleDelegate="@((WeatherForecast data) => Task.FromResult(data.TemperatureC.ToString()))"
                     
                     DataNavigationMode=DataGridNavigationMode.Paging
                     
-                    SelectionMode=GridSelectionMode.SingleSelectedDataRow
+                    SelectionMode=GridSelectionMode.MultipleSelectedDataRows
                     @bind-SingleSelectedDataRow=selectedRow
+                    @bind-MultipleSelectedDataRows=selectedRows
                     
                     RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
                     RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))">
@@ -79,6 +82,13 @@ else
             @if (selectedRow != null)
             {
                 <div>@("Summary " + selectedRow.Summary + " Temp. " + selectedRow.TemperatureC)</div>
+            }
+            @if (selectedRows != null)
+            {
+                @foreach (var item in selectedRows)
+                {
+                    <div>@("Summary " + item.Summary + " Temp. " + item.TemperatureC)</div>
+                }
             }
         </div>
     </div>
