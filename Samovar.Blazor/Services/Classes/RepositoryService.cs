@@ -84,16 +84,10 @@ namespace Samovar.Blazor
 
         private void DataGridInitializerCallback(bool obj)
         {
-            if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
-            {
-                ViewCollectionObservableTask = Observable.CombineLatest(
-                _dataSourceService.DataQuery,
-                _navigationService.NavigationStrategy.DataLoadingSettings,
-                ViewCollectionObservableMap11);
-            }
-            else {
-                _dataSourceService.DataQuery.Subscribe(ViewCollectionObservableMap22);
-            }
+            ViewCollectionObservableTask = Observable.CombineLatest(
+            _dataSourceService.DataQuery,
+            _navigationService.NavigationStrategy.DataLoadingSettings,
+            ViewCollectionObservableMap11);
 
             _viewCollectionObservableTaskSubscription = ViewCollectionObservableTask.Subscribe(async getNewCollectionViewTask =>
             {
@@ -154,7 +148,7 @@ namespace Samovar.Blazor
                 _retVal = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
                 stopWatch.Stop();
             }
-            
+
             return Task.FromResult(_retVal);
         }
 

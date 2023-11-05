@@ -20,7 +20,7 @@ namespace Samovar.Blazor
 
         public BehaviorSubject<DataGridPagerInfo> PagerInfo { get; private set; } = new BehaviorSubject<DataGridPagerInfo>(DataGridPagerInfo.Empty);
 
-        public IObservable<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; private set; }// = new BehaviorSubject<NavigationStrategyDataLoadingSettings>(new NavigationStrategyDataLoadingSettings());
+        public IObservable<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; private set; } //= new BehaviorSubject<NavigationStrategyDataLoadingSettings>(NavigationStrategyDataLoadingSettings.Empty);
 
         //TODO Refactoring 10/2023
         //Subscription2<int, int, NavigationStrategyDataLoadingSettings> pagingSettingsSubscription;
