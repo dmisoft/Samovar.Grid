@@ -2,6 +2,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
@@ -31,6 +32,7 @@ namespace Samovar.Blazor
         private readonly IJsService _jsService;
         private readonly IInitService _initService;
         private readonly IDataSourceService<T> _dataSourceService;
+        private readonly IRepositoryService<T> _repositoryService;
 
         //private readonly IRepositoryService<T> _repositoryService;
         private readonly IConstantService _constantService;
@@ -52,6 +54,7 @@ namespace Samovar.Blazor
             , IJsService jsService
             , IInitService initService
             , IDataSourceService<T> dataSourceService
+            , IRepositoryService<T> repositoryService
             , IConstantService constantService
             )
         {
@@ -61,13 +64,33 @@ namespace Samovar.Blazor
             _jsService = jsService;
             _initService = initService;
             _dataSourceService = dataSourceService;
+            _repositoryService = repositoryService;
             _constantService = constantService;
+
+            _initService.IsInitialized.Subscribe(async (val) => await DataGridInitializerCallback(val));
 
             //TODO refactoring 10/2023
             //var sub1 = new Subscription1TaskVoid<bool>(_initService.IsInitialized, myfunc1);
             //sub1.CreateMap();
         }
+        private async Task DataGridInitializerCallback(bool obj)
+        {
+            int cnt =  _repositoryService.TotalItemsCount.SubjectValue == null ? 0 : _repositoryService.TotalItemsCount.SubjectValue.Count();
 
+            double divHeightValue = await TranslatableDivHeight(cnt);
+
+            double innerGridHeight = await _jsService.GetInnerGridHeight();
+
+            string divHeight = $"{Math.Max(divHeightValue, innerGridHeight).ToString(CultureInfo.InvariantCulture)}px";
+
+            TranslatableDivHeightValue.OnNext(divHeight);
+
+            VirtualScrollingInfo.OnNext(new DataGridVirtualScrollingInfo(0d, 0d, divHeight));
+
+            _repositoryService.TotalItemsCount.
+            //var sub2 = new Subscription1TaskVoid<IQueryable<T>>(_repositoryService.TotalItemsCount, myfunc2);
+            //sub2.CreateMap();
+        }
         private async Task myfunc1(bool arg)
         {
             //int cnt =  _repositoryService.TotalItemsCount.SubjectValue == null ? 0 : _repositoryService.TotalItemsCount.SubjectValue.Count();
@@ -117,7 +140,7 @@ namespace Samovar.Blazor
             int skip = (int)(scrollTop / rowHeight);
 
             //TODO refactoring
-            //DataLoadingSettings.OnNext(new NavigationStrategyDataLoadingSettings(skip: skip, take: visibleItems));
+            DataLoadingSettings.OnNext(new NavigationStrategyDataLoadingSettings(skip: skip, take: visibleItems));
 
             VirtualScrollingInfo.OnNext(new DataGridVirtualScrollingInfo(0d, skip * rowHeight, TranslatableDivHeightValue.Value));
         }
