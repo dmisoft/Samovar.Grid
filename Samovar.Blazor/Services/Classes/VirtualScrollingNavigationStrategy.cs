@@ -71,12 +71,13 @@ namespace Samovar.Blazor
             //sub1.CreateMap();
         }
 
-        private Task DataGridInitializerCallback(bool val)
+        private async Task DataGridInitializerCallback(bool val)
         {
             DataLoadingSettings = ScrollTop.Select(async (scrollTop) => await GetDataLoadingSettings(scrollTop));
             _dataSourceService.DataQuery.Where(x => x != null).Subscribe(async (query) => await ProcessDataPrequery(query));
             //ScrollTop.Subscribe(async (scrollTop) => await ProcessVirtualScrolling(scrollTop));
-            return Task.CompletedTask;
+            await Activate();
+            //return Task.CompletedTask;
         }
 
         
@@ -118,9 +119,10 @@ namespace Samovar.Blazor
             int visibleItems = (int)Math.Round(innerGridHeight / rowHeight, 2, MidpointRounding.AwayFromZero) + 1;
             int skip = (int)(scrollTop / rowHeight);
 
-            return  new NavigationStrategyDataLoadingSettings(skip: skip, take: visibleItems);
+            VirtualScrollingInfo.OnNext(new DataGridVirtualScrollingInfo(0d, skip * rowHeight, TranslatableDivHeightValue.Value));
 
-            //VirtualScrollingInfo.OnNext(new DataGridVirtualScrollingInfo(0d, skip * rowHeight, TranslatableDivHeightValue.Value));
+            return new NavigationStrategyDataLoadingSettings(skip: skip, take: visibleItems);
+
         }
 
         //protected async Task<NavigationStrategyDataLoadingSettings> ProcessVirtualScrolling(double scrollTop)
