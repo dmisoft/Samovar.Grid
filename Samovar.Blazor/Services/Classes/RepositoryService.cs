@@ -132,13 +132,13 @@ namespace Samovar.Blazor
             Console.WriteLine("RunTime " + elapsedTime);
         }
 
-        private Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T> query, NavigationStrategyDataLoadingSettings loadingSettings)
+        private async Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T> query, Task<NavigationStrategyDataLoadingSettings> loadingSettingsTask)
         {
             IEnumerable<SmDataGridRowModel<T>> _retVal = null;
-
+            var loadingSettings = await loadingSettingsTask;
             query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
 
-            if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+            //if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
             {
                 _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
                 _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.Loading));
@@ -149,7 +149,7 @@ namespace Samovar.Blazor
                 stopWatch.Stop();
             }
 
-            return Task.FromResult(_retVal);
+            return _retVal;
         }
 
         private void viewCollectionObserverHandler(IEnumerable<SmDataGridRowModel<T>> enumerable)
@@ -292,7 +292,7 @@ namespace Samovar.Blazor
                     //await _stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.NoData);
                     _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.NoData));
                     //CollectionViewChangedEvList.ForEach(x => x.InvokeAsync(null));
-
+                    
                     observer.OnNext(null);
                 }
 

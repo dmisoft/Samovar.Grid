@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Reactive.Subjects;
+using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
     public interface INavigationStrategy
     {
-        IObservable<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; }
+        IObservable<Task<NavigationStrategyDataLoadingSettings>> DataLoadingSettings { get; }
     }
 }

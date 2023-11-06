@@ -2,7 +2,6 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
@@ -12,8 +11,8 @@ namespace Samovar.Blazor
     public class VirtualScrollingNavigationStrategy<T>
         : IVirtualScrollingNavigationStrategy, IAsyncDisposable
     {
-        public IObservable<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; private set; }// = new BehaviorSubject<NavigationStrategyDataLoadingSettings>(NavigationStrategyDataLoadingSettings.Empty);
-        private AsyncSubject<double> ScrollTop { get; set; } //= new AsyncSubject <double>(0);
+        public IObservable<Task<NavigationStrategyDataLoadingSettings>> DataLoadingSettings { get; private set; }// = new BehaviorSubject<NavigationStrategyDataLoadingSettings>(NavigationStrategyDataLoadingSettings.Empty);
+        private BehaviorSubject<double> ScrollTop { get; set; } = new BehaviorSubject<double>(0);
 
         public DotNetObjectReference<IVirtualScrollingNavigationStrategy> DotNetRef { get; }
 
@@ -74,10 +73,13 @@ namespace Samovar.Blazor
 
         private Task DataGridInitializerCallback(bool val)
         {
-            //DataLoadingSettings = Observable.FromAsyncPattern<NavigationStrategyDataLoadingSettings>(async (p)=> await Js_InnerGrid_AfterScroll11(0));
+            DataLoadingSettings = ScrollTop.Select(async (scrollTop) => await GetDataLoadingSettings(scrollTop));
+            _dataSourceService.DataQuery.Where(x => x != null).Subscribe(async (query) => await ProcessDataPrequery(query));
+            //ScrollTop.Subscribe(async (scrollTop) => await ProcessVirtualScrolling(scrollTop));
             return Task.CompletedTask;
         }
 
+        
         //private async Task DataGridInitializerCallback(bool obj)
         //{
         //    int cnt =  _repositoryService.TotalItemsCount.SubjectValue == null ? 0 : _repositoryService.TotalItemsCount.SubjectValue.Count();
@@ -96,14 +98,17 @@ namespace Samovar.Blazor
         //    //var sub2 = new Subscription1TaskVoid<IQueryable<T>>(_repositoryService.TotalItemsCount, myfunc2);
         //    //sub2.CreateMap();
         //}
-        
-        
+
+
 
         [JSInvokable]
-        public async Task<NavigationStrategyDataLoadingSettings> Js_InnerGrid_AfterScroll(double scrollTop)
+        public Task Js_InnerGrid_AfterScroll(double scrollTop)
         {
-            return await ProcessVirtualScrolling(scrollTop);
+            ScrollTop.OnNext(scrollTop);
+            return Task.CompletedTask;
+            //await ProcessVirtualScrolling(scrollTop);
         }
+
         protected async Task<NavigationStrategyDataLoadingSettings> GetDataLoadingSettings(double obj)
         {
             double scrollTop = (double)obj;
@@ -118,27 +123,20 @@ namespace Samovar.Blazor
             //VirtualScrollingInfo.OnNext(new DataGridVirtualScrollingInfo(0d, skip * rowHeight, TranslatableDivHeightValue.Value));
         }
 
-        protected async Task<NavigationStrategyDataLoadingSettings> ProcessVirtualScrolling(double scrollTop)
-        {
-            double rowHeight = await _layoutService.TableRowHeight();
-            double innerGridHeight = await _jsService.GetInnerGridHeight();
+        //protected async Task<NavigationStrategyDataLoadingSettings> ProcessVirtualScrolling(double scrollTop)
+        //{
+        //    double rowHeight = await _layoutService.TableRowHeight();
+        //    double innerGridHeight = await _jsService.GetInnerGridHeight();
 
-            int visibleItems = (int)Math.Round(innerGridHeight / rowHeight, 2, MidpointRounding.AwayFromZero) + 1;
-            int skip = (int)(scrollTop / rowHeight);
+        //    int visibleItems = (int)Math.Round(innerGridHeight / rowHeight, 2, MidpointRounding.AwayFromZero) + 1;
+        //    int skip = (int)(scrollTop / rowHeight);
 
-            return new NavigationStrategyDataLoadingSettings(skip: skip, take: visibleItems);
-            //TODO refactoring
-            //DataLoadingSettings.OnNext(new NavigationStrategyDataLoadingSettings(skip: skip, take: visibleItems));
+            
+        //    //TODO refactoring
+        //    DataLoadingSettings.OnNext(new NavigationStrategyDataLoadingSettings(skip: skip, take: visibleItems));
 
-            //VirtualScrollingInfo.OnNext(new DataGridVirtualScrollingInfo(0d, skip * rowHeight, TranslatableDivHeightValue.Value));
-        }
-
-        private Task<object> test(object val)
-        {
-            throw new NotImplementedException();
-        }
-
-        
+        //    VirtualScrollingInfo.OnNext(new DataGridVirtualScrollingInfo(0d, skip * rowHeight, TranslatableDivHeightValue.Value));
+        //}
 
         public async Task Activate()
         {
@@ -167,7 +165,8 @@ namespace Samovar.Blazor
 
             TranslatableDivHeightValue.OnNext(divHeight);
 
-            await ProcessVirtualScrolling(0);
+            //TODO refactoring
+            //await ProcessVirtualScrolling(0);
         }
     }
 }
