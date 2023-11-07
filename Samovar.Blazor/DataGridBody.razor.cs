@@ -28,6 +28,9 @@ namespace Samovar.Blazor
         [SmInject]
         public IGridStateService GridStateService { get; set; }
 
+        [SmInject]
+        public INavigationService NavigationService { get; set; }
+
         [Parameter]
         public Action<IEnumerable<SmDataGridRowModel<TItem>>> CollectionViewChanged { get; set; }
 

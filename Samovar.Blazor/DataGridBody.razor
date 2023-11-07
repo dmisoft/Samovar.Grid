@@ -8,15 +8,32 @@
         <div class="s-flex s-align-content-center s-justify-content-center" style="height:100%;background:lightgray;">
             <div class="s-align-self-center">no data to show</div>
         </div>
-
         break;
     case DataSourceStateEnum.Loading:
     case DataSourceStateEnum.Idle:
     default:
-        <div class="@(_dataSourceState == DataSourceStateEnum.Loading ? "s-flex s-align-content-center s-justify-content-center s-visible" : "s-hidden")" style="height:100%;">
-            <div class="spinner-border text-muted s-align-self-center"></div>
-        </div>
-        <div class="@(_dataSourceState == DataSourceStateEnum.Idle ? "s-visible" : "s-hidden")">
+        @if (NavigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+        {
+            <div class="@(_dataSourceState == DataSourceStateEnum.Loading ? "s-flex s-align-content-center s-justify-content-center s-visible" : "s-hidden")" style="height:100%;">
+                <div class="spinner-border text-muted s-align-self-center"></div>
+            </div>
+            <div class="@(_dataSourceState == DataSourceStateEnum.Idle ? "s-visible" : "s-hidden")">
+                <table id="@ConstantService.InnerGridBodyTableId" class="@LayoutService.TableTagClass.Value" style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
+                    <DataGridHiddenHeader TItem=TItem />
+                    <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
+                        @if (View != null)
+                        {
+                            @foreach (var rowModel in View)
+                            {
+                                <SmDataGridRow RowModel="rowModel" />
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
             <table id="@ConstantService.InnerGridBodyTableId" class="@LayoutService.TableTagClass.Value" style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
                 <DataGridHiddenHeader TItem=TItem />
                 <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
@@ -29,8 +46,7 @@
                     }
                 </tbody>
             </table>
-        </div>
-
+        }
         break;
 }
 

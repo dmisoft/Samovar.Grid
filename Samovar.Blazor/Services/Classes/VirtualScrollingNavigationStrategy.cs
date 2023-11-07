@@ -75,26 +75,19 @@ namespace Samovar.Blazor
         {
             DataLoadingSettings = ScrollTop.Select(async (scrollTop) => await GetDataLoadingSettings(scrollTop));
             _dataSourceService.DataQuery.Where(x => x != null).Subscribe(async (query) => await ProcessDataPrequery(query));
-            //ScrollTop.Subscribe(async (scrollTop) => await ProcessVirtualScrolling(scrollTop));
             await Activate();
-            //return Task.CompletedTask;
+            //ScrollTop.OnNext(0);
         }
 
-        
+
         //private async Task DataGridInitializerCallback(bool obj)
         //{
         //    int cnt =  _repositoryService.TotalItemsCount.SubjectValue == null ? 0 : _repositoryService.TotalItemsCount.SubjectValue.Count();
-
         //    double divHeightValue = await TranslatableDivHeight(cnt);
-
         //    double innerGridHeight = await _jsService.GetInnerGridHeight();
-
         //    string divHeight = $"{Math.Max(divHeightValue, innerGridHeight).ToString(CultureInfo.InvariantCulture)}px";
-
         //    TranslatableDivHeightValue.OnNext(divHeight);
-
         //    VirtualScrollingInfo.OnNext(new DataGridVirtualScrollingInfo(0d, 0d, divHeight));
-
         //    _repositoryService.TotalItemsCount.
         //    //var sub2 = new Subscription1TaskVoid<IQueryable<T>>(_repositoryService.TotalItemsCount, myfunc2);
         //    //sub2.CreateMap();
@@ -110,9 +103,8 @@ namespace Samovar.Blazor
             //await ProcessVirtualScrolling(scrollTop);
         }
 
-        protected async Task<NavigationStrategyDataLoadingSettings> GetDataLoadingSettings(double obj)
+        protected async Task<NavigationStrategyDataLoadingSettings> GetDataLoadingSettings(double scrollTop)
         {
-            double scrollTop = (double)obj;
             double rowHeight = await _layoutService.TableRowHeight();
             double innerGridHeight = await _jsService.GetInnerGridHeight();
 
@@ -124,21 +116,6 @@ namespace Samovar.Blazor
             return new NavigationStrategyDataLoadingSettings(skip: skip, take: visibleItems);
 
         }
-
-        //protected async Task<NavigationStrategyDataLoadingSettings> ProcessVirtualScrolling(double scrollTop)
-        //{
-        //    double rowHeight = await _layoutService.TableRowHeight();
-        //    double innerGridHeight = await _jsService.GetInnerGridHeight();
-
-        //    int visibleItems = (int)Math.Round(innerGridHeight / rowHeight, 2, MidpointRounding.AwayFromZero) + 1;
-        //    int skip = (int)(scrollTop / rowHeight);
-
-            
-        //    //TODO refactoring
-        //    DataLoadingSettings.OnNext(new NavigationStrategyDataLoadingSettings(skip: skip, take: visibleItems));
-
-        //    VirtualScrollingInfo.OnNext(new DataGridVirtualScrollingInfo(0d, skip * rowHeight, TranslatableDivHeightValue.Value));
-        //}
 
         public async Task Activate()
         {

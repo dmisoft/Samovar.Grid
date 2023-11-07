@@ -138,16 +138,13 @@ namespace Samovar.Blazor
             var loadingSettings = await loadingSettingsTask;
             query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
 
-            //if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
-            {
-                _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
-                _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.Loading));
+            _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
+            _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.Loading));
 
-                Stopwatch stopWatch = new Stopwatch();
-                stopWatch.Start();
-                _retVal = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
-                stopWatch.Stop();
-            }
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+            _retVal = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+            stopWatch.Stop();
 
             return _retVal;
         }
@@ -292,7 +289,7 @@ namespace Samovar.Blazor
                     //await _stateService.DataSourceStateEv.InvokeAsync(DataSourceStateEnum.NoData);
                     _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.NoData));
                     //CollectionViewChangedEvList.ForEach(x => x.InvokeAsync(null));
-                    
+
                     observer.OnNext(null);
                 }
 
