@@ -55,6 +55,8 @@ namespace Samovar.Blazor
         
         ValueTask<double> GetInnerGridHeight();
 
+        ValueTask<double> GetElementHeightById(string elementId);
+        
         ValueTask ScrollInnerGridToTop();
     }
 }

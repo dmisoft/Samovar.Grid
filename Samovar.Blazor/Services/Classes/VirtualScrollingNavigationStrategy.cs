@@ -106,6 +106,7 @@ namespace Samovar.Blazor
         protected async Task<NavigationStrategyDataLoadingSettings> GetDataLoadingSettings(double scrollTop)
         {
             double rowHeight = await _layoutService.TableRowHeight();
+            //double rowHeight = await _jsService.GetElementHeightById();
             double innerGridHeight = await _jsService.GetInnerGridHeight();
 
             int visibleItems = (int)Math.Round(innerGridHeight / rowHeight, 2, MidpointRounding.AwayFromZero) + 1;
@@ -144,6 +145,7 @@ namespace Samovar.Blazor
 
             TranslatableDivHeightValue.OnNext(divHeight);
 
+            ScrollTop.OnNext(0);
             //TODO refactoring
             //await ProcessVirtualScrolling(0);
         }

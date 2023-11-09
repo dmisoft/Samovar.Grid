@@ -38,7 +38,7 @@ else
                 Data="forecasts1" 
                 FilterMode=DataGridFilterMode.FilterRow 
                 Height="450px" 
-                ShowDetailRow=true 
+                ShowDetailRow=false 
                 EditMode=GridEditMode.Popup
                 DataNavigationMode=DataGridNavigationMode.VirtualScrolling
                 SelectionMode=GridSelectionMode.SingleSelectedDataRow
@@ -50,7 +50,7 @@ else
             <SmDataGridColumn Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="200px"/>
             <SmDataGridColumn Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="200px"/>
             <SmDataGridColumn Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="200px"/>
-            <SmDataGridCommandColumn EditButtonVisible=true NewButtonVisible=true Width="250px"/>
+            @*<SmDataGridCommandColumn EditButtonVisible=true NewButtonVisible=true Width="250px"/>*@
         </Columns>
         <DetailRowTemplate Context="mydata">
         @{

@@ -108,6 +108,11 @@ namespace Samovar.Blazor
             return await (await JsModule()).InvokeAsync<double>("getElementHeight", new[] { _constantService.InnerGridId });
         }
 
+        public async ValueTask<double> GetElementHeightById(string elementId)
+        {
+            return await (await JsModule()).InvokeAsync<double>("getElementHeight", new[] { elementId });
+        }
+
         public async ValueTask ScrollInnerGridToTop()
         {
             await ScrollElementVerticalByValue(_constantService.InnerGridId, 0);
