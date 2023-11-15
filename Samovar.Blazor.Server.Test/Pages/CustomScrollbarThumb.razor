@@ -1,0 +1,42 @@
+﻿@using System.Globalization
+<!-- CustomScrollbarThumb.razor -->
+@inject IJSRuntime jsRuntime
+@inherits ComponentBase
+
+<div class="custom-scrollbar-thumb" id="customScrollbarThumb" @onmousedown="HandleMouseDown" style="@($"transform: translateY({offsetY.ToString(CultureInfo.InvariantCulture)}px"))"></div>
+@* style="transform:translateY(@(offsetY.ToString(CultureInfo.InvariantCulture) + "px")) *@
+@code {
+    private bool isDragging = false;
+    private int startY;
+    private double offsetY { get; set; }
+
+    private void HandleMouseDown(MouseEventArgs e)
+    {
+        isDragging = true;
+        startY = (int)e.ClientY;
+
+        // Subscribe to global mousemove and mouseup events using JavaScript Interop
+        jsRuntime.InvokeVoidAsync("customScrollbar.handleMouseDown", DotNetObjectReference.Create(this));
+    }
+
+    [JSInvokable]
+    public void HandleMouseMove(int clientY)
+    {
+        if (isDragging)
+        {
+            var deltaY = clientY - startY;
+            jsRuntime.InvokeVoidAsync("customScrollbar.handleMouseMove", deltaY);
+            offsetY = deltaY;
+            StateHasChanged();
+
+        }
+    }
+
+    [JSInvokable]
+    public void HandleMouseUp()
+    {
+        isDragging = false;
+        // Unsubscribe from global mousemove and mouseup events using JavaScript Interop
+        jsRuntime.InvokeVoidAsync("customScrollbar.handleMouseUp");
+    }
+}

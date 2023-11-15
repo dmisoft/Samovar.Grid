@@ -1,0 +1,25 @@
+﻿@page "/scrollbartest"
+<!-- YourPage.razor -->
+
+<div class="scroll-container">
+    <!-- Your content goes here -->
+    @* @for (int i = 0; i < 50; i++)
+    {
+        <p>Item @i</p>
+    } *@
+
+    <CustomScrollbarThumb />
+</div>
+<style>
+    .scroll-container {
+        height: 200px;
+        overflow-y: hidden;
+        border: 1px solid #ccc;
+    }
+
+    .scroll-content {
+        height: 1000px; /* Adjust the height based on your content */
+        padding: 10px;
+        background-color: lightgray;
+    }
+</style>
