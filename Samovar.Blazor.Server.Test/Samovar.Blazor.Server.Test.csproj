@@ -10,10 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Pages\CustomScrollbarThumb.razor.css" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Samovar.Blazor\Samovar.Blazor.csproj" />
   </ItemGroup>
 

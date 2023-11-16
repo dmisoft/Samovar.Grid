@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Common\CustomScrollbar.razor.css" />
     <None Remove="compilerconfig.json.defaults" />
   </ItemGroup>
 

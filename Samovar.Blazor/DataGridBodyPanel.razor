@@ -5,14 +5,14 @@
 
 @if (NavigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
 {
-    <div style="@ScrollStyle">
-        <div translate_y_offset="@VirtualScrollingService.TranslateYOffset" id="@ConstantService.InnerGridBodyId" style="transform:translateY(@(OffsetY.ToString(CultureInfo.InvariantCulture)+"px"))">
-            <DataGridBody TItem=T />
-        </div>
+
+    <div id=@ConstantService.InnerGridBodyId style=@($"transform:translateY({OffsetY.ToString(CultureInfo.InvariantCulture)}px);{ScrollStyle}")>
+        <DataGridBody TItem=T />
     </div>
+    <DataGridScrollbar DeltaChangedCallback=@((deltaY) => OffsetY = -deltaY*(1000/200)) /> 
+
 }
 else
 {
     <DataGridBody TItem=T />
-
 }

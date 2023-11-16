@@ -18,10 +18,10 @@ window.customScrollbar = {
     },
 
     handleMouseMove: function (deltaY) {
-        var thumb = document.getElementById('customScrollbarThumb');
-        if (thumb && thumb.style) {
-            thumb.style.top = Math.max(0, thumb.offsetTop + deltaY) + 'px';
-        }
+        //var thumb = document.getElementById('customScrollbarThumb');
+        //if (thumb && thumb.style) {
+        //    thumb.style.top = Math.max(0, thumb.offsetTop + deltaY) + 'px';
+        //}
     },
 
     handleMouseUp: function () {

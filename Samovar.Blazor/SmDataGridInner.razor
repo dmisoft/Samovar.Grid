@@ -8,7 +8,7 @@
 		<DataGridFilterRowMain T=T />
 	</div>
 
-	<div id="@ConstantService.InnerGridId" class="s-grid-content" @ref="@LayoutService.GridInnerRef" style="overflow:auto;">
+	<div id="@ConstantService.InnerGridId" class="s-grid-content" @ref="@LayoutService.GridInnerRef" >
 		@if (InsertingForm != null){ @InsertingForm }@*ist hier inline inserting form gemeint?*@
 		@*@if (DataPanel != null){ @DataPanel }*@
 		<DataGridBodyPanel T=T />
