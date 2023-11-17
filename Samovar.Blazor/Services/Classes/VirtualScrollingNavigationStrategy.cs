@@ -123,7 +123,7 @@ namespace Samovar.Blazor
             VirtualScrollingInfo.OnNext(
                 new DataGridVirtualScrollingInfo(
                     offsetX: 0d,
-                    offsetY: skip * rowHeight,
+                    offsetY: scrollTop,// skip * rowHeight,
                     contentContainerHeight: _translatableDivHeight,
                     topPlaceholderHeight:topPlaceholderHeight,
                     bottomPlaceholderHeight: bottomPlaceholderHeight,
