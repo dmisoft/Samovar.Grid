@@ -1,0 +1,21 @@
+﻿@using System.Globalization
+@typeparam TItem
+@inherits SmDesignComponentBase
+
+<div class="@(_dataSourceState == DataSourceStateEnum.Loading ? "s-flex s-align-content-center s-justify-content-center s-visible" : "s-hidden")" style="height:100%;">
+    <div class="spinner-border text-muted s-align-self-center"></div>
+</div>
+<div class="@(_dataSourceState == DataSourceStateEnum.Idle ? "s-visible" : "s-hidden")">
+    <table id="@ConstantService.InnerGridBodyTableId" class="@LayoutService.TableTagClass.Value" style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
+        <DataGridHiddenHeader TItem=TItem />
+        <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
+            @if (View != null)
+            {
+                @foreach (var rowModel in View)
+                {
+                    <SmDataGridRow RowModel="rowModel" />
+                }
+            }
+        </tbody>
+    </table>
+</div>

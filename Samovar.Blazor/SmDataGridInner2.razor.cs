@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Rendering;
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Samovar.Blazor
@@ -38,10 +39,11 @@ namespace Samovar.Blazor
             base.OnInitialized();
         }
 
-        private Task myfunc1(DataGridVirtualScrollingInfo arg)
+        private Task myfunc1(DataGridVirtualScrollingInfo info)
         {
-            ScrollStyle = $"height:{arg.TranslatableDivHeight};overflow:hidden;position:absolute;";
-            OffsetY = arg.OffsetY;
+
+            ScrollStyle = $"height:{info.ContentContainerHeight.ToString(CultureInfo.InvariantCulture)}px;overflow:hidden;position:absolute;";
+            OffsetY = info.OffsetY;
             StateHasChanged();
             return Task.CompletedTask;
         }

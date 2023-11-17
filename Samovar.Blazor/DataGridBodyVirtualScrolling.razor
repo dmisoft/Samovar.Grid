@@ -1,0 +1,20 @@
+﻿@using System.Globalization
+@typeparam TItem
+@inherits SmDesignComponentBase
+
+<table id="@ConstantService.InnerGridBodyTableId" class=@LayoutService.TableTagClass.Value style=@ScrollStyle>
+    <DataGridHiddenHeader TItem=TItem />
+    <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
+        @if (View != null)
+        {
+            <SmDataGridRowVirtualScrollingPlaceHolder TopPlaceHolder=true />
+
+            @foreach (var rowModel in View)
+            {
+                <SmDataGridRow RowModel="rowModel" />
+            }
+
+            <SmDataGridRowVirtualScrollingPlaceHolder TopPlaceHolder=false  />
+        }
+    </tbody>
+</table>

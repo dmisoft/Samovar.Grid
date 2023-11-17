@@ -2,7 +2,15 @@
 @typeparam T
 @inherits SmDesignComponentBase
 
-@if (GridLayoutService.ShowColumnHeader.Value)
+<div style="position:relative;display:flex;flex-direction:row;">
+	<div style="overflow:hidden;position:relative;flex-grow:1;" id="@ConstantService.GridHeaderContainerId">
+		<div style="position:relative;" class="s-noselect">
+			<SmDataGridHeader TItem=T />
+		</div>
+	</div>
+</div>
+
+@* @if (GridLayoutService.ShowColumnHeader.Value)
 {
 	@if (Style.ActualScrollbarWidth > 0)
 	{
@@ -24,4 +32,4 @@
 			<SmDataGridHeader TItem=T />
 		</div>
 	}
-}
+} *@

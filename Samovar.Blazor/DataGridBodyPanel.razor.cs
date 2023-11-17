@@ -38,10 +38,11 @@ namespace Samovar.Blazor
 
         public DataGridStyleInfo Style { get; set; } //Default style
         
-        public string ScrollStyle { get; set; }
-        public double OffsetY { get; set; }
+        //public string ScrollStyle { get; set; }
+        //public double OffsetY { get; set; }
 
         protected Task _dataSourceStateEv(DataSourceStateEnum dataSourceState) { 
+
             _dataSourceState = dataSourceState;
             //StateHasChanged();
             return Task.CompletedTask;
@@ -49,11 +50,7 @@ namespace Samovar.Blazor
 
         protected override Task OnInitializedAsync()
         {
-            
-            //TODO refactoring 10/2023
-            //var sub1 = new Subscription1TaskVoid<DataGridVirtualScrollingInfo>(VirtualScrollingService.VirtualScrollingInfo, myfunc1);
-            //sub1.CreateMap();
-            VirtualScrollingService.VirtualScrollingInfo.Subscribe(myfunc1);
+            //VirtualScrollingService.VirtualScrollingInfo.Subscribe(myfunc1);
 
             Style = new DataGridStyleInfo
             {
@@ -61,40 +58,30 @@ namespace Samovar.Blazor
                 ActualScrollbarWidth = LayoutService.ActualScrollbarWidth
             };
             
-            LayoutService.DataGridInnerCssStyleChanged += LayoutService_DataGridInnerCssStyleChanged;
-            //GridStateService.DataSourceState.Subscribe(async dataSourceState => await ProcessDataSourceState(dataSourceState));
-            
+            //LayoutService.DataGridInnerCssStyleChanged += LayoutService_DataGridInnerCssStyleChanged;
             DataSourceStateEv = new EventCallbackFactory().Create<DataSourceStateEnum>(this, async (data) => await _dataSourceStateEv(data));
-
-            //GridStateService.DataSourceStateEv = DataSourceStateEv;
-            //GridStateService.DataSourceStateEv = _dataSourceStateEv;
             GridStateService.DataSourceStateEvList.Add(DataSourceStateEv);
 
             return base.OnInitializedAsync();   
         }
 
-  //      private Task ProcessDataSourceState(DataSourceStateEnum dataSourceState)
-		//{
-  //          _dataSourceState = dataSourceState;
-  //          return Task.CompletedTask;
-		//}
-
 		private void myfunc1(DataGridVirtualScrollingInfo arg)
         {
-            ScrollStyle = $"height:{arg.TranslatableDivHeight};overflow:hidden;position:absolute;";
-            OffsetY = arg.OffsetY;
-            StateHasChanged();
+            //ScrollStyle = $"height:{arg.TranslatableDivHeight};overflow:hidden;position:absolute;";
+            //OffsetY = arg.OffsetY;
+            //StateHasChanged();
         }
 
-        private async Task LayoutService_DataGridInnerCssStyleChanged(DataGridStyleInfo arg)
-        {
-            Style = arg;
-            await InvokeAsync(StateHasChanged);
-        }
+        //private async Task LayoutService_DataGridInnerCssStyleChanged(DataGridStyleInfo arg)
+        //{
+        //    Style = arg;
+        //    await InvokeAsync(StateHasChanged);
+        //}
+
         public ValueTask DisposeAsync()
         {
             GridStateService.DataSourceStateEvList.Remove(DataSourceStateEv);
-            LayoutService.DataGridInnerCssStyleChanged -= LayoutService_DataGridInnerCssStyleChanged;
+            //LayoutService.DataGridInnerCssStyleChanged -= LayoutService_DataGridInnerCssStyleChanged;
             return ValueTask.CompletedTask;
         }
     }

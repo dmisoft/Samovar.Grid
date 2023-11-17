@@ -2,7 +2,15 @@
 @typeparam T
 @inherits SmDesignComponentBase
 
-@if (GridLayoutService.FilterMode.Value == DataGridFilterMode.FilterRow)
+<div style="position:relative;display:flex;flex-direction:row;">
+	<div style="position:relative;overflow:hidden;flex-grow:1;" id="@ConstantService.GridFilterContainerId">
+		<div style="position:relative;">
+			<DataGridFilterRow TItem=T />
+		</div>
+	</div>
+</div>
+
+@* @if (GridLayoutService.FilterMode.Value == DataGridFilterMode.FilterRow)
 {
 	@if (Style.ActualScrollbarWidth > 0)
 	{
@@ -24,4 +32,4 @@
 			<DataGridFilterRow TItem=T />
 		</div>
 	}
-}
+} *@

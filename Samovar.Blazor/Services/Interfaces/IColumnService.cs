@@ -6,11 +6,8 @@ namespace Samovar.Blazor
     {
         public List<IColumnModel> AllColumnModels { get; }
         public IEnumerable<IDataColumnModel> DataColumnModels { get; }
-        //public IEnumerable<ICommandColumnModel> CommandColumnModels { get; }
-
         public IColumnModel EmptyColumnModel { get; }
         public IColumnModel DetailExpanderColumnModel { get; }
-
         public void RegisterColumn(IColumnModel columntModel);//nur registrierbare Spalten
     }
 }

@@ -34,7 +34,7 @@ namespace Samovar.Blazor
         [Parameter]
         public EventCallback<SmDataGridRowModel<TItem>> RowModelChanged { get; set; }
 
-        int dataHashCode = 0;
+        //int dataHashCode = 0;
         [Parameter]
         public SmDataGridRowModel<TItem> RowModel
         {
@@ -42,19 +42,13 @@ namespace Samovar.Blazor
             set
             {
                 _rowModel = value;
-                if (dataHashCode != value.GetHashCode())
-                {
-                    dataHashCode = value.GetHashCode();
-                }
+                //if (dataHashCode != value.GetHashCode())
+                //{
+                //    dataHashCode = value.GetHashCode();
+                //}
             }
         }
 
-        protected override void OnInitialized()
-        {
-        }
-
-
-        
         protected async Task MouseDownOnResizeColumnGrip(MouseEventArgs args, DataColumnModel colMeta)
         {
             //if (DataGrid.FitColumnsToTableWidth)

@@ -12,14 +12,18 @@ namespace Samovar.Blazor
         : IVirtualScrollingNavigationStrategy, IAsyncDisposable
     {
         public IObservable<Task<NavigationStrategyDataLoadingSettings>> DataLoadingSettings { get; private set; }// = new BehaviorSubject<NavigationStrategyDataLoadingSettings>(NavigationStrategyDataLoadingSettings.Empty);
-        private BehaviorSubject<double> ScrollTop { get; set; } = new BehaviorSubject<double>(0);
+        public BehaviorSubject<double> ScrollTop { get; private set; } = new BehaviorSubject<double>(0);
 
         public DotNetObjectReference<IVirtualScrollingNavigationStrategy> DotNetRef { get; }
 
         public int VisibleItems { get; set; }
         public int ItemsToShow { get; set; } = 10;
-        public double DummyRowHeight { get; set; }
-        public int DummyItemsCount { get; set; }
+
+        public double TopPlaceholderRowHeight { get; set; } = 0;
+        public double BottomPlaceholderRowHeight { get; set; } = 0;
+
+        //public double DummyRowHeight { get; set; }
+        //public int DummyItemsCount { get; set; }
         public int TopVisibleDataItemPosition { get; set; }
         public int StartGridItemPosition { get; set; }
         public int EndGridItemPosition { get; set; }
@@ -27,7 +31,7 @@ namespace Samovar.Blazor
         public double TranslateYOffset { get; private set; } = 0d;
         
         protected double ActualTopOffset = 0;
-
+        private double _translatableDivHeight;
         private readonly ILayoutService _layoutService;
         private readonly IJsService _jsService;
         private readonly IInitService _initService;
@@ -36,13 +40,13 @@ namespace Samovar.Blazor
         //private readonly IRepositoryService<T> _repositoryService;
         private readonly IConstantService _constantService;
 
-        public async Task<double> TranslatableDivHeight(int itemCount)
+        public async Task<double> GetTranslatableDivHeight(int itemCount)
         {
             var translatableDivHeight = await _layoutService.TableRowHeight() * itemCount;
             return translatableDivHeight;
         }
 
-        public BehaviorSubject<string> TranslatableDivHeightValue { get; } = new BehaviorSubject<string>("");
+        //public BehaviorSubject<string> TranslatableDivHeightValue { get; } = new BehaviorSubject<string>("");
 
         public BehaviorSubject<DataGridVirtualScrollingInfo> VirtualScrollingInfo { get; } = new BehaviorSubject<DataGridVirtualScrollingInfo>(DataGridVirtualScrollingInfo.Empty);
 
@@ -107,15 +111,25 @@ namespace Samovar.Blazor
         {
             double rowHeight = await _layoutService.TableRowHeight();
             //double rowHeight = await _jsService.GetElementHeightById();
-            double innerGridHeight = await _jsService.GetInnerGridHeight();
+            double scrollContainerHeight = await _jsService.GetInnerGridHeight();
 
-            int visibleItems = (int)Math.Round(innerGridHeight / rowHeight, 2, MidpointRounding.AwayFromZero) + 1;
+            int visibleItems = (int)Math.Round(scrollContainerHeight / rowHeight, 2, MidpointRounding.AwayFromZero) + 1;
             int skip = (int)(scrollTop / rowHeight);
 
-            VirtualScrollingInfo.OnNext(new DataGridVirtualScrollingInfo(0d, skip * rowHeight, TranslatableDivHeightValue.Value));
+            var topPlaceholderHeight = skip * rowHeight;
+            var bottomPlaceholderHeight = _translatableDivHeight - visibleItems * rowHeight - topPlaceholderHeight;
+
+
+            VirtualScrollingInfo.OnNext(
+                new DataGridVirtualScrollingInfo(
+                    offsetX: 0d,
+                    offsetY: skip * rowHeight,
+                    contentContainerHeight: _translatableDivHeight,
+                    topPlaceholderHeight:topPlaceholderHeight,
+                    bottomPlaceholderHeight: bottomPlaceholderHeight,
+                    scrollContainerHeight: scrollContainerHeight)) ;
 
             return new NavigationStrategyDataLoadingSettings(skip: skip, take: visibleItems);
-
         }
 
         public async Task Activate()
@@ -137,13 +151,13 @@ namespace Samovar.Blazor
         {
             await _jsService.ScrollInnerGridToTop();
 
-            double divHeightValue = await TranslatableDivHeight(data.Count());
+            double divHeightValue = await GetTranslatableDivHeight(data.Count());
 
             double innerGridHeight = await _jsService.GetInnerGridHeight();
 
-            string divHeight = $"{Math.Max(divHeightValue, innerGridHeight).ToString(CultureInfo.InvariantCulture)}px";
+            _translatableDivHeight = Math.Max(divHeightValue, innerGridHeight);
 
-            TranslatableDivHeightValue.OnNext(divHeight);
+            //TranslatableDivHeightValue.OnNext(divHeight);
 
             ScrollTop.OnNext(0);
             //TODO refactoring

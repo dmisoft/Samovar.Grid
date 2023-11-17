@@ -11,7 +11,7 @@
         }
     </div>
 
-    <CustomScrollbar DeltaChangedCallback=@((deltaY) => offsetY = -deltaY*(1000/200)) />
+    <CustomScrollbar DeltaChangedCallback=@((offsetY) => this.offsetY = -offsetY * (1000/200)) />
 </div>
 <style>
     .scroll-container {

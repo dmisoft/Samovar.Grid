@@ -3,16 +3,37 @@
 @typeparam T
 @inherits SmDesignComponentBase
 
-@if (NavigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
+@* @if (NavigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
 {
-
-    <div id=@ConstantService.InnerGridBodyId style=@($"transform:translateY({OffsetY.ToString(CultureInfo.InvariantCulture)}px);{ScrollStyle}")>
-        <DataGridBody TItem=T />
+    <div id=@ConstantService.InnerGridBodyId>
+        <DataGridBodyVirtualScrolling TItem=T />
     </div>
-    <DataGridScrollbar DeltaChangedCallback=@((deltaY) => OffsetY = -deltaY*(1000/200)) /> 
-
+    <DataGridScrollbar DeltaChangedCallback=@((deltaY) => {OffsetY = -deltaY*(1000/200);VirtualScrollingService.ScrollTop.OnNext(-1*OffsetY);}) />
 }
 else
 {
-    <DataGridBody TItem=T />
+    <DataGridBodyPagingTable TItem=T />
+} *@
+@switch (_dataSourceState)
+{
+    case DataSourceStateEnum.NoData:
+        <div class="s-flex s-align-content-center s-justify-content-center" style="height:100%;background:lightgray;">
+            <div class="s-align-self-center">no data to show</div>
+        </div>
+        break;
+    case DataSourceStateEnum.Loading:
+    case DataSourceStateEnum.Idle:
+    default:
+        @if (NavigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+        {
+            <DataGridBodyPagingTable TItem=T />
+        }
+        else
+        {
+            <div id=@ConstantService.InnerGridBodyId>
+                <DataGridBodyVirtualScrolling TItem=T />
+            </div>
+            <DataGridScrollbar DeltaChangedCallback=@((offsetY) => VirtualScrollingService.ScrollTop.OnNext(-offsetY*(1000/200))) />
+        }
+        break;
 }

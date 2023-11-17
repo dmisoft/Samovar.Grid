@@ -70,11 +70,6 @@ namespace Samovar.Blazor
             return base.SetParametersAsync(parameters);
         }
 
-        //private async Task Value_NotifyAfterLoadData()
-        //{
-        //    await InvokeAsync(StateHasChanged);
-        //}
-
         private SmDataGridRowModel<T> _rowModel;
 
         //Row editing
