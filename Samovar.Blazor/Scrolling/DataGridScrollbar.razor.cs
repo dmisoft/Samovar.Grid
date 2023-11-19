@@ -13,6 +13,7 @@ namespace Samovar.Blazor.Scrolling
     {
         private bool isDragging = false;
         private double startDraggingY;
+        private double oldActualTranslateY { get; set; }
         private double actualTranslateY { get; set; }
         private double newScrollbarThumbOffsetY { get; set; }
 		protected string Style { get; set; }
@@ -30,9 +31,9 @@ namespace Samovar.Blazor.Scrolling
         {
             isDragging = true;
             startDraggingY = e.ClientY;
-
-            // Subscribe to global mousemove and mouseup events using JavaScript Interop
-            jsRuntime.InvokeVoidAsync("dataGridScrollbar.handleMouseDown", DotNetObjectReference.Create(this));
+            oldActualTranslateY = actualTranslateY;
+			// Subscribe to global mousemove and mouseup events using JavaScript Interop
+			jsRuntime.InvokeVoidAsync("dataGridScrollbar.handleMouseDown", DotNetObjectReference.Create(this));
         }
         protected override Task OnInitializedAsync()
         {
@@ -57,21 +58,23 @@ namespace Samovar.Blazor.Scrolling
                 var deltaY = clientY - startDraggingY;
                 jsRuntime.InvokeVoidAsync("dataGridScrollbar.handleMouseMove", deltaY);
 
-                if (actualTranslateY + deltaY < 0)
+                if (oldActualTranslateY + deltaY < 0)
                 {
                     newScrollbarThumbOffsetY = 0;
                 }
-                else if (actualTranslateY + deltaY + scrollbarThumbHeight > scrollContainerHeight)
+                else if (oldActualTranslateY + deltaY + scrollbarThumbHeight > scrollContainerHeight)
                 {
                     newScrollbarThumbOffsetY = scrollContainerHeight - scrollbarThumbHeight;
                 }
                 else
                 {
-                    newScrollbarThumbOffsetY = actualTranslateY + deltaY;
+                    newScrollbarThumbOffsetY = oldActualTranslateY + deltaY;
                 }
+				
+                actualTranslateY = newScrollbarThumbOffsetY;
 
-                DeltaChangedCallback.InvokeAsync(newScrollbarThumbOffsetY);
-                VirtualScrollingService.ScrollTop.OnNext(newScrollbarThumbOffsetY * ((contentContainerHeight - scrollContainerHeight) / (scrollContainerHeight- scrollbarThumbHeight)));
+				DeltaChangedCallback.InvokeAsync(actualTranslateY);
+                VirtualScrollingService.ScrollTop.OnNext(actualTranslateY * ((contentContainerHeight - scrollContainerHeight) / (scrollContainerHeight- scrollbarThumbHeight)));
                 //StateHasChanged();
             }
         }
@@ -81,6 +84,8 @@ namespace Samovar.Blazor.Scrolling
         {
             isDragging = false;
             actualTranslateY = newScrollbarThumbOffsetY;
+			
+            oldActualTranslateY = 0;
             newScrollbarThumbOffsetY = 0;
             // Unsubscribe from global mousemove and mouseup events using JavaScript Interop
             jsRuntime.InvokeVoidAsync("dataGridScrollbar.handleMouseUp");

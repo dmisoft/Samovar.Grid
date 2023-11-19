@@ -1,6 +1,7 @@
 ﻿using Samovar.Blazor.Filter;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
@@ -21,7 +22,7 @@ namespace Samovar.Blazor
 
         public BehaviorSubject<IEnumerable<T>> Data { get; private set; } = new BehaviorSubject<IEnumerable<T>>(new List<T>());
 
-        public IObservable<IQueryable<T>> DataQuery { get; private set; }
+        public BehaviorSubject<IQueryable<T>> DataQuery { get; private set; } = new BehaviorSubject<IQueryable<T>>(null);
 
         List<Type> numericTypeList = new List<Type>
                 {
@@ -69,15 +70,40 @@ namespace Samovar.Blazor
         private void DataGridInitializerCallback(bool obj)
         {
             //combine
-            DataQuery = Observable.CombineLatest(
+            var rr = Observable.CombineLatest(
                 _filterService.FilterInfo,
                 _orderService.ColumnOrderInfo,
                 Data,
-                myfunc3
-             );
+				(filterInfo, columnOrderInfo, data) => Tuple.Create(filterInfo, columnOrderInfo, data )
+			 ).DistinctUntilChanged();
+            rr.Subscribe(myfunc33);
         }
 
-        private IQueryable<T> myfunc3(IEnumerable<DataGridFilterCellInfo> filterInfo, DataGridColumnOrderInfo orderInfo, IEnumerable<T> data)
+		private void myfunc33(Tuple<IEnumerable<DataGridFilterCellInfo>, DataGridColumnOrderInfo, IEnumerable<T>> tuple)
+		{
+			if (tuple.Item3 == null)
+			{
+                return;
+			//	tuple.Item3 = new List<T>();
+			//	//Data = new ParameterSubject<IEnumerable<T>>(new List<T>());
+			}
+
+			IQueryable<T> query = tuple.Item3.AsQueryable();
+
+			//apply filter
+			if (tuple.Item1.Count() > 0)
+				query = AttachFilter(query, tuple.Item1);
+
+			if (tuple.Item2 != null && !tuple.Item2.Equals(DataGridColumnOrderInfo.Empty))
+			{
+				var pr = typeof(T).GetProperty(tuple.Item2.Field);
+
+				query = tuple.Item2.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
+			}
+			DataQuery.OnNext(query);
+		}
+
+		private IQueryable<T> myfunc3(IEnumerable<DataGridFilterCellInfo> filterInfo, DataGridColumnOrderInfo orderInfo, IEnumerable<T> data)
         {
             if (data == null)
             {
