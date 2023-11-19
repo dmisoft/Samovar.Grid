@@ -3,6 +3,6 @@
 
 @inherits SmDesignComponentBase
 
-<div class="custom-scrollbar">
-    <div class="custom-scrollbar-thumb" id="customScrollbarThumb" @onmousedown="HandleMouseDown" style=@($"transform:translateY({newOffsetY.ToString(CultureInfo.InvariantCulture)}px);top:0;")></div>
+<div class="custom-scrollbar" style=@Style>
+    <div class="custom-scrollbar-thumb" id="customScrollbarThumb" @onmousedown="HandleMouseDown" style=@($"transform:translateY({newScrollbarThumbOffsetY.ToString(CultureInfo.InvariantCulture)}px);top:0;")></div>
 </div>

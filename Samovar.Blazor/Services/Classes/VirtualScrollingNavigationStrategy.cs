@@ -42,7 +42,7 @@ namespace Samovar.Blazor
 
         public async Task<double> GetTranslatableDivHeight(int itemCount)
         {
-            var translatableDivHeight = await _layoutService.TableRowHeight() * itemCount;
+            var translatableDivHeight = 34.3 * itemCount;// await _layoutService.TableRowHeight() * itemCount;
             return translatableDivHeight;
         }
 
@@ -109,7 +109,7 @@ namespace Samovar.Blazor
 
         protected async Task<NavigationStrategyDataLoadingSettings> GetDataLoadingSettings(double scrollTop)
         {
-            double rowHeight = await _layoutService.TableRowHeight();
+            double rowHeight = 34.3;// await _layoutService.TableRowHeight();
             //double rowHeight = await _jsService.GetElementHeightById();
             double scrollContainerHeight = await _jsService.GetInnerGridHeight();
 

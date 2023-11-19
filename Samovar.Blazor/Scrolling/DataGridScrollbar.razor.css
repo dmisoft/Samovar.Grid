@@ -1,6 +1,6 @@
 ﻿.custom-scrollbar {
     width: 8px;
-    height: 200px; /* Set the height of your scrollbar thumb */
+    /*height: 200px;*/
     background-color: transparent;
     cursor: pointer;
     position: absolute;
