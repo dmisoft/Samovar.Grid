@@ -1,5 +1,6 @@
-﻿@* @using System.Globalization
-@typeparam TItem
+﻿@using System.Globalization
+@using Samovar.Blazor;
+@typeparam T
 @inherits SmDesignComponentBase
 
 @switch (_dataSourceState)
@@ -12,15 +13,9 @@
     case DataSourceStateEnum.Loading:
     case DataSourceStateEnum.Idle:
     default:
-        @if (NavigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
-        {
-            <DataGridBodyPagingTable TItem=TItem />
-        }
-        else
-        {
-            <DataGridBodyVirtualScrolling TItem=TItem />
-        }
+        <div id=@ConstantService.InnerGridBodyId>
+            <DataGridBodyVirtualScrolling TItem=T />
+        </div>
+        <DataGridScrollbar DeltaChangedCallback=@((offsetY) => VirtualScrollingService.ScrollTop.OnNext(-offsetY*(1000/200))) />
         break;
 }
-
- *@

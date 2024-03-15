@@ -184,7 +184,7 @@ namespace Samovar.Blazor
         {
             RenderFragment rf = (builder) =>
             {
-                builder.OpenComponent(0, typeof(DataGridBodyPanel<T>));
+                builder.OpenComponent(0, typeof(DataGridPagingTablePanel<T>));
                 builder.CloseComponent();
             };
             return rf;

@@ -1,0 +1,25 @@
+﻿@using System.Globalization
+@typeparam T
+@inherits SmDesignComponentBase
+
+<div @ref="@LayoutService.GridOuterRef" class="s-grid-container" style="@Style.CssStyle" @onkeydown:stopPropagation="true">
+	<div style="display:flex;flex-direction:column;">
+		<DataGridHeaderRow T=T />
+		<DataGridFilterRowMain T=T />
+	</div>
+	<div id="@ConstantService.InnerGridId" class="s-grid-content" @ref="@LayoutService.GridInnerRef" >
+		@if (InsertingForm != null){ @InsertingForm }@*ist hier inline inserting form gemeint?*@
+		@*@if (DataPanel != null){ @DataPanel }*@
+		<DataGridPagingTablePanel T=T />
+		@*@if (NoDataPanel != null){ @NoDataPanel }*@
+		@*@if (NoDataFoundPanel != null){ @NoDataFoundPanel }*@
+		@*@if (DataProcessingPanel != null){ @DataProcessingPanel }*@
+	</div>
+	@if (NavigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+	{
+		<DataGridPagingFooter TItem=T />
+	}
+</div>
+
+@if (EditingPopup != null){	@EditingPopup }
+@if (InsertingPopup != null){ @InsertingPopup }

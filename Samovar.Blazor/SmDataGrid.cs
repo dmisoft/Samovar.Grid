@@ -292,23 +292,39 @@ namespace Samovar.Blazor
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-
-            RenderFragment del = delegate (RenderTreeBuilder builder2)
+            RenderFragment del = null;
+			switch (DataNavigationMode)
             {
-                Columns?.Invoke(builder2);
+				case DataGridNavigationMode.Paging:
+					del = delegate (RenderTreeBuilder builder2)
+					{
+						Columns?.Invoke(builder2);
 
-                builder2.OpenComponent<SmDataGridInner<T>>(5);
-                builder2.CloseComponent();
-            };
+						builder2.OpenComponent<SmDataGridPagingTableInner<T>>(5);
+						builder2.CloseComponent();
+					};
+					break;
+				case DataGridNavigationMode.VirtualScrolling:
+					del = delegate (RenderTreeBuilder builder2)
+					{
+						Columns?.Invoke(builder2);
 
-            builder.OpenComponent<CascadingValue<IComponentServiceProvider>>(1);
-            builder.AddAttribute(2, "Value", this);
-            builder.AddAttribute(3, "Name", "ServiceProvider");
-            builder.AddAttribute(4, "ChildContent", del);
-            builder.CloseComponent();
+						builder2.OpenComponent<SmDataGridVirtualTableInner<T>>(5);
+						builder2.CloseComponent();
+					};
+					break;
+				default:
+                    throw new NotImplementedException();
+			}
 
-        }
-        protected override Task OnInitializedAsync()
+			builder.OpenComponent<CascadingValue<IComponentServiceProvider>>(1);
+			builder.AddAttribute(2, "Value", this);
+			builder.AddAttribute(3, "Name", "ServiceProvider");
+			builder.AddAttribute(4, "ChildContent", del);
+			builder.CloseComponent();
+		}
+
+		protected override Task OnInitializedAsync()
         {
 
             GridSelectionService.SingleSelectedRowCallback = async () => { await SingleSelectedDataRowChanged.InvokeAsync(GridSelectionService.SingleSelectedDataRow.Value); };

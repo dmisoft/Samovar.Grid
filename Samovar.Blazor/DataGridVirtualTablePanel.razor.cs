@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
-    public partial class DataGridBodyPanel<T>
+    public partial class DataGridVirtualTablePanel<T>
         : SmDesignComponentBase, IAsyncDisposable
     {
 		protected DataSourceStateEnum _dataSourceState = DataSourceStateEnum.NoData;
@@ -33,55 +34,49 @@ namespace Samovar.Blazor
 		[SmInject]
 		public IGridStateService GridStateService { get; set; }
 
-        //[Parameter]
         public EventCallback<DataSourceStateEnum> DataSourceStateEv { get; set; }
 
         public DataGridStyleInfo Style { get; set; } //Default style
         
-        //public string ScrollStyle { get; set; }
-        //public double OffsetY { get; set; }
+        public ElementReference GridBodyRef;
 
-        protected Task _dataSourceStateEv(DataSourceStateEnum dataSourceState) { 
+        protected IEnumerable<SmDataGridRowModel<T>> View { get; set; }
 
-            _dataSourceState = dataSourceState;
-            //StateHasChanged();
+        private Task _collectionViewChangedEv(IEnumerable<SmDataGridRowModel<T>> collectionView)
+        {
+            View = collectionView;
             return Task.CompletedTask;
         }
 
+
+        protected Task _dataSourceStateEv(DataSourceStateEnum dataSourceState) { 
+            _dataSourceState = dataSourceState;
+            return Task.CompletedTask;
+        }
+        public EventCallback<IEnumerable<SmDataGridRowModel<T>>> CollectionViewChangedEv { get; set; }
+
         protected override Task OnInitializedAsync()
         {
-            //VirtualScrollingService.VirtualScrollingInfo.Subscribe(myfunc1);
-
             Style = new DataGridStyleInfo
             {
                 CssStyle = LayoutService.OuterStyle.Value,
                 ActualScrollbarWidth = LayoutService.ActualScrollbarWidth
             };
             
-            //LayoutService.DataGridInnerCssStyleChanged += LayoutService_DataGridInnerCssStyleChanged;
             DataSourceStateEv = new EventCallbackFactory().Create<DataSourceStateEnum>(this, async (data) => await _dataSourceStateEv(data));
             GridStateService.DataSourceStateEvList.Add(DataSourceStateEv);
 
+            CollectionViewChangedEv = new EventCallbackFactory().Create<IEnumerable<SmDataGridRowModel<T>>>(this, async (data) => await _collectionViewChangedEv(data));
+            RepositoryService.CollectionViewChangedEvList.Add(CollectionViewChangedEv);
+
             return base.OnInitializedAsync();   
         }
-
-		private void myfunc1(DataGridVirtualScrollingInfo arg)
-        {
-            //ScrollStyle = $"height:{arg.TranslatableDivHeight};overflow:hidden;position:absolute;";
-            //OffsetY = arg.OffsetY;
-            //StateHasChanged();
-        }
-
-        //private async Task LayoutService_DataGridInnerCssStyleChanged(DataGridStyleInfo arg)
-        //{
-        //    Style = arg;
-        //    await InvokeAsync(StateHasChanged);
-        //}
+        
 
         public ValueTask DisposeAsync()
         {
             GridStateService.DataSourceStateEvList.Remove(DataSourceStateEv);
-            //LayoutService.DataGridInnerCssStyleChanged -= LayoutService_DataGridInnerCssStyleChanged;
+            RepositoryService.CollectionViewChangedEvList.Remove(CollectionViewChangedEv);
             return ValueTask.CompletedTask;
         }
     }

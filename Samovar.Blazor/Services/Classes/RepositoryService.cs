@@ -23,10 +23,7 @@ namespace Samovar.Blazor
         private readonly IColumnService _columnService;
         private readonly IInitService _initService;
         private readonly IRowDetailService<T> _rowDetailService;
-
-        private bool repositoryForVirtualScrollingInitialized;
         private readonly IGridStateService _stateService;
-        private readonly ILayoutService _layoutService;
 
         public BehaviorSubject<HashSet<T>> Data { get; private set; } = new BehaviorSubject<HashSet<T>>(new HashSet<T>());
 
@@ -42,8 +39,7 @@ namespace Samovar.Blazor
             , IColumnService columnService
             , IInitService initService
             , IRowDetailService<T> rowDetailService
-            , IGridStateService stateService
-            , ILayoutService layoutService)
+            , IGridStateService stateService)
         {
             _dataSourceService = dataSourceService;
             _navigationService = navigationService;
@@ -51,7 +47,6 @@ namespace Samovar.Blazor
             _initService = initService;
             _rowDetailService = rowDetailService;
             _stateService = stateService;
-            _layoutService = layoutService;
 
             Type t = typeof(T);
 

@@ -8,9 +8,6 @@ namespace Samovar.Blazor
         ServiceCollection _services;
         ServiceProvider _serviceProvider;
         IServiceScope _scope;
-        public SmComponentServiceProvider()
-        {
-        }
 
         public void InitServices<T>()
         {

@@ -7,22 +7,14 @@
 		<DataGridHeaderRow T=T />
 		<DataGridFilterRowMain T=T />
 	</div>
-
 	<div id="@ConstantService.InnerGridId" class="s-grid-content" @ref="@LayoutService.GridInnerRef" >
 		@if (InsertingForm != null){ @InsertingForm }@*ist hier inline inserting form gemeint?*@
 		@*@if (DataPanel != null){ @DataPanel }*@
-		<DataGridBodyPanel T=T />
+		<DataGridVirtualTablePanel T=T />
 		@*@if (NoDataPanel != null){ @NoDataPanel }*@
 		@*@if (NoDataFoundPanel != null){ @NoDataFoundPanel }*@
 		@*@if (DataProcessingPanel != null){ @DataProcessingPanel }*@
 	</div>
-	@if (NavigationService.NavigationMode.Value == DataGridNavigationMode.Paging 
-	)
-	{
-		<DataGridPagingFooter TItem=T />
-	}
-
-@*		@if (PagingPanel != null){ @PagingPanel }*@
 </div>
 
 @if (EditingPopup != null){	@EditingPopup }

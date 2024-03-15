@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
-    public partial class SmDataGridInner<T>
+    public partial class SmDataGridVirtualTableInner<T>
         : SmDesignComponentBase, IAsyncDisposable
     {
         [SmInject]

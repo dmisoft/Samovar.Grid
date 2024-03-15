@@ -52,19 +52,19 @@
               "schema": {
                 "$ref": "#/components/schemas/WeatherForecast"
               },
-              "example": {"date":"2023-11-05T18:03:02.0786502+01:00","temperatureC":100,"temperatureF":211,"summary":"Example text 3ffc63b4-e413-490e-9599-da304fe4e293"}
+              "example": {"date":"2023-11-22T23:05:23.9466535+01:00","temperatureC":100,"temperatureF":211,"summary":"Example text 6f768c64-d394-4497-9240-c3be66feb950"}
             },
             "text/json": {
               "schema": {
                 "$ref": "#/components/schemas/WeatherForecast"
               },
-              "example": {"date":"2023-11-05T18:03:02.0786502+01:00","temperatureC":100,"temperatureF":211,"summary":"Example text 3ffc63b4-e413-490e-9599-da304fe4e293"}
+              "example": {"date":"2023-11-22T23:05:23.9466535+01:00","temperatureC":100,"temperatureF":211,"summary":"Example text 6f768c64-d394-4497-9240-c3be66feb950"}
             },
             "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/WeatherForecast"
               },
-              "example": {"date":"2023-11-05T18:03:02.0786502+01:00","temperatureC":100,"temperatureF":211,"summary":"Example text 3ffc63b4-e413-490e-9599-da304fe4e293"}
+              "example": {"date":"2023-11-22T23:05:23.9466535+01:00","temperatureC":100,"temperatureF":211,"summary":"Example text 6f768c64-d394-4497-9240-c3be66feb950"}
             }
           }
         },
