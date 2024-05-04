@@ -11,10 +11,10 @@ namespace Samovar.Blazor
 
         private bool _dependenciesInitialized;
 
-        public override Task SetParametersAsync(ParameterView parameters)
+        public override async Task SetParametersAsync(ParameterView parameters)
         {
-            InitializeDependencies(in parameters);
-            return base.SetParametersAsync(parameters);
+            await InitializeDependencies(in parameters);
+            await base.SetParametersAsync(parameters);
         }
 
         public virtual void InitializeModel(in ParameterView parameters) { }

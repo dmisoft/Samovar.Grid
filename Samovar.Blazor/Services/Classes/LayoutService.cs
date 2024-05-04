@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Reactive.Subjects;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
@@ -57,7 +53,6 @@ namespace Samovar.Blazor
             _initService = initService;
             _columnService = columnService;
 
-            //_initService.IsInitialized.Subscribe(new SmObserver<bool>(new SmObserverDispatcher<bool>(DataGridInitializerCallback)));
             _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
 
             DataGridDotNetRef = DotNetObjectReference.Create(this as ILayoutService);
@@ -69,11 +64,6 @@ namespace Samovar.Blazor
 
         private void DataGridInitializerCallback(bool obj)
         {
-            //TODO refactoring 10/2023
-            //var sub1 = new Subscription2TaskVoid<string, string>(Height, Width, HeightWidthChanged);
-            //sub1.CreateMap();
-
-            //Standard values
             Task.Run(async () => await HeightWidthChanged(height: Height.Value, width: Width.Value));
         }
 
@@ -81,9 +71,6 @@ namespace Samovar.Blazor
 
 
         public event Func<DataGridStyleInfo, Task> DataGridInnerCssStyleChanged;
-
-        //internal double MinGridWidth { get; set; }
-
 
         public double FilterRowHeight { get; private set; }
 

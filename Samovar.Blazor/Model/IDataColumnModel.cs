@@ -10,7 +10,7 @@ namespace Samovar.Blazor
     {
         Type ColumnDataItemType { get; }
 
-        PropertyInfo ColumnDataItemPropertyInfo { get; }//TODO?
+        PropertyInfo ColumnDataItemPropertyInfo { get; }
 
         public BehaviorSubject<RenderFragment<object>> CellShowTemplate { get; }
 

@@ -16,9 +16,6 @@ namespace Samovar.Blazor
         private readonly IInitService _initService;
         private readonly IFilterService _filterService;
         private readonly ISortingService _orderService;
-        private readonly INavigationService _navigationService;
-
-        //public BehaviorSubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; set; } = new BehaviorSubject<NavigationStrategyDataLoadingSettings>(new NavigationStrategyDataLoadingSettings());
 
         public BehaviorSubject<IEnumerable<T>> Data { get; private set; } = new BehaviorSubject<IEnumerable<T>>(new List<T>());
 
@@ -56,14 +53,11 @@ namespace Samovar.Blazor
               IFilterService filterService
             , ISortingService orderService
             , IInitService initService
-            //, INavigationService navigationService
-
             )
         {
             _filterService = filterService;
             _orderService = orderService;
             _initService = initService;
-            //_navigationService = navigationService;
             _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
         }
 
@@ -74,58 +68,32 @@ namespace Samovar.Blazor
                 _filterService.FilterInfo,
                 _orderService.ColumnOrderInfo,
                 Data,
-				(filterInfo, columnOrderInfo, data) => Tuple.Create(filterInfo, columnOrderInfo, data )
-			 ).DistinctUntilChanged();
+                (filterInfo, columnOrderInfo, data) => Tuple.Create(filterInfo, columnOrderInfo, data)
+             ).DistinctUntilChanged();
             rr.Subscribe(myfunc33);
         }
 
-		private void myfunc33(Tuple<IEnumerable<DataGridFilterCellInfo>, DataGridColumnOrderInfo, IEnumerable<T>> tuple)
-		{
-			if (tuple.Item3 == null)
-			{
-                return;
-			//	tuple.Item3 = new List<T>();
-			//	//Data = new ParameterSubject<IEnumerable<T>>(new List<T>());
-			}
-
-			IQueryable<T> query = tuple.Item3.AsQueryable();
-
-			//apply filter
-			if (tuple.Item1.Count() > 0)
-				query = AttachFilter(query, tuple.Item1);
-
-			if (tuple.Item2 != null && !tuple.Item2.Equals(DataGridColumnOrderInfo.Empty))
-			{
-				var pr = typeof(T).GetProperty(tuple.Item2.Field);
-
-				query = tuple.Item2.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
-			}
-			DataQuery.OnNext(query);
-		}
-
-		private IQueryable<T> myfunc3(IEnumerable<DataGridFilterCellInfo> filterInfo, DataGridColumnOrderInfo orderInfo, IEnumerable<T> data)
+        private void myfunc33(Tuple<IEnumerable<DataGridFilterCellInfo>, DataGridColumnOrderInfo, IEnumerable<T>> tuple)
         {
-            if (data == null)
+            if (tuple.Item3 == null)
             {
-                data = new List<T>();
-                //Data = new ParameterSubject<IEnumerable<T>>(new List<T>());
+                return;
             }
 
-            IQueryable<T> query = data.AsQueryable();
-            
-            //apply filter
-            if (filterInfo.Count() > 0)
-                query = AttachFilter(query, filterInfo);
+            IQueryable<T> query = tuple.Item3.AsQueryable();
 
-            if (orderInfo != null && !orderInfo.Equals(DataGridColumnOrderInfo.Empty))
+            if (tuple.Item1.Any())
+                query = AttachFilter(query, tuple.Item1);
+
+            if (tuple.Item2 != null && !tuple.Item2.Equals(DataGridColumnOrderInfo.Empty))
             {
-                var pr = typeof(T).GetProperty(orderInfo.Field);
+                var pr = typeof(T).GetProperty(tuple.Item2.Field);
 
-                query = orderInfo.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
+                query = tuple.Item2.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
             }
-            return query;
+            DataQuery.OnNext(query);
         }
-        
+
         private IQueryable<T> AttachFilter(IQueryable<T> data, IEnumerable<DataGridFilterCellInfo> filterInfo)
         {
             Type t = typeof(T);
@@ -142,22 +110,34 @@ namespace Samovar.Blazor
 
                 MemberExpression memberExp = Expression.Property(obj, field);
 
-                switch (t.GetProperty(field).PropertyType)
+                PropertyInfo? prop = t.GetProperty(field);
+                if (prop is null)
+                    continue;
+
+                switch (prop.PropertyType)
                 {
                     case var tt when tt == typeof(string):
-                        ConstantExpression valueExp = Expression.Constant(filterCellInfo.FilterCellValue.ToString().ToLower());
+                        var filterCellValue = filterCellInfo.FilterCellValue.ToString().ToLower();
+                        ConstantExpression valueExp = Expression.Constant(filterCellValue);
 
-                        MethodInfo IsNullOrEmptyMethod = typeof(string).GetMethod("IsNullOrEmpty", new[] { typeof(string) });
+                        MethodInfo? IsNullOrEmptyMethod = typeof(string).GetMethod("IsNullOrEmpty", new[] { typeof(string) });
+                        if (IsNullOrEmptyMethod is null)
+                            break;
+
                         var nullValueSubstExpression = Expression.Assign(memberExp, Expression.Constant(""));
                         isNullExpression = Expression.IfThen(Expression.Call(IsNullOrEmptyMethod, memberExp), nullValueSubstExpression);
 
-                        MethodInfo propertyToLowerMethod = typeof(string).GetMethod("ToLower", Type.EmptyTypes);
+                        MethodInfo? propertyToLowerMethod = typeof(string).GetMethod("ToLower", Type.EmptyTypes);
+                        if (propertyToLowerMethod is null)
+                            break;
                         var callExp = Expression.Call(memberExp, propertyToLowerMethod);
 
                         switch (pair.FilterCellMode)
                         {
                             case 0: //*A*
-                                MethodInfo containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
+                                MethodInfo? containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
+                                if (containsMethod is null)
+                                    break;
                                 var containsMethodExp = Expression.Call(callExp, containsMethod, valueExp);
                                 lambdaList.Add(containsMethodExp);
                                 break;
@@ -165,12 +145,16 @@ namespace Samovar.Blazor
                                 lambdaList.Add(Expression.Equal(callExp, valueExp));
                                 break;
                             case 2: //A*
-                                MethodInfo startsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) });
+                                MethodInfo? startsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) });
+                                if (startsWithMethod is null)
+                                    break;
                                 var startsWithMethodExp = Expression.Call(callExp, startsWithMethod, valueExp);
                                 lambdaList.Add(startsWithMethodExp);
                                 break;
                             case 3: //*A
-                                MethodInfo endsWithMethod = typeof(string).GetMethod("EndsWith", new[] { typeof(string) });
+                                MethodInfo? endsWithMethod = typeof(string).GetMethod("EndsWith", new[] { typeof(string) });
+                                if (endsWithMethod is null)
+                                    break;
                                 var endsWithMethodExp = Expression.Call(callExp, endsWithMethod, valueExp);
                                 lambdaList.Add(endsWithMethodExp);
                                 break;
@@ -206,32 +190,32 @@ namespace Samovar.Blazor
                         }
                         break;
                     default:
-                        //TODO
                         break;
                 }
             }
 
-            Expression retLambda = null;
+            Expression? retLambda = null;
 
-            if (lambdaList.Count() == 1)
+            if (lambdaList.Count == 1)
             {
                 retLambda = lambdaList[0];
             }
-            else if (lambdaList.Count() >= 2)
+            else if (lambdaList.Count >= 2)
             {
                 retLambda = Expression.AndAlso(lambdaList[0], lambdaList[1]);
-                for (int i = 2; i < lambdaList.Count(); i++)
+                for (int i = 2; i < lambdaList.Count; i++)
                 {
                     retLambda = Expression.AndAlso(retLambda, lambdaList[i]);
                 }
             }
 
-            if (isNullExpression != null)
-                retLambda = Expression.Block(new[] { isNullExpression, retLambda });
+            if (isNullExpression is not null && retLambda is not null) {
+                retLambda = Expression.Block(isNullExpression, retLambda);
+                var lambda = Expression.Lambda<Func<T, bool>>(retLambda, obj );
+                return data.Where(lambda);
+            }
 
-            var lambda = Expression.Lambda<Func<T, bool>>(retLambda, new ParameterExpression[] { obj });
-
-            return data.Where(lambda);
+            return data;
         }
     }
 }

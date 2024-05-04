@@ -63,7 +63,7 @@ namespace Samovar.Blazor
         {
             get
             {
-                return null;
+                return DataSourceService.Data.Value;
             }
             set
             {
@@ -111,7 +111,7 @@ namespace Samovar.Blazor
         }
 
         [Parameter]
-        public string Height
+        public string? Height
         {
             get
             {
@@ -202,13 +202,13 @@ namespace Samovar.Blazor
         }
 
         [Parameter]
-        public RenderFragment<T> DetailRowTemplate { get { return null; } set { TemplateService.DetailRowTemplate.OnNext(value); } }
+        public RenderFragment<T>? DetailRowTemplate { get { return null; } set { TemplateService.DetailRowTemplate.OnNext(value); } }
 
         [Parameter]
-        public RenderFragment<T> EditFormTemplate { get { return null; } set { TemplateService.EditFormTemplate.OnNext(value); } }
+        public RenderFragment<T>? EditFormTemplate { get { return null; } set { TemplateService.EditFormTemplate.OnNext(value); } }
 
         [Parameter]
-        public RenderFragment<T> InsertFormTemplate { get { return null; } set { TemplateService.InsertFormTemplate.OnNext(value); } }
+        public RenderFragment<T>? InsertFormTemplate { get { return null; } set { TemplateService.InsertFormTemplate.OnNext(value); } }
 
         [Parameter]
         public GridEditMode EditMode { get { return GridEditMode.None; } set { EditingService.EditMode.OnNext(value); } }
@@ -251,7 +251,7 @@ namespace Samovar.Blazor
         [Parameter]
         public T SingleSelectedDataRow
         {
-            get { return default(T); }
+            get { return default; }
             set
             {
                 GridSelectionService.SingleSelectedDataRow.OnNext(value);
@@ -264,7 +264,7 @@ namespace Samovar.Blazor
         [Parameter]
         public IEnumerable<T> MultipleSelectedDataRows
         {
-            get { return default(IEnumerable<T>); }
+            get { return default; }
             set
             {
                 GridSelectionService.MultipleSelectedDataRows.OnNext(value);
@@ -331,14 +331,7 @@ namespace Samovar.Blazor
 
             if (firstRender)
             {
-                //Lazy<Task<IJSObjectReference>> moduleTask = new(() => JsRuntime.InvokeAsync<IJSObjectReference>(
-                //    "import", "./_content/Samovar.Blazor/samovar.blazor.js").AsTask());
-
-                //await JsService.InitJsModule2(moduleTask);
-
                 await JsService.AttachWindowResizeEvent(ConstantService.DataGridId, LayoutService.DataGridDotNetRef);
-
-                //JsService.AttachOnScrollollingEvent(ConstantService.InnerGridId, VirtualScrollingService.DotNetRef);
 
                 await LayoutService.InitHeader();
 

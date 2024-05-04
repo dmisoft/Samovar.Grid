@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace Samovar.Blazor.Header
 {
     public partial class SmDataGridHeader<TItem>
-        : SmDesignComponentBase, IDisposable
+        : SmDesignComponentBase, IAsyncDisposable
     {
         [Inject]
         protected IJSRuntime JsRuntime { get; set; }
 
         [SmInject]
-        protected IColumnService GridColumnService { get; set; }
+        protected IColumnService GridColumnService { get; init; }
 
         [SmInject]
         protected ILayoutService GridLayoutService { get; set; }
@@ -94,20 +94,17 @@ namespace Samovar.Blazor.Header
         protected Task RowInsering()
         {
             return GridEditingService.RowInsertBegin();
-            //GridStateService.State.OnNextParameterValue(Common.GridState.Inserting); 
-            //await DataGrid.Repaint();
-            //return Task.CompletedTask;
-        }
-
-        public void Dispose()
-        {
-            //this.DataGrid.NotifierService.NotifyAfterScroll -= NotifierService_NotifyAfterScroll;
         }
 
         //Ordering handler
         internal Task ColumnCellClick(IDataColumnModel columnModel)
         {
             return GridOrderService.OnColumnClick(columnModel);
+        }
+
+        public ValueTask DisposeAsync()
+        {
+            return ValueTask.CompletedTask;
         }
     }
 }

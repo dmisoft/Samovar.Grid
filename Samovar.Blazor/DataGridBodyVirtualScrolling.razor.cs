@@ -25,8 +25,6 @@ namespace Samovar.Blazor
 
         protected ElementReference GridBodyRef;
 
-        private IDisposable viewCollectionObserverHandler;
-
         public EventCallback<DataSourceStateEnum> DataSourceStateEv { get; set; }
 
         public EventCallback<IEnumerable<SmDataGridRowModel<TItem>>> CollectionViewChangedEv { get; set; }
@@ -40,6 +38,12 @@ namespace Samovar.Blazor
 
         protected override Task OnInitializedAsync()
         {
+            if(VirtualScrollingService is null)
+                throw new ArgumentNullException(nameof(IVirtualScrollingNavigationStrategy));
+
+            if(RepositoryService is null)
+                throw new ArgumentNullException(nameof(IRepositoryService<TItem>));
+
             VirtualScrollingService.VirtualScrollingInfo.Subscribe(VirtualScrollingInfoSubscriber);
 
             DataSourceStateEv = new EventCallbackFactory().Create<DataSourceStateEnum>(this, async (data) => await _dataSourceStateEv(data));
@@ -71,7 +75,6 @@ namespace Samovar.Blazor
 
         public ValueTask DisposeAsync()
         {
-            viewCollectionObserverHandler?.Dispose();
             return ValueTask.CompletedTask;
         }
     }
