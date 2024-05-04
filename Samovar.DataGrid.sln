@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31423.177
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samovar.Grid.Test.WebApi", "Samovar.Grid.Test.WebApi\Samovar.Grid.Test.WebApi.csproj", "{2CECA4C9-F03D-4354-8B8D-7CF5ED052D6D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samovar.Blazor", "Samovar.Blazor\Samovar.Blazor.csproj", "{A535D91E-85DF-4064-8D95-01EECDCF473C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samovar.Blazor.Server.Test", "Samovar.Blazor.Server.Test\Samovar.Blazor.Server.Test.csproj", "{90BBC2C3-3D5D-4077-954A-9BECF89BC2AB}"
@@ -17,6 +15,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorApp1.Client", "Blazor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorApp1.Shared", "BlazorApp1\Shared\BlazorApp1.Shared.csproj", "{987CEBF0-F653-48BE-AB6A-17EC06BDC8C9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{559904F0-AC65-4E66-B297-4DC1E5B2DE64}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,18 +31,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2CECA4C9-F03D-4354-8B8D-7CF5ED052D6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2CECA4C9-F03D-4354-8B8D-7CF5ED052D6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2CECA4C9-F03D-4354-8B8D-7CF5ED052D6D}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{2CECA4C9-F03D-4354-8B8D-7CF5ED052D6D}.Debug|x64.Build.0 = Debug|Any CPU
-		{2CECA4C9-F03D-4354-8B8D-7CF5ED052D6D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{2CECA4C9-F03D-4354-8B8D-7CF5ED052D6D}.Debug|x86.Build.0 = Debug|Any CPU
-		{2CECA4C9-F03D-4354-8B8D-7CF5ED052D6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2CECA4C9-F03D-4354-8B8D-7CF5ED052D6D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2CECA4C9-F03D-4354-8B8D-7CF5ED052D6D}.Release|x64.ActiveCfg = Release|Any CPU
-		{2CECA4C9-F03D-4354-8B8D-7CF5ED052D6D}.Release|x64.Build.0 = Release|Any CPU
-		{2CECA4C9-F03D-4354-8B8D-7CF5ED052D6D}.Release|x86.ActiveCfg = Release|Any CPU
-		{2CECA4C9-F03D-4354-8B8D-7CF5ED052D6D}.Release|x86.Build.0 = Release|Any CPU
 		{A535D91E-85DF-4064-8D95-01EECDCF473C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A535D91E-85DF-4064-8D95-01EECDCF473C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A535D91E-85DF-4064-8D95-01EECDCF473C}.Debug|x64.ActiveCfg = Debug|Any CPU

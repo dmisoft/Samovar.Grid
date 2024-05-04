@@ -1,24 +1,25 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace Samovar.Blazor
+﻿namespace Samovar.Blazor
 {
     public partial class DataGridFilterRowMain<T>
-        : SmDesignComponentBase , IDisposable //TODO kein DesignComponent
+        : SmDesignComponentBase , IAsyncDisposable
     {
         [SmInject]
-        public ILayoutService GridLayoutService { get; set; }
+        public ILayoutService? GridLayoutService { get; set; }
 
         [SmInject]
-        public IConstantService ConstantService { get; set; }
+        public IConstantService? ConstantService { get; set; }
 
-        public DataGridStyleInfo Style { get; set; } //Default style
+        public DataGridStyleInfo? Style { get; set; } //Default style
+
 
         protected override void OnInitialized()
         {
+            if(GridLayoutService is null)
+                throw new ArgumentNullException();
+
             Style = new DataGridStyleInfo { 
                 CssStyle = GridLayoutService.OuterStyle.Value,
-                ActualScrollbarWidth = GridLayoutService.ActualScrollbarWidth
+                ActualScrollbarWidth = GridLayoutService.ActualScrollbarWidth!
             };
             GridLayoutService.DataGridInnerCssStyleChanged += GridLayoutService_DataGridInnerCssStyleChanged;
             base.OnInitialized();
@@ -31,9 +32,11 @@ namespace Samovar.Blazor
             return Task.CompletedTask;
         }
 
-        public void Dispose()
+        public ValueTask DisposeAsync()
         {
             GridLayoutService.DataGridInnerCssStyleChanged -= GridLayoutService_DataGridInnerCssStyleChanged;
+            return ValueTask.CompletedTask;
         }
     }
 }
+

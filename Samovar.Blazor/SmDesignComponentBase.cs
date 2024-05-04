@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
@@ -10,14 +7,9 @@ namespace Samovar.Blazor
         : ComponentBase 
     {
         [CascadingParameter(Name = "ServiceProvider")]
-        IComponentServiceProvider ServiceProvider { get; set; }
+        IComponentServiceProvider? ServiceProvider { get; set; }
 
         private bool _dependenciesInitialized;
-
-        protected override void OnParametersSet()
-        {
-            base.OnParametersSet();
-        }
 
         public override Task SetParametersAsync(ParameterView parameters)
         {
@@ -39,25 +31,17 @@ namespace Samovar.Blazor
 
                 PropertyInfo[] props = this.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
-                try
+                foreach (PropertyInfo prop in props)
                 {
-                    foreach (PropertyInfo prop in props)
+                    IEnumerable<SmInjectAttribute> attrs = prop.GetCustomAttributes<SmInjectAttribute>(true);
+                    foreach (SmInjectAttribute attr in attrs)
                     {
-                        object[] attrs = prop.GetCustomAttributes(true);
-                        foreach (object attr in attrs)
+                        if (attr != null)
                         {
-                            SmInjectAttribute injectAttr = attr as SmInjectAttribute;
-                            if (injectAttr != null)
-                            {
-                                string propName = prop.Name;
-                                _dict.Add(propName, prop.PropertyType);
-                            }
+                            string propName = prop.Name;
+                            _dict.Add(propName, prop.PropertyType);
                         }
                     }
-                }
-                catch
-                {
-                    throw;
                 }
 
                 IComponentServiceProvider componentServiceProvider;
@@ -72,8 +56,8 @@ namespace Samovar.Blazor
                     foreach (var pair in _dict)
                     {
                         object service = componentServiceProvider.ServiceProvider.GetService(pair.Value);
-                        PropertyInfo piShared = this.GetType().GetProperty(pair.Key, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                        piShared.SetValue(this, service);
+                        PropertyInfo? piShared = this.GetType().GetProperty(pair.Key, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                        piShared?.SetValue(this, service);
                     }
                 }
                 DependenciesInitialized();

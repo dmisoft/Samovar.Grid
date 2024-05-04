@@ -14,7 +14,6 @@ namespace Samovar.Blazor
         [SmInject]
         public IJsService JsService { get; set; }
 
-        //private readonly Lazy<IServiceProvider> _serviceProviderLazy;
         public SmComponentServiceProvider ServiceProvider { get; set; }
         
         [Parameter]
@@ -24,11 +23,6 @@ namespace Samovar.Blazor
         {
             ServiceProvider = new SmComponentServiceProvider();
             ServiceProvider.InitServices<T>();
-            //_serviceProviderLazy = new Lazy<IServiceProvider>(new Func<IServiceProvider>(ServiceProviderInitializer), LazyThreadSafetyMode.ExecutionAndPublication);
-        }
-        protected override Task OnInitializedAsync()
-        {
-            return base.OnInitializedAsync();
         }
 
         protected override Task OnAfterRenderAsync(bool firstRender)
@@ -37,7 +31,7 @@ namespace Samovar.Blazor
                 Lazy<Task<IJSObjectReference>> moduleTask = new(() => JsRuntime.InvokeAsync<IJSObjectReference>(
                    "import", "./_content/Samovar.Blazor/samovar.blazor.js").AsTask());
 
-                JsService.InitJsModule2(moduleTask);
+                JsService.InitJsModule(moduleTask);
             }
             return base.OnAfterRenderAsync(firstRender);
         }

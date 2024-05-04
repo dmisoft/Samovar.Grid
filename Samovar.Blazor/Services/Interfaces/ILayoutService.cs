@@ -40,7 +40,6 @@ namespace Samovar.Blazor
         ElementReference TableBodyInnerRef { get; set; }
         
         double ActualScrollbarWidth { get; set; }
-        //string innerGridBodyId { get; }
 
         BehaviorSubject<bool> ShowColumnHeader { get; }
         BehaviorSubject<bool> ShowDetailHeader { get; }

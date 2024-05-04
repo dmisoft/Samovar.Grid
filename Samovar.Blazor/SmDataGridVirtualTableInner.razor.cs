@@ -32,19 +32,19 @@ namespace Samovar.Blazor
         [SmInject]
         public IEditingService<T> EditingService { get; set; }
 
-        public RenderFragment EditingPopup { get; set; }
+        public RenderFragment? EditingPopup { get; set; }
 
-        public RenderFragment InsertingPopup { get; set; }
+        public RenderFragment? InsertingPopup { get; set; }
 
-        public RenderFragment InsertingForm { get; set; }
+        public RenderFragment? InsertingForm { get; set; }
 
-        public RenderFragment NoDataPanel { get; set; }
-        public RenderFragment DataPanel { get; set; }
+        public RenderFragment? NoDataPanel { get; set; }
+        public RenderFragment? DataPanel { get; set; }
 
-        public RenderFragment NoDataFoundPanel { get; set; }
-        public RenderFragment PagingPanel { get; set; }
+        public RenderFragment? NoDataFoundPanel { get; set; }
+        public RenderFragment? PagingPanel { get; set; }
 
-        public RenderFragment DataProcessingPanel { get; set; }
+        public RenderFragment? DataProcessingPanel { get; set; }
 
         public DataGridStyleInfo Style { get; set; } //Default style
 

@@ -35,8 +35,6 @@ namespace Samovar.Blazor
             _services.AddScoped<IRowDetailService<T>, RowDetailService<T>>();
             _services.AddScoped<IDataSourceService<T>, DataSourceService<T>>();
 
-            //_services.AddScoped<INavigationStrategy, VirtualNavigationStrategy>();
-
             _services.AddTransient<IDataColumnModel, DataColumnModel>();
             _services.AddTransient<ICommandColumnModel, CommandColumnModel>();
 

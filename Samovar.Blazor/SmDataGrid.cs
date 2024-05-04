@@ -227,14 +227,6 @@ namespace Samovar.Blazor
             set { EditingService.OnRowInsertBegin.OnNext(value); }
         }
 
-        //[Parameter]
-        //public EventCallback<Dictionary<string, object>> InitializeNewRow
-        //{
-        //    get { return EditingService.OnInitializeNewRow.Value; }
-        //    set { EditingService.OnInitializeNewRow.OnNext(value); }
-        //}
-
-        
         [Parameter]
         public EventCallback<T> RowInserting
         {
@@ -262,8 +254,7 @@ namespace Samovar.Blazor
             get { return default(T); }
             set
             {
-                //GridSelectionService.SingleSelectedDataRow.OnNext(value, SingleSelectedDataRowChanged);
-                GridSelectionService.SingleSelectedDataRow.OnNext(value);//, SingleSelectedDataRowChanged);
+                GridSelectionService.SingleSelectedDataRow.OnNext(value);
             }
         }
 

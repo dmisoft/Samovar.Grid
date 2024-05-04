@@ -6,10 +6,9 @@ namespace Samovar.Blazor
 {
     public interface IJsService
     {
-        //IJSRuntime JsRuntime { get; set; }
         Task<IJSObjectReference> JsModule();
-        //Task InitJsModule(IJSObjectReference jsModule);
-        Task InitJsModule2(Lazy<Task<IJSObjectReference>> module);
+
+        Task InitJsModule(Lazy<Task<IJSObjectReference>> module);
 
         Task AttachWindowResizeEvent(string DataGridId, DotNetObjectReference<ILayoutService> DataGridDotNetRef);
 

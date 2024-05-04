@@ -26,7 +26,7 @@ namespace Samovar.Blazor
         
         private Lazy<Task<IJSObjectReference>> _module;
 
-        public Task InitJsModule2(Lazy<Task<IJSObjectReference>> module)
+        public Task InitJsModule(Lazy<Task<IJSObjectReference>> module)
         {
             _module = module;
             return Task.CompletedTask;
@@ -82,14 +82,6 @@ namespace Samovar.Blazor
         {
             return await (await JsModule()).InvokeAsync<bool>("getWindowIsShiftKeyDown");
         }
-
-        //public Task InitJsModule(IJSObjectReference jsModule)
-        //{
-        //    //JsModule = jsModule;
-
-        //    return Task.CompletedTask;
-        //    //JsModule = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/Samovar.Blazor/samovar.blazor.js");
-        //}
 
         public async ValueTask<double> MeasureScrollbar()
         {
