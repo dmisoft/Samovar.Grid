@@ -38,11 +38,11 @@ namespace Samovar.Blazor
 
         public EventCallback<DataSourceState> DataSourceStateEv { get; set; }
 
-        public DataGridStyleInfo Style { get; set; } //Default style
+        public DataGridStyleInfo? Style { get; set; } //Default style
         
         public ElementReference GridBodyRef;
 
-        protected IEnumerable<SmDataGridRowModel<T>> View { get; set; }
+        protected IEnumerable<SmDataGridRowModel<T>> View { get; set; } = [];
 
         private Task _collectionViewChangedEv(IEnumerable<SmDataGridRowModel<T>> collectionView)
         {

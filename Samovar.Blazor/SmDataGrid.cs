@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
@@ -131,7 +128,7 @@ namespace Samovar.Blazor
         {
             get
             {
-                return null;
+                return "";
             }
             set
             {

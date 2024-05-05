@@ -3,8 +3,8 @@ using System;
 
 namespace Samovar.Blazor
 {
-	public partial class DataGridPagingFooter<TItem>
-        : SmDesignComponentBase, IDisposable, IObserver<DataGridPagerInfo>
+	public partial class DataGridPagingFooter
+        : SmDesignComponentBase, IAsyncDisposable, IObserver<DataGridPagerInfo>
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         [SmInject]
@@ -36,8 +36,9 @@ namespace Samovar.Blazor
             InvokeAsync(StateHasChanged);
         }
 
-        public void Dispose()
+        public ValueTask DisposeAsync()
         {
+            return new ValueTask();
         }
     }
 }

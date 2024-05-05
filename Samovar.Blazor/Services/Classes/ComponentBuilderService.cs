@@ -5,11 +5,11 @@ using System;
 namespace Samovar.Blazor
 {
     public class ComponentBuilderService<T1>
-        : IComponentBuilderService, IDisposable
+        : IComponentBuilderService, IAsyncDisposable
     {
-        private ITemplateService<T1> _templateService;
-        private IEditingService<T1> _editingService;
-        private INavigationService _navigationService;
+        private readonly ITemplateService<T1> _templateService;
+        private readonly IEditingService<T1> _editingService;
+        private readonly INavigationService _navigationService;
 
         public ComponentBuilderService(
             ITemplateService<T1> templateService
@@ -51,7 +51,7 @@ namespace Samovar.Blazor
 
         public RenderFragment GetEditingPopup<U>(SmDataGridRowModel<U> model)
         {
-            RenderFragment rf = null;
+            RenderFragment? rf;
 
             if (_templateService.EditFormTemplate.Value != null)
             {
@@ -149,11 +149,6 @@ namespace Samovar.Blazor
             return rf;
         }
 
-
-        public void Dispose()
-        {
-        }
-
         public RenderFragment GetNoDataPanel()
         {
             RenderFragment rf = (builder) =>
@@ -194,20 +189,15 @@ namespace Samovar.Blazor
         {
             RenderFragment rf = (builder) =>
             {
-                builder.OpenComponent(0, typeof(DataGridPagingFooter<T>));
+                builder.OpenComponent(0, typeof(DataGridPagingFooter));
                 builder.CloseComponent();
             };
             return rf;
         }
 
-        //public RenderFragment<T> GetPagingPanel()
-        //{
-        //    RenderFragment rf = (builder) =>
-        //    {
-        //        builder.OpenComponent(0, typeof(DataGridPagingFooter<T>));
-        //        builder.CloseComponent();
-        //    };
-        //    return rf;
-        //}
+        public ValueTask DisposeAsync()
+        {
+            return new ValueTask(Task.CompletedTask);
+        }
     }
 }
