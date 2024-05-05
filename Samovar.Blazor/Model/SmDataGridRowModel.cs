@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Samovar.Blazor {
+namespace Samovar.Blazor
+{
     public interface IComponentModel
     {
         public string HtmlElementId { get; }
@@ -19,7 +14,7 @@ namespace Samovar.Blazor {
     }
 
     public class SmDataGridRowModel<T>
-        : IDisposable, IRowModel<T>
+        : IRowModel<T>, IAsyncDisposable
     {
         public bool RowDetailExpanded { get; set; }
 
@@ -91,11 +86,10 @@ namespace Samovar.Blazor {
             return gridCellModelCollection;
         }
 
-        //TODO rename to StartEdit() or EditBegin()
         internal void CreateEditingModel()
         {
             EditingDataItem = CloneRowItem(DataItem);
-            EditingGridCellModels = CreateGridRowCellModelCollection(ColumnMetadata, EditingDataItem);// CreateRowModel(CloneRowItem(RowModel.Data), ColumnMetadata);
+            EditingGridCellModels = CreateGridRowCellModelCollection(ColumnMetadata, EditingDataItem);
         }
         internal void CommitEditingModel()
         {
@@ -132,11 +126,12 @@ namespace Samovar.Blazor {
                 GridCellModelCollection = CreateGridRowCellModelCollection(columnMetadata, dataItem)
             };
         }
-
-        public void Dispose()
+        
+        public ValueTask DisposeAsync()
         {
             GridCellModels?.Clear();
             EditingGridCellModels?.Clear();
+            return ValueTask.CompletedTask;
         }
     }
 }

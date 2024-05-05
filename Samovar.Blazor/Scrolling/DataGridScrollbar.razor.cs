@@ -78,7 +78,6 @@ namespace Samovar.Blazor.Scrolling
 
 				DeltaChangedCallback.InvokeAsync(actualTranslateY);
                 VirtualScrollingService.ScrollTop.OnNext(actualTranslateY * ((contentContainerHeight - scrollContainerHeight) / (scrollContainerHeight- scrollbarThumbHeight)));
-                //StateHasChanged();
             }
         }
 
@@ -97,7 +96,6 @@ namespace Samovar.Blazor.Scrolling
         public ValueTask DisposeAsync()
         {
             return ValueTask.CompletedTask;
-            //throw new NotImplementedException();
         }
     }
 }

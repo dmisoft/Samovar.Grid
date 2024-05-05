@@ -1,8 +1,4 @@
 ﻿using Samovar.Blazor.Filter;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -13,7 +9,6 @@ namespace Samovar.Blazor
     public class DataSourceService<T>
         : IDataSourceService<T>
     {
-        private readonly IInitService _initService;
         private readonly IFilterService _filterService;
         private readonly ISortingService _orderService;
 
@@ -57,8 +52,7 @@ namespace Samovar.Blazor
         {
             _filterService = filterService;
             _orderService = orderService;
-            _initService = initService;
-            _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
+            initService.IsInitialized.Subscribe(DataGridInitializerCallback);
         }
 
         private void DataGridInitializerCallback(bool obj)
