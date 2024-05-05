@@ -3,20 +3,20 @@
     public partial class DataGridFilterRowMain<T>
         : SmDesignComponentBase , IAsyncDisposable
     {
-        [SmInject]
-        public ILayoutService? GridLayoutService { get; set; }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         [SmInject]
-        public IConstantService? ConstantService { get; set; }
+        public ILayoutService GridLayoutService { get; set; }
+
+        [SmInject]
+        public IConstantService ConstantService { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         public DataGridStyleInfo? Style { get; set; } //Default style
 
 
         protected override void OnInitialized()
         {
-            if(GridLayoutService is null)
-                throw new ArgumentNullException();
-
             Style = new DataGridStyleInfo { 
                 CssStyle = GridLayoutService.OuterStyle.Value,
                 ActualScrollbarWidth = GridLayoutService.ActualScrollbarWidth!

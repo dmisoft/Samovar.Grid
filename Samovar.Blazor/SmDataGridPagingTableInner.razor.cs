@@ -7,9 +7,10 @@ namespace Samovar.Blazor
     public partial class SmDataGridPagingTableInner<T>
         : SmDesignComponentBase, IAsyncDisposable
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
         [SmInject]
         public IGridStateService StateService { get; set; }
-
 
         [SmInject]
         public ILayoutService LayoutService { get; set; }
@@ -31,6 +32,7 @@ namespace Samovar.Blazor
 
         [SmInject]
         public IEditingService<T> EditingService { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         public RenderFragment EditingPopup { get; set; }
 

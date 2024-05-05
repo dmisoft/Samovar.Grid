@@ -9,44 +9,41 @@ namespace Samovar.Blazor
     public partial class DataGridBodyVirtualScrolling<TItem>
         : SmDesignComponentBase, IAsyncDisposable
     {
-        [SmInject]
-        public IRepositoryService<TItem>? RepositoryService { get; set; }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         [SmInject]
-        public ILayoutService? LayoutService { get; set; }
+        public IRepositoryService<TItem> RepositoryService { get; set; }
 
         [SmInject]
-        public IVirtualScrollingNavigationStrategy? VirtualScrollingService { get; set; }
+        public ILayoutService LayoutService { get; set; }
 
         [SmInject]
-        public IConstantService? ConstantService { get; set; }
+        public IVirtualScrollingNavigationStrategy VirtualScrollingService { get; set; }
+
+        [SmInject]
+        public IConstantService ConstantService { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         protected IEnumerable<SmDataGridRowModel<TItem>>? View { get; set; }
 
         protected ElementReference GridBodyRef;
 
-        public EventCallback<DataSourceStateEnum> DataSourceStateEv { get; set; }
+        public EventCallback<DataSourceState> DataSourceStateEv { get; set; }
 
         public EventCallback<IEnumerable<SmDataGridRowModel<TItem>>> CollectionViewChangedEv { get; set; }
 
         public string ScrollStyle { get; set; } = "";
 
-        protected Task _dataSourceStateEv(DataSourceStateEnum dataSourceState)
+        protected Task _dataSourceStateEv(DataSourceState dataSourceState)
         {
             return Task.CompletedTask;
         }
 
         protected override Task OnInitializedAsync()
         {
-            if(VirtualScrollingService is null)
-                throw new ArgumentNullException(nameof(IVirtualScrollingNavigationStrategy));
-
-            if(RepositoryService is null)
-                throw new ArgumentNullException(nameof(IRepositoryService<TItem>));
-
             VirtualScrollingService.VirtualScrollingInfo.Subscribe(VirtualScrollingInfoSubscriber);
 
-            DataSourceStateEv = new EventCallbackFactory().Create<DataSourceStateEnum>(this, async (data) => await _dataSourceStateEv(data));
+            DataSourceStateEv = new EventCallbackFactory().Create<DataSourceState>(this, async (data) => await _dataSourceStateEv(data));
             CollectionViewChangedEv = new EventCallbackFactory().Create<IEnumerable<SmDataGridRowModel<TItem>>>(this, async (data) => await _collectionViewChangedEv(data));
 
             RepositoryService.CollectionViewChangedEvList.Add(CollectionViewChangedEv);
@@ -57,7 +54,7 @@ namespace Samovar.Blazor
         private void VirtualScrollingInfoSubscriber(DataGridVirtualScrollingInfo info)
         {
             ScrollStyle = $"height:{info.ContentContainerHeight.ToString(CultureInfo.InvariantCulture)}px;overflow:hidden;position:absolute;table-layout:fixed;";
-            ScrollStyle += LayoutService.MinGridWidth.Value > 0 ? "min-width:"+LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture)+"px;" : "";
+            ScrollStyle += LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "";
             ScrollStyle += $"transform:translateY({(-info.OffsetY).ToString(CultureInfo.InvariantCulture)}px);";
         }
 

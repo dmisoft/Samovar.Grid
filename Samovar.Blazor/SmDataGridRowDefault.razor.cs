@@ -12,6 +12,7 @@ namespace Samovar.Blazor
     {
         [CascadingParameter(Name = "datagrid-row")]
         protected SmDataGridRow<T> GridRow { get; set; }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         [SmInject]
         public IColumnService ColumnService { get; set; }
@@ -33,6 +34,7 @@ namespace Samovar.Blazor
 
         [SmInject]
         protected IRowDetailService<T> RowDetailService { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         [Parameter]
         public SmDataGridRowModel<T> RowModel
@@ -42,7 +44,7 @@ namespace Samovar.Blazor
             {
                 _rowModel = value;
 
-                _rowModel.RowSelected = false;//TODO die Konstruktion hier ist nicht elegant. Man braucht eine Model Factrory
+                _rowModel.RowSelected = false;
 
                 switch (GridSelectionService.SelectionMode.Value)
                 {
@@ -75,7 +77,7 @@ namespace Samovar.Blazor
         //Row editing
         protected async Task RowEditBegin(SmDataGridRowModel<T> rowMainModel)
         {
-            if (GridStateService.DataSourceState.Value != DataSourceStateEnum.Idle)
+            if (GridStateService.DataSourceState.Value != DataSourceState.Idle)
                 await EditingService.RowEditCancel();
 
             await EditingService.RowEditBegin(rowMainModel);

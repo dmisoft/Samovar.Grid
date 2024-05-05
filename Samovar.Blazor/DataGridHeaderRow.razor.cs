@@ -4,15 +4,18 @@ using System.Threading.Tasks;
 namespace Samovar.Blazor
 {
     public partial class DataGridHeaderRow<T>
-        : SmDesignComponentBase , IDisposable //TODO kein DesignComponent
+        : SmDesignComponentBase, IAsyncDisposable
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
         [SmInject]
         public ILayoutService GridLayoutService { get; set; }
 
         [SmInject]
         public IConstantService ConstantService { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-        public DataGridStyleInfo Style { get; set; } //Default style
+        public DataGridStyleInfo Style { get; set; }
 
         protected override void OnInitialized()
         {
@@ -31,9 +34,10 @@ namespace Samovar.Blazor
             return Task.CompletedTask;
         }
 
-        public void Dispose()
+        public ValueTask DisposeAsync()
         {
             GridLayoutService.DataGridInnerCssStyleChanged -= GridLayoutService_DataGridInnerCssStyleChanged;
+            return ValueTask.CompletedTask;
         }
     }
 }

@@ -8,10 +8,10 @@ namespace Samovar.Blazor
 {
     public interface IGridStateService
     {
-        BehaviorSubject<DataSourceStateEnum> DataSourceState { get; }
+        BehaviorSubject<DataSourceState> DataSourceState { get; }
         //EventCallback<DataSourceStateEnum> DataSourceStateEv { get; set; }
-        List<EventCallback<DataSourceStateEnum>> DataSourceStateEvList { get; set; }
-        BehaviorSubject<DataEditStateEnum> DataEditState { get; }
+        List<EventCallback<DataSourceState>> DataSourceStateEvList { get; set; }
+        BehaviorSubject<DataEditState> DataEditState { get; }
 
         Func<Task> ShowDataPanelDelegate { get; set; }
         Func<Task> CloseDataPanelDelegate { get; set; }

@@ -5,18 +5,18 @@
 
 @switch (_dataSourceState)
 {
-    case DataSourceStateEnum.NoData:
+    case DataSourceState.NoData:
         <div class="s-flex s-align-content-center s-justify-content-center" style="height:100%;background:lightgray;">
             <div class="s-align-self-center">no data to show</div>
         </div>
         break;
-    case DataSourceStateEnum.Loading:
-    case DataSourceStateEnum.Idle:
+    case DataSourceState.Loading:
+    case DataSourceState.Idle:
     default:
-        <div class="@(_dataSourceState == DataSourceStateEnum.Loading ? "s-flex s-align-content-center s-justify-content-center s-visible" : "s-hidden")" style="height:100%;">
+        <div class="@(_dataSourceState == DataSourceState.Loading ? "s-flex s-align-content-center s-justify-content-center s-visible" : "s-hidden")" style="height:100%;">
             <div class="spinner-border text-muted s-align-self-center"></div>
         </div>
-        <div class="@(_dataSourceState == DataSourceStateEnum.Idle ? "s-visible" : "s-hidden")">
+        <div class="@(_dataSourceState == DataSourceState.Idle ? "s-visible" : "s-hidden")">
             <table id="@ConstantService.InnerGridBodyTableId" class="@LayoutService.TableTagClass.Value" style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
                 <DataGridHiddenHeader TItem=T />
                 <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">

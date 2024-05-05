@@ -95,13 +95,13 @@ namespace Samovar.Blazor
 
                     if (!newCollectionView.Any())
                     {
-                        _stateService.DataSourceState.OnNext(DataSourceStateEnum.NoData);
-                        _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.NoData));
+                        _stateService.DataSourceState.OnNext(DataSourceState.NoData);
+                        _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceState.NoData));
                     }
                     else
                     {
-                        _stateService.DataSourceState.OnNext(DataSourceStateEnum.Idle);
-                        _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.Idle));
+                        _stateService.DataSourceState.OnNext(DataSourceState.Idle);
+                        _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceState.Idle));
                     }
                     CollectionViewChangedEvList.ForEach(x => x.InvokeAsync(newCollectionView));
                 }
@@ -119,8 +119,8 @@ namespace Samovar.Blazor
             var loadingSettings = await loadingSettingsTask;
             query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
 
-            _stateService.DataSourceState.OnNext(DataSourceStateEnum.Loading);
-            _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceStateEnum.Loading));
+            _stateService.DataSourceState.OnNext(DataSourceState.Loading);
+            _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceState.Loading));
 
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();

@@ -5,13 +5,13 @@
 
 @switch (_dataSourceState)
 {
-    case DataSourceStateEnum.NoData:
+    case DataSourceState.NoData:
         <div class="s-flex s-align-content-center s-justify-content-center" style="height:100%;background:lightgray;">
             <div class="s-align-self-center">no data to show</div>
         </div>
         break;
-    case DataSourceStateEnum.Loading:
-    case DataSourceStateEnum.Idle:
+    case DataSourceState.Loading:
+    case DataSourceState.Idle:
     default:
         <div id=@ConstantService.InnerGridBodyId>
             <DataGridBodyVirtualScrolling TItem=T />

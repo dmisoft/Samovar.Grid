@@ -7,9 +7,10 @@ namespace Samovar.Blazor
     public partial class SmDataGridVirtualTableInner<T>
         : SmDesignComponentBase, IAsyncDisposable
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
         [SmInject]
         public IGridStateService StateService { get; set; }
-
 
         [SmInject]
         public ILayoutService LayoutService { get; set; }
@@ -31,6 +32,7 @@ namespace Samovar.Blazor
 
         [SmInject]
         public IEditingService<T> EditingService { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         public RenderFragment? EditingPopup { get; set; }
 
@@ -130,58 +132,10 @@ namespace Samovar.Blazor
             await InvokeAsync(StateHasChanged);
         }
 
-        //[Parameter]
-        //public string FilterToggleButtonClass { get; set; } = "btn btn-secondary";
-        //[Parameter]
-        //public string PaginationClass { get; set; } = "pagination";
-
-        //internal string GridBodyContainerId { get; } = $"gridbodycontainer{Guid.NewGuid().ToString().Replace("-", "")}";
-        //internal string innerGridBodyTableId { get; } = $"innergridbodytable{Guid.NewGuid().ToString().Replace("-", "")}";
-
-        //internal string outerGridId { get; set; } = $"outergrid{Guid.NewGuid().ToString().Replace("-", "")}";
-        //internal string gridHeaderContainerId { get; set; } = $"gridheadercontainer{Guid.NewGuid().ToString().Replace("-", "")}";
-        //internal string gridFilterContainerId { get; set; } = $"gridfiltercontainer{Guid.NewGuid().ToString().Replace("-", "")}";
-        //private string DataGridId { get; } = $"samovargrid{Guid.NewGuid().ToString().Replace("-", "")}";
-
-        //internal double MinGridWidth { get; set; }
-        //[SmInject]
-        //IColumnService ColumnService { get; set; }
-        //public async Task<string> TranslatableDivHeight() {
-        //    return await VirtualScrollingService.TranslatableDivHeight();
-        //}
-
-        //public async Task<string> ScrollStyle() {
-        //    var height = await VirtualScrollingService.TranslatableDivHeight();
-        //    return $"height:{height};overflow:hidden;position:absolute;";
-        //}
-        //public string ScrollStyle { get; set; }
-        //public double OffsetY { get; set; }
-        //public Task<string> ScrollStyle()
-        //{
-        //    var height = await VirtualScrollingService.TranslatableDivHeight();
-        //    return Task.FromResult( $"height:{height};overflow:hidden;position:absolute;");
-        //}
-
         public ValueTask DisposeAsync()
         {
             LayoutService.DataGridInnerCssStyleChanged -= GridLayoutService_DataGridInnerCssStyleChanged;
             return ValueTask.CompletedTask;
         }
-
-        //public void OnCompleted()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public void OnError(Exception error)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public string ScrollStyle { get; set; }
-        //public void OnNext(string height)
-        //{
-        //    ScrollStyle = $"height:{height};overflow:hidden;position:absolute;";
-        //}
     }
 }

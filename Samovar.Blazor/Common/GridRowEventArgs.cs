@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Samovar.Blazor
+﻿namespace Samovar.Blazor
 {
-    public class GridRowEventArgs 
+    public class GridRowEventArgs
         : EventArgs
     {
         public object RowData { get; private set; }
@@ -35,7 +33,7 @@ namespace Samovar.Blazor
     {
         public T OldData { get; private set; }
         public T NewData { get; private set; }
-        public int RowPosition { get; private set; }
+        public int RowPosition { get; }
 
         public GridRowEditEventArgs(T oldData, T newData)
             : base()

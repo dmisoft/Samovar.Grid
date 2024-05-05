@@ -4,8 +4,10 @@ using System;
 namespace Samovar.Blazor.Edit
 {
     public partial class GridRowEditing_Form<TItem>
-        : SmDesignComponentBase, IDisposable
+        : SmDesignComponentBase, IAsyncDisposable
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
         [SmInject]
         public ILayoutService LayoutService { get; set; }
 
@@ -17,10 +19,11 @@ namespace Samovar.Blazor.Edit
 
         [Parameter]
         public SmDataGridRowModel<TItem> RowModel { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-        public void Dispose()
+        public ValueTask DisposeAsync()
         {
-            GC.Collect();
+            return ValueTask.CompletedTask;
         }
     }
 }

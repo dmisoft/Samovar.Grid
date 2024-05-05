@@ -10,12 +10,14 @@ namespace Samovar.Blazor.Edit
     {
         [CascadingParameter(Name = "datagrid-row")]
         protected SmDataGridRow<TItem> GridRow { get; set; }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         [SmInject]
         public IEditingService<TItem> EditingService { get; set; }
 
         [SmInject]
         public IJsService JsService { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         [Parameter]
         public SmDataGridRowModel<TItem> RowModel { get; set; }

@@ -1,13 +1,13 @@
 ﻿namespace Samovar.Blazor
 {
-    public enum DataSourceStateEnum
+    public enum DataSourceState
     {
         Idle,
         Loading,
         NoData
     }
 
-    public enum DataEditStateEnum
+    public enum DataEditState
     {
         Idle,
         Editing,

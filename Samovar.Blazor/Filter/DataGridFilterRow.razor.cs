@@ -8,14 +8,8 @@ namespace Samovar.Blazor.Filter
     public partial class DataGridFilterRow<TItem>
         : SmDesignComponentBase, IDisposable
     {
-        //[CascadingParameter(Name = "datagrid-container")]
-        //protected SamovarGrid<TItem> DataGrid { get; set; }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-        //[CascadingParameter(Name = "datagrid-gridcolumnservice")]
-        //protected GridColumnService GridColumnService { get; set; }
-
-        //[Inject]
-        //protected IJSRuntime JsRuntime { get; set; }
         [SmInject]
         public IColumnService ColumnService { get; set; }
         
@@ -27,6 +21,8 @@ namespace Samovar.Blazor.Filter
 
         [SmInject]
         public IRepositoryService<TItem> RepositoryService { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
         protected readonly List<Type> Numeric_Types_For_Constant_Expression = new List<Type>
 
                 {
@@ -54,12 +50,9 @@ namespace Samovar.Blazor.Filter
                     typeof(decimal?),
             };
 
-        //#region Column width per MouseMove
-
-        //#endregion
         public void Dispose()
         {
-            //this.grid.NotifierService.NotifyAfterScroll -= NotifierService_NotifyAfterScroll;
+            
         }
     }
 }

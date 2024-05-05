@@ -26,7 +26,7 @@ namespace Samovar.Blazor
 
 		public bool Equals(DataGridVirtualScrollingInfo other)
 		{
-			return (OffsetX == other.OffsetX && OffsetY == other.OffsetY && ContentContainerHeight.Equals(other.ContentContainerHeight));
+            return Math.Abs(OffsetX - other.OffsetX) < double.Epsilon && Math.Abs(OffsetY - other.OffsetY) < double.Epsilon && ContentContainerHeight.Equals(other.ContentContainerHeight);
 		}
 	}
 }

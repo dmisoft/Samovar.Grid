@@ -13,9 +13,9 @@ namespace Samovar.Blazor
         private readonly IInitService _initService;
         private readonly INavigationService _navigationService;
 
-        public BehaviorSubject<DataSourceStateEnum> DataSourceState { get; } = new BehaviorSubject<DataSourceStateEnum>(DataSourceStateEnum.NoData);
+        public BehaviorSubject<DataSourceState> DataSourceState { get; } = new BehaviorSubject<DataSourceState>(Blazor.DataSourceState.NoData);
         //public EventCallback<DataSourceStateEnum> DataSourceStateEv { get; set; }
-        public BehaviorSubject<DataEditStateEnum> DataEditState { get; } = new BehaviorSubject<DataEditStateEnum>(DataEditStateEnum.Idle);
+        public BehaviorSubject<DataEditState> DataEditState { get; } = new BehaviorSubject<DataEditState>(Blazor.DataEditState.Idle);
 
         public Func<Task> ShowDataPanelDelegate { get; set; }
         public Func<Task> CloseDataPanelDelegate { get; set; }
@@ -30,7 +30,7 @@ namespace Samovar.Blazor
         public Func<Task> CloseProcessingDataPanelDelegate { get; set; }
         public Func<Task> ShowPagingPanelDelegate { get; set; }
         public Func<Task> HidePagingPanelDelegate { get; set; }
-        public List<EventCallback<DataSourceStateEnum>> DataSourceStateEvList { get; set; } = new List<EventCallback<DataSourceStateEnum>>();
+        public List<EventCallback<DataSourceState>> DataSourceStateEvList { get; set; } = new List<EventCallback<DataSourceState>>();
 
         public GridStateService(IInitService initService, INavigationService navigationService)
         {
@@ -46,12 +46,12 @@ namespace Samovar.Blazor
             DataEditState.Subscribe(ProcessDataEditState);
         }
 
-        private void ProcessDataEditState(DataEditStateEnum arg)
+        private void ProcessDataEditState(DataEditState arg)
         {
             //return Task.CompletedTask;
         }
 
-        private async Task ProcessDataSourceState(DataSourceStateEnum dataSourceState)
+        private async Task ProcessDataSourceState(DataSourceState dataSourceState)
         {
             //await CloseDataPanelDelegate?.Invoke();
             await CloseNoDataPanelDelegate?.Invoke();
@@ -61,15 +61,15 @@ namespace Samovar.Blazor
 
             switch (dataSourceState)
             {
-                case DataSourceStateEnum.Idle:
+                case Blazor.DataSourceState.Idle:
                     //await ShowDataPanelDelegate.Invoke();
                     //if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
                     //    await ShowPagingPanelDelegate.Invoke();
                     break;
-                case DataSourceStateEnum.Loading:
+                case Blazor.DataSourceState.Loading:
                     //await ShowProcessingDataPanelDelegate.Invoke();
                     break;
-                case DataSourceStateEnum.NoData:
+                case Blazor.DataSourceState.NoData:
                     await ShowNoDataPanelDelegate.Invoke();
                     break;
                 default:

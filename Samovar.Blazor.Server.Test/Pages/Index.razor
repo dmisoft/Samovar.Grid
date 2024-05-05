@@ -171,10 +171,8 @@ else
         forecasts2 = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
     }
 
-    string height = "450px";
     Task changeStyle()
     {
-        height = "800px";
         return Task.CompletedTask;
     }
 

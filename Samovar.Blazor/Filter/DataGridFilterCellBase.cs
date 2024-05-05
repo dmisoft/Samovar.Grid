@@ -8,6 +8,8 @@ namespace Samovar.Blazor.Filter
     public abstract partial class DataGridFilterCellBase<TItem, TFilterCell>
         : SmDesignComponentBase, IDisposable
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
         [SmInject]
         public IJsService JsService { get; set; }
 
@@ -16,6 +18,7 @@ namespace Samovar.Blazor.Filter
 
         [SmInject]
         public IFilterService FilterService { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 
         [Parameter]
@@ -29,7 +32,7 @@ namespace Samovar.Blazor.Filter
         //3 *A
         protected byte _menuMode { get; set; }
 
-        protected DataGridFilterCellInfo FilterCellInfo;// = new DataGridFilterCellInfo();
+        protected DataGridFilterCellInfo FilterCellInfo;
 
         private TFilterCell _innerValue = default;
 
@@ -55,48 +58,14 @@ namespace Samovar.Blazor.Filter
             FilterService.FilterCleared += FilterService_FilterCleared;
         }
 
-        //void ResetFilterCellValue()
-        //{
-        //    innerValue = default;
-        //}
-
         private Task FilterService_FilterCleared()
         {
-            //ClearingMode = true;
-            //ResetFilterCellValue();
             _innerValue = default;
-
-            //await InvokeAsync(() => InnerValue = default);
-            //ClearingMode = false;
             return Task.CompletedTask;
         }
 
-        //private async Task NotifierService_OnFilterModeChange(byte filterMode, string targetFilterMenuContainerId)
-        //{
-        //    if (ColMetadata.FilterMenuContainerId == targetFilterMenuContainerId)
-        //        await ChangeMode(filterMode);
-        //}
-
-        //protected async Task ChangeMode() {
-        //    mode = mode+(byte)1 < (byte)4 ? ++mode : (byte)0;
-        //    await ChangeMode(mode);
-        //}
-
-        //protected async Task ChangeMode(byte newMode)
-        //{
-        //    mode = newMode;
-        //    filterCellInfo.FilterCellMode = mode;
-        //    await FilterService.Filter(filterCellInfo);
-        //}
-
-        //protected async Task ValueReset() {
-        //    MenuMode = 0;
-        //    InnerValue = default;
-        //    filterCellInfo = new DataGridFilterCellInfo { ColumnMetadata = ColMetadata, FilterCellValue = InnerValue, FilterCellMode = MenuMode };
-        //    await FilterService.Filter(filterCellInfo);
-        //}
-
         bool filterMenuOpen = false;
+        
         protected async Task ShowMenu()
         {
             filterMenuOpen = !filterMenuOpen;

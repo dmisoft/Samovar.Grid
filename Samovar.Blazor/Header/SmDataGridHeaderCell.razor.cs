@@ -10,7 +10,8 @@ namespace Samovar.Blazor.Header
     {
         [Parameter]
         public IDataColumnModel Model { get; set; }
-        
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
         [SmInject]
         public ISortingService SortingService {  get; set; }
 
@@ -28,6 +29,7 @@ namespace Samovar.Blazor.Header
 
         [SmInject]
         public IConstantService ConstantService { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         IDisposable _columnOrderInfoUnsubscriber;
         protected override Task OnInitializedAsync()

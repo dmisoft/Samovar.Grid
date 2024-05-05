@@ -18,10 +18,13 @@ namespace Samovar.Blazor.Scrolling
         private double newScrollbarThumbOffsetY { get; set; }
 		protected string Style { get; set; }
 
-		[Inject] IJSRuntime jsRuntime { get; set; }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+        [Inject] IJSRuntime jsRuntime { get; set; }
 
         [SmInject]
         public IVirtualScrollingNavigationStrategy VirtualScrollingService { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         [Parameter]
         public EventCallback<double> DeltaChangedCallback { set; get; }

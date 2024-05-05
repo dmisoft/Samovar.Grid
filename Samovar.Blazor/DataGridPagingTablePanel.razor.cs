@@ -8,9 +8,10 @@ namespace Samovar.Blazor
     public partial class DataGridPagingTablePanel<T>
         : SmDesignComponentBase, IAsyncDisposable
     {
-		protected DataSourceStateEnum _dataSourceState = DataSourceStateEnum.NoData;
+		protected DataSourceState _dataSourceState = DataSourceState.NoData;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-		[SmInject]
+        [SmInject]
         public IRepositoryService<T> RepositoryService { get; set; }
 
         [SmInject]
@@ -33,8 +34,9 @@ namespace Samovar.Blazor
 
 		[SmInject]
 		public IGridStateService GridStateService { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-        public EventCallback<DataSourceStateEnum> DataSourceStateEv { get; set; }
+        public EventCallback<DataSourceState> DataSourceStateEv { get; set; }
 
         public DataGridStyleInfo Style { get; set; } //Default style
         
@@ -48,8 +50,7 @@ namespace Samovar.Blazor
             return Task.CompletedTask;
         }
 
-
-        protected Task _dataSourceStateEv(DataSourceStateEnum dataSourceState) { 
+        protected Task _dataSourceStateEv(DataSourceState dataSourceState) { 
             _dataSourceState = dataSourceState;
             return Task.CompletedTask;
         }
@@ -63,7 +64,7 @@ namespace Samovar.Blazor
                 ActualScrollbarWidth = LayoutService.ActualScrollbarWidth
             };
             
-            DataSourceStateEv = new EventCallbackFactory().Create<DataSourceStateEnum>(this, async (data) => await _dataSourceStateEv(data));
+            DataSourceStateEv = new EventCallbackFactory().Create<DataSourceState>(this, async (data) => await _dataSourceStateEv(data));
             GridStateService.DataSourceStateEvList.Add(DataSourceStateEv);
 
             CollectionViewChangedEv = new EventCallbackFactory().Create<IEnumerable<SmDataGridRowModel<T>>>(this, async (data) => await _collectionViewChangedEv(data));

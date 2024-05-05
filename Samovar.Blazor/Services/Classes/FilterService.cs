@@ -81,7 +81,7 @@ namespace Samovar.Blazor
 		{
             if (!ColumnFilters.Any(f => f.ColumnMetadata.Equals(columnModel)))
             {
-                return default(T);
+                return default;
             }
 
             return (T)ColumnFilters.Single(f => f.ColumnMetadata.Equals(columnModel)).FilterCellValue;

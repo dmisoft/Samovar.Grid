@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 namespace Samovar.Blazor.Edit
 {
     public partial class GridRowEditing_PopupTemplate<TItem>
-        : SmDesignComponentBase, IDisposable
+        : SmDesignComponentBase, IAsyncDisposable
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
         [SmInject]
         public IEditingService<TItem> EditingService { get; set; }
 
@@ -15,10 +17,11 @@ namespace Samovar.Blazor.Edit
         public IJsService JsService { get; set; }
 
         [Parameter]
-        public RenderFragment<TItem> Template { get; set; }
+        public SmDataGridRowModel<TItem> RowModel { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         [Parameter]
-        public SmDataGridRowModel<TItem> RowModel { get; set; }
+        public RenderFragment<TItem> Template { get; set; }
 
         protected string Id { get; set; } = Guid.NewGuid().ToString().Replace("-", "");
 
@@ -29,10 +32,10 @@ namespace Samovar.Blazor.Edit
             if (firstRender)
                 await (await JsService.JsModule()).InvokeVoidAsync("dragElement", Ref);
         }
-
-        public void Dispose()
+        
+        public ValueTask DisposeAsync()
         {
-            GC.Collect();
+            return ValueTask.CompletedTask;
         }
     }
 }

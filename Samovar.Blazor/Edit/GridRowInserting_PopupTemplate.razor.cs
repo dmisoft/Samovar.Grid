@@ -9,14 +9,16 @@ namespace Samovar.Blazor.Edit
         : SmDesignComponentBase, IDisposable
 
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         [SmInject]
         protected IEditingService<T> EditingService { get; set; }
 
-        [Parameter]
-        public RenderFragment<T> Template { get; set; }
-
         [SmInject]
         public IJsService JsService { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+        [Parameter]
+        public RenderFragment<T> Template { get; set; }
 
         [Parameter]
         public SmDataGridRowModel<T> RowModel { get; set; }

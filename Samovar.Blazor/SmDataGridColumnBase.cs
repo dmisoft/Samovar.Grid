@@ -8,6 +8,8 @@ namespace Samovar.Blazor
     public class SmDataGridColumnBase<T>
         : SmDesignComponentBase
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
         [SmInject]
         public IColumnService ColumnService { get; set; }
 
@@ -16,16 +18,6 @@ namespace Samovar.Blazor
 
         [SmInject]
         public T Model { get; set; }
-        //public override async Task SetParametersAsync(ParameterView parameters)
-        //{
-        //    await base.SetParametersAsync(parameters);
-
-        //    if (Model == null)
-        //    {
-        //        Model = (T)ModelFactoryService.CreateModel<DataGridCommandColumnModel>(parameters);
-        //        ColumnService.RegisterCommandColumn(Model);
-        //    }
-        //}
-
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     }
 }
