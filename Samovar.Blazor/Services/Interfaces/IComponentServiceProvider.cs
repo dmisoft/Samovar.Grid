@@ -2,6 +2,6 @@
 {
     internal interface IComponentServiceProvider
     {
-        SmComponentServiceProvider ServiceProvider { get; set; }
+        SmComponentServiceProvider ServiceProvider { get; }
     }
 }

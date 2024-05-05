@@ -5,12 +5,13 @@ namespace Samovar.Blazor
 {
     public class SmComponentServiceProvider
     {
-        ServiceCollection _services;
-        ServiceProvider _serviceProvider;
-        IServiceScope _scope;
+        IServiceScope? _scope;
 
         public void InitServices<T>()
         {
+            ServiceCollection _services;
+            ServiceProvider _serviceProvider;
+
             _services = new ServiceCollection();
             _services.AddScoped<IColumnService, ColumnService>();
             _services.AddScoped<IRepositoryService<T>, RepositoryService<T>>();
@@ -43,6 +44,10 @@ namespace Samovar.Blazor
         }
         public object GetService(Type serviceType)
         {
+            if(_scope is null)
+            {
+                throw new InvalidOperationException("Services not initialized");
+            }
             object retVal;
             retVal = _scope.ServiceProvider.GetRequiredService(serviceType);
             return retVal;

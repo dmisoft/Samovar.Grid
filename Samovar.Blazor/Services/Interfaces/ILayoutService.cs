@@ -20,7 +20,6 @@ namespace Samovar.Blazor
         BehaviorSubject<bool> ShowFilterRow { get; }
         
         double ScrollbarWidth { get; }
-        Task<double> ScrollbarWidth2();
         
         double FilterRowHeight { get; }
 
@@ -43,8 +42,6 @@ namespace Samovar.Blazor
         BehaviorSubject<bool> ShowDetailHeader { get; }
 
         Task InitHeader();
-
-        Task<bool> CheckScrollBarWidth();
 
         event Func<DataGridStyleInfo, Task> DataGridInnerCssStyleChanged;
 

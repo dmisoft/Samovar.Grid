@@ -18,7 +18,7 @@
         </div>
         <div class="@(_dataSourceState == DataSourceState.Idle ? "s-visible" : "s-hidden")">
             <table id="@ConstantService.InnerGridBodyTableId" class="@LayoutService.TableTagClass.Value" style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
-                <DataGridHiddenHeader TItem=T />
+                <DataGridHiddenHeader />
                 <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
                     @if (View != null)
                     {

@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
 using System.Reactive.Subjects;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
@@ -11,10 +8,10 @@ namespace Samovar.Blazor
     {
         SmDataGridRowModel<T> _editingRowModel;
 
-        IGridStateService _stateService;
-        IRepositoryService<T> _repositoryService;
-        IColumnService _columnService;
-        INavigationService _navigationService;
+        readonly IGridStateService _stateService;
+        readonly IRepositoryService<T> _repositoryService;
+        readonly IColumnService _columnService;
+        readonly INavigationService _navigationService;
 
         public event Func<Task> RowEditingEnded;
         

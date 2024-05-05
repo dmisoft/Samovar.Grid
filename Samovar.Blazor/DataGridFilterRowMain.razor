@@ -9,27 +9,3 @@
 		</div>
 	</div>
 </div>
-
-@* @if (GridLayoutService.FilterMode.Value == DataGridFilterMode.FilterRow)
-{
-	@if (Style.ActualScrollbarWidth > 0)
-	{
-		<div style="position:relative;display:flex;flex-direction:row;">
-			<div style="position:relative;overflow:hidden;flex-grow:1;" id="@ConstantService.GridFilterContainerId">
-				<div style="position:absolute;">
-					<DataGridFilterRow TItem=T />
-				</div>
-			</div>
-
-			<div style="width:@(Style.ActualScrollbarWidth.ToString(CultureInfo.InvariantCulture) + "px;")height:@(GridLayoutService.FilterRowHeight.ToString(System.Globalization.CultureInfo.InvariantCulture)+"px;")">
-				<SmDataGridFilterHeaderScrollbar TItem=T />
-			</div>
-		</div>
-	}
-	else
-	{
-		<div style="position:relative;overflow:hidden;" id="@ConstantService.GridFilterContainerId">
-			<DataGridFilterRow TItem=T />
-		</div>
-	}
-} *@

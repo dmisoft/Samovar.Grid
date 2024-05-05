@@ -6,7 +6,7 @@ using System.Reactive.Subjects;
 namespace Samovar.Blazor
 {
     public class LayoutService
-        : ILayoutService, IDisposable
+        : ILayoutService, IAsyncDisposable
     {
         public BehaviorSubject<string> SelectedRowClass { get; } = new BehaviorSubject<string>("bg-warning");
 
@@ -32,15 +32,13 @@ namespace Samovar.Blazor
 
         public double GridColWidthSum { get; set; }
 
-        private IConstantService _constantService;
-        private IJsService _jsService;
-        private IInitService _initService;
-        private IColumnService _columnService;
+        private readonly IConstantService _constantService;
+        private readonly IJsService _jsService;
+        private readonly IColumnService _columnService;
 
         public DotNetObjectReference<ILayoutService> DataGridDotNetRef { get; }
 
-        private readonly Lazy<Task<double>> ScrollbarWidthLazy = null;
-        private readonly Lazy<Task<double>> TableRowHeightLazy = null;
+        private readonly Lazy<Task<double>> TableRowHeightLazy;
 
         public LayoutService(
               IConstantService constantService
@@ -50,14 +48,11 @@ namespace Samovar.Blazor
         {
             _constantService = constantService;
             _jsService = jsService;
-            _initService = initService;
             _columnService = columnService;
 
-            _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
+            initService.IsInitialized.Subscribe(DataGridInitializerCallback);
 
             DataGridDotNetRef = DotNetObjectReference.Create(this as ILayoutService);
-
-            ScrollbarWidthLazy = new(() => _jsService.MeasureScrollbar().AsTask());
 
             TableRowHeightLazy = new(() => _jsService.MeasureTableRowHeight(TableTagClass.Value).AsTask());
         }
@@ -70,7 +65,7 @@ namespace Samovar.Blazor
         public bool FitColumnsToTableWidth { get; set; } = false;
 
 
-        public event Func<DataGridStyleInfo, Task> DataGridInnerCssStyleChanged;
+        public event Func<DataGridStyleInfo, Task>? DataGridInnerCssStyleChanged = null;
 
         public double FilterRowHeight { get; private set; }
 
@@ -114,10 +109,7 @@ namespace Samovar.Blazor
         public async Task JS_AfterWindowResize()
         {
             var tBodyWidth = await GridOuterRef.GetElementWidthByRef(await _jsService.JsModule());
-
             CalculateEmptyColumn(tBodyWidth);
-
-            await CheckScrollBarWidth();
         }
 
         public async Task InitHeader()
@@ -134,12 +126,10 @@ namespace Samovar.Blazor
             GridColWidthSum = 0;
             MinGridWidth.OnNext(0);
 
-            var allCols = _columnService.AllColumnModels.Count() + (ShowDetailRow.Value ? 1 : 0);
+            var allCols = _columnService.AllColumnModels.Count + (ShowDetailRow.Value ? 1 : 0);
             
-            var absCols = _columnService.AllColumnModels.Where(c => c.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Absolute).Count() + (ShowDetailRow.Value ? 1 : 0); ;
+            var absCols = _columnService.AllColumnModels.Count(c => c.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Absolute) + (ShowDetailRow.Value ? 1 : 0);
             
-            var relCols = _columnService.AllColumnModels.Where(c => c.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Relative).Count();
-
             if (absCols != allCols)
             {
                 FitColumnsToTableWidth = true;
@@ -166,8 +156,6 @@ namespace Samovar.Blazor
         {
             try
             {
-                CultureInfo ci = CultureInfo.InvariantCulture;
-
                 double gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule());
                 gridInnerWidth = Math.Max(gridInnerWidth, MinGridWidth.Value);
 
@@ -179,8 +167,6 @@ namespace Samovar.Blazor
 
                 var relativeWidthSum = _columnService.AllColumnModels.Where(cmt => cmt.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Relative).Sum(cmt => cmt.WidthInfo.WidthValue);
 
-                var restForRelative = gridInnerWidth - absoluteWidthSum;
-                
                 var restForRelativePercent = (gridInnerWidth - absoluteWidthSum) / gridInnerWidth;
 
                 foreach (var m in _columnService.AllColumnModels.Where(cmt => cmt.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Relative))
@@ -194,11 +180,7 @@ namespace Samovar.Blazor
                     double nw = m.WidthInfo.WidthValue / gridInnerWidth;
                     widthList.Add(m, new TempColumnMetadata { VisibleAbsoluteWidthValue = m.WidthInfo.WidthValue, VisiblePercentWidthValue = nw * 100d });
                 }
-                //Test
-                var abs = widthList.Sum(cmt => cmt.Value.VisibleAbsoluteWidthValue);
-                var rel = widthList.Sum(cmt => cmt.Value.VisiblePercentWidthValue);
 
-                //Werte aus TempObjekt transferieren
                 foreach (var m in _columnService.AllColumnModels)
                 {
                     m.VisibleAbsoluteWidthValue = widthList[m].VisibleAbsoluteWidthValue;
@@ -213,41 +195,29 @@ namespace Samovar.Blazor
 
         private async Task ShowFixHeader(int newWidth)
         {
-            try
+            double gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule());
+            Dictionary<IColumnModel, TempColumnMetadata> widthList = new Dictionary<IColumnModel, TempColumnMetadata>();
+
+            foreach (var m in _columnService.AllColumnModels.Where(cmt => cmt.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Absolute))
             {
-                CultureInfo ci = CultureInfo.InvariantCulture;
-
-                double gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule());
-                Dictionary<IColumnModel, TempColumnMetadata> widthList = new Dictionary<IColumnModel, TempColumnMetadata>();
-
-                foreach (var m in _columnService.AllColumnModels.Where(cmt => cmt.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Absolute))
-                {
-                    double nw = m.WidthInfo.WidthValue / gridInnerWidth;
-                    widthList.Add(m, new TempColumnMetadata { VisibleAbsoluteWidthValue = m.WidthInfo.WidthValue, VisiblePercentWidthValue = nw * 100d });
-                }
-
-                //Werte aus TempObjekt transferieren
-                foreach (var m in _columnService.AllColumnModels)
-                {
-                    if (widthList.ContainsKey(m))
-                    {
-                        m.VisibleAbsoluteWidthValue = widthList[m].VisibleAbsoluteWidthValue;
-                        m.VisiblePercentWidthValue = widthList[m].VisiblePercentWidthValue;
-                    }
-                }
-
-                double tBodyWidth = 0;
-                if (newWidth == 0)
-                    tBodyWidth = await GridOuterRef.GetElementWidthByRef(await _jsService.JsModule());
-                else
-                    tBodyWidth = newWidth;
-
-                CalculateEmptyColumn(tBodyWidth);
+                double nw = m.WidthInfo.WidthValue / gridInnerWidth;
+                widthList.Add(m, new TempColumnMetadata { VisibleAbsoluteWidthValue = m.WidthInfo.WidthValue, VisiblePercentWidthValue = nw * 100d });
             }
-            catch (Exception ex)
+
+            //Werte aus TempObjekt transferieren
+            foreach (var m in _columnService.AllColumnModels.Where(widthList.ContainsKey))
             {
-                Console.WriteLine(ex.Message);
+                m.VisibleAbsoluteWidthValue = widthList[m].VisibleAbsoluteWidthValue;
+                m.VisiblePercentWidthValue = widthList[m].VisiblePercentWidthValue;
             }
+
+            double tBodyWidth = 0;
+            if (newWidth == 0)
+                tBodyWidth = await GridOuterRef.GetElementWidthByRef(await _jsService.JsModule());
+            else
+                tBodyWidth = newWidth;
+
+            CalculateEmptyColumn(tBodyWidth);
         }
 
         private void CalculateEmptyColumn(double tBodyWidth)
@@ -267,32 +237,6 @@ namespace Samovar.Blazor
             _columnService.EmptyColumnModel.WidthInfo = new ColumnMetadataWidthInfo { WidthMode = ColumnMetadataWidthInfo.ColumnWidthMode.Absolute, WidthValue = emptyColWidth };
         }
 
-        //TODO Trigger: on window size changed
-        public async Task<bool> CheckScrollBarWidth()
-        {
-            try
-            {
-                double tempActualScrollbarWidth = 0d;
-
-                if (await (await _jsService.JsModule()).InvokeAsync<bool>("isScrollbarVisible", new object[] { _constantService.InnerGridId }))
-                {
-                    tempActualScrollbarWidth = ScrollbarWidth;
-                }
-
-                var retVal = tempActualScrollbarWidth != ActualScrollbarWidth ? true : false;
-                
-                ActualScrollbarWidth = tempActualScrollbarWidth;
-                
-                await OnDataGridInnerCssStyleChanged();
-
-                return retVal;
-            }
-            catch
-            {
-            }
-
-            return false;
-        }
         internal async Task OnDataGridInnerCssStyleChanged()
         {
             if (DataGridInnerCssStyleChanged != null)
@@ -306,16 +250,9 @@ namespace Samovar.Blazor
             }
         }
 
-
-
-        public void Dispose()
+        public ValueTask DisposeAsync()
         {
-
-        }
-
-        public Task<double> ScrollbarWidth2()
-        {
-            return ScrollbarWidthLazy.Value;
+            return ValueTask.CompletedTask;
         }
 
         class TempColumnMetadata

@@ -2,7 +2,7 @@
 @typeparam TItem
 @inherits SmDesignComponentBase
 
-<table @ref="GridHeaderRef" style="margin:0;border:0;table-layout:fixed; @(GridLayoutService.MinGridWidth.Value > 0 ? "min-width:" + GridLayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")" class="@GridLayoutService.TableTagClass.Value">
+<table style="margin:0;border:0;table-layout:fixed; @(GridLayoutService.MinGridWidth.Value > 0 ? "min-width:" + GridLayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")" class="@GridLayoutService.TableTagClass.Value">
 	<thead class="@GridLayoutService.TheadTagClass.Value">
 		<tr>
 			@{

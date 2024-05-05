@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using System;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor.Header
 {
     public partial class SmDataGridHeaderCell
-        : SmDesignComponentBase, IDisposable
+        : SmDesignComponentBase, IAsyncDisposable
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
         [Parameter]
         public IDataColumnModel Model { get; set; }
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         [SmInject]
         public ISortingService SortingService {  get; set; }
@@ -31,17 +30,18 @@ namespace Samovar.Blazor.Header
         public IConstantService ConstantService { get; set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-        IDisposable _columnOrderInfoUnsubscriber;
+        IDisposable? _columnOrderInfoUnsubscriber = null;
         protected override Task OnInitializedAsync()
         {
             _columnOrderInfoUnsubscriber = SortingService.ColumnOrderInfo.Subscribe(OnOrderInfoChanged);
             return base.OnInitializedAsync();
         }
 
-        public string SortSymbol;
+        public string SortSymbol { get; private set; } = string.Empty;
+
         private void OnOrderInfoChanged(DataGridColumnOrderInfo args)
         {
-            string sortSymbol = "";
+            string sortSymbol = string.Empty;
 
             if (args.Field == Model.Field.Value && args.Asc) {
                 sortSymbol = "&#x2BC5;";
@@ -52,10 +52,8 @@ namespace Samovar.Blazor.Header
             }
             
             SortSymbol = sortSymbol;
-            
-            StateHasChanged();
 
-            //return Task.CompletedTask;
+            StateHasChanged();
         }
 
         internal Task ColumnCellClick()
@@ -65,11 +63,6 @@ namespace Samovar.Blazor.Header
 
         protected async Task OnMouseDown(MouseEventArgs args, IDataColumnModel colMeta)
         {
-            //if (DataGrid.FitColumnsToTableWidth)
-            //{
-            //    return;
-            //}
-
             await JsService.AttachWindowMouseMoveEvent(LayoutService.DataGridDotNetRef);
             await JsService.AttachWindowMouseUpEvent(LayoutService.DataGridDotNetRef);
 
@@ -78,11 +71,9 @@ namespace Samovar.Blazor.Header
             ColumnResizingService.MouseMoveCol = colMeta;
             ColumnResizingService.OldAbsoluteVisibleWidthValue = colMeta.VisibleAbsoluteWidthValue;
 
-            var colEmpty = ColumnService.EmptyColumnModel;// Columns.Values.FirstOrDefault(cm => cm.ColumnType == GridColumnType.EmptyColumn);
-            if (colEmpty != null)
-                ColumnResizingService.OldAbsoluteEmptyColVisibleWidthValue = colEmpty.VisibleAbsoluteWidthValue;
+            IColumnModel colEmpty = ColumnService.EmptyColumnModel;
+            ColumnResizingService.OldAbsoluteEmptyColVisibleWidthValue = colEmpty.VisibleAbsoluteWidthValue;
 
-            ////TODO colEmpty exisitiert nicht im dynamischen Modus
             await JsService.StartDataGridColumnWidthChangeMode(
                 ColumnResizingService.ColumnResizingDotNetRef,
                 LayoutService.GridColWidthSum,
@@ -94,6 +85,7 @@ namespace Samovar.Blazor.Header
                 colMeta.HiddenGridColumnCellId.ToString(),
                 colMeta.FilterGridColumnCellId.ToString(),
 
+                
                 colEmpty.VisibleGridColumnCellId.ToString(),
                 colEmpty.HiddenGridColumnCellId.ToString(),
                 colEmpty.FilterGridColumnCellId.ToString(),
@@ -104,23 +96,11 @@ namespace Samovar.Blazor.Header
                 LayoutService.FitColumnsToTableWidth,
                 colEmpty.VisibleAbsoluteWidthValue);
         }
-        protected async Task DropHandler(IDataColumnModel colMeta)
-        {
-            //if (DataGrid._ColumnDragDropService.Accepts("DropZoneGridHeader"))
-            //{
-            //    GridColumnService.ReplaceColumn(Guid.Parse(DataGrid._ColumnDragDropService.Data.ToString()), colMeta.Id);
-            //}
-            //await DataGrid.RefreshAsync();
-        }
 
-        protected void DragStartHandler(IDataColumnModel colMeta)
+        public ValueTask DisposeAsync()
         {
-            //DataGrid._ColumnDragDropService.StartDrag(colMeta.Id.ToString(), "DropZoneGridHeader");
-        }
-
-        public void Dispose()
-        {
-            _columnOrderInfoUnsubscriber.Dispose();
+            _columnOrderInfoUnsubscriber?.Dispose();
+            return ValueTask.CompletedTask;
         }
     }
 }

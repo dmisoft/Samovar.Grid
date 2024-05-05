@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
@@ -62,12 +59,6 @@ namespace Samovar.Blazor
         {
             View = collectionView;
             return Task.CompletedTask;
-        }
-
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            if (!firstRender)
-                await LayoutService.CheckScrollBarWidth();
         }
 
         public ValueTask DisposeAsync()

@@ -4,7 +4,7 @@ using System.Reflection;
 namespace Samovar.Blazor
 {
     public class SmDesignComponentBase
-        : ComponentBase 
+        : ComponentBase
     {
         [CascadingParameter(Name = "ServiceProvider")]
         IComponentServiceProvider? ServiceProvider { get; set; }
@@ -28,35 +28,31 @@ namespace Samovar.Blazor
                 _dependenciesInitialized = true;
 
                 Dictionary<string, Type> _dict = new Dictionary<string, Type>();
-
-                PropertyInfo[] props = this.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+#pragma warning disable S3011 // Reflection should not be used to increase accessibility of classes, methods, or fields
+                PropertyInfo[] props = GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+#pragma warning restore S3011 // Reflection should not be used to increase accessibility of classes, methods, or fields
 
                 foreach (PropertyInfo prop in props)
                 {
                     IEnumerable<SmInjectAttribute> attrs = prop.GetCustomAttributes<SmInjectAttribute>(true);
-                    foreach (SmInjectAttribute attr in attrs)
+                    foreach (SmInjectAttribute attr in attrs.Where(x => x is not null))
                     {
-                        if (attr != null)
-                        {
-                            string propName = prop.Name;
-                            _dict.Add(propName, prop.PropertyType);
-                        }
+                        string propName = prop.Name;
+                        _dict.Add(propName, prop.PropertyType);
                     }
                 }
 
-                IComponentServiceProvider componentServiceProvider;
-
-                if (this is IComponentServiceProvider)
-                    componentServiceProvider = this as IComponentServiceProvider;
-                else
-                    componentServiceProvider = parameters.GetValueOrDefault<IComponentServiceProvider>("ServiceProvider");
+                IComponentServiceProvider? componentServiceProvider;
+                parameters.TryGetValue<IComponentServiceProvider>("ServiceProvider", out componentServiceProvider);
 
                 if (componentServiceProvider != null)
                 {
                     foreach (var pair in _dict)
                     {
                         object service = componentServiceProvider.ServiceProvider.GetService(pair.Value);
+#pragma warning disable S3011 // Reflection should not be used to increase accessibility of classes, methods, or fields
                         PropertyInfo? piShared = this.GetType().GetProperty(pair.Key, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+#pragma warning restore S3011 // Reflection should not be used to increase accessibility of classes, methods, or fields
                         piShared?.SetValue(this, service);
                     }
                 }

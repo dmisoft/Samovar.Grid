@@ -13,7 +13,6 @@ namespace Samovar.Blazor
         int ItemsToShow { get; set; }
         double TopPlaceholderRowHeight { get; set; }
         double BottomPlaceholderRowHeight { get; set; }
-        //int DummyItemsCount { get; set; }
 
         int TopVisibleDataItemPosition { get; set; }
         int StartGridItemPosition { get; set; }

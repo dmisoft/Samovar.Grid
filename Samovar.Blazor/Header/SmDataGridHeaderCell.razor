@@ -7,7 +7,7 @@
 
 
 		<div @onclick=ColumnCellClick style="flex-grow:1;text-overflow:ellipsis;overflow:hidden;white-space: nowrap;cursor:pointer;display:block;"
-dropzone="DropZoneGridHeader" draggable="true" @ondragstart="@(()=>DragStartHandler(Model))" @ondrop="@(()=>DropHandler(Model))" ondragover="event.preventDefault()">
+dropzone="DropZoneGridHeader" draggable="true" ondragover="event.preventDefault()">
 			@(Model.Title.Value)
 		</div>
 		<div class="flex-grow">@((MarkupString)SortSymbol)</div>

@@ -3,7 +3,7 @@
 @inherits SmDesignComponentBase
 
 <table id="@ConstantService.InnerGridBodyTableId" class=@LayoutService.TableTagClass.Value style=@ScrollStyle>
-    <DataGridHiddenHeader TItem=TItem />
+    <DataGridHiddenHeader />
     <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
         @if (View != null)
         {

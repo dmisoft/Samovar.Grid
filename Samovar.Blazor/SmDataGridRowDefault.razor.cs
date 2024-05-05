@@ -1,18 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
     public partial class SmDataGridRowDefault<T>
-        : SmDesignComponentBase, IDisposable//, IModelContainer<T>
+        : SmDesignComponentBase, IAsyncDisposable
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
         [CascadingParameter(Name = "datagrid-row")]
         protected SmDataGridRow<T> GridRow { get; set; }
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         [SmInject]
         public IColumnService ColumnService { get; set; }
@@ -34,47 +30,45 @@ namespace Samovar.Blazor
 
         [SmInject]
         protected IRowDetailService<T> RowDetailService { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         [Parameter]
-        public SmDataGridRowModel<T> RowModel
+        public SmDataGridRowModel<T> RowModel { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+        IDisposable? SingleSelectedDataRowsSubscription = null;
+
+        IDisposable? MultipleSelectedDataRowsSubscription = null;
+
+        protected override Task OnParametersSetAsync()
         {
-            get { return _rowModel; }
-            set
+            base.OnParametersSetAsync();
+            RowModel.RowSelected = false;
+            if(GridSelectionService is null)
             {
-                _rowModel = value;
-
-                _rowModel.RowSelected = false;
-
-                switch (GridSelectionService.SelectionMode.Value)
-                {
-                    case GridSelectionMode.None:
-                        break;
-                    case GridSelectionMode.SingleSelectedDataRow:
-                        _rowModel.RowSelected = GridSelectionService.SingleSelectedDataRow.Value != null && GridSelectionService.SingleSelectedDataRow.Value.Equals(_rowModel.DataItem);
-                        break;
-                    case GridSelectionMode.MultipleSelectedDataRows:
-                        _rowModel.RowSelected = GridSelectionService.MultipleSelectedDataRows.Value != null && GridSelectionService.MultipleSelectedDataRows.Value.Any(a => a.Equals(_rowModel.DataItem));
-                        break;
-                    default:
-                        break;
-                }
+                return Task.CompletedTask;
             }
+
+            switch (GridSelectionService.SelectionMode.Value)
+            {
+                case GridSelectionMode.None:
+                    break;
+                case GridSelectionMode.SingleSelectedDataRow:
+                    var val = GridSelectionService.SingleSelectedDataRow.Value;
+                    if (val is null)
+                        break;
+                    RowModel.RowSelected = !object.Equals(val, default(T)) && val.Equals(RowModel.DataItem);
+                    break;
+                case GridSelectionMode.MultipleSelectedDataRows:
+                    RowModel.RowSelected = GridSelectionService.MultipleSelectedDataRows.Value is not null && GridSelectionService.MultipleSelectedDataRows.Value.Any(a => a!.Equals(RowModel.DataItem));
+                    break;
+                default:
+                    break;
+            }
+
+            return Task.CompletedTask;
         }
 
-        protected override void OnParametersSet()
-        {
-            base.OnParametersSet();
-        }
-
-        public override Task SetParametersAsync(ParameterView parameters)
-        {
-            return base.SetParametersAsync(parameters);
-        }
-
-        private SmDataGridRowModel<T> _rowModel;
-
-        //Row editing
+        // Row editing
         protected async Task RowEditBegin(SmDataGridRowModel<T> rowMainModel)
         {
             if (GridStateService.DataSourceState.Value != DataSourceState.Idle)
@@ -83,100 +77,23 @@ namespace Samovar.Blazor
             await EditingService.RowEditBegin(rowMainModel);
         }
 
-        protected async Task RowEditCommit(SmDataGridRowModel<T> rowMainModel)
-        {
-            //await DataGrid.GridEditingService.RowEditCommit();
-            //StateHasChanged();
-        }
-
-        protected async Task RowEditCancel(SmDataGridRowModel<T> rowMainModel)
-        {
-            //await DataGrid.GridEditingService.RowEditCancel();
-            //StateHasChanged();
-        }
-
-        ////Row deleting
+        // Row deleting
         protected async Task RowDeleteBegin(SmDataGridRowModel<T> rowMainModel)
         {
             await EditingService.RowDeleteBegin(rowMainModel);
         }
 
-        protected async Task MouseDownOnResizeColumnGrip(MouseEventArgs args, IDataColumnModel colMeta)
-        {
-
-            //if (LayoutService.FitColumnsToTableWidth)
-            //{
-            //    return;
-            //}
-            //await JsService.JsModule.InvokeVoidAsync("add_Window_MouseMove_EventListener", LayoutService.DataGridDotNetRef);//TODO DataGridDotNetRef braucht man nicht
-            //await JsService.JsModule.InvokeVoidAsync("add_Window_MouseUp_EventListener", LayoutService.DataGridDotNetRef);
-
-            //DataGrid.ColWidthChangeManager.IsMouseDown = true;
-            //DataGrid.ColWidthChangeManager.StartMouseMoveX = args.ClientX;
-            //DataGrid.ColWidthChangeManager.MouseMoveCol = colMeta;
-
-            //DataGrid.ColWidthChangeManager.OldAbsoluteVisibleWidthValue = colMeta.VisibleAbsoluteWidthValue;
-
-            //var colEmpty = GridColumnService.Columns.Values.FirstOrDefault(cm => cm.ColumnType == GridColumnType.EmptyColumn);
-            //if (colEmpty != null)
-            //    DataGrid.ColWidthChangeManager.OldAbsoluteEmptyColVisibleWidthValue = colEmpty.VisibleAbsoluteWidthValue;
-
-            //JsInteropClasses.Start_ColumnWidthChange_Mode(DataGrid.jsModule,
-            //    DataGrid.GridColWidthSum,
-            //    GridColumnService.Columns.First(x => x.Value.Equals(colMeta)).Key.ToString(),
-            //    DataGrid.rx.GridModelService.innerGridId,
-            //    DataGrid.innerGridBodyTableId,
-
-            //    colMeta.VisibleGridColumnCellId.ToString(),
-            //    colMeta.HiddenGridColumnCellId.ToString(),
-            //    colMeta.FilterGridColumnCellId.ToString(),
-
-            //    colEmpty.VisibleGridColumnCellId.ToString(),
-            //    colEmpty.HiddenGridColumnCellId.ToString(),
-            //    colEmpty.FilterGridColumnCellId.ToString(),
-
-            //    GridColumnService.Columns.First(x => x.Value.Equals(colEmpty)).Key.ToString(),
-            //    args.ClientX,
-            //    colMeta.VisibleAbsoluteWidthValue,
-            //    DataGrid.FitColumnsToTableWidth,
-            //    colEmpty.VisibleAbsoluteWidthValue);
-        }
-
-        public void Dispose()
-        {
-            SingleSelectedDataRowsSubscription.Dispose();
-            
-            MultipleSelectedDataRowsSubscription.Dispose();
-
-            EditingService.RowEditingEnded -= EditingService_RowEditingEnded;
-
-            GC.Collect();
-        }
         internal async Task RowSelectedIntern(GridRowEventArgs args, SmDataGridRowModel<T> selectedModel)
         {
             await GridSelectionService.OnRowSelected(selectedModel.DataItem);
-            //return Task.CompletedTask;
         }
-        internal void FireRowDoubleClick(GridRowEventArgs args, SmDataGridRowModel<T> mainModel)
-        {
-            //if (RowDoubleClickAsync != null)
-            //    RowDoubleClickAsync.Invoke(mainModel.dataItem);
-            //else
-            //    RowDoubleClick?.Invoke(mainModel.dataItem);
-        }
-
-        IDisposable SingleSelectedDataRowsSubscription;
-
-        IDisposable MultipleSelectedDataRowsSubscription;
 
         protected override Task OnInitializedAsync()
         {
             SingleSelectedDataRowsSubscription = GridSelectionService.SingleSelectedDataRow.Subscribe(SingleSelectedDataRowsChanged);
-
             MultipleSelectedDataRowsSubscription = GridSelectionService.MultipleSelectedDataRows.Subscribe(MultipleSelectedDataRowsChanged);
-
             EditingService.RowEditingEnded += EditingService_RowEditingEnded;
-            
+
             return base.OnInitializedAsync();
         }
 
@@ -188,20 +105,22 @@ namespace Samovar.Blazor
 
         private void MultipleSelectedDataRowsChanged(IEnumerable<T> arg)
         {
-            _rowModel.RowSelected = arg != null && arg.Any(a => a.Equals(_rowModel.DataItem));
-
+            RowModel.RowSelected = arg is not null && arg.Any(a => a!.Equals(RowModel.DataItem));
             StateHasChanged();
-
-            //return Task.CompletedTask;
         }
 
         private void SingleSelectedDataRowsChanged(T arg)
         {
-            _rowModel.RowSelected = arg != null && arg.Equals(_rowModel.DataItem);
-
+            RowModel.RowSelected = arg is not null && arg.Equals(RowModel.DataItem);
             StateHasChanged();
-            
-            //return Task.CompletedTask;
+        }
+
+        public ValueTask DisposeAsync()
+        {
+            SingleSelectedDataRowsSubscription?.Dispose();
+            MultipleSelectedDataRowsSubscription?.Dispose();
+            EditingService.RowEditingEnded -= EditingService_RowEditingEnded;
+            return ValueTask.CompletedTask;
         }
     }
 }

@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using System;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
     public partial class SmDataGridRow<TItem>
-        : SmDesignComponentBase, IDisposable
+        : SmDesignComponentBase, IAsyncDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -30,84 +27,23 @@ namespace Samovar.Blazor
 
         [SmInject]
         public IComponentBuilderService ComponentBuilderService { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-        private SmDataGridRowModel<TItem> _rowModel;
+        [Parameter]
+        public SmDataGridRowModel<TItem> RowModel { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         [Parameter]
         public EventCallback<SmDataGridRowModel<TItem>> RowModelChanged { get; set; }
-
-        //int dataHashCode = 0;
-        [Parameter]
-        public SmDataGridRowModel<TItem> RowModel
-        {
-            get { return _rowModel; }
-            set
-            {
-                _rowModel = value;
-                //if (dataHashCode != value.GetHashCode())
-                //{
-                //    dataHashCode = value.GetHashCode();
-                //}
-            }
-        }
-
-        protected async Task MouseDownOnResizeColumnGrip(MouseEventArgs args, DataColumnModel colMeta)
-        {
-            //if (DataGrid.FitColumnsToTableWidth)
-            //{
-            //    return;
-            //}
-            //await DataGrid.jsModule.InvokeVoidAsync("add_Window_MouseMove_EventListener", DataGrid.DataGridDotNetRef);
-            //await DataGrid.jsModule.InvokeVoidAsync("add_Window_MouseUp_EventListener", DataGrid.DataGridDotNetRef);
-
-            //DataGrid.ColWidthChangeManager.IsMouseDown = true;
-            //DataGrid.ColWidthChangeManager.StartMouseMoveX = args.ClientX;
-            //DataGrid.ColWidthChangeManager.MouseMoveCol = colMeta;
-
-            //DataGrid.ColWidthChangeManager.OldAbsoluteVisibleWidthValue = colMeta.VisibleAbsoluteWidthValue;
-
-            //var colEmpty = GridColumnService.Columns.Values.FirstOrDefault(cm => cm.ColumnType == GridColumnType.EmptyColumn);
-            //if (colEmpty != null)
-            //    DataGrid.ColWidthChangeManager.OldAbsoluteEmptyColVisibleWidthValue = colEmpty.VisibleAbsoluteWidthValue;
-
-            //JsInteropClasses.Start_ColumnWidthChange_Mode(DataGrid.jsModule,
-            //    DataGrid.GridColWidthSum,
-            //    GridColumnService.Columns.First(x => x.Value.Equals(colMeta)).Key.ToString(),
-            //    DataGrid.rx.GridModelService.innerGridId,
-            //    DataGrid.innerGridBodyTableId,
-
-            //    colMeta.VisibleGridColumnCellId.ToString(),
-            //    colMeta.HiddenGridColumnCellId.ToString(),
-            //    colMeta.FilterGridColumnCellId.ToString(),
-
-            //    colEmpty.VisibleGridColumnCellId.ToString(),
-            //    colEmpty.HiddenGridColumnCellId.ToString(),
-            //    colEmpty.FilterGridColumnCellId.ToString(),
-
-            //    GridColumnService.Columns.First(x => x.Value.Equals(colEmpty)).Key.ToString(),
-            //    args.ClientX,
-            //    colMeta.VisibleAbsoluteWidthValue,
-            //    DataGrid.FitColumnsToTableWidth,
-            //    colEmpty.VisibleAbsoluteWidthValue);
-        }
-
-		//internal bool ShowDetailPanel { get; set; }
+       
 		internal async Task DetailExpanderClick()
 		{
 			RowModel.RowDetailExpanded = !RowModel.RowDetailExpanded;
             await RowDetailService.ExpandOrCloseRowDetails(RowModel.DataItem);
         }
 
-		public void Dispose()
+        public ValueTask DisposeAsync()
         {
-            //DataGrid.NotifierService.NotifyAfterSort -= NotifierService_ResetDetailPanel;
-            //DataGrid.NotifierService.NotifyAfterFilter -= NotifierService_ResetDetailPanel;
-            //DataGrid.NotifierService.NotifyAfterPagingChange -= NotifierService_ResetDetailPanel;
-            //DataGrid.NotifierService.NotifyAfterEditingEnd -= NotifierService_NotifyAfterEditingEnd;
-
-            //_rowModel.NotifyAfterLoadData -= Value_NotifyAfterLoadData;
-            GC.Collect();
+            return ValueTask.CompletedTask;
         }
     }
 }

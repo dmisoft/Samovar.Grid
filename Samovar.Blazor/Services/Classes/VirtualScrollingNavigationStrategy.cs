@@ -7,9 +7,8 @@ namespace Samovar.Blazor
     public class VirtualScrollingNavigationStrategy<T>
         : IVirtualScrollingNavigationStrategy, IAsyncDisposable
     {
-        public IObservable<Task<NavigationStrategyDataLoadingSettings>> DataLoadingSettings { get; private set; }
+        public IObservable<Task<NavigationStrategyDataLoadingSettings>>? DataLoadingSettings { get; private set; }
         public BehaviorSubject<double> ScrollTop { get; private set; } = new BehaviorSubject<double>(0);
-
         public DotNetObjectReference<IVirtualScrollingNavigationStrategy> DotNetRef { get; }
 
         public int VisibleItems { get; set; }
@@ -27,20 +26,17 @@ namespace Samovar.Blazor
         protected double ActualTopOffset = 0;
         private double _translatableDivHeight;
         private readonly IJsService _jsService;
-        private readonly IInitService _initService;
         private readonly IDataSourceService<T> _dataSourceService;
 
         private readonly IConstantService _constantService;
 
-        public async Task<double> GetTranslatableDivHeight(int itemCount)
+        public Task<double> GetTranslatableDivHeight(int itemCount)
         {
             var translatableDivHeight = 34.3 * itemCount;
-            return translatableDivHeight;
+            return Task.FromResult(translatableDivHeight);
         }
 
         public BehaviorSubject<DataGridVirtualScrollingInfo> VirtualScrollingInfo { get; } = new BehaviorSubject<DataGridVirtualScrollingInfo>(DataGridVirtualScrollingInfo.Empty);
-
-        public ISubject<IQueryable> Query { get; }
 
         public VirtualScrollingNavigationStrategy(
               ILayoutService layoutService
@@ -53,14 +49,13 @@ namespace Samovar.Blazor
             DotNetRef = DotNetObjectReference.Create(this as IVirtualScrollingNavigationStrategy);
 
             _jsService = jsService;
-            _initService = initService;
             _dataSourceService = dataSourceService;
             _constantService = constantService;
 
-            _initService.IsInitialized.Subscribe(async (val) => await DataGridInitializerCallback(val));
+            initService.IsInitialized.Subscribe(async (val) => await DataGridInitializerCallback());
         }
 
-        private async Task DataGridInitializerCallback(bool val)
+        private async Task DataGridInitializerCallback()
         {
             DataLoadingSettings = ScrollTop.Select(async (scrollTop) => await GetDataLoadingSettings(scrollTop));
             _dataSourceService.DataQuery.Where(x => x != null).Subscribe(async (query) => await ProcessDataPrequery(query));

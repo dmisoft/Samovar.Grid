@@ -15,7 +15,7 @@ namespace Samovar.Blazor
         public IConstantService ConstantService { get; set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-        public DataGridStyleInfo Style { get; set; }
+        public DataGridStyleInfo? Style { get; set; }
 
         protected override void OnInitialized()
         {

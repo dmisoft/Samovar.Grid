@@ -2,7 +2,7 @@
 
 namespace Samovar.Blazor
 {
-	public partial class DataGridHiddenHeader<TItem>
+	public partial class DataGridHiddenHeader
         : SmDesignComponentBase, IAsyncDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

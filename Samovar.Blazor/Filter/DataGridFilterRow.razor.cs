@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-
-namespace Samovar.Blazor.Filter
+﻿namespace Samovar.Blazor.Filter
 {
     public partial class DataGridFilterRow<TItem>
-        : SmDesignComponentBase, IDisposable
+        : SmDesignComponentBase, IAsyncDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -49,10 +44,10 @@ namespace Samovar.Blazor.Filter
                     typeof(decimal),
                     typeof(decimal?),
             };
-
-        public void Dispose()
+        
+        public ValueTask DisposeAsync()
         {
-            
+            return ValueTask.CompletedTask;
         }
     }
 }

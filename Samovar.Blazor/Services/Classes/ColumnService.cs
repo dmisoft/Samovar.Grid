@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Samovar.Blazor
+﻿namespace Samovar.Blazor
 {
     public class ColumnService
         : IColumnService
@@ -13,13 +10,7 @@ namespace Samovar.Blazor
         public List<IColumnModel> AllColumnModels { get; } = new List<IColumnModel>();
 
         public IEnumerable<IDataColumnModel> DataColumnModels => AllColumnModels.OfType<IDataColumnModel>();
-
-        //public IEnumerable<ICommandColumnModel> CommandColumnModels => AllColumnModels.OfType<ICommandColumnModel>();
         
-        public ColumnService()
-        {
-        }
-
         public void RegisterColumn(IColumnModel columntModel)
         {
             int _columnOrder = AllColumnModels.Count + 1;

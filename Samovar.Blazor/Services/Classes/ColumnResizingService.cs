@@ -1,16 +1,13 @@
 ﻿using Microsoft.JSInterop;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
     public class ColumnResizingService
-        : IColumnResizingService, IDisposable
+        : IColumnResizingService, IAsyncDisposable
     {
-        private IJsService _jsService;
-        private IColumnService _columnService;
-        private ILayoutService _layoutService;
+        private readonly IJsService _jsService;
+        private readonly IColumnService _columnService;
+        private readonly ILayoutService _layoutService;
 
         public ColumnResizingService(
             IJsService jsService, 
@@ -24,33 +21,12 @@ namespace Samovar.Blazor
             ColumnResizingDotNetRef = DotNetObjectReference.Create(this as IColumnResizingService);
         }
 
-        //public object Data { get; set; }
-        //public string Zone { get; set; }
-
-        //public void StartDrag(object data, string zone)
-        //{
-        //    Data = data;
-        //    Zone = zone;
-        //}
-
-        //public bool Accepts(string zone)
-        //{
-        //    return Zone == zone;
-        //}
-
-        public void Dispose()
-        {
-            //TODO
-        }
-
-
-
         public bool IsMouseDown { get; set; }
         public double StartMouseMoveX { get; set; } = double.NaN;
         public double EndMouseMoveX { get; set; } = double.NaN;
         public double OldAbsoluteVisibleWidthValue { get; set; } = double.NaN;
         public double OldAbsoluteEmptyColVisibleWidthValue { get; set; } = double.NaN;
-        public IDataColumnModel MouseMoveCol { get; set; } = null;
+        public IDataColumnModel? MouseMoveCol { get; set; }
 
         public DotNetObjectReference<IColumnResizingService> ColumnResizingDotNetRef { get; private set; }
 
@@ -70,7 +46,7 @@ namespace Samovar.Blazor
             await _jsService.DetachWindowMouseUpEvent();
 
             if (!string.IsNullOrEmpty(colMetaId)) {
-                var col = _columnService.AllColumnModels.FirstOrDefault(c => c.Id == colMetaId);
+                var col = _columnService.AllColumnModels.Find(c => c.Id == colMetaId);
                 if(col != default(IColumnModel))
                     col.VisibleAbsoluteWidthValue = newVisibleAbsoluteWidthValue;
             }
@@ -85,6 +61,12 @@ namespace Samovar.Blazor
 
                 _layoutService.GridColWidthSum = newGridColWidthSum;
             }
+        }
+
+        public ValueTask DisposeAsync()
+        {
+            ColumnResizingDotNetRef.Dispose();
+            return ValueTask.CompletedTask;
         }
     }
 }
