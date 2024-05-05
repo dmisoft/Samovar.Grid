@@ -5,13 +5,12 @@ using System.Reflection;
 namespace Samovar.Blazor.Edit
 {
     public partial class GridEditCellDate
-        //: ComponentBase
     {
         [Parameter]
-        public object Data { get; set; }
+        public required object Data { get; set; }
 
         [Parameter]
-        public PropertyInfo PropInfo { get; set; }
+        public required PropertyInfo PropInfo { get; set; }
 
         private DateTime innerValue = DateTime.MinValue;
         protected DateTime InnerValue {

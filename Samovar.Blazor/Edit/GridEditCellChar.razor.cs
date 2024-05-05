@@ -5,25 +5,24 @@ using System.Reflection;
 namespace Samovar.Blazor.Edit
 {
     public partial class GridEditCellChar
-        //: ComponentBase
     {
         [Parameter]
-        public object Data { get; set; }
+        public required object Data { get; set; }
 
         [Parameter]
-        public PropertyInfo PropInfo { get; set; }
+        public required PropertyInfo PropInfo { get; set; }
 
         private char innerValue;
         protected char InnerValue
         {
             set
             {
-                this.innerValue = value;
+                innerValue = value;
                 PropInfo.SetValue(Data, innerValue);
             }
             get
             {
-                return this.innerValue;
+                return innerValue;
             }
         }
 
@@ -32,9 +31,7 @@ namespace Samovar.Blazor.Edit
             base.OnInitialized();
             InnerValue = (char)PropInfo.GetValue(Data);
         }
-        public void InnerValueOnInput(ChangeEventArgs args)
-        {
-        }
+       
         public void InnerValueOnChange(ChangeEventArgs args)
         {
             PropInfo.SetValue(Data, innerValue);

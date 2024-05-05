@@ -1,20 +1,18 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
 using System.Reflection;
 
 namespace Samovar.Blazor.Edit
 {
     public partial class GridEditCellNumeric<TValue, TEntity>
-        //: ComponentBase
     {
         [Parameter]
-        public object Data { get; set; }
+        public required TEntity Data { get; set; }
 
         [Parameter]
-        public PropertyInfo PropInfo { get; set; }
+        public required PropertyInfo PropInfo { get; set; }
 
-        private TValue innerValue;
-        protected TValue InnerValue
+        private TValue? innerValue;
+        protected TValue? InnerValue
         {
             set
             {
@@ -27,10 +25,9 @@ namespace Samovar.Blazor.Edit
             }
         }
 
-
         protected override void OnInitialized()
         {
-            InnerValue = (TValue)PropInfo.GetValue(Data) == null ? default : (TValue)PropInfo.GetValue(Data);
+            InnerValue = (TValue?)PropInfo.GetValue(Data);
         }
 
         public void InnerValueOnChange(ChangeEventArgs args)

@@ -5,14 +5,11 @@ namespace Samovar.Blazor.Edit
 {
     public partial class GridEditCellBoolean
     {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        [Parameter]
+        public required object Data { get; set; }
 
         [Parameter]
-        public object Data { get; set; }
-
-        [Parameter]
-        public PropertyInfo PropInfo { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public required PropertyInfo PropInfo { get; set; }
 
         private bool innerValue;
         protected bool InnerValue

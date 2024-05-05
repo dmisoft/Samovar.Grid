@@ -85,17 +85,7 @@ namespace Samovar.Blazor
         }
 
         [Parameter]
-        public int PageSize
-        {
-            get
-            {
-                return 0;
-            }
-            set
-            {
-                PagingNavigationStrategy.PageSize.OnNext(value);
-            }
-        }
+        public int PageSize { get; set; }
 
         [Parameter]
         public int PagerSize
@@ -279,6 +269,15 @@ namespace Samovar.Blazor
         {
             get { return EditingService.EditingFormTitleDelegate; }
             set { EditingService.EditingFormTitleDelegate = value; }
+        }
+
+        public override async Task SetParametersAsync(ParameterView parameters)
+        {
+            await base.SetParametersAsync(parameters);
+            
+            int pageSize = parameters.GetValueOrDefault<int>("PageSize");
+            pageSize = pageSize == 0 ? 50 : pageSize;
+            PagingNavigationStrategy.PageSize.OnNext(pageSize);
         }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)

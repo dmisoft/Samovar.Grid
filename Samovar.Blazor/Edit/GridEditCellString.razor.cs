@@ -6,13 +6,13 @@ namespace Samovar.Blazor.Edit
     public partial class GridEditCellString
     {
         [Parameter]
-        public object Data { get; set; }
+        public required object Data { get; set; }
 
         [Parameter]
-        public PropertyInfo PropInfo { get; set; }
+        public required PropertyInfo PropInfo { get; set; }
 
-        private string innerValue;
-        protected string InnerValue
+        private string? innerValue;
+        protected string? InnerValue
         {
             set
             {
@@ -30,9 +30,7 @@ namespace Samovar.Blazor.Edit
             base.OnInitialized();
             InnerValue = PropInfo.GetValue(Data)?.ToString();
         }
-        public void InnerValueOnInput(ChangeEventArgs args)
-        {
-        }
+        
         public void InnerValueOnChange(ChangeEventArgs args)
         {
             PropInfo.SetValue(Data, innerValue);

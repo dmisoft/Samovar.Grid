@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
@@ -19,20 +16,16 @@ namespace Samovar.Blazor
 
         public BehaviorSubject<DataGridPagerInfo> PagerInfo { get; private set; } = new BehaviorSubject<DataGridPagerInfo>(DataGridPagerInfo.Empty);
 
-        public IObservable<Task<NavigationStrategyDataLoadingSettings>> DataLoadingSettings { get; private set; } //= new BehaviorSubject<NavigationStrategyDataLoadingSettings>(NavigationStrategyDataLoadingSettings.Empty);
+        public IObservable<Task<NavigationStrategyDataLoadingSettings>> DataLoadingSettings { get; private set; }
 
-        //TODO Refactoring 10/2023
-        //Subscription2<int, int, NavigationStrategyDataLoadingSettings> pagingSettingsSubscription;
-        private readonly IInitService _initService;
         private readonly IDataSourceService<T> _dataSourceService;
 
         public PagingNavigationStrategy(
               IInitService initService
             , IDataSourceService<T> dataSourceService)
         {
-            _initService = initService;
             _dataSourceService = dataSourceService;
-            _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
+            initService.IsInitialized.Subscribe(DataGridInitializerCallback);
         }
 
         private void DataGridInitializerCallback(bool obj)
@@ -46,7 +39,7 @@ namespace Samovar.Blazor
             DataLoadingSettings = Observable.CombineLatest(
                 PageSize,
                 CurrentPage,
-                CalculateDataLoadingSetting);//.Subscribe(LoadingSettingsSubscriber);
+                CalculateDataLoadingSetting);
 
             _dataSourceService.DataQuery.Where(x => x != null).Subscribe(ProcessDataPrequery);
         }
@@ -55,11 +48,6 @@ namespace Samovar.Blazor
         {
             PagerInfo.OnNext(info);
         }
-
-        //private void LoadingSettingsSubscriber(NavigationStrategyDataLoadingSettings obj)
-        //{
-        //    DataLoadingSettings.OnNext(obj);
-        //}
 
         private Task<NavigationStrategyDataLoadingSettings> CalculateDataLoadingSetting(int pageSize, int currentPage)
         {
@@ -87,9 +75,9 @@ namespace Samovar.Blazor
             return Task.CompletedTask;
         }
 
-        public Task NavigateToPage(int newPage)
+        public Task NavigateToPage(int pageNumber)
         {
-            CurrentPage.OnNext(newPage);
+            CurrentPage.OnNext(pageNumber);
             return Task.CompletedTask;
         }
 
