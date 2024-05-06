@@ -203,13 +203,20 @@ namespace Samovar.Blazor
                 }
             }
 
-            if (isNullExpression is not null && retLambda is not null) {
-                retLambda = Expression.Block(isNullExpression, retLambda);
-                var lambda = Expression.Lambda<Func<T, bool>>(retLambda, obj );
-                return data.Where(lambda);
-            }
+            if (isNullExpression != null)
+                retLambda = Expression.Block(new[] { isNullExpression, retLambda });
 
-            return data;
+            var lambda = Expression.Lambda<Func<T, bool>>(retLambda, new ParameterExpression[] { obj });
+
+            return data.Where(lambda);
+
+            //if (isNullExpression is not null && retLambda is not null) {
+            //    retLambda = Expression.Block(isNullExpression, retLambda);
+            //    var lambda = Expression.Lambda<Func<T, bool>>(retLambda, obj );
+            //    return data.Where(lambda);
+            //}
+
+            //return data;
         }
     }
 }
