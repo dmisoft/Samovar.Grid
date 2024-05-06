@@ -12,25 +12,23 @@ namespace Samovar.Blazor.Edit
         [Parameter]
         public required PropertyInfo PropInfo { get; set; }
 
-        private DateTime innerValue = DateTime.MinValue;
-        protected DateTime InnerValue {
+        private DateTime? innerValue = DateTime.MinValue;
+        protected DateTime? InnerValue {
             set {
-                this.innerValue = value;
+                innerValue = value;
                 PropInfo.SetValue(Data, innerValue);
             }
             get {
-                return this.innerValue;
+                return innerValue;
             }
         }
 
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            innerValue = (DateTime)PropInfo.GetValue(Data);
+            innerValue = (DateTime?)PropInfo.GetValue(Data);
         }
-        public void InnerValueOnInput(ChangeEventArgs args)
-        {
-        }
+        
         public void InnerValueOnChange(ChangeEventArgs args)
         {
             PropInfo.SetValue(Data, innerValue);

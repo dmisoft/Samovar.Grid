@@ -34,27 +34,24 @@ namespace Samovar.Blazor
         public IEditingService<T> EditingService { get; set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-        public RenderFragment EditingPopup { get; set; }
+        public RenderFragment? EditingPopup { get; set; }
 
-        public RenderFragment InsertingPopup { get; set; }
+        public RenderFragment? InsertingPopup { get; set; }
 
-        public RenderFragment InsertingForm { get; set; }
+        public RenderFragment? InsertingForm { get; set; }
 
-        public RenderFragment NoDataPanel { get; set; }
-        public RenderFragment DataPanel { get; set; }
+        public RenderFragment? NoDataPanel { get; set; }
+        public RenderFragment? DataPanel { get; set; }
 
-        public RenderFragment NoDataFoundPanel { get; set; }
-        public RenderFragment PagingPanel { get; set; }
+        public RenderFragment? NoDataFoundPanel { get; set; }
+        public RenderFragment? PagingPanel { get; set; }
 
-        public RenderFragment DataProcessingPanel { get; set; }
+        public RenderFragment? DataProcessingPanel { get; set; }
 
-        public DataGridStyleInfo Style { get; set; } //Default style
+        public required DataGridStyleInfo Style { get; set; }
 
         protected override Task OnInitializedAsync()
         {
-            //var sub1 = new Subscription1TaskVoid<DataGridVirtualScrollingInfo>(VirtualScrollingService.VirtualScrollingInfo, myfunc1);
-            //sub1.CreateMap();
-
             Style = new DataGridStyleInfo
             {
                 CssStyle = LayoutService.OuterStyle.Value,
@@ -97,33 +94,6 @@ namespace Samovar.Blazor
             StateService.ShowPagingPanelDelegate = () => { PagingPanel = ComponentBuilderService.GetPagingPanel<T>(); StateHasChanged(); return Task.CompletedTask; };
             StateService.HidePagingPanelDelegate = () => { PagingPanel = null; StateHasChanged(); return Task.CompletedTask; };
 
-            //StateService.DataSourceState.Subscribe(state =>
-            //InvokeAsync(() =>
-            //{
-            //    DataProcessingPanel = null;
-            //    DataPanel = null;
-            //    PagingPanel = null;
-            //    NoDataPanel = null;
-            //    StateHasChanged();
-
-            //    switch (state)
-            //    {
-            //        case DataSourceStateEnum.Idle:
-            //            DataPanel = ComponentBuilderService.GetDataPanel<T>();
-            //            if (NavigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
-            //                PagingPanel = ComponentBuilderService.GetPagingPanel<T>();
-            //            break;
-            //        case DataSourceStateEnum.Loading:
-            //            DataProcessingPanel = ComponentBuilderService.GetProcessingDataPanel();
-            //            break;
-            //        case DataSourceStateEnum.NoData:
-            //            NoDataPanel = ComponentBuilderService.GetNoDataPanel();
-            //            break;
-            //        default:
-            //            break;
-            //    }
-            //    StateHasChanged();
-            //}));
             base.OnInitializedAsync();
 
             return Task.CompletedTask;
@@ -134,59 +104,10 @@ namespace Samovar.Blazor
             Style = arg;
             await InvokeAsync(StateHasChanged);
         }
-
-        //[Parameter]
-        //public string FilterToggleButtonClass { get; set; } = "btn btn-secondary";
-        //[Parameter]
-        //public string PaginationClass { get; set; } = "pagination";
-
-        //internal string GridBodyContainerId { get; } = $"gridbodycontainer{Guid.NewGuid().ToString().Replace("-", "")}";
-        //internal string innerGridBodyTableId { get; } = $"innergridbodytable{Guid.NewGuid().ToString().Replace("-", "")}";
-
-        //internal string outerGridId { get; set; } = $"outergrid{Guid.NewGuid().ToString().Replace("-", "")}";
-        //internal string gridHeaderContainerId { get; set; } = $"gridheadercontainer{Guid.NewGuid().ToString().Replace("-", "")}";
-        //internal string gridFilterContainerId { get; set; } = $"gridfiltercontainer{Guid.NewGuid().ToString().Replace("-", "")}";
-        //private string DataGridId { get; } = $"samovargrid{Guid.NewGuid().ToString().Replace("-", "")}";
-
-        //internal double MinGridWidth { get; set; }
-        //[SmInject]
-        //IColumnService ColumnService { get; set; }
-        //public async Task<string> TranslatableDivHeight() {
-        //    return await VirtualScrollingService.TranslatableDivHeight();
-        //}
-
-        //public async Task<string> ScrollStyle() {
-        //    var height = await VirtualScrollingService.TranslatableDivHeight();
-        //    return $"height:{height};overflow:hidden;position:absolute;";
-        //}
-        //public string ScrollStyle { get; set; }
-        //public double OffsetY { get; set; }
-        //public Task<string> ScrollStyle()
-        //{
-        //    var height = await VirtualScrollingService.TranslatableDivHeight();
-        //    return Task.FromResult( $"height:{height};overflow:hidden;position:absolute;");
-        //}
-
         public ValueTask DisposeAsync()
         {
             LayoutService.DataGridInnerCssStyleChanged -= GridLayoutService_DataGridInnerCssStyleChanged;
             return ValueTask.CompletedTask;
         }
-
-        //public void OnCompleted()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public void OnError(Exception error)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public string ScrollStyle { get; set; }
-        //public void OnNext(string height)
-        //{
-        //    ScrollStyle = $"height:{height};overflow:hidden;position:absolute;";
-        //}
     }
 }

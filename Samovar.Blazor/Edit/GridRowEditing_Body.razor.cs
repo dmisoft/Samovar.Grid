@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
 
 namespace Samovar.Blazor.Edit
 {
     public partial class GridRowEditing_Body<TItem>
-        : SmDesignComponentBase, IDisposable
+        : SmDesignComponentBase, IAsyncDisposable
     {
 
         [Parameter]
-        public SmDataGridRowModel<TItem> RowModel { get; set; }
+        public required SmDataGridRowModel<TItem> RowModel { get; set; }
 
-        public void Dispose()
+        public ValueTask DisposeAsync()
         {
-            GC.Collect();
+            return new ValueTask(Task.CompletedTask);
         }
     }
 }

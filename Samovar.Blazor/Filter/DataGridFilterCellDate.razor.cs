@@ -2,8 +2,8 @@
 
 namespace Samovar.Blazor.Filter
 {
-    public partial class DataGridFilterCellDate<TItem>
-        : DataGridFilterCellBase<TItem, DateTime?>
+    public partial class DataGridFilterCellDate
+        : DataGridFilterCellBase<DateTime?>
     {
 
     }

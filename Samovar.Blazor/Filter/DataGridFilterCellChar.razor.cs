@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace Samovar.Blazor.Filter
 {
-    public partial class DataGridFilterCellChar<TItem>
-        : DataGridFilterCellBase<TItem, char?>
+    public partial class DataGridFilterCellChar
+        : DataGridFilterCellBase<char?>
     {
 
     }

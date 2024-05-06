@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
 using System.Globalization;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
     public partial class SmDataGridRowVirtualScrollingPlaceHolder
-        : SmDesignComponentBase, IDisposable
+        : SmDesignComponentBase, IAsyncDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -26,28 +24,14 @@ namespace Samovar.Blazor
         [Parameter]
         public bool TopPlaceHolder { get; set; }
 
-        protected override void OnParametersSet()
-        {
-            base.OnParametersSet();
-        }
-
-        public override Task SetParametersAsync(ParameterView parameters)
-        {
-            return base.SetParametersAsync(parameters);
-        }
-
-        public void Dispose()
-        {
-            GC.Collect();
-        }
-
         protected override Task OnInitializedAsync()
         {
             VirtualScrollingService.VirtualScrollingInfo.Subscribe(VirtualScrollingInfoSubscriber);
 
             return base.OnInitializedAsync();
         }
-        protected string Style { get; set; }
+        protected string Style { get; set; } = string.Empty;
+
         private void VirtualScrollingInfoSubscriber(DataGridVirtualScrollingInfo info)
         {
             if (TopPlaceHolder)
@@ -59,6 +43,11 @@ namespace Samovar.Blazor
                 Style = $"cursor:pointer;height:{info.BottomPlaceholderHeight.ToString(CultureInfo.InvariantCulture)}px;";
             }
             StateHasChanged();
+        }
+
+        public ValueTask DisposeAsync()
+        {
+            return new ValueTask(Task.CompletedTask);
         }
     }
 }

@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor.Filter
 {
-    public abstract partial class DataGridFilterCellBase<TItem, TFilterCell>
-        : SmDesignComponentBase, IDisposable
+    public abstract partial class DataGridFilterCellBase<TFilterCell>
+        : SmDesignComponentBase, IAsyncDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -22,7 +20,7 @@ namespace Samovar.Blazor.Filter
 
 
         [Parameter]
-        public IDataColumnModel ColMetadata { get; set; }
+        public required IDataColumnModel ColMetadata { get; set; }
 
         protected string DropdownMenuButtonId { get; } = $"dropdownmenubtn{Guid.NewGuid().ToString().Replace("-", "")}";
 
@@ -41,9 +39,9 @@ namespace Samovar.Blazor.Filter
             set
             {
                 _innerValue = value;
-                
+
                 FilterCellInfo = new DataGridFilterCellInfo { ColumnMetadata = ColMetadata, FilterCellValue = _innerValue, FilterCellMode = _menuMode };
-                
+
                 FilterService.Filter(FilterCellInfo);
             }
             get
@@ -65,15 +63,17 @@ namespace Samovar.Blazor.Filter
         }
 
         bool filterMenuOpen = false;
-        
+
         protected async Task ShowMenu()
         {
             filterMenuOpen = !filterMenuOpen;
             await (await JsService.JsModule()).InvokeVoidAsync("toggleFilterPopupMenu", DropdownMenuButtonId, ColMetadata.FilterMenuContainerId, ColMetadata.FilterMenuId, filterMenuOpen);
         }
-        public void Dispose()
+
+        public ValueTask DisposeAsync()
         {
             FilterService.FilterCleared -= FilterService_FilterCleared;
+            return ValueTask.CompletedTask;
         }
     }
 }

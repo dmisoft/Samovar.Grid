@@ -12,8 +12,8 @@ namespace Samovar.Blazor.Edit
         [Parameter]
         public required PropertyInfo PropInfo { get; set; }
 
-        private char innerValue;
-        protected char InnerValue
+        private char? innerValue;
+        protected char? InnerValue
         {
             set
             {
@@ -29,7 +29,7 @@ namespace Samovar.Blazor.Edit
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            InnerValue = (char)PropInfo.GetValue(Data);
+            InnerValue = (char?)PropInfo.GetValue(Data);
         }
        
         public void InnerValueOnChange(ChangeEventArgs args)

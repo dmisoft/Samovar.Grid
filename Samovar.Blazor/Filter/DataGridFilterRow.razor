@@ -22,49 +22,49 @@
 								@switch (RepositoryService.PropInfo[((IDataColumnModel)colMeta).Field.Value].PropertyType)
 								{
 									case var t when t == typeof(DateTime) || t == typeof(DateTime?):
-										<DataGridFilterCellDate TItem=TItem ColMetadata="(IDataColumnModel)colMeta" />
+										<DataGridFilterCellDate ColMetadata="(IDataColumnModel)colMeta" />
 										break;
 									case var t when t == typeof(string):
-										<DataGridFilterCellString TItem=TItem ColMetadata="(IDataColumnModel)colMeta" />
+										<DataGridFilterCellString ColMetadata="(IDataColumnModel)colMeta" />
 										break;
 									case var t when t == typeof(char):
-										<DataGridFilterCellChar TItem=TItem ColMetadata="(IDataColumnModel)colMeta" />
+										<DataGridFilterCellChar ColMetadata="(IDataColumnModel)colMeta" />
 										break;
 									case var t when t == typeof(bool):
-										<DataGridFilterCellBoolean TItem=TItem ColMetadata="(IDataColumnModel)colMeta" />
+										<DataGridFilterCellBoolean ColMetadata="(IDataColumnModel)colMeta" />
 										break;
 									case var t when t == typeof(byte) || t == typeof(byte?):
-										<DataGridFilterCellNumeric TEntity=TItem TValue="byte?" ColMetadata="(IDataColumnModel)colMeta" />
+										<DataGridFilterCellNumeric TValue="byte?" ColMetadata="(IDataColumnModel)colMeta" />
 										break;
 									case var t when t == typeof(sbyte) || t == typeof(sbyte?):
-										<DataGridFilterCellNumeric TEntity=TItem TValue="sbyte?" ColMetadata="(IDataColumnModel)colMeta" />
+										<DataGridFilterCellNumeric TValue="sbyte?" ColMetadata="(IDataColumnModel)colMeta" />
 										break;
 									case var t when t == typeof(short) || t == typeof(short?):
-										<DataGridFilterCellNumeric TEntity=TItem TValue="short?" ColMetadata="(IDataColumnModel)colMeta" />
+										<DataGridFilterCellNumeric TValue="short?" ColMetadata="(IDataColumnModel)colMeta" />
 										break;
 									case var t when t == typeof(ushort) || t == typeof(ushort?):
-										<DataGridFilterCellNumeric TEntity=TItem TValue="ushort?" ColMetadata="(IDataColumnModel)colMeta" />
+										<DataGridFilterCellNumeric TValue="ushort?" ColMetadata="(IDataColumnModel)colMeta" />
 										break;
 									case var t when t == typeof(int) || t == typeof(int?):
-										<DataGridFilterCellNumeric TEntity=TItem TValue="int?" ColMetadata="(IDataColumnModel)colMeta" />
+										<DataGridFilterCellNumeric TValue="int?" ColMetadata="(IDataColumnModel)colMeta" />
 										break;
 									case var t when t == typeof(uint) || t == typeof(uint?):
-										<DataGridFilterCellNumeric TEntity=TItem TValue="uint?" ColMetadata="(IDataColumnModel)colMeta" />
+										<DataGridFilterCellNumeric TValue="uint?" ColMetadata="(IDataColumnModel)colMeta" />
 										break;
 									case var t when t == typeof(long) || t == typeof(long?):
-										<DataGridFilterCellNumeric TEntity=TItem TValue="long?" ColMetadata="(IDataColumnModel)colMeta" />
+										<DataGridFilterCellNumeric TValue="long?" ColMetadata="(IDataColumnModel)colMeta" />
 										break;
 									case var t when t == typeof(ulong) || t == typeof(ulong?):
-										<DataGridFilterCellNumeric TEntity=TItem TValue="ulong?" ColMetadata="(IDataColumnModel)colMeta" />
+										<DataGridFilterCellNumeric TValue="ulong?" ColMetadata="(IDataColumnModel)colMeta" />
 										break;
 									case var t when t == typeof(float) || t == typeof(float?):
-										<DataGridFilterCellNumeric TEntity=TItem TValue="float?" ColMetadata="(IDataColumnModel)colMeta" />
+										<DataGridFilterCellNumeric TValue="float?" ColMetadata="(IDataColumnModel)colMeta" />
 										break;
 									case var t when t == typeof(double) || t == typeof(double?):
-										<DataGridFilterCellNumeric TEntity=TItem TValue="double?" ColMetadata="(IDataColumnModel)colMeta" />
+										<DataGridFilterCellNumeric TValue="double?" ColMetadata="(IDataColumnModel)colMeta" />
 										break;
 									case var t when t == typeof(decimal) || t == typeof(decimal?):
-										<DataGridFilterCellNumeric TEntity=TItem TValue="decimal?" ColMetadata="(IDataColumnModel)colMeta" />
+										<DataGridFilterCellNumeric TValue="decimal?" ColMetadata="(IDataColumnModel)colMeta" />
 										break;
 									default:
 										break;

@@ -25,7 +25,6 @@ namespace Samovar.Blazor.Edit
             }
         }
 
-
         protected override void OnInitialized()
         {
             base.OnInitialized();

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
-namespace Samovar.Blazor.Filter
+﻿namespace Samovar.Blazor.Filter
 {
     public sealed class DataGridFilterCellInfo
         : IEquatable<DataGridFilterCellInfo>
