@@ -102,7 +102,7 @@ namespace Samovar.Blazor
                     {
                         switch (_editingService.EditMode.Value)
                         {
-                            case GridEditMode.Form:
+                            case DataGridEditMode.Form:
                                 if (_templateService.EditFormTemplate.Value != null)
                                 {
                                     rf = (builder) =>
@@ -122,7 +122,7 @@ namespace Samovar.Blazor
                                     };
                                 }
                                 break;
-                            case GridEditMode.Popup:
+                            case DataGridEditMode.Popup:
                                 rf = GetDefaultRow(model);
                                 break;
                         }

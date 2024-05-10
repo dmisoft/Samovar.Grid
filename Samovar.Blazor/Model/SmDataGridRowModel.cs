@@ -10,7 +10,7 @@ namespace Samovar.Blazor
     public interface IRowModel<T> 
         : IComponentModel {
         public T DataItem { get; set; }
-        public T EditingDataItem { get; set; }
+        public T? EditingDataItem { get; set; }
     }
 
     public class SmDataGridRowModel<T>
@@ -22,14 +22,13 @@ namespace Samovar.Blazor
 
         internal SmDataGridRowState RowState { get; set; } = SmDataGridRowState.Idle;
 
-        //Item position in CollectionView
         public int DataItemPosition { get; set; }
         public int DataItemIndex { get => DataItemPosition - 1; }
         public bool RowSelected { get; set; }
         public T DataItem { get; set; }
-        public T EditingDataItem { get; set; }
+        public T? EditingDataItem { get; set; }
         public List<DataGridRowCellModel<T>> GridCellModels { get; set; }
-        public List<DataGridRowCellModel<T>> EditingGridCellModels { get; set; }
+        public List<DataGridRowCellModel<T>>? EditingGridCellModels { get; set; }
 
         public readonly IEnumerable<IDataColumnModel> ColumnMetadata;
         
@@ -58,10 +57,7 @@ namespace Samovar.Blazor
 
             foreach (var cm in columnMetadata.Where(c => c.ColumnType == DataGridColumnType.Data))
             {
-                if (!string.IsNullOrEmpty(cm.Field.Value))
-                    gridCellModelCollection.Add(new DataGridRowCellModel<T>(dataItem, PropDict[cm.Field.Value], cm));
-                else
-                    gridCellModelCollection.Add(new DataGridRowCellModel<T>(dataItem, cm));
+                gridCellModelCollection.Add(new DataGridRowCellModel<T>(dataItem, PropDict[cm.Field.Value], cm));
             }
             return gridCellModelCollection;
         }
@@ -75,10 +71,7 @@ namespace Samovar.Blazor
 
             foreach (var cm in ColumnMetadata)
             {
-                if (!string.IsNullOrEmpty(cm.Field.Value))
-                    gridCellModelCollection.Add(new DataGridRowCellModel<T>(dataItem, PropDict[cm.Field.Value], cm));
-                else
-                    gridCellModelCollection.Add(new DataGridRowCellModel<T>(dataItem, cm));
+                gridCellModelCollection.Add(new DataGridRowCellModel<T>(dataItem, PropDict[cm.Field.Value], cm));
             }
 
             stopWatch.Stop();
@@ -93,14 +86,18 @@ namespace Samovar.Blazor
         }
         internal void CommitEditingModel()
         {
+            if (EditingDataItem is null)
+                return;
             DataItem = CopyRowModelData(EditingDataItem, DataItem);
             GridCellModels = CreateGridRowCellModelCollection2(DataItem);
         }
         public static T CloneRowItem(T sourceData)
         {
-            T retVal = (T)Activator.CreateInstance(typeof(T));
+            T? retVal = (T?)Activator.CreateInstance(typeof(T));
+            if (retVal is null)
+                throw new InvalidOperationException("Failed to create instance of type T");
 
-            foreach (PropertyInfo pi in sourceData.GetType().GetProperties())
+            foreach (PropertyInfo pi in sourceData!.GetType().GetProperties())
             {
                 if (pi.CanWrite)
                     pi.SetValue(retVal, pi.GetValue(sourceData));
@@ -110,7 +107,7 @@ namespace Samovar.Blazor
 
         public static T CopyRowModelData(T sourceData, T targetData)
         {
-            foreach (PropertyInfo pi in sourceData.GetType().GetProperties())
+            foreach (PropertyInfo pi in sourceData!.GetType().GetProperties())
             {
                 if (pi.CanWrite)
                     pi.SetValue(targetData, pi.GetValue(sourceData));
@@ -118,15 +115,6 @@ namespace Samovar.Blazor
             return targetData;
         }
 
-        private DataGridRowInnerModel<T> CreateRowModel(T dataItem, IEnumerable<IDataColumnModel> columnMetadata)
-        {
-            return new DataGridRowInnerModel<T>
-            {
-                Data = dataItem,
-                GridCellModelCollection = CreateGridRowCellModelCollection(columnMetadata, dataItem)
-            };
-        }
-        
         public ValueTask DisposeAsync()
         {
             GridCellModels?.Clear();

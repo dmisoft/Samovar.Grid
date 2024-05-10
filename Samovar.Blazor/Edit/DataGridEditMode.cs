@@ -1,6 +1,6 @@
 ﻿namespace Samovar.Blazor
 {
-    public enum GridEditMode
+    public enum DataGridEditMode
     {
         None = 0,
         //Inline = 1,

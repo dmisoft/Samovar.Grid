@@ -7,7 +7,7 @@ namespace Samovar.Blazor
 {
     public interface IEditingService<T>
     {
-        BehaviorSubject<GridEditMode> EditMode { get; }
+        BehaviorSubject<DataGridEditMode> EditMode { get; }
 
         public BehaviorSubject<EventCallback<T>> OnRowEditBegin { get; }
 
@@ -29,17 +29,17 @@ namespace Samovar.Blazor
         Task RowInsertCommit(T dataItem);
         Task RowInsertCancel();
 
-        Func<SmDataGridRowModel<T>, Task> ShowInsertingPopupDelegate { get; set; }
-        Func<Task> CloseInsertingPopupDelegate { get; set; }
+        Func<SmDataGridRowModel<T>, Task>? ShowInsertingPopupDelegate { get; set; }
+        Func<Task>? CloseInsertingPopupDelegate { get; set; }
 
-        Func<SmDataGridRowModel<T>, Task> ShowEditingPopupDelegate { get; set; }
-        Func<Task> CloseEditingPopupDelegate { get; set; }
+        Func<SmDataGridRowModel<T>, Task>? ShowEditingPopupDelegate { get; set; }
+        Func<Task>? CloseEditingPopupDelegate { get; set; }
 
-        Func<SmDataGridRowModel<T>, Task> ShowInsertingFormDelegate { get; set; }
+        Func<SmDataGridRowModel<T>, Task>? ShowInsertingFormDelegate { get; set; }
 
-        Func<Task> CloseInsertingFormDelegate { get; set; }
+        Func<Task>? CloseInsertingFormDelegate { get; set; }
 
-        Func<T, Task<string>> EditingFormTitleDelegate { get; set; }
+        Func<T, Task<string>>? EditingFormTitleDelegate { get; set; }
 
         event Func<Task> RowEditingEnded;
     }

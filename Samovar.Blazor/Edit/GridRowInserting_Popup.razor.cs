@@ -1,23 +1,19 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor.Edit
 {
     public partial class GridRowInserting_Popup<T>
-        : SmDesignComponentBase, IDisposable
+        : SmDesignComponentBase, IAsyncDisposable
     {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         [SmInject]
-        protected IEditingService<T> EditingService { get; set; }
+        public required IEditingService<T> EditingService { get; set; }
 
         [SmInject]
-        public IJsService JsService { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public required IJsService JsService { get; set; }
 
         [Parameter]
-        public SmDataGridRowModel<T> RowModel { get; set; }
+        public required SmDataGridRowModel<T> RowModel { get; set; }
 
         protected string Id { get; set; } = Guid.NewGuid().ToString().Replace("-", "");
 
@@ -29,9 +25,9 @@ namespace Samovar.Blazor.Edit
                 await (await JsService.JsModule()).InvokeVoidAsync("dragElement", Ref);
         }
 
-        public void Dispose()
+        public ValueTask DisposeAsync()
         {
-            GC.Collect();
+            return ValueTask.CompletedTask;
         }
     }
 }

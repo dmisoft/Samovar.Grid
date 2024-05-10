@@ -39,14 +39,11 @@ else
             <SmDataGrid Data="forecasts1"
                     Height="450px"
                     Width="1200px"
-                    FilterMode=DataGridFilterMode.FilterRow
+                    FilterMode=DataGridFilterMode.None
                     ShowDetailRow=true
-                    
-                    EditMode=GridEditMode.Form
+                    PageSize="10"
+                    EditMode=DataGridEditMode.Form
                     EditingFormTitleDelegate="@((WeatherForecast data) => Task.FromResult(data.TemperatureC.ToString()))"
-                    
-                    DataNavigationMode=DataGridNavigationMode.Paging
-                    
                     SelectionMode=GridSelectionMode.MultipleSelectedDataRows
                     @bind-SingleSelectedDataRow=selectedRow
                     @bind-MultipleSelectedDataRows=selectedRows

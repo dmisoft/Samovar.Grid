@@ -30,9 +30,9 @@ namespace Samovar.Blazor.Filter
         //3 *A
         protected byte _menuMode { get; set; }
 
-        protected DataGridFilterCellInfo FilterCellInfo;
+        protected DataGridFilterCellInfo? FilterCellInfo;
 
-        private TFilterCell _innerValue = default;
+        private TFilterCell? _innerValue = default;
 
         protected TFilterCell InnerValue
         {

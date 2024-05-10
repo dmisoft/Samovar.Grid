@@ -1,20 +1,17 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
     public class RepositoryService<T>
         : IRepositoryService<T>, IAsyncDisposable
     {
+        private IDisposable? _viewCollectionObservableTaskSubscription;
+
         public IEnumerable<SmDataGridRowModel<T>> ViewCollection { get; } = new List<SmDataGridRowModel<T>>();
 
         private readonly IDataSourceService<T> _dataSourceService;
@@ -78,7 +75,6 @@ namespace Samovar.Blazor
             _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
         }
 
-        private IDisposable _viewCollectionObservableTaskSubscription;
 
         private void DataGridInitializerCallback(bool obj)
         {
@@ -112,7 +108,7 @@ namespace Samovar.Blazor
             });
         }
 
-        private async Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T> query, Task<NavigationStrategyDataLoadingSettings> loadingSettingsTask)
+        private async Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T>? query, Task<NavigationStrategyDataLoadingSettings>? loadingSettingsTask)
         {
             IEnumerable<SmDataGridRowModel<T>> _retVal;
 
@@ -147,7 +143,7 @@ namespace Samovar.Blazor
 
         public ValueTask DisposeAsync()
         {
-            _viewCollectionObservableTaskSubscription.Dispose();
+            _viewCollectionObservableTaskSubscription?.Dispose();
             return ValueTask.CompletedTask;
         }
     }

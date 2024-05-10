@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor.Edit
 {
     public partial class GridRowEditing_Popup<TItem>
-        : SmDesignComponentBase, IDisposable
+        : SmDesignComponentBase, IAsyncDisposable
     {
-        [CascadingParameter(Name = "datagrid-row")]
-        protected SmDataGridRow<TItem> GridRow { get; set; }
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+        [CascadingParameter(Name = "datagrid-row")]
+        public required SmDataGridRow<TItem> GridRow { get; set; }
 
         [SmInject]
         public IEditingService<TItem> EditingService { get; set; }
@@ -20,7 +19,7 @@ namespace Samovar.Blazor.Edit
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         [Parameter]
-        public SmDataGridRowModel<TItem> RowModel { get; set; }
+        public required SmDataGridRowModel<TItem> RowModel { get; set; }
 
         protected ElementReference Ref { get; set; }
 
@@ -35,24 +34,11 @@ namespace Samovar.Blazor.Edit
         protected override void OnInitialized()
         {
             RowModel.CreateEditingModel();
-            //if (RowModel == null)
-            //{
-            //    RowModel = new GridRowModel<TItem>((TItem)Activator.CreateInstance(typeof(TItem)), DataGrid.rx.GridModelService.ColumnMetadataList,
-            //        0, DataGrid.rx.GridModelService.PropInfo);
-            //    RowModel.RowModel = new GridRowInnerModel<TItem>
-            //    {
-            //        Data = RowModel.dataItem,
-            //        GridCellModelCollection = RowModel.CreateGridRowCellModelCollection2(RowModel.ColumnMetadata, RowModel.PropInfo, RowModel.dataItem)
-            //    };
-            //    RowModel.IsLoaded = true;
-
-            //    await DataGrid.GridEditingService.RowInsertingBegin(RowModel);
-            //}
         }
 
-        public void Dispose()
+        public ValueTask DisposeAsync()
         {
-            GC.Collect();
+            return ValueTask.CompletedTask;
         }
     }
 }

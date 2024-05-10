@@ -1,4 +1,5 @@
 ﻿using Samovar.Blazor.Filter;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -14,9 +15,9 @@ namespace Samovar.Blazor
 
         public BehaviorSubject<IEnumerable<T>> Data { get; private set; } = new BehaviorSubject<IEnumerable<T>>(new List<T>());
 
-        public BehaviorSubject<IQueryable<T>> DataQuery { get; private set; } = new BehaviorSubject<IQueryable<T>>(null);
+        public BehaviorSubject<IQueryable<T>?> DataQuery { get; private set; } = new BehaviorSubject<IQueryable<T>?>(null);
 
-        List<Type> numericTypeList = new List<Type>
+        readonly List<Type> numericTypeList = new List<Type>
                 {
                     typeof(byte),
                     typeof(sbyte),
@@ -70,9 +71,7 @@ namespace Samovar.Blazor
         private void myfunc33(Tuple<IEnumerable<DataGridFilterCellInfo>, DataGridColumnOrderInfo, IEnumerable<T>> tuple)
         {
             if (tuple.Item3 == null)
-            {
                 return;
-            }
 
             IQueryable<T> query = tuple.Item3.AsQueryable();
 
@@ -82,8 +81,8 @@ namespace Samovar.Blazor
             if (tuple.Item2 != null && !tuple.Item2.Equals(DataGridColumnOrderInfo.Empty))
             {
                 var pr = typeof(T).GetProperty(tuple.Item2.Field);
-
-                query = tuple.Item2.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
+                if (pr is not null)
+                    query = tuple.Item2.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
             }
             DataQuery.OnNext(query);
         }
@@ -95,11 +94,11 @@ namespace Samovar.Blazor
 
             List<Expression> lambdaList = new List<Expression>();
 
-            ConditionalExpression isNullExpression = null;
+            ConditionalExpression? isNullExpression = null;
 
             foreach (var pair in filterInfo)
             {
-                string field = pair.ColumnMetadata.Field.Value;
+                string field = pair.ColumnMetadata!.Field.Value;
                 DataGridFilterCellInfo filterCellInfo = pair;
 
                 MemberExpression memberExp = Expression.Property(obj, field);
@@ -111,7 +110,8 @@ namespace Samovar.Blazor
                 switch (prop.PropertyType)
                 {
                     case var tt when tt == typeof(string):
-                        var filterCellValue = filterCellInfo.FilterCellValue.ToString().ToLower();
+                        var filterCellValue = filterCellInfo.FilterCellValue.ToString() ?? "";
+                        filterCellValue = filterCellValue.ToLower();
                         ConstantExpression valueExp = Expression.Constant(filterCellValue);
 
                         MethodInfo? IsNullOrEmptyMethod = typeof(string).GetMethod("IsNullOrEmpty", new[] { typeof(string) });
@@ -203,20 +203,17 @@ namespace Samovar.Blazor
                 }
             }
 
-            if (isNullExpression != null)
-                retLambda = Expression.Block(new[] { isNullExpression, retLambda });
+            if (isNullExpression is not null && retLambda is not null)
+                retLambda = Expression.Block(isNullExpression, retLambda);
 
-            var lambda = Expression.Lambda<Func<T, bool>>(retLambda, new ParameterExpression[] { obj });
 
-            return data.Where(lambda);
+            if (retLambda is not null)
+                retLambda = Expression.Lambda<Func<T, bool>>(retLambda, obj);
 
-            //if (isNullExpression is not null && retLambda is not null) {
-            //    retLambda = Expression.Block(isNullExpression, retLambda);
-            //    var lambda = Expression.Lambda<Func<T, bool>>(retLambda, obj );
-            //    return data.Where(lambda);
-            //}
-
-            //return data;
+            if (retLambda is not null)
+                return data.Where((Expression<Func<T, bool>>)retLambda);
+            else
+                return data;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Samovar.Blazor
 
         public BehaviorSubject<DataGridPagerInfo> PagerInfo { get; private set; } = new BehaviorSubject<DataGridPagerInfo>(DataGridPagerInfo.Empty);
 
-        public IObservable<Task<NavigationStrategyDataLoadingSettings>> DataLoadingSettings { get; private set; }
+        public IObservable<Task<NavigationStrategyDataLoadingSettings>>? DataLoadingSettings { get; private set; }
 
         private readonly IDataSourceService<T> _dataSourceService;
 
@@ -30,7 +30,7 @@ namespace Samovar.Blazor
 
         private void DataGridInitializerCallback(bool obj)
         {
-            var pagingInfoObservable = Observable.CombineLatest(
+            Observable.CombineLatest(
                 PagerSize,
                 TotalPageCount,
                 CurrentPage,
@@ -108,8 +108,11 @@ namespace Samovar.Blazor
             throw new NotImplementedException();
         }
 
-        public void ProcessDataPrequery<T1>(IQueryable<T1> data)
+        public void ProcessDataPrequery<T1>(IQueryable<T1>? data)
         {
+            if (data is null)
+                return;
+
             int items = data.Count();
 
             int newTotalPageCount = (int)Math.Ceiling(items / (decimal)PageSize.Value);

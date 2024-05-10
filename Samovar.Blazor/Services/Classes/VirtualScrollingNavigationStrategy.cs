@@ -58,7 +58,7 @@ namespace Samovar.Blazor
         private async Task DataGridInitializerCallback()
         {
             DataLoadingSettings = ScrollTop.Select(async (scrollTop) => await GetDataLoadingSettings(scrollTop));
-            _dataSourceService.DataQuery.Where(x => x != null).Subscribe(async (query) => await ProcessDataPrequery(query));
+            _dataSourceService.DataQuery.Where(x => x is not null).Subscribe(async (query) => await ProcessDataPrequery(query));
             await Activate();
         }
 

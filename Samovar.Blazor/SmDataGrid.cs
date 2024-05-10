@@ -1,49 +1,47 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using System.Collections.Generic;
 
 namespace Samovar.Blazor
 {
     public class SmDataGrid<T>
         : SmDataGridBase<T>
     {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        [SmInject]
+        public required IInitService InitService { get; set; }
 
         [SmInject]
-        public IInitService InitService { get; set; }
+        public required IRepositoryService<T> RepositoryService { get; set; }
 
         [SmInject]
-        public IRepositoryService<T> RepositoryService { get; set; }
+        public required IEditingService<T> EditingService { get; set; }
 
         [SmInject]
-        public IEditingService<T> EditingService { get; set; }
+        public required INavigationService NavigationService { get; set; }
 
         [SmInject]
-        public INavigationService NavigationService { get; set; }
+        public required IPagingNavigationStrategy PagingNavigationStrategy { get; set; }
 
         [SmInject]
-        public IPagingNavigationStrategy PagingNavigationStrategy { get; set; }
+        public required IConstantService ConstantService { get; set; }
 
         [SmInject]
-        public IConstantService ConstantService { get; set; }
+        public required ILayoutService LayoutService { get; set; }
 
         [SmInject]
-        public ILayoutService LayoutService { get; set; }
+        public required IVirtualScrollingNavigationStrategy VirtualScrollingService { get; set; }
 
         [SmInject]
-        public IVirtualScrollingNavigationStrategy VirtualScrollingService { get; set; }
+        public required ITemplateService<T> TemplateService { get; set; }
 
         [SmInject]
-        public ITemplateService<T> TemplateService { get; set; }
+        public required IGridSelectionService<T> GridSelectionService { get; set; }
 
         [SmInject]
-        public IGridSelectionService<T> GridSelectionService { get; set; }
+        public required IComponentBuilderService ComponentBuilderService { get; set; }
 
         [SmInject]
-        public IComponentBuilderService ComponentBuilderService { get; set; }
-
-        [SmInject]
-        public IDataSourceService<T> DataSourceService { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public required IDataSourceService<T> DataSourceService { get; set; }
 
         [Parameter]
         public RenderFragment Columns
@@ -59,149 +57,51 @@ namespace Samovar.Blazor
         }
 
         [Parameter]
-        public IEnumerable<T> Data
-        {
-            get
-            {
-                return DataSourceService.Data.Value;
-            }
-            set
-            {
-                DataSourceService.Data.OnNext(value);
-            }
-        }
+        public IEnumerable<T>? Data { get; set; }
 
         [Parameter]
-        public DataGridFilterMode FilterMode
-        {
-            get
-            {
-                return DataGridFilterMode.None;
-            }
-            set
-            {
-                LayoutService.FilterMode.OnNext(value);
-            }
-        }
+        public DataGridFilterMode? FilterMode { get; set; }
 
         [Parameter]
         public int PageSize { get; set; }
 
         [Parameter]
-        public int PagerSize
-        {
-            get
-            {
-                return 0;
-            }
-            set
-            {
-                PagingNavigationStrategy.PagerSize.OnNext(value);
-            }
-        }
+        public int PagerSize { get; set; }
 
         [Parameter]
-        public string? Height
-        {
-            get
-            {
-                return null;
-            }
-            set
-            {
-                LayoutService.Height.OnNext(value);
-            }
-        }
+        public string? Height { get; set; }
 
         [Parameter]
-        public string Width
-        {
-            get
-            {
-                return "";
-            }
-            set
-            {
-                LayoutService.Width.OnNext(value);
-            }
-        }
+        public string? Width { get; set; }
 
         [Parameter]
-        public string FilterToggleButtonClass
-        {
-            get
-            {
-                return null;
-            }
-            set
-            {
-                LayoutService.FilterToggleButtonClass.OnNext(value);
-            }
-        }
+        public string? FilterToggleButtonClass { get; set; }
+    
+        [Parameter]
+        public string? CssClass { get; set; }
+    
+        [Parameter]
+        public bool? ShowColumnHeader { get; set; }
+        
 
         [Parameter]
-        public string CssClass
-        {
-            get
-            {
-                return null;
-            }
-            set
-            {
-                LayoutService.TableTagClass.OnNext(value);
-            }
-        }
+        public bool? ShowDetailRow { get; set; }
+      
+        [Parameter]
+        public DataGridNavigationMode? DataNavigationMode { get; set; }
 
         [Parameter]
-        public bool ShowColumnHeader
-        {
-            get
-            {
-                return false;
-            }
-            set
-            {
-                LayoutService.ShowColumnHeader.OnNext(value);
-            }
-        }
+        public DataGridEditMode EditMode { get; set; }
 
         [Parameter]
-        public bool ShowDetailRow
-        {
-            get
-            {
-                return false;
-            }
-            set
-            {
-                LayoutService.ShowDetailRow.OnNext(value);
-            }
-        }
+        public RenderFragment<T>? DetailRowTemplate { get; set; }
 
         [Parameter]
-        public DataGridNavigationMode DataNavigationMode
-        {
-            get
-            {
-                return NavigationService.NavigationMode.Value;
-            }
-            set
-            {
-                NavigationService.NavigationMode.OnNext(value);
-            }
-        }
+        public RenderFragment<T>? EditFormTemplate { get; set; }
 
         [Parameter]
-        public RenderFragment<T>? DetailRowTemplate { get { return null; } set { TemplateService.DetailRowTemplate.OnNext(value); } }
-
-        [Parameter]
-        public RenderFragment<T>? EditFormTemplate { get { return null; } set { TemplateService.EditFormTemplate.OnNext(value); } }
-
-        [Parameter]
-        public RenderFragment<T>? InsertFormTemplate { get { return null; } set { TemplateService.InsertFormTemplate.OnNext(value); } }
-
-        [Parameter]
-        public GridEditMode EditMode { get { return GridEditMode.None; } set { EditingService.EditMode.OnNext(value); } }
+        public RenderFragment<T>? InsertFormTemplate { get; set; }
+        
 
         [Parameter]
         public EventCallback<T> RowEditBegin
@@ -274,16 +174,75 @@ namespace Samovar.Blazor
         public override async Task SetParametersAsync(ParameterView parameters)
         {
             await base.SetParametersAsync(parameters);
-            
-            int pageSize = parameters.GetValueOrDefault<int>("PageSize");
+
+            int pageSize = parameters.GetValueOrDefault<int>(nameof(PageSize));
             pageSize = pageSize == 0 ? 50 : pageSize;
             PagingNavigationStrategy.PageSize.OnNext(pageSize);
+
+            int pagerSize = parameters.GetValueOrDefault<int>(nameof(PagerSize));
+            pagerSize = pagerSize == 0 ? 10 : pagerSize;
+            PagingNavigationStrategy.PagerSize.OnNext(pagerSize);
+
+            string? height = parameters.GetValueOrDefault<string?>(nameof(Height));
+            if(height != null)
+                LayoutService.Height.OnNext(height);
+
+            string? width = parameters.GetValueOrDefault<string?>(nameof(Width));
+            if (width != null)
+                LayoutService.Width.OnNext(width);
+
+            string? filterToggleButtonClass = parameters.GetValueOrDefault<string?>(nameof(FilterToggleButtonClass));
+            if (filterToggleButtonClass != null)
+                LayoutService.FilterToggleButtonClass.OnNext(filterToggleButtonClass);
+
+            string? cssClass = parameters.GetValueOrDefault<string?>(nameof(CssClass));
+            if (cssClass != null)
+                LayoutService.TableTagClass.OnNext(cssClass);
+
+            bool? showColumnHeader = parameters.GetValueOrDefault<bool?>(nameof(ShowColumnHeader));
+            showColumnHeader ??= true;
+            LayoutService.ShowColumnHeader.OnNext(showColumnHeader.Value);
+
+            bool? showDetailRow = parameters.GetValueOrDefault<bool?>(nameof(ShowDetailRow));
+            showDetailRow ??= false;
+            LayoutService.ShowDetailRow.OnNext(showDetailRow.Value);
+
+            DataGridNavigationMode? dataNavigationMode = parameters.GetValueOrDefault<DataGridNavigationMode?>(nameof(DataNavigationMode));
+            dataNavigationMode ??= DataGridNavigationMode.Paging;
+            NavigationService.NavigationMode.OnNext(dataNavigationMode.Value);
+
+            DataGridFilterMode? dataGridFilterMode = parameters.GetValueOrDefault<DataGridFilterMode?>(nameof(FilterMode));
+            dataGridFilterMode ??= DataGridFilterMode.None;
+            LayoutService.FilterMode.OnNext(dataGridFilterMode.Value);
+
+            DataGridEditMode? dataGridEditMode = parameters.GetValueOrDefault<DataGridEditMode?>(nameof(EditMode));
+            dataGridEditMode ??= DataGridEditMode.None;
+            EditingService.EditMode.OnNext(dataGridEditMode.Value);
+
+            RenderFragment<T>? detailRowTemplate = parameters.GetValueOrDefault< RenderFragment<T>?> (nameof(DetailRowTemplate));
+            if (detailRowTemplate != null)
+                TemplateService.DetailRowTemplate.OnNext(detailRowTemplate);
+
+            RenderFragment<T>? editFormTemplate = parameters.GetValueOrDefault<RenderFragment<T>?>(nameof(EditFormTemplate));
+            if (editFormTemplate != null)
+                TemplateService.EditFormTemplate.OnNext(editFormTemplate);
+
+            RenderFragment<T>? insertFormTemplate = parameters.GetValueOrDefault<RenderFragment<T>?>(nameof(InsertFormTemplate));
+            if (insertFormTemplate != null)
+                TemplateService.InsertFormTemplate.OnNext(insertFormTemplate);
+
+
+
+            IEnumerable<T>? data = parameters.GetValueOrDefault<IEnumerable<T>>(nameof(Data));
+            if(data != null)
+                DataSourceService.Data.OnNext(data);
+
         }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            RenderFragment del = null;
-			switch (DataNavigationMode)
+            RenderFragment del;
+			switch (NavigationService.NavigationMode.Value)
             {
 				case DataGridNavigationMode.Paging:
 					del = delegate (RenderTreeBuilder builder2)

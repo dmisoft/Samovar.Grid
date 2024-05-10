@@ -4,16 +4,16 @@ using System.Reactive.Subjects;
 namespace Samovar.Blazor
 {
     public class EditingService<T>
-        : IEditingService<T>, IDisposable
+        : IEditingService<T>, IAsyncDisposable
     {
-        SmDataGridRowModel<T> _editingRowModel;
+        SmDataGridRowModel<T>? _editingRowModel;
 
         readonly IGridStateService _stateService;
         readonly IRepositoryService<T> _repositoryService;
         readonly IColumnService _columnService;
         readonly INavigationService _navigationService;
 
-        public event Func<Task> RowEditingEnded;
+        public event Func<Task>? RowEditingEnded;
         
         public async Task OnRowEditingEnded()
         {
@@ -23,21 +23,22 @@ namespace Samovar.Blazor
             }
         }
 
-        public BehaviorSubject<GridEditMode> EditMode { get; } = new BehaviorSubject<GridEditMode>(GridEditMode.Form);
+        public BehaviorSubject<DataGridEditMode> EditMode { get; } = new BehaviorSubject<DataGridEditMode>(DataGridEditMode.Form);
 
         public BehaviorSubject<EventCallback<T>> OnRowEditBegin { get; } = new BehaviorSubject<EventCallback<T>>(default(EventCallback<T>));
         public BehaviorSubject<EventCallback<Dictionary<string, object>>> OnInitializeNewRow { get; } = new BehaviorSubject<EventCallback<Dictionary<string, object>>>(default(EventCallback<Dictionary<string, object>>));
         public BehaviorSubject<EventCallback> OnRowInsertBegin { get; } = new BehaviorSubject<EventCallback>(default(EventCallback));
         public BehaviorSubject<EventCallback<T>> OnRowInserting { get; } = new BehaviorSubject<EventCallback<T>>(default(EventCallback<T>));
         public BehaviorSubject<EventCallback<T>> OnRowRemoving { get; } = new BehaviorSubject<EventCallback<T>>(default(EventCallback<T>));
-        public Func<SmDataGridRowModel<T>, Task> ShowInsertingPopupDelegate { get; set; }
-        public Func<Task> CloseInsertingPopupDelegate { get; set; }
-        public Func<SmDataGridRowModel<T>, Task> ShowEditingPopupDelegate { get; set; }
-        public Func<Task> CloseEditingPopupDelegate { get; set; }
+        
+        public Func<SmDataGridRowModel<T>, Task>? ShowInsertingPopupDelegate { get; set; }
+        public Func<Task>? CloseInsertingPopupDelegate { get; set; }
+        public Func<SmDataGridRowModel<T>, Task>? ShowEditingPopupDelegate { get; set; }
+        public Func<Task>? CloseEditingPopupDelegate { get; set; }
 
-        public Func<SmDataGridRowModel<T>, Task> ShowInsertingFormDelegate { get; set; }
-        public Func<Task> CloseInsertingFormDelegate { get; set; }
-		public Func<T, Task<string>> EditingFormTitleDelegate { get; set; }
+        public Func<SmDataGridRowModel<T>, Task>? ShowInsertingFormDelegate { get; set; }
+        public Func<Task>? CloseInsertingFormDelegate { get; set; }
+		public Func<T, Task<string>>? EditingFormTitleDelegate { get; set; }
 
 		public EditingService(
               IGridStateService stateService
@@ -64,7 +65,7 @@ namespace Samovar.Blazor
                 ShowEditingPopupDelegate?.Invoke(_editingRowModel);
             }
             else {
-                if (EditMode.Value == GridEditMode.Popup)
+                if (EditMode.Value == DataGridEditMode.Popup)
                     ShowEditingPopupDelegate?.Invoke(_editingRowModel);
             }
 
@@ -73,8 +74,7 @@ namespace Samovar.Blazor
 
         public Task RowEditCancel()
         {
-            _editingRowModel.RowState = SmDataGridRowState.Idle;
-
+            _editingRowModel!.RowState = SmDataGridRowState.Idle;
             _editingRowModel = null;
 
             if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
@@ -83,7 +83,7 @@ namespace Samovar.Blazor
             }
             else
             {
-                if (EditMode.Value == GridEditMode.Popup)
+                if (EditMode.Value == DataGridEditMode.Popup)
                     CloseEditingPopupDelegate?.Invoke();
             }
 
@@ -92,11 +92,11 @@ namespace Samovar.Blazor
 
         public async Task RowEditCommit()
         {
-            _editingRowModel.RowState = SmDataGridRowState.Idle;
+            _editingRowModel!.RowState = SmDataGridRowState.Idle;
             _editingRowModel.CommitEditingModel();
             _editingRowModel = null;
 
-            if (EditMode.Value == GridEditMode.Popup)
+            if (EditMode.Value == DataGridEditMode.Popup)
                 CloseEditingPopupDelegate?.Invoke();
 
             await OnRowEditingEnded();
@@ -109,14 +109,18 @@ namespace Samovar.Blazor
 
         public async Task RowInsertBegin()
         {
-            var rowModel = new SmDataGridRowModel<T>((T)Activator.CreateInstance(typeof(T)), _columnService.DataColumnModels, 0, _repositoryService.PropInfo, false);
+            var insertModel = (T?)Activator.CreateInstance(typeof(T));
+            if(insertModel is null)
+                throw new InvalidOperationException("Failed to create instance of type T");
+
+            var rowModel = new SmDataGridRowModel<T>(insertModel, _columnService.DataColumnModels, 0, _repositoryService.PropInfo, false);
             rowModel.CreateEditingModel();
 
             await OnRowInsertBegin.Value.InvokeAsync();
 
-            if (EditMode.Value == GridEditMode.Popup)
+            if (EditMode.Value == DataGridEditMode.Popup)
                 ShowInsertingPopupDelegate?.Invoke(rowModel);
-            else if (EditMode.Value == GridEditMode.Form)
+            else if (EditMode.Value == DataGridEditMode.Form)
                 ShowInsertingFormDelegate?.Invoke(rowModel);
 
             _stateService.DataEditState.OnNext(DataEditState.Inserting);
@@ -126,25 +130,25 @@ namespace Samovar.Blazor
         {
             await OnRowInserting.Value.InvokeAsync(dataItem);
 
-            if (EditMode.Value == GridEditMode.Popup)
+            if (EditMode.Value == DataGridEditMode.Popup)
                 CloseInsertingPopupDelegate?.Invoke();
-            else if (EditMode.Value == GridEditMode.Form)
+            else if (EditMode.Value == DataGridEditMode.Form)
                 CloseInsertingFormDelegate?.Invoke();
         }
 
         public Task RowInsertCancel()
         {
-            if (EditMode.Value == GridEditMode.Popup)
+            if (EditMode.Value == DataGridEditMode.Popup)
                 CloseInsertingPopupDelegate?.Invoke();
-            else if (EditMode.Value == GridEditMode.Form)
+            else if (EditMode.Value == DataGridEditMode.Form)
                 CloseInsertingFormDelegate?.Invoke();
 
             return Task.CompletedTask;
         }
 
-        public void Dispose()
+        public ValueTask DisposeAsync()
         {
-
+            return ValueTask.CompletedTask;
         }
-	}
+    }
 }

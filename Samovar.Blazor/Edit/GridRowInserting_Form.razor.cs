@@ -4,26 +4,23 @@ using System;
 namespace Samovar.Blazor.Edit
 {
     public partial class GridRowInserting_Form<TItem>
-        : SmDesignComponentBase, IDisposable
+        : SmDesignComponentBase, IAsyncDisposable
     {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        [SmInject]
+        public required ILayoutService LayoutService { get; set; }
 
         [SmInject]
-        public ILayoutService LayoutService { get; set; }
+        public required IColumnService ColumnService { get; set; }
 
         [SmInject]
-        public IColumnService ColumnService { get; set; }
-
-        [SmInject]
-        public IEditingService<TItem> EditingService { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public required IEditingService<TItem> EditingService { get; set; }
 
         [Parameter]
-        public SmDataGridRowModel<TItem> RowModel { get; set; }
+        public required SmDataGridRowModel<TItem> RowModel { get; set; }
 
-        public void Dispose()
+        public ValueTask DisposeAsync()
         {
-            GC.Collect();
+            return ValueTask.CompletedTask;
         }
     }
 }

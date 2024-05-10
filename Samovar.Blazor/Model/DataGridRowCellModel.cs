@@ -1,37 +1,24 @@
-﻿using System.Linq.Expressions;
-using System;
-using System.Reflection;
-using System.Reflection.Emit;
+﻿using System.Reflection;
 
 namespace Samovar.Blazor
 {
     public class DataGridRowCellModel<T>
     {
-        internal string CellValue { get; private set; } = "...";
+        internal string CellValue { get; private set; } = string.Empty;
         public IDataColumnModel ColumnMetadata { get; set; }
-        public string Style { get; set; }
+        public string Style { get; set; } = string.Empty;
         public PropertyInfo Pi { get; private set; }
-        private T _underlyingRowData;// { get; private set; }
-        public DataGridRowCellModel(T rowData, PropertyInfo pi, IDataColumnModel columnMetadata)
+        
+        public DataGridRowCellModel(T? rowData, PropertyInfo pi, IDataColumnModel columnMetadata)
         {
-            _underlyingRowData = rowData;
             ColumnMetadata = columnMetadata;
             Pi = pi;
-            if (_underlyingRowData != null)
+            if (rowData is not null)
             {
-                CellValue = Pi.GetValue(_underlyingRowData)?.ToString();
-                //Expression propertyExpr = Expression.Property(Expression.Constant(_underlyingRowData),pi.Name);
-                //CellValue = Expression.Lambda<Func<dynamic>>(propertyExpr).Compile()?.ToString();
+                var cellValue = Pi.GetValue(rowData);
+                if (cellValue is not null)
+                    CellValue = cellValue.ToString() ?? "";
             }
-        }
-
-        public DataGridRowCellModel(T rowData, IDataColumnModel columnMetadata)
-        {
-            //TODO dieser ctor gilt nur für CellTemplate
-            //andere Lösung bitte, weil nicht übersichtlich
-            _underlyingRowData = rowData;
-            CellValue = "";
-            ColumnMetadata = columnMetadata;
         }
     }
 }

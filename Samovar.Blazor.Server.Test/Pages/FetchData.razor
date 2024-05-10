@@ -23,7 +23,7 @@ else
             <SmDataGrid Data="forecasts1"
                         FilterMode=DataGridFilterMode.FilterRow
                         Height="450px" ShowDetailRow=true
-                        EditMode=GridEditMode.Popup
+                        EditMode=DataGridEditMode.Popup
                         DataNavigationMode=DataGridNavigationMode.Paging
                         PageSize="5"
                         PagerSize="7"
@@ -79,7 +79,7 @@ else
                         Height="@height"
                         RowEditBegin="@((WeatherForecast data) => RowEditBeginHandler(data))"
                         RowInsertBegin=@RowInsertBeginHandler
-                        EditMode=GridEditMode.Form
+                        EditMode=DataGridEditMode.Form
                         DataNavigationMode=DataGridNavigationMode.VirtualScrolling
                         SelectionMode=GridSelectionMode.MultipleSelectedDataRows
                         @bind-MultipleSelectedDataRows=selectedRows>
