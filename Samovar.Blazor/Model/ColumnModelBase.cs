@@ -10,7 +10,6 @@ namespace Samovar.Blazor
     {
         public string Id { get; } = $"columnmodel{Guid.NewGuid().ToString().Replace("-", "")}";
 
-
         public abstract DataGridColumnType ColumnType { get; }
 
         public BehaviorSubject<string> Title { get; } = new BehaviorSubject<string>("");
@@ -71,7 +70,7 @@ namespace Samovar.Blazor
 
         public PropertyInfo ColumnDataItemPropertyInfo => throw new NotImplementedException();
 
-        public ColumnModelBase()
+        protected ColumnModelBase()
         {
             Width.Subscribe(WidthSubjectCallback);
         }

@@ -53,6 +53,10 @@ namespace Samovar.Blazor
 
 		public T TryGetFilterCellValue<T>(IDataColumnModel columnModel)
 		{
+            if (!ColumnFilters.Any(f => f.ColumnMetadata is not null && f.ColumnMetadata.Equals(columnModel)))
+            {
+                return default;
+            }
             return (T)ColumnFilters.Single(f => f.ColumnMetadata is not null && f.ColumnMetadata.Equals(columnModel)).FilterCellValue;
         }
 
