@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using System.Collections.Generic;
 
 namespace Samovar.Blazor
 {
@@ -44,17 +43,7 @@ namespace Samovar.Blazor
         public required IDataSourceService<T> DataSourceService { get; set; }
 
         [Parameter]
-        public RenderFragment Columns
-        {
-            get
-            {
-                return base.ChildContent;
-            }
-            set
-            {
-                base.ChildContent = value;
-            }
-        }
+        public required RenderFragment Columns { get; set; }
 
         [Parameter]
         public IEnumerable<T>? Data { get; set; }
@@ -64,6 +53,9 @@ namespace Samovar.Blazor
 
         [Parameter]
         public int PageSize { get; set; }
+
+        [Parameter]
+        public EventCallback<int> PageSizeChanged { get; set; }
 
         [Parameter]
         public int PagerSize { get; set; }
@@ -104,76 +96,44 @@ namespace Samovar.Blazor
         
 
         [Parameter]
-        public EventCallback<T> RowEditBegin
-        {
-            get { return EditingService.OnRowEditBegin.Value; }
-            set { EditingService.OnRowEditBegin.OnNext(value); }
-        }
+        public EventCallback<T> RowEditBegin { get; set; }
 
         [Parameter]
-        public EventCallback RowInsertBegin
-        {
-            get { return EditingService.OnRowInsertBegin.Value; }
-            set { EditingService.OnRowInsertBegin.OnNext(value); }
-        }
+        public EventCallback RowInsertBegin { get; set; }
 
         [Parameter]
-        public EventCallback<T> RowInserting
-        {
-            get { return EditingService.OnRowInserting.Value; }
-            set { EditingService.OnRowInserting.OnNext(value); }
-        }
+        public EventCallback<T> RowInserting { get; set; }
 
         [Parameter]
-        public EventCallback<T> RowRemoving
-        {
-            get { return EditingService.OnRowRemoving.Value; }
-            set { EditingService.OnRowRemoving.OnNext(value); }
-        }
+        public EventCallback<T> RowRemoving { get; set; }
 
         [Parameter]
-        public GridSelectionMode SelectionMode
-        {
-            get { return GridSelectionMode.None; }
-            set { GridSelectionService.SelectionMode.OnNext(value); }
-        }
+        public GridSelectionMode SelectionMode { get; set; }
 
         [Parameter]
-        public T SingleSelectedDataRow
-        {
-            get { return default; }
-            set
-            {
-                GridSelectionService.SingleSelectedDataRow.OnNext(value);
-            }
-        }
+        public T? SingleSelectedDataRow { get; set; }
 
         [Parameter]
         public EventCallback<T> SingleSelectedDataRowChanged { get; set; }
 
         [Parameter]
-        public IEnumerable<T> MultipleSelectedDataRows
-        {
-            get { return default; }
-            set
-            {
-                GridSelectionService.MultipleSelectedDataRows.OnNext(value);
-            }
-        }
+        public IEnumerable<T>? MultipleSelectedDataRows { get; set; }
 
         [Parameter]
         public EventCallback<IEnumerable<T>> MultipleSelectedDataRowsChanged { get; set; }
 
         [Parameter]
-        public Func<T, Task<string>> EditingFormTitleDelegate
-        {
-            get { return EditingService.EditingFormTitleDelegate; }
-            set { EditingService.EditingFormTitleDelegate = value; }
-        }
+        public Func<T, Task<string>>? EditingFormTitleDelegate { get; set; }
 
         public override async Task SetParametersAsync(ParameterView parameters)
         {
             await base.SetParametersAsync(parameters);
+
+            RenderFragment? columns = parameters.GetValueOrDefault<RenderFragment>(nameof(Columns));
+            if (columns is null)
+                throw new ArgumentException(nameof(Columns));
+            else
+                ChildContent = columns;
 
             int pageSize = parameters.GetValueOrDefault<int>(nameof(PageSize));
             pageSize = pageSize == 0 ? 50 : pageSize;
@@ -183,19 +143,19 @@ namespace Samovar.Blazor
             pagerSize = pagerSize == 0 ? 10 : pagerSize;
             PagingNavigationStrategy.PagerSize.OnNext(pagerSize);
 
-            string? height = parameters.GetValueOrDefault<string?>(nameof(Height));
+            string? height = parameters.GetValueOrDefault<string>(nameof(Height));
             if(height != null)
                 LayoutService.Height.OnNext(height);
 
-            string? width = parameters.GetValueOrDefault<string?>(nameof(Width));
+            string? width = parameters.GetValueOrDefault<string>(nameof(Width));
             if (width != null)
                 LayoutService.Width.OnNext(width);
 
-            string? filterToggleButtonClass = parameters.GetValueOrDefault<string?>(nameof(FilterToggleButtonClass));
+            string? filterToggleButtonClass = parameters.GetValueOrDefault<string>(nameof(FilterToggleButtonClass));
             if (filterToggleButtonClass != null)
                 LayoutService.FilterToggleButtonClass.OnNext(filterToggleButtonClass);
 
-            string? cssClass = parameters.GetValueOrDefault<string?>(nameof(CssClass));
+            string? cssClass = parameters.GetValueOrDefault<string>(nameof(CssClass));
             if (cssClass != null)
                 LayoutService.TableTagClass.OnNext(cssClass);
 
@@ -204,7 +164,7 @@ namespace Samovar.Blazor
             LayoutService.ShowColumnHeader.OnNext(showColumnHeader.Value);
 
             bool? showDetailRow = parameters.GetValueOrDefault<bool?>(nameof(ShowDetailRow));
-            showDetailRow ??= false;
+            showDetailRow??= false;
             LayoutService.ShowDetailRow.OnNext(showDetailRow.Value);
 
             DataGridNavigationMode? dataNavigationMode = parameters.GetValueOrDefault<DataGridNavigationMode?>(nameof(DataNavigationMode));
@@ -219,17 +179,50 @@ namespace Samovar.Blazor
             dataGridEditMode ??= DataGridEditMode.None;
             EditingService.EditMode.OnNext(dataGridEditMode.Value);
 
-            RenderFragment<T>? detailRowTemplate = parameters.GetValueOrDefault< RenderFragment<T>?> (nameof(DetailRowTemplate));
+            GridSelectionMode? dataGridSelectionMode = parameters.GetValueOrDefault<GridSelectionMode?>(nameof(SelectionMode));
+            dataGridSelectionMode ??= GridSelectionMode.None;
+            GridSelectionService.SelectionMode.OnNext(dataGridSelectionMode.Value);
+
+            T? singleSelectedDataRow = parameters.GetValueOrDefault<T?>(nameof(SingleSelectedDataRow));
+            if(singleSelectedDataRow is not null)
+                GridSelectionService.SingleSelectedDataRow.OnNext(singleSelectedDataRow);
+
+            IEnumerable<T>? multipleSelectedDataRows = parameters.GetValueOrDefault<IEnumerable<T>?>(nameof(MultipleSelectedDataRows));
+            if (multipleSelectedDataRows is not null && multipleSelectedDataRows.Any())
+                GridSelectionService.MultipleSelectedDataRows.OnNext(multipleSelectedDataRows);
+
+            Func<T, Task<string>>? editingFormTitleDelegate = parameters.GetValueOrDefault<Func<T, Task<string>>?>(nameof(EditingFormTitleDelegate));
+            if (editingFormTitleDelegate is not null)
+                EditingService.EditingFormTitleDelegate = editingFormTitleDelegate;
+
+            RenderFragment<T>? detailRowTemplate = parameters.GetValueOrDefault< RenderFragment<T>> (nameof(DetailRowTemplate));
             if (detailRowTemplate != null)
                 TemplateService.DetailRowTemplate.OnNext(detailRowTemplate);
 
-            RenderFragment<T>? editFormTemplate = parameters.GetValueOrDefault<RenderFragment<T>?>(nameof(EditFormTemplate));
+            RenderFragment<T>? editFormTemplate = parameters.GetValueOrDefault<RenderFragment<T>>(nameof(EditFormTemplate));
             if (editFormTemplate != null)
                 TemplateService.EditFormTemplate.OnNext(editFormTemplate);
 
-            RenderFragment<T>? insertFormTemplate = parameters.GetValueOrDefault<RenderFragment<T>?>(nameof(InsertFormTemplate));
+            RenderFragment<T>? insertFormTemplate = parameters.GetValueOrDefault<RenderFragment<T>>(nameof(InsertFormTemplate));
             if (insertFormTemplate != null)
                 TemplateService.InsertFormTemplate.OnNext(insertFormTemplate);
+
+            EventCallback<T> rowEditBegin = parameters.GetValueOrDefault<EventCallback<T>>(nameof(RowEditBegin));
+            if (rowEditBegin.HasDelegate)
+                EditingService.OnRowEditBegin.OnNext(rowEditBegin);
+
+            EventCallback rowInsertBegin = parameters.GetValueOrDefault<EventCallback>(nameof(RowInsertBegin));
+            if (rowInsertBegin.HasDelegate)
+                EditingService.OnRowInsertBegin.OnNext(rowInsertBegin);
+
+            EventCallback<T> rowInserting = parameters.GetValueOrDefault<EventCallback<T>>(nameof(RowInserting));
+            if (rowInserting.HasDelegate)
+                EditingService.OnRowInserting.OnNext(rowInserting);
+
+            EventCallback<T> rowRemoving = parameters.GetValueOrDefault<EventCallback<T>>(nameof(RowRemoving));
+            if (rowRemoving.HasDelegate)
+                EditingService.OnRowRemoving.OnNext(rowRemoving);
+
 
 
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Samovar.Blazor
 {
     public partial class SmDataGridInner2<T>
-        : SmDesignComponentBase , IDisposable
+        : SmDesignComponentBase, IAsyncDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -26,11 +26,12 @@ namespace Samovar.Blazor
         public INavigationService NavigationService { get; set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-        public DataGridStyleInfo Style { get; set; } //Default style
-        
+        public DataGridStyleInfo? Style { get; set; }
+
         protected override void OnInitialized()
         {
-            Style = new DataGridStyleInfo { 
+            Style = new DataGridStyleInfo
+            {
                 CssStyle = GridLayoutService.OuterStyle.Value,
                 ActualScrollbarWidth = GridLayoutService.ActualScrollbarWidth
             };
@@ -38,31 +39,19 @@ namespace Samovar.Blazor
             base.OnInitialized();
         }
 
-        private Task myfunc1(DataGridVirtualScrollingInfo info)
-        {
-
-            ScrollStyle = $"height:{info.ContentContainerHeight.ToString(CultureInfo.InvariantCulture)}px;overflow:hidden;position:absolute;";
-            OffsetY = info.OffsetY;
-            StateHasChanged();
-            return Task.CompletedTask;
-        }
-
         private async Task GridLayoutService_DataGridInnerCssStyleChanged(DataGridStyleInfo arg)
         {
             Style = arg;
             await InvokeAsync(StateHasChanged);
         }
-        
-        protected override void BuildRenderTree(RenderTreeBuilder builder)
-        {
-            base.BuildRenderTree(builder);
-        }
 
-        public string ScrollStyle { get; set; }
+        public string? ScrollStyle { get; set; }
         public double OffsetY { get; set; }
-        public void Dispose()
+
+        public ValueTask DisposeAsync()
         {
             GridLayoutService.DataGridInnerCssStyleChanged -= GridLayoutService_DataGridInnerCssStyleChanged;
+            return ValueTask.CompletedTask;
         }
     }
 }

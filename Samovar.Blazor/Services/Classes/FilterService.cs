@@ -1,15 +1,11 @@
 ﻿using Samovar.Blazor.Filter;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reactive.Subjects;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
     public class FilterService
-        : IFilterService, IDisposable
+        : IFilterService, IAsyncDisposable
     {
         public ObservableCollection<DataGridFilterCellInfo> ColumnFilters { get; } = new ObservableCollection<DataGridFilterCellInfo>();
 
@@ -34,31 +30,11 @@ namespace Samovar.Blazor
             }
         }
 
-        private void ColumnFilters_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void ColumnFilters_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            switch (e.Action)
-            {
-                case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
-                    break;
-                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
-                    break;
-                case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
-                    break;
-                case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
-                    break;
-                case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                    break;
-                default:
-                    break;
-            }
-
             FilterInfo.OnNext(ColumnFilters.ToList());
         }
 
-        public void Dispose()
-        {
-            ColumnFilters.CollectionChanged -= ColumnFilters_CollectionChanged;
-        }
 
         public async Task ClearFilter()
         {
@@ -67,24 +43,23 @@ namespace Samovar.Blazor
             await OnFilterCleared();
         }
         
-        public event Func<Task> FilterCleared;
+        public event Func<Task>? FilterCleared;
 
         public async Task OnFilterCleared()
         {
-            if (FilterCleared != null)
-            {
+            if (FilterCleared is not null)
                 await FilterCleared.Invoke();
-            }
         }
 
 		public T TryGetFilterCellValue<T>(IDataColumnModel columnModel)
 		{
-            if (!ColumnFilters.Any(f => f.ColumnMetadata.Equals(columnModel)))
-            {
-                return default;
-            }
+            return (T)ColumnFilters.Single(f => f.ColumnMetadata is not null && f.ColumnMetadata.Equals(columnModel)).FilterCellValue;
+        }
 
-            return (T)ColumnFilters.Single(f => f.ColumnMetadata.Equals(columnModel)).FilterCellValue;
+        public ValueTask DisposeAsync()
+        {
+            ColumnFilters.CollectionChanged -= ColumnFilters_CollectionChanged;
+            return ValueTask.CompletedTask;
         }
     }
 }

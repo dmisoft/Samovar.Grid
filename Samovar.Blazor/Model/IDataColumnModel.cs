@@ -8,13 +8,12 @@ namespace Samovar.Blazor
     public interface IDataColumnModel
         : IColumnModel
     {
-        Type ColumnDataItemType { get; }
 
         PropertyInfo ColumnDataItemPropertyInfo { get; }
 
-        public BehaviorSubject<RenderFragment<object>> CellShowTemplate { get; }
+        public BehaviorSubject<RenderFragment<object>?> CellShowTemplate { get; }
 
-        public BehaviorSubject<RenderFragment<object>> CellEditTemplate { get; }
+        public BehaviorSubject<RenderFragment<object>?> CellEditTemplate { get; }
         
         public BehaviorSubject<string> Field { get; }
 

@@ -24,11 +24,9 @@ namespace Samovar.Blazor
 
         public RenderFragment GetInsertingPopup<U>(SmDataGridRowModel<U> model)
         {
-            RenderFragment rf = null;
-
             if (_templateService.EditFormTemplate.Value != null)
             {
-                rf = (builder) =>
+                return (builder) =>
                 {
                     builder.OpenComponent(0, typeof(GridRowInserting_PopupTemplate<U>));
                     builder.AddAttribute(1, "RowModel", model);
@@ -38,15 +36,13 @@ namespace Samovar.Blazor
             }
             else
             {
-                rf = (builder) =>
+                return (builder) =>
                 {
                     builder.OpenComponent(0, typeof(GridRowInserting_Popup<U>));
                     builder.AddAttribute(1, "RowModel", model);
                     builder.CloseComponent();
                 };
             }
-
-            return rf;
         }
 
         public RenderFragment GetEditingPopup<U>(SmDataGridRowModel<U> model)
@@ -89,14 +85,12 @@ namespace Samovar.Blazor
 
         public RenderFragment GetRow<U>(SmDataGridRowModel<U> model)
         {
-            RenderFragment rf = null;
-
             switch (model.RowState)
             {
                 case SmDataGridRowState.Editing:
                     if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
                     {
-                        rf = GetDefaultRow(model);
+                        return GetDefaultRow(model);
                     }
                     else if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
                     {
@@ -105,7 +99,7 @@ namespace Samovar.Blazor
                             case DataGridEditMode.Form:
                                 if (_templateService.EditFormTemplate.Value != null)
                                 {
-                                    rf = (builder) =>
+                                    return (builder) =>
                                     {
                                         builder.OpenComponent(0, typeof(GridRowEditing_FormTemplate<U>));
                                         builder.AddAttribute(1, "RowModel", model);
@@ -114,27 +108,22 @@ namespace Samovar.Blazor
                                 }
                                 else
                                 {
-                                    rf = (builder) =>
+                                    return (builder) =>
                                     {
                                         builder.OpenComponent(0, typeof(GridRowEditing_Form<U>));
                                         builder.AddAttribute(1, "RowModel", model);
                                         builder.CloseComponent();
                                     };
                                 }
-                                break;
                             case DataGridEditMode.Popup:
-                                rf = GetDefaultRow(model);
-                                break;
+                                return GetDefaultRow(model);
                         }
                     }
-
-                    break;
+                    return GetDefaultRow(model);
                 default:
-                    rf = GetDefaultRow(model);
-                    break;
+                    return GetDefaultRow(model);
             }
 
-            return rf;
         }
 
 

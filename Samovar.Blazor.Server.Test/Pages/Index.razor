@@ -33,7 +33,7 @@ else
     <button class="btn btn-primary" @onclick="changeStyle">change style</button>
     <button class="btn btn-primary" @onclick="changeFirstDataItem">change first data item</button>
     <button class="btn btn-primary" @onclick="deselectSingleSelectedItem">deselct single selected item</button>
-    
+    <input type="text" @bind="pageSize" />
     <div class="row">
         <div class="col-10">
             <SmDataGrid Data="forecasts1"
@@ -41,10 +41,10 @@ else
                     Width="1200px"
                     FilterMode=DataGridFilterMode.None
                     ShowDetailRow=true
-                    PageSize="10"
+                    @bind-PageSize=pageSize
                     EditMode=DataGridEditMode.Form
                     EditingFormTitleDelegate="@((WeatherForecast data) => Task.FromResult(data.TemperatureC.ToString()))"
-                    SelectionMode=GridSelectionMode.MultipleSelectedDataRows
+                    SelectionMode=GridSelectionMode.SingleSelectedDataRow
                     @bind-SingleSelectedDataRow=selectedRow
                     @bind-MultipleSelectedDataRows=selectedRows
                     
@@ -138,6 +138,7 @@ else
     SmDataGrid<WeatherForecast> grid;
 
     WeatherForecast selectedRow = null;
+    int pageSize = 5;
     IEnumerable<WeatherForecast> selectedRows = null;
 
     protected override async Task OnInitializedAsync()

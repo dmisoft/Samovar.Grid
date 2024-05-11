@@ -28,7 +28,7 @@ namespace Samovar.Blazor
         public T DataItem { get; set; }
         public T? EditingDataItem { get; set; }
         public List<DataGridRowCellModel<T>> GridCellModels { get; set; }
-        public List<DataGridRowCellModel<T>>? EditingGridCellModels { get; set; }
+        public List<DataGridRowCellModel<T>> EditingGridCellModels { get; set; } = [];
 
         public readonly IEnumerable<IDataColumnModel> ColumnMetadata;
         

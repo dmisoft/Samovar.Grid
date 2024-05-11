@@ -10,13 +10,11 @@ namespace Samovar.Blazor
     {
         public string Id { get; } = $"columnmodel{Guid.NewGuid().ToString().Replace("-", "")}";
 
-        public Type ColumnDataItemType { get; }
 
         public abstract DataGridColumnType ColumnType { get; }
 
         public BehaviorSubject<string> Title { get; } = new BehaviorSubject<string>("");
 
-        //TODO std. value new Subject<string>("");
         public Subject<string> Width { get; } = new Subject<string>();
 
         public int ColumnOrder { get; set; }
@@ -75,7 +73,6 @@ namespace Samovar.Blazor
 
         public ColumnModelBase()
         {
-            //Width.Subscribe(new SmObserver<string>(new SmObserverDispatcher<string>(WidthSubjectCallback)));
             Width.Subscribe(WidthSubjectCallback);
         }
 
