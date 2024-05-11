@@ -3,6 +3,6 @@
     public partial class DataGridFilterCellString
         : DataGridFilterCellBase<string?>
     {
-        
+
     }
 }

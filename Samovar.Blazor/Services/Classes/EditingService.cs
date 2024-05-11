@@ -14,7 +14,7 @@ namespace Samovar.Blazor
         readonly INavigationService _navigationService;
 
         public event Func<Task>? RowEditingEnded;
-        
+
         public async Task OnRowEditingEnded()
         {
             if (RowEditingEnded != null)
@@ -30,7 +30,7 @@ namespace Samovar.Blazor
         public BehaviorSubject<EventCallback> OnRowInsertBegin { get; } = new BehaviorSubject<EventCallback>(default(EventCallback));
         public BehaviorSubject<EventCallback<T>> OnRowInserting { get; } = new BehaviorSubject<EventCallback<T>>(default(EventCallback<T>));
         public BehaviorSubject<EventCallback<T>> OnRowRemoving { get; } = new BehaviorSubject<EventCallback<T>>(default(EventCallback<T>));
-        
+
         public Func<SmDataGridRowModel<T>, Task>? ShowInsertingPopupDelegate { get; set; }
         public Func<Task>? CloseInsertingPopupDelegate { get; set; }
         public Func<SmDataGridRowModel<T>, Task>? ShowEditingPopupDelegate { get; set; }
@@ -38,9 +38,9 @@ namespace Samovar.Blazor
 
         public Func<SmDataGridRowModel<T>, Task>? ShowInsertingFormDelegate { get; set; }
         public Func<Task>? CloseInsertingFormDelegate { get; set; }
-		public Func<T, Task<string>>? EditingFormTitleDelegate { get; set; }
+        public Func<T, Task<string>>? EditingFormTitleDelegate { get; set; }
 
-		public EditingService(
+        public EditingService(
               IGridStateService stateService
             , IRepositoryService<T> repositoryService
             , IColumnService columnService
@@ -61,10 +61,12 @@ namespace Samovar.Blazor
 
             _editingRowModel.CreateEditingModel();
 
-            if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling) {
+            if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
+            {
                 ShowEditingPopupDelegate?.Invoke(_editingRowModel);
             }
-            else {
+            else
+            {
                 if (EditMode.Value == DataGridEditMode.Popup)
                     ShowEditingPopupDelegate?.Invoke(_editingRowModel);
             }
@@ -110,7 +112,7 @@ namespace Samovar.Blazor
         public async Task RowInsertBegin()
         {
             var insertModel = (T?)Activator.CreateInstance(typeof(T));
-            if(insertModel is null)
+            if (insertModel is null)
                 throw new InvalidOperationException("Failed to create instance of type T");
 
             var rowModel = new SmDataGridRowModel<T>(insertModel, _columnService.DataColumnModels, 0, _repositoryService.PropInfo, false);

@@ -5,35 +5,32 @@ namespace Samovar.Blazor
     public partial class SmDataGridRowDefault<T>
         : SmDesignComponentBase, IAsyncDisposable
     {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
         [CascadingParameter(Name = "datagrid-row")]
-        protected SmDataGridRow<T> GridRow { get; set; }
+        public required SmDataGridRow<T> GridRow { get; set; }
 
         [SmInject]
-        public IColumnService ColumnService { get; set; }
+        public required IColumnService ColumnService { get; set; }
 
         [SmInject]
-        public ILayoutService LayoutService { get; set; }
+        public required ILayoutService LayoutService { get; set; }
 
         [SmInject]
-        public IGridStateService GridStateService { get; set; }
+        public required IGridStateService GridStateService { get; set; }
 
         [SmInject]
-        public IEditingService<T> EditingService { get; set; }
+        public required IEditingService<T> EditingService { get; set; }
 
         [SmInject]
-        public ITemplateService<T> TemplateService { get; set; }
+        public required ITemplateService<T> TemplateService { get; set; }
 
         [SmInject]
-        public IGridSelectionService<T> GridSelectionService { get; set; }
+        public required IGridSelectionService<T> GridSelectionService { get; set; }
 
         [SmInject]
-        protected IRowDetailService<T> RowDetailService { get; set; }
+        public required IRowDetailService<T> RowDetailService { get; set; }
 
         [Parameter]
-        public SmDataGridRowModel<T> RowModel { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public required SmDataGridRowModel<T> RowModel { get; set; }
 
         IDisposable? SingleSelectedDataRowsSubscription = null;
 
@@ -43,7 +40,7 @@ namespace Samovar.Blazor
         {
             base.OnParametersSetAsync();
             RowModel.RowSelected = false;
-            if(GridSelectionService is null)
+            if (GridSelectionService is null)
             {
                 return Task.CompletedTask;
             }
@@ -103,13 +100,13 @@ namespace Samovar.Blazor
             return Task.CompletedTask;
         }
 
-        private void MultipleSelectedDataRowsChanged(IEnumerable<T> arg)
+        private void MultipleSelectedDataRowsChanged(IEnumerable<T>? arg)
         {
             RowModel.RowSelected = arg is not null && arg.Any(a => a!.Equals(RowModel.DataItem));
             StateHasChanged();
         }
 
-        private void SingleSelectedDataRowsChanged(T arg)
+        private void SingleSelectedDataRowsChanged(T? arg)
         {
             RowModel.RowSelected = arg is not null && arg.Equals(RowModel.DataItem);
             StateHasChanged();

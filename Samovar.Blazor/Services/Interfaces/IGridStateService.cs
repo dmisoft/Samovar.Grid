@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
 using System.Reactive.Subjects;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
@@ -18,10 +15,10 @@ namespace Samovar.Blazor
 
         Func<Task> ShowNoDataPanelDelegate { get; set; }
         Func<Task> CloseNoDataPanelDelegate { get; set; }
-        
+
         Func<Task> ShowNoDataFoundPanelDelegate { get; set; }
         Func<Task> CloseNoDataFoundPanelDelegate { get; set; }
-        
+
         Func<Task> ShowProcessingDataPanelDelegate { get; set; }
         Func<Task> CloseProcessingDataPanelDelegate { get; set; }
 

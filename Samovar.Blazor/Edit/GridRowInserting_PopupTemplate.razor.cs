@@ -7,7 +7,7 @@ namespace Samovar.Blazor.Edit
         : SmDesignComponentBase, IAsyncDisposable
     {
         [SmInject]
-        public required  IEditingService<T> EditingService { get; set; }
+        public required IEditingService<T> EditingService { get; set; }
 
         [SmInject]
         public required IJsService JsService { get; set; }

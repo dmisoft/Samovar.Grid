@@ -28,32 +28,32 @@ namespace Samovar.Blazor
 
         Task StartDataGridColumnWidthChangeMode(
             DotNetObjectReference<IColumnResizingService> colResizingService,
-            double GridColWidthSum, 
-            string ColMetaId, 
-            string InnerGridId, 
-            string InnerGridBodyTableId, 
-            string VisibleGridColumnCellId, 
-            string HiddenGridColumnCellId, 
-            string FilterGridColumnCellId, 
-            string VisibleEmptyColumnId, 
-            string HiddenEmptyColumnId, 
-            string FilterEmptyColumnId, 
-            string EmptyColumnDictId, 
-            double StartMouseMoveX, 
-            double OldAbsoluteVisibleWidthValue, 
-            bool FitColumnsToTableWidth, 
+            double GridColWidthSum,
+            string ColMetaId,
+            string InnerGridId,
+            string InnerGridBodyTableId,
+            string VisibleGridColumnCellId,
+            string HiddenGridColumnCellId,
+            string FilterGridColumnCellId,
+            string VisibleEmptyColumnId,
+            string HiddenEmptyColumnId,
+            string FilterEmptyColumnId,
+            string EmptyColumnDictId,
+            double StartMouseMoveX,
+            double OldAbsoluteVisibleWidthValue,
+            bool FitColumnsToTableWidth,
             double OldAbsoluteEmptyColVisibleWidthValue);
 
         ValueTask<double> MeasureScrollbar();
-        
+
         ValueTask<double> MeasureTableFilterHeight(string tableClass, string tableHeaderClass, string filterToggleButtonClass);
-        
+
         ValueTask<double> MeasureTableRowHeight(string tableClass);
-        
+
         ValueTask<double> GetInnerGridHeight();
 
         ValueTask<double> GetElementHeightById(string elementId);
-        
+
         ValueTask ScrollInnerGridToTop();
     }
 }

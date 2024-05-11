@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace Samovar.Blazor
 {
@@ -25,7 +24,7 @@ namespace Samovar.Blazor
             _services.AddScoped<ISortingService, SortingService>();
             _services.AddScoped<IModelFactoryService, ModelFactoryService>();
             _services.AddScoped<ITemplateService<T>, TemplateService<T>>();
-            
+
             _services.AddScoped<IVirtualScrollingNavigationStrategy, VirtualScrollingNavigationStrategy<T>>();
             _services.AddScoped<IPagingNavigationStrategy, PagingNavigationStrategy<T>>();
 
@@ -44,7 +43,7 @@ namespace Samovar.Blazor
         }
         public object GetService(Type serviceType)
         {
-            if(_scope is null)
+            if (_scope is null)
             {
                 throw new InvalidOperationException("Services not initialized");
             }

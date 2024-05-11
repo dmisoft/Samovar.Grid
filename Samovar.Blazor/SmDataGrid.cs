@@ -68,17 +68,17 @@ namespace Samovar.Blazor
 
         [Parameter]
         public string? FilterToggleButtonClass { get; set; }
-    
+
         [Parameter]
         public string? CssClass { get; set; }
-    
+
         [Parameter]
         public bool? ShowColumnHeader { get; set; }
-        
+
 
         [Parameter]
         public bool? ShowDetailRow { get; set; }
-      
+
         [Parameter]
         public DataGridNavigationMode? DataNavigationMode { get; set; }
 
@@ -93,7 +93,7 @@ namespace Samovar.Blazor
 
         [Parameter]
         public RenderFragment<T>? InsertFormTemplate { get; set; }
-        
+
 
         [Parameter]
         public EventCallback<T> RowEditBegin { get; set; }
@@ -144,7 +144,7 @@ namespace Samovar.Blazor
             PagingNavigationStrategy.PagerSize.OnNext(pagerSize);
 
             string? height = parameters.GetValueOrDefault<string>(nameof(Height));
-            if(height != null)
+            if (height != null)
                 LayoutService.Height.OnNext(height);
 
             string? width = parameters.GetValueOrDefault<string>(nameof(Width));
@@ -164,7 +164,7 @@ namespace Samovar.Blazor
             LayoutService.ShowColumnHeader.OnNext(showColumnHeader.Value);
 
             bool? showDetailRow = parameters.GetValueOrDefault<bool?>(nameof(ShowDetailRow));
-            showDetailRow??= false;
+            showDetailRow ??= false;
             LayoutService.ShowDetailRow.OnNext(showDetailRow.Value);
 
             DataGridNavigationMode? dataNavigationMode = parameters.GetValueOrDefault<DataGridNavigationMode?>(nameof(DataNavigationMode));
@@ -184,7 +184,7 @@ namespace Samovar.Blazor
             GridSelectionService.SelectionMode.OnNext(dataGridSelectionMode.Value);
 
             T? singleSelectedDataRow = parameters.GetValueOrDefault<T?>(nameof(SingleSelectedDataRow));
-            if(singleSelectedDataRow is not null)
+            if (singleSelectedDataRow is not null)
                 GridSelectionService.SingleSelectedDataRow.OnNext(singleSelectedDataRow);
 
             IEnumerable<T>? multipleSelectedDataRows = parameters.GetValueOrDefault<IEnumerable<T>?>(nameof(MultipleSelectedDataRows));
@@ -195,7 +195,7 @@ namespace Samovar.Blazor
             if (editingFormTitleDelegate is not null)
                 EditingService.EditingFormTitleDelegate = editingFormTitleDelegate;
 
-            RenderFragment<T>? detailRowTemplate = parameters.GetValueOrDefault< RenderFragment<T>> (nameof(DetailRowTemplate));
+            RenderFragment<T>? detailRowTemplate = parameters.GetValueOrDefault<RenderFragment<T>>(nameof(DetailRowTemplate));
             if (detailRowTemplate != null)
                 TemplateService.DetailRowTemplate.OnNext(detailRowTemplate);
 
@@ -227,7 +227,7 @@ namespace Samovar.Blazor
 
 
             IEnumerable<T>? data = parameters.GetValueOrDefault<IEnumerable<T>>(nameof(Data));
-            if(data != null)
+            if (data != null)
                 DataSourceService.Data.OnNext(data);
 
         }
@@ -235,42 +235,42 @@ namespace Samovar.Blazor
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
             RenderFragment del;
-			switch (NavigationService.NavigationMode.Value)
+            switch (NavigationService.NavigationMode.Value)
             {
-				case DataGridNavigationMode.Paging:
-					del = delegate (RenderTreeBuilder builder2)
-					{
-						Columns?.Invoke(builder2);
+                case DataGridNavigationMode.Paging:
+                    del = delegate (RenderTreeBuilder builder2)
+                    {
+                        Columns?.Invoke(builder2);
 
-						builder2.OpenComponent<SmDataGridPagingTableInner<T>>(5);
-						builder2.CloseComponent();
-					};
-					break;
-				case DataGridNavigationMode.VirtualScrolling:
-					del = delegate (RenderTreeBuilder builder2)
-					{
-						Columns?.Invoke(builder2);
+                        builder2.OpenComponent<SmDataGridPagingTableInner<T>>(5);
+                        builder2.CloseComponent();
+                    };
+                    break;
+                case DataGridNavigationMode.VirtualScrolling:
+                    del = delegate (RenderTreeBuilder builder2)
+                    {
+                        Columns?.Invoke(builder2);
 
-						builder2.OpenComponent<SmDataGridVirtualTableInner<T>>(5);
-						builder2.CloseComponent();
-					};
-					break;
-				default:
+                        builder2.OpenComponent<SmDataGridVirtualTableInner<T>>(5);
+                        builder2.CloseComponent();
+                    };
+                    break;
+                default:
                     throw new NotImplementedException();
-			}
+            }
 
-			builder.OpenComponent<CascadingValue<IComponentServiceProvider>>(1);
-			builder.AddAttribute(2, "Value", this);
-			builder.AddAttribute(3, "Name", "ServiceProvider");
-			builder.AddAttribute(4, "ChildContent", del);
-			builder.CloseComponent();
-		}
+            builder.OpenComponent<CascadingValue<IComponentServiceProvider>>(1);
+            builder.AddAttribute(2, "Value", this);
+            builder.AddAttribute(3, "Name", "ServiceProvider");
+            builder.AddAttribute(4, "ChildContent", del);
+            builder.CloseComponent();
+        }
 
-		protected override Task OnInitializedAsync()
+        protected override Task OnInitializedAsync()
         {
 
             GridSelectionService.SingleSelectedRowCallback = async () => { await SingleSelectedDataRowChanged.InvokeAsync(GridSelectionService.SingleSelectedDataRow.Value); };
-            
+
             GridSelectionService.MultipleSelectedRowsCallback = async () => { await MultipleSelectedDataRowsChanged.InvokeAsync(GridSelectionService.MultipleSelectedDataRows.Value); };
 
             return base.OnInitializedAsync();
@@ -302,7 +302,8 @@ namespace Samovar.Blazor
             return EditingService.RowInsertCancel();
         }
 
-        public Task ExpandAllDetailRows() {
+        public Task ExpandAllDetailRows()
+        {
 
             return Task.CompletedTask;
         }

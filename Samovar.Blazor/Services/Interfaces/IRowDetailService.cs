@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Reactive.Subjects;
-using System.Threading.Tasks;
+﻿using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
 {
-	public interface IRowDetailService<T>
+    public interface IRowDetailService<T>
     {
         BehaviorSubject<IList<T>> ExpandedRowDetails { get; }
 

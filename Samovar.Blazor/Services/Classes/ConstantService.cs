@@ -1,16 +1,15 @@
-﻿using System;
-
+﻿
 namespace Samovar.Blazor
 {
     public class ConstantService
-        : IConstantService, IDisposable
+        : IConstantService, IAsyncDisposable
     {
         public string InnerGridId { get; } = $"innergrid{Guid.NewGuid().ToString().Replace("-", "")}";
-        
+
         public string DataGridId { get; } = $"samovargrid{Guid.NewGuid().ToString().Replace("-", "")}";
 
         public string GridHeaderContainerId { get; } = $"gridheadercontainer{Guid.NewGuid().ToString().Replace("-", "")}";
-        
+
         public string GridFilterContainerId { get; } = $"gridfiltercontainer{Guid.NewGuid().ToString().Replace("-", "")}";
 
         public string InnerGridBodyTableId { get; } = $"innergridbodytable{Guid.NewGuid().ToString().Replace("-", "")}";
@@ -19,9 +18,9 @@ namespace Samovar.Blazor
 
         public string GridBodyId { get; } = $"gridbody{Guid.NewGuid().ToString().Replace("-", "")}";
 
-        public void Dispose()
+        public ValueTask DisposeAsync()
         {
-            
+            return ValueTask.CompletedTask;
         }
     }
 }

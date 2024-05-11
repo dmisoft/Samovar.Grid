@@ -54,7 +54,7 @@ namespace Samovar.Blazor
             //ITaskObservable
             if (currentPage == 0)
                 return Task.FromResult(NavigationStrategyDataLoadingSettings.Empty);
-            
+
             var skipPages = currentPage - 1;
             return Task.FromResult(new NavigationStrategyDataLoadingSettings(skip: skipPages * pageSize, take: pageSize));
         }
@@ -118,7 +118,7 @@ namespace Samovar.Blazor
             int newTotalPageCount = (int)Math.Ceiling(items / (decimal)PageSize.Value);
             TotalPageCount.OnNext(newTotalPageCount);
 
-            int newCurrentPage = CurrentPage.Value == 0 && newTotalPageCount > 0 ? 1: Math.Min(newTotalPageCount, CurrentPage.Value);
+            int newCurrentPage = CurrentPage.Value == 0 && newTotalPageCount > 0 ? 1 : Math.Min(newTotalPageCount, CurrentPage.Value);
             CurrentPage.OnNext(newCurrentPage);
         }
     }

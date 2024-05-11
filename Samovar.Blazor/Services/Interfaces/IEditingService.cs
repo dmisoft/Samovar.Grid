@@ -12,7 +12,7 @@ namespace Samovar.Blazor
         public BehaviorSubject<EventCallback> OnRowInsertBegin { get; }
 
         public BehaviorSubject<EventCallback<T>> OnRowInserting { get; }
-        
+
         public BehaviorSubject<EventCallback<T>> OnRowRemoving { get; }
 
         Task RowEditCancel();

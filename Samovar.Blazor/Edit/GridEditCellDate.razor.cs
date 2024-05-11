@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
 using System.Reflection;
 
 namespace Samovar.Blazor.Edit
@@ -13,12 +12,15 @@ namespace Samovar.Blazor.Edit
         public required PropertyInfo PropInfo { get; set; }
 
         private DateTime? innerValue = DateTime.MinValue;
-        protected DateTime? InnerValue {
-            set {
+        protected DateTime? InnerValue
+        {
+            set
+            {
                 innerValue = value;
                 PropInfo.SetValue(Data, innerValue);
             }
-            get {
+            get
+            {
                 return innerValue;
             }
         }
@@ -28,7 +30,7 @@ namespace Samovar.Blazor.Edit
             base.OnInitialized();
             innerValue = (DateTime?)PropInfo.GetValue(Data);
         }
-        
+
         public void InnerValueOnChange(ChangeEventArgs args)
         {
             PropInfo.SetValue(Data, innerValue);

@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System.Collections.Generic;
 using System.Reactive.Subjects;
 using System.Reflection;
 
 namespace Samovar.Blazor
 {
-	public interface IRepositoryService<T>
+    public interface IRepositoryService<T>
     {
         IEnumerable<SmDataGridRowModel<T>> ViewCollection { get; }
         BehaviorSubject<HashSet<T>> Data { get; }

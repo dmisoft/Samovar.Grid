@@ -1,10 +1,7 @@
 ﻿
 using Samovar.Blazor.Filter;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive.Subjects;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
@@ -16,5 +13,5 @@ namespace Samovar.Blazor
         T TryGetFilterCellValue<T>(IDataColumnModel columnModel);
         Task ClearFilter();
         event Func<Task> FilterCleared;
-	}
+    }
 }

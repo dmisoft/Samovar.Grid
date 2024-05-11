@@ -110,6 +110,9 @@ namespace Samovar.Blazor
 
         private async Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T>? query, Task<NavigationStrategyDataLoadingSettings>? loadingSettingsTask)
         {
+            if (query is null || loadingSettingsTask is null)
+                return new List<SmDataGridRowModel<T>>();
+
             IEnumerable<SmDataGridRowModel<T>> _retVal;
 
             var loadingSettings = await loadingSettingsTask;
@@ -126,7 +129,7 @@ namespace Samovar.Blazor
             return _retVal;
         }
 
-        
+
         private List<SmDataGridRowModel<T>> CreateRowModelList(IQueryable<T> gridData, IEnumerable<IDataColumnModel> ColumnMetadataList, Dictionary<string, PropertyInfo> PropInfo)
         {
             var retVal = new List<SmDataGridRowModel<T>>();

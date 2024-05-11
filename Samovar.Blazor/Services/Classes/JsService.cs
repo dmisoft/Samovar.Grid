@@ -1,6 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
@@ -23,7 +21,7 @@ namespace Samovar.Blazor
         {
             return await _module.Value;
         }
-        
+
         private Lazy<Task<IJSObjectReference>> _module;
 
         public Task InitJsModule(Lazy<Task<IJSObjectReference>> module)
@@ -96,7 +94,8 @@ namespace Samovar.Blazor
             return await JsInteropClasses.MeasureTableRowHeight(await JsModule(), tableClass, $"measure{Guid.NewGuid().ToString().Replace("-", "")}");
         }
 
-        public async ValueTask<double> GetInnerGridHeight() { 
+        public async ValueTask<double> GetInnerGridHeight()
+        {
             return await (await JsModule()).InvokeAsync<double>("getElementHeight", new[] { _constantService.InnerGridId });
         }
 

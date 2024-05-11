@@ -7,7 +7,7 @@
 
         [SmInject]
         public IColumnService ColumnService { get; set; }
-        
+
         [SmInject]
         public ILayoutService LayoutService { get; set; }
 
@@ -44,7 +44,7 @@
                     typeof(decimal),
                     typeof(decimal?),
             };
-        
+
         public ValueTask DisposeAsync()
         {
             return ValueTask.CompletedTask;

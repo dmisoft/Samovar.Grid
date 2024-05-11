@@ -1,46 +1,41 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
     public partial class DataGridVirtualTablePanel<T>
         : SmDesignComponentBase, IAsyncDisposable
     {
-		protected DataSourceState _dataSourceState = DataSourceState.NoData;
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        protected DataSourceState _dataSourceState = DataSourceState.NoData;
 
         [SmInject]
-        public IRepositoryService<T> RepositoryService { get; set; }
+        public required IRepositoryService<T> RepositoryService { get; set; }
 
         [SmInject]
-        public ILayoutService LayoutService { get; set; }
+        public required ILayoutService LayoutService { get; set; }
 
         [SmInject]
-        public IEditingService<T> EditingService { get; set; }
+        public required IEditingService<T> EditingService { get; set; }
 
         [SmInject]
-        public IComponentBuilderService ComponentBuilderService { get; set; }
+        public required IComponentBuilderService ComponentBuilderService { get; set; }
 
         [SmInject]
-        public IConstantService ConstantService { get; set; }
+        public required IConstantService ConstantService { get; set; }
 
         [SmInject]
-        public INavigationService NavigationService { get; set; }
+        public required INavigationService NavigationService { get; set; }
 
         [SmInject]
-        public IVirtualScrollingNavigationStrategy VirtualScrollingService { get; set; }
+        public required IVirtualScrollingNavigationStrategy VirtualScrollingService { get; set; }
 
-		[SmInject]
-		public IGridStateService GridStateService { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        [SmInject]
+        public required IGridStateService GridStateService { get; set; }
 
         public EventCallback<DataSourceState> DataSourceStateEv { get; set; }
 
-        public DataGridStyleInfo? Style { get; set; } //Default style
-        
-        public ElementReference GridBodyRef;
+        public DataGridStyleInfo? Style { get; set; }
+
+        public ElementReference GridBodyRef { get; set; }
 
         protected IEnumerable<SmDataGridRowModel<T>> View { get; set; } = [];
 
@@ -51,7 +46,8 @@ namespace Samovar.Blazor
         }
 
 
-        protected Task _dataSourceStateEv(DataSourceState dataSourceState) { 
+        protected Task _dataSourceStateEv(DataSourceState dataSourceState)
+        {
             _dataSourceState = dataSourceState;
             return Task.CompletedTask;
         }
@@ -64,14 +60,14 @@ namespace Samovar.Blazor
                 CssStyle = LayoutService.OuterStyle.Value,
                 ActualScrollbarWidth = LayoutService.ActualScrollbarWidth
             };
-            
+
             DataSourceStateEv = new EventCallbackFactory().Create<DataSourceState>(this, async (data) => await _dataSourceStateEv(data));
             GridStateService.DataSourceStateEvList.Add(DataSourceStateEv);
 
             CollectionViewChangedEv = new EventCallbackFactory().Create<IEnumerable<SmDataGridRowModel<T>>>(this, async (data) => await _collectionViewChangedEv(data));
             RepositoryService.CollectionViewChangedEvList.Add(CollectionViewChangedEv);
 
-            return base.OnInitializedAsync();   
+            return base.OnInitializedAsync();
         }
 
         public ValueTask DisposeAsync()

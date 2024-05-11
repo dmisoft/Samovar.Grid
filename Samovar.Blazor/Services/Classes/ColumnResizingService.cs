@@ -10,14 +10,14 @@ namespace Samovar.Blazor
         private readonly ILayoutService _layoutService;
 
         public ColumnResizingService(
-            IJsService jsService, 
-            IColumnService columnService, 
+            IJsService jsService,
+            IColumnService columnService,
             ILayoutService layoutService)
         {
             _jsService = jsService;
             _columnService = columnService;
             _layoutService = layoutService;
-            
+
             ColumnResizingDotNetRef = DotNetObjectReference.Create(this as IColumnResizingService);
         }
 
@@ -45,9 +45,10 @@ namespace Samovar.Blazor
             await _jsService.DetachWindowMouseMoveEvent();
             await _jsService.DetachWindowMouseUpEvent();
 
-            if (!string.IsNullOrEmpty(colMetaId)) {
+            if (!string.IsNullOrEmpty(colMetaId))
+            {
                 var col = _columnService.AllColumnModels.Find(c => c.Id == colMetaId);
-                if(col != default(IColumnModel))
+                if (col != default(IColumnModel))
                     col.VisibleAbsoluteWidthValue = newVisibleAbsoluteWidthValue;
             }
 

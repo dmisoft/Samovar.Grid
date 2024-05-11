@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace Samovar.Blazor
+﻿namespace Samovar.Blazor
 {
     public class DetailExpanderColumnModel
         : ColumnModelBase
@@ -8,7 +6,7 @@ namespace Samovar.Blazor
         public override DataGridColumnType ColumnType { get; } = DataGridColumnType.DetailExpanderColumn;
 
         public DetailExpanderColumnModel()
-            :base()
+            : base()
         {
             double detailExpanderColWidth = 30;
 

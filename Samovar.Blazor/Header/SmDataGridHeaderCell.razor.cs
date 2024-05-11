@@ -12,7 +12,7 @@ namespace Samovar.Blazor.Header
         public IDataColumnModel Model { get; set; }
 
         [SmInject]
-        public ISortingService SortingService {  get; set; }
+        public ISortingService SortingService { get; set; }
 
         [SmInject]
         public ILayoutService LayoutService { get; set; }
@@ -43,14 +43,15 @@ namespace Samovar.Blazor.Header
         {
             string sortSymbol = string.Empty;
 
-            if (args.Field == Model.Field.Value && args.Asc) {
+            if (args.Field == Model.Field.Value && args.Asc)
+            {
                 sortSymbol = "&#x2BC5;";
             }
             else if (args.Field == Model.Field.Value && !args.Asc)
             {
                 sortSymbol = "&#x2BC6;";
             }
-            
+
             SortSymbol = sortSymbol;
 
             StateHasChanged();
@@ -85,7 +86,7 @@ namespace Samovar.Blazor.Header
                 colMeta.HiddenGridColumnCellId.ToString(),
                 colMeta.FilterGridColumnCellId.ToString(),
 
-                
+
                 colEmpty.VisibleGridColumnCellId.ToString(),
                 colEmpty.HiddenGridColumnCellId.ToString(),
                 colEmpty.FilterGridColumnCellId.ToString(),

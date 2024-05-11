@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Subjects;
-using System.Threading.Tasks;
+﻿using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
 {
@@ -9,14 +6,14 @@ namespace Samovar.Blazor
     {
         BehaviorSubject<GridSelectionMode> SelectionMode { get; }
 
-        BehaviorSubject<T> SingleSelectedDataRow { get; }
-        
-        BehaviorSubject<IEnumerable<T>> MultipleSelectedDataRows { get; }
-        
+        BehaviorSubject<T?> SingleSelectedDataRow { get; }
+
+        BehaviorSubject<IEnumerable<T>?> MultipleSelectedDataRows { get; }
+
         Task OnRowSelected(T dataItem);
 
-        Func<Task> SingleSelectedRowCallback { get; set; }
+        Func<Task>? SingleSelectedRowCallback { get; set; }
 
-        Func<Task> MultipleSelectedRowsCallback { get; set; }
+        Func<Task>? MultipleSelectedRowsCallback { get; set; }
     }
 }

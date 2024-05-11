@@ -8,7 +8,7 @@ namespace Samovar.Blazor
         public IDataColumnModel ColumnMetadata { get; set; }
         public string Style { get; set; } = string.Empty;
         public PropertyInfo Pi { get; private set; }
-        
+
         public DataGridRowCellModel(T? rowData, PropertyInfo pi, IDataColumnModel columnMetadata)
         {
             ColumnMetadata = columnMetadata;

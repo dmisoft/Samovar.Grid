@@ -1,29 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Subjects;
-using System.Threading.Tasks;
+﻿using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
 {
     public class GridSelectionService<T>
-        : IGridSelectionService<T>, IDisposable
+        : IGridSelectionService<T>, IAsyncDisposable
     {
         public BehaviorSubject<GridSelectionMode> SelectionMode { get; } = new BehaviorSubject<GridSelectionMode>(GridSelectionMode.None);
 
-        public BehaviorSubject<T> SingleSelectedDataRow { get; } = new BehaviorSubject<T>(default(T));
+        public BehaviorSubject<T?> SingleSelectedDataRow { get; } = new BehaviorSubject<T?>(default);
 
-        public BehaviorSubject<IEnumerable<T>> MultipleSelectedDataRows { get; } = new BehaviorSubject<IEnumerable<T>>(default(IEnumerable<T>));
+        public BehaviorSubject<IEnumerable<T>?> MultipleSelectedDataRows { get; } = new BehaviorSubject<IEnumerable<T>?>(default);
 
-        public Func<Task> SingleSelectedRowCallback { get; set; }
-        
-        public Func<Task> MultipleSelectedRowsCallback { get; set; }
+        public Func<Task>? SingleSelectedRowCallback { get; set; }
 
-        T _singleSelectedDataItem;
+        public Func<Task>? MultipleSelectedRowsCallback { get; set; }
 
-        private IJsService _jsService;
+        T? _singleSelectedDataItem;
 
-        private IRepositoryService<T> _repositoryService;
+        private readonly IJsService _jsService;
+
+        private readonly IRepositoryService<T> _repositoryService;
 
         public GridSelectionService(IJsService jsService, IRepositoryService<T> repositoryService)
         {
@@ -34,11 +30,6 @@ namespace Samovar.Blazor
             _repositoryService.Data.Subscribe(RepositoryDataSourceChanged);
         }
 
-        //private void RepositoryDataSourceChanged(HashSet<T> set)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
         private void RepositoryDataSourceChanged(HashSet<T> arg)
         {
             switch (SelectionMode.Value)
@@ -46,49 +37,45 @@ namespace Samovar.Blazor
                 case GridSelectionMode.None:
                     break;
                 case GridSelectionMode.SingleSelectedDataRow:
-                    if (SingleSelectedDataRow.Value != null && !arg.Any(x => x.Equals(SingleSelectedDataRow.Value))) {
-                        SingleSelectedDataRow.OnNext(default(T));
+                    if (SingleSelectedDataRow.Value is not null && !arg.Any(x => x is not null && x.Equals(SingleSelectedDataRow.Value)))
+                    {
+                        SingleSelectedDataRow.OnNext(default);
 
                         SingleSelectedRowCallback?.Invoke();
                     }
                     break;
                 case GridSelectionMode.MultipleSelectedDataRows:
-                    if (MultipleSelectedDataRows.Value != null && MultipleSelectedDataRows.Value.Count() > 0)
+                    if (MultipleSelectedDataRows.Value != null && MultipleSelectedDataRows.Value.Any())
                     {
                         MultipleSelectedDataRows.OnNext(MultipleSelectedDataRows.Value.Intersect(arg));
-                        
+
                         MultipleSelectedRowsCallback?.Invoke();
                     }
                     break;
                 default:
                     break;
             }
-
-            //return Task.CompletedTask;
         }
 
         public async Task OnRowSelected(T dataItem)
         {
-            //if (ColWidthChangeManager.IsMouseDown)
-            //    return;
-
             switch (SelectionMode.Value)
             {
                 case GridSelectionMode.None:
                     break;
                 case GridSelectionMode.SingleSelectedDataRow:
-                    if (_singleSelectedDataItem != null && _singleSelectedDataItem.Equals(dataItem))
+                    if (_singleSelectedDataItem is not null && _singleSelectedDataItem.Equals(dataItem))
                     {
-                        _singleSelectedDataItem = default(T);
+                        _singleSelectedDataItem = default;
                     }
                     else
                     {
                         _singleSelectedDataItem = dataItem;
                     }
 
-                    if (_singleSelectedDataItem == null)
+                    if (_singleSelectedDataItem is null)
                     {
-                        SingleSelectedDataRow.OnNext(default(T));
+                        SingleSelectedDataRow.OnNext(default);
                     }
                     else
                     {
@@ -101,9 +88,9 @@ namespace Samovar.Blazor
                 case GridSelectionMode.MultipleSelectedDataRows:
                     if (await _jsService.IsWindowCtrlKeyDown())
                     {
-                        if (MultipleSelectedDataRows.Value == null || MultipleSelectedDataRows.Value.Count() == 0)//initial selection in the multiple selection mode
+                        if (MultipleSelectedDataRows.Value == null || !MultipleSelectedDataRows.Value.Any())//initial selection in the multiple selection mode
                         {
-                            MultipleSelectedDataRows.OnNext(new [] { dataItem });
+                            MultipleSelectedDataRows.OnNext(new[] { dataItem });
                         }
                         else
                         {
@@ -125,7 +112,7 @@ namespace Samovar.Blazor
                     }
                     else if (await _jsService.IsWindowShiftKeyDown())
                     {
-                        if (MultipleSelectedDataRows.Value == null || MultipleSelectedDataRows?.Value.Count() == 0)//initial selection in the multiple selection mode
+                        if (MultipleSelectedDataRows.Value == null || !MultipleSelectedDataRows.Value.Any())
                         {
                             MultipleSelectedDataRows.OnNext(new[] { dataItem });
                         }
@@ -133,16 +120,18 @@ namespace Samovar.Blazor
                         {
                             var tList = MultipleSelectedDataRows.Value.ToList();
 
-                            var rm = _repositoryService.ViewCollection.SingleOrDefault(x => x.DataItem.Equals(dataItem));//. MultipleSelectedDataRows.OrderBy(dr => dr.)
+                            var rm = _repositoryService.ViewCollection.SingleOrDefault(x => x.DataItem is not null && x.DataItem.Equals(dataItem));//. MultipleSelectedDataRows.OrderBy(dr => dr.)
                             if (rm != null)
                             {
-                                var initPos = _repositoryService.ViewCollection.SingleOrDefault(y => y.DataItem.Equals(MultipleSelectedDataRows.Value.First())).DataItemPosition;
-
+                                var pos = _repositoryService.ViewCollection.Single(y => y.DataItem is not null && y.DataItem.Equals(MultipleSelectedDataRows.Value.First()));
+                                
+                                int initPos = pos.DataItemPosition;
                                 int rmMin = initPos;
                                 int rmMax = initPos;
+                                
                                 MultipleSelectedDataRows.Value.ToList().ForEach(x =>
                                 {
-                                    var currRm = _repositoryService.ViewCollection.SingleOrDefault(y => y.DataItem.Equals(x));
+                                    var currRm = _repositoryService.ViewCollection.SingleOrDefault(y => y.DataItem is not null && y.DataItem.Equals(x));
                                     if (currRm != null && currRm.DataItemPosition <= rmMin) rmMin = currRm.DataItemPosition;
                                     if (currRm != null && currRm.DataItemPosition >= rmMax) rmMax = currRm.DataItemPosition;
 
@@ -163,7 +152,6 @@ namespace Samovar.Blazor
                                 var tempList = _repositoryService.ViewCollection.Where(rm => rm.DataItemPosition >= iFrom && rm.DataItemPosition <= iTo);
                                 tempList.ToList().ForEach(item =>
                                 {
-                                    //(item as GridRowModel<TItem>).RowSelected = true;
                                     if (!tList.Contains(item.DataItem))
                                     {
                                         tList.Add(item.DataItem);
@@ -179,7 +167,7 @@ namespace Samovar.Blazor
                     else
                     {
                         MultipleSelectedDataRows.OnNext(new[] { dataItem });
-                        
+
                         MultipleSelectedRowsCallback?.Invoke();
                     }
 
@@ -189,11 +177,12 @@ namespace Samovar.Blazor
             }
         }
 
-        public void Dispose()
+        public ValueTask DisposeAsync()
         {
             SingleSelectedRowCallback = null;
-
             MultipleSelectedRowsCallback = null;
+
+            return ValueTask.CompletedTask;
         }
     }
 }

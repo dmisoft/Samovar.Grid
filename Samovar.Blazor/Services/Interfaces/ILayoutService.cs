@@ -18,15 +18,15 @@ namespace Samovar.Blazor
         BehaviorSubject<bool> ShowDetailRow { get; }
         BehaviorSubject<DataGridFilterMode> FilterMode { get; }
         BehaviorSubject<bool> ShowFilterRow { get; }
-        
+
         double ScrollbarWidth { get; }
-        
+
         double FilterRowHeight { get; }
 
         Task<double> TableRowHeight();
 
         BehaviorSubject<string> Height { get; }
-        BehaviorSubject<string> Width {  get; }
+        BehaviorSubject<string> Width { get; }
 
         BehaviorSubject<string> OuterStyle { get; }
         BehaviorSubject<string> FooterStyle { get; }
@@ -35,7 +35,7 @@ namespace Samovar.Blazor
         ElementReference GridOuterRef { get; set; }
         ElementReference GridInnerRef { get; set; }
         ElementReference TableBodyInnerRef { get; set; }
-        
+
         double ActualScrollbarWidth { get; set; }
 
         BehaviorSubject<bool> ShowColumnHeader { get; }

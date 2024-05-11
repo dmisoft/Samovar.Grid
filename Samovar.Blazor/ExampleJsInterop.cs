@@ -1,10 +1,9 @@
 using Microsoft.JSInterop;
-using System;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor
 {
-    public interface IExampleJsInterop {
+    public interface IExampleJsInterop
+    {
         ValueTask<string> Prompt(string message);
     }
     // This class provides an example of how JavaScript functionality can be wrapped
@@ -14,7 +13,7 @@ namespace Samovar.Blazor
     // This class can be registered as scoped DI service and then injected into Blazor
     // components for use.
 
-    public class ExampleJsInterop 
+    public class ExampleJsInterop
         : IExampleJsInterop, IAsyncDisposable
     {
         private readonly Lazy<Task<IJSObjectReference>> moduleTask;

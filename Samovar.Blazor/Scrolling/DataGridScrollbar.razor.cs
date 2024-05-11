@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using System;
 using System.Globalization;
-using System.Threading.Tasks;
 
 namespace Samovar.Blazor.Scrolling
 {
@@ -12,19 +9,19 @@ namespace Samovar.Blazor.Scrolling
         : SmDesignComponentBase, IAsyncDisposable
     {
         private bool isDragging = false;
+
         private double startDraggingY;
         private double oldActualTranslateY { get; set; }
         private double actualTranslateY { get; set; }
         private double newScrollbarThumbOffsetY { get; set; }
-		protected string Style { get; set; }
+        protected string Style { get; set; } = string.Empty;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-        [Inject] IJSRuntime jsRuntime { get; set; }
+        [Inject]
+        public required IJSRuntime jsRuntime { get; set; }
 
         [SmInject]
-        public IVirtualScrollingNavigationStrategy VirtualScrollingService { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public required IVirtualScrollingNavigationStrategy VirtualScrollingService { get; set; }
 
         [Parameter]
         public EventCallback<double> DeltaChangedCallback { set; get; }
@@ -35,8 +32,7 @@ namespace Samovar.Blazor.Scrolling
             isDragging = true;
             startDraggingY = e.ClientY;
             oldActualTranslateY = actualTranslateY;
-			// Subscribe to global mousemove and mouseup events using JavaScript Interop
-			jsRuntime.InvokeVoidAsync("dataGridScrollbar.handleMouseDown", DotNetObjectReference.Create(this));
+            jsRuntime.InvokeVoidAsync("dataGridScrollbar.handleMouseDown", DotNetObjectReference.Create(this));
         }
         protected override Task OnInitializedAsync()
         {
@@ -47,16 +43,16 @@ namespace Samovar.Blazor.Scrolling
         private void VirtualScrollingInfoSubscriber(DataGridVirtualScrollingInfo info)
         {
             Style = $"height:{info.ScrollContainerHeight.ToString(CultureInfo.InvariantCulture)}px;";
-		}
+        }
 
         [JSInvokable]
         public void HandleMouseMove(int clientY)
         {
             double scrollbarThumbHeight = 40;
-			var scrollContainerHeight = VirtualScrollingService.VirtualScrollingInfo.Value.ScrollContainerHeight;
-			var contentContainerHeight = VirtualScrollingService.VirtualScrollingInfo.Value.ContentContainerHeight;
+            var scrollContainerHeight = VirtualScrollingService.VirtualScrollingInfo.Value.ScrollContainerHeight;
+            var contentContainerHeight = VirtualScrollingService.VirtualScrollingInfo.Value.ContentContainerHeight;
 
-			if (isDragging)
+            if (isDragging)
             {
                 var deltaY = clientY - startDraggingY;
                 jsRuntime.InvokeVoidAsync("dataGridScrollbar.handleMouseMove", deltaY);
@@ -73,11 +69,11 @@ namespace Samovar.Blazor.Scrolling
                 {
                     newScrollbarThumbOffsetY = oldActualTranslateY + deltaY;
                 }
-				
+
                 actualTranslateY = newScrollbarThumbOffsetY;
 
-				DeltaChangedCallback.InvokeAsync(actualTranslateY);
-                VirtualScrollingService.ScrollTop.OnNext(actualTranslateY * ((contentContainerHeight - scrollContainerHeight) / (scrollContainerHeight- scrollbarThumbHeight)));
+                DeltaChangedCallback.InvokeAsync(actualTranslateY);
+                VirtualScrollingService.ScrollTop.OnNext(actualTranslateY * ((contentContainerHeight - scrollContainerHeight) / (scrollContainerHeight - scrollbarThumbHeight)));
             }
         }
 
@@ -86,10 +82,9 @@ namespace Samovar.Blazor.Scrolling
         {
             isDragging = false;
             actualTranslateY = newScrollbarThumbOffsetY;
-			
+
             oldActualTranslateY = 0;
             newScrollbarThumbOffsetY = 0;
-            // Unsubscribe from global mousemove and mouseup events using JavaScript Interop
             jsRuntime.InvokeVoidAsync("dataGridScrollbar.handleMouseUp");
         }
 

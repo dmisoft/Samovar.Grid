@@ -1,11 +1,9 @@
-﻿using Microsoft.JSInterop;
-
-namespace Samovar.Blazor
+﻿namespace Samovar.Blazor
 {
     public interface IConstantService
     {
         string InnerGridId { get; }
-        
+
         string DataGridId { get; }
 
         string GridHeaderContainerId { get; }

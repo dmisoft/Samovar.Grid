@@ -10,7 +10,7 @@
         public List<IColumnModel> AllColumnModels { get; } = new List<IColumnModel>();
 
         public IEnumerable<IDataColumnModel> DataColumnModels => AllColumnModels.OfType<IDataColumnModel>();
-        
+
         public void RegisterColumn(IColumnModel columntModel)
         {
             int _columnOrder = AllColumnModels.Count + 1;

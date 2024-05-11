@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace Samovar.Blazor
+﻿namespace Samovar.Blazor
 {
     public partial class DataGridHeaderRow<T>
         : SmDesignComponentBase, IAsyncDisposable
@@ -19,7 +16,8 @@ namespace Samovar.Blazor
 
         protected override void OnInitialized()
         {
-            Style = new DataGridStyleInfo { 
+            Style = new DataGridStyleInfo
+            {
                 CssStyle = GridLayoutService.OuterStyle.Value,
                 ActualScrollbarWidth = GridLayoutService.ActualScrollbarWidth
             };

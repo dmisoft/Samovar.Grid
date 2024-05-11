@@ -22,7 +22,8 @@ namespace Samovar.Blazor
             {
                 ColumnFilters.Add(filterCellInfo);
             }
-            else {
+            else
+            {
                 if (filterCellInfo.FilterCellValue is null)
                     ColumnFilters.RemoveAt(ColumnFilters.IndexOf(filterCellInfo));
                 else
@@ -42,7 +43,7 @@ namespace Samovar.Blazor
             FilterInfo.OnNext(ColumnFilters.ToList());
             await OnFilterCleared();
         }
-        
+
         public event Func<Task>? FilterCleared;
 
         public async Task OnFilterCleared()
@@ -51,8 +52,8 @@ namespace Samovar.Blazor
                 await FilterCleared.Invoke();
         }
 
-		public T TryGetFilterCellValue<T>(IDataColumnModel columnModel)
-		{
+        public T TryGetFilterCellValue<T>(IDataColumnModel columnModel)
+        {
             if (!ColumnFilters.Any(f => f.ColumnMetadata is not null && f.ColumnMetadata.Equals(columnModel)))
             {
                 return default;

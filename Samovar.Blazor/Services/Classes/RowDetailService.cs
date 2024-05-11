@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Subjects;
-using System.Threading.Tasks;
+﻿using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
 {
     public class RowDetailService<T>
         : IRowDetailService<T>, IDisposable
     {
-		public BehaviorSubject<IList<T>> ExpandedRowDetails { get; } = new BehaviorSubject<IList<T>>(new List<T>());
+        public BehaviorSubject<IList<T>> ExpandedRowDetails { get; } = new BehaviorSubject<IList<T>>(new List<T>());
 
         public Task ExpandOrCloseRowDetails(T dataItem)
         {
@@ -40,6 +37,6 @@ namespace Samovar.Blazor
         {
         }
 
-		
-	}
+
+    }
 }

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace Samovar.Blazor
+﻿namespace Samovar.Blazor
 {
     public class DataGridColumnOrderInfo
     {

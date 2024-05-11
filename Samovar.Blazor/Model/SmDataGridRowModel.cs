@@ -7,8 +7,9 @@ namespace Samovar.Blazor
     {
         public string HtmlElementId { get; }
     }
-    public interface IRowModel<T> 
-        : IComponentModel {
+    public interface IRowModel<T>
+        : IComponentModel
+    {
         public T DataItem { get; set; }
         public T? EditingDataItem { get; set; }
     }
@@ -31,7 +32,7 @@ namespace Samovar.Blazor
         public List<DataGridRowCellModel<T>> EditingGridCellModels { get; set; } = [];
 
         public readonly IEnumerable<IDataColumnModel> ColumnMetadata;
-        
+
         private readonly Dictionary<string, PropertyInfo> PropDict;
 
         #region ctor
@@ -49,8 +50,8 @@ namespace Samovar.Blazor
             stopWatch.Stop();
         }
 
-        #endregion 
-        
+        #endregion
+
         internal List<DataGridRowCellModel<T>> CreateGridRowCellModelCollection(IEnumerable<IDataColumnModel> columnMetadata, T dataItem)//, CancellationToken token)
         {
             List<DataGridRowCellModel<T>> gridCellModelCollection = new List<DataGridRowCellModel<T>>();

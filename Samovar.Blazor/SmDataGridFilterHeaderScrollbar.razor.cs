@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace Samovar.Blazor
+﻿namespace Samovar.Blazor
 {
     public partial class SmDataGridFilterHeaderScrollbar
-        : SmDesignComponentBase ,IAsyncDisposable
+        : SmDesignComponentBase, IAsyncDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 

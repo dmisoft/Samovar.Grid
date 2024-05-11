@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System;
 using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
@@ -17,7 +16,7 @@ namespace Samovar.Blazor
 
         public void Dispose()
         {
-            
+
         }
     }
 }

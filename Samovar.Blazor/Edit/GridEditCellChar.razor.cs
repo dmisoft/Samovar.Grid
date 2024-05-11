@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
 using System.Reflection;
 
 namespace Samovar.Blazor.Edit
@@ -31,7 +30,7 @@ namespace Samovar.Blazor.Edit
             base.OnInitialized();
             InnerValue = (char?)PropInfo.GetValue(Data);
         }
-       
+
         public void InnerValueOnChange(ChangeEventArgs args)
         {
             PropInfo.SetValue(Data, innerValue);

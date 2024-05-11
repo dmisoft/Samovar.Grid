@@ -24,13 +24,13 @@ namespace Samovar.Blazor.Edit
                 return innerValue;
             }
         }
-        
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
             InnerValue = PropInfo.GetValue(Data)?.ToString();
         }
-        
+
         public void InnerValueOnChange(ChangeEventArgs args)
         {
             PropInfo.SetValue(Data, innerValue);

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reactive.Subjects;
+﻿using System.Reactive.Subjects;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -25,7 +24,7 @@ namespace Samovar.Blazor
 
         public string FilterMenuContainerId { get; } = $"filtermenucontainer{Guid.NewGuid().ToString().Replace("-", "")}";
         public string FilterMenuId { get; set; } = $"filtermenu{Guid.NewGuid().ToString().Replace("-", "")}";
-        
+
         public bool? SortingAscending { get; set; } = null;
 
         #region absolute column width

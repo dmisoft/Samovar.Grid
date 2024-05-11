@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reactive.Subjects;
-using System.Threading.Tasks;
+﻿using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
 {
@@ -21,22 +19,27 @@ namespace Samovar.Blazor
         {
             DataGridColumnOrderInfo orderInfo = DataGridColumnOrderInfo.Empty;
 
-            if (string.IsNullOrEmpty(_currenSortingField)) {//initial setting
+            if (string.IsNullOrEmpty(_currenSortingField))
+            {//initial setting
                 _currenSortingField = columnModel.Field.Value;
                 _ascSorting = true;
             }
-            else {
+            else
+            {
                 if (_currenSortingField == columnModel.Field.Value)
                 {
-                    if (!_ascSorting) {//reset to original sorting state of data source
+                    if (!_ascSorting)
+                    {//reset to original sorting state of data source
                         _currenSortingField = "";
                         _ascSorting = true;
                     }
-                    else {
+                    else
+                    {
                         _ascSorting = !_ascSorting;
                     }
                 }
-                else {//column change
+                else
+                {//column change
                     _currenSortingField = columnModel.Field.Value;
                     _ascSorting = true;
                 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Reflection;
-using System.Linq;
 
 namespace Samovar.Blazor
 {

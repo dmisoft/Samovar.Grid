@@ -22,7 +22,7 @@ namespace Samovar.Blazor
         public int EndGridItemPosition { get; set; }
 
         public double TranslateYOffset { get; private set; } = 0d;
-        
+
         protected double ActualTopOffset = 0;
         private double _translatableDivHeight;
         private readonly IJsService _jsService;
@@ -87,9 +87,9 @@ namespace Samovar.Blazor
                     offsetX: 0d,
                     offsetY: scrollTop,// skip * rowHeight,
                     contentContainerHeight: _translatableDivHeight,
-                    topPlaceholderHeight:topPlaceholderHeight,
+                    topPlaceholderHeight: topPlaceholderHeight,
                     bottomPlaceholderHeight: bottomPlaceholderHeight,
-                    scrollContainerHeight: scrollContainerHeight)) ;
+                    scrollContainerHeight: scrollContainerHeight));
 
             return new NavigationStrategyDataLoadingSettings(skip: skip, take: visibleItems);
         }
@@ -101,7 +101,7 @@ namespace Samovar.Blazor
 
         public async Task Deactivate()
         {
-            await _jsService.DetachOnScrollollingEvent (_constantService.InnerGridId, DotNetRef);
+            await _jsService.DetachOnScrollollingEvent(_constantService.InnerGridId, DotNetRef);
         }
 
         public async ValueTask DisposeAsync()
@@ -109,8 +109,11 @@ namespace Samovar.Blazor
             await Deactivate();
         }
 
-        public async Task ProcessDataPrequery<T1>(IQueryable<T1> data)
+        public async Task ProcessDataPrequery<T1>(IQueryable<T1>? data)
         {
+            if (data is null)
+                return;
+
             await _jsService.ScrollInnerGridToTop();
 
             double divHeightValue = await GetTranslatableDivHeight(data.Count());

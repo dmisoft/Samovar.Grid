@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Samovar.Blazor
+﻿namespace Samovar.Blazor
 {
     public interface IColumnService
     {

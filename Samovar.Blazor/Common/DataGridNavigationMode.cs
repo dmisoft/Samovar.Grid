@@ -1,8 +1,8 @@
 ﻿namespace Samovar.Blazor
 {
     public enum DataGridNavigationMode
-	{
-		Paging,
-		VirtualScrolling
-	}
+    {
+        Paging,
+        VirtualScrolling
+    }
 }

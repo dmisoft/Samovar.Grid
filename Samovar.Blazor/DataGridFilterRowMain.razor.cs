@@ -1,7 +1,7 @@
 ﻿namespace Samovar.Blazor
 {
     public partial class DataGridFilterRowMain<T>
-        : SmDesignComponentBase , IAsyncDisposable
+        : SmDesignComponentBase, IAsyncDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -17,7 +17,8 @@
 
         protected override void OnInitialized()
         {
-            Style = new DataGridStyleInfo { 
+            Style = new DataGridStyleInfo
+            {
                 CssStyle = GridLayoutService.OuterStyle.Value,
                 ActualScrollbarWidth = GridLayoutService.ActualScrollbarWidth!
             };

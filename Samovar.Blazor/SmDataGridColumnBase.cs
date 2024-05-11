@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using System.ComponentModel;
-using System.Reflection;
-using System.Threading.Tasks;
-
-namespace Samovar.Blazor
+﻿namespace Samovar.Blazor
 {
     public class SmDataGridColumnBase<T>
         : SmDesignComponentBase

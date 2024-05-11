@@ -9,7 +9,7 @@ namespace Samovar.Blazor
 
         [SmInject]
         protected IColumnService GridColumnService { get; set; }
-        
+
         [SmInject]
         protected IGridStateService GridStateService { get; set; }
 
@@ -34,10 +34,10 @@ namespace Samovar.Blazor
 
         [Parameter]
         public EventCallback<SmDataGridRowModel<TItem>> RowModelChanged { get; set; }
-       
-		internal async Task DetailExpanderClick()
-		{
-			RowModel.RowDetailExpanded = !RowModel.RowDetailExpanded;
+
+        internal async Task DetailExpanderClick()
+        {
+            RowModel.RowDetailExpanded = !RowModel.RowDetailExpanded;
             await RowDetailService.ExpandOrCloseRowDetails(RowModel.DataItem);
         }
 

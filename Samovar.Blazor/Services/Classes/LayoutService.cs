@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System.Globalization;
 using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
@@ -127,9 +126,9 @@ namespace Samovar.Blazor
             MinGridWidth.OnNext(0);
 
             var allCols = _columnService.AllColumnModels.Count + (ShowDetailRow.Value ? 1 : 0);
-            
+
             var absCols = _columnService.AllColumnModels.Count(c => c.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Absolute) + (ShowDetailRow.Value ? 1 : 0);
-            
+
             if (absCols != allCols)
             {
                 FitColumnsToTableWidth = true;

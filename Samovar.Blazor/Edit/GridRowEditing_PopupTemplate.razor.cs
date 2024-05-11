@@ -27,7 +27,7 @@ namespace Samovar.Blazor.Edit
             if (firstRender)
                 await (await JsService.JsModule()).InvokeVoidAsync("dragElement", Ref);
         }
-        
+
         public ValueTask DisposeAsync()
         {
             return ValueTask.CompletedTask;
