@@ -108,14 +108,14 @@ namespace Samovar.Blazor
             });
         }
 
-        private async Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T>? query, Task<NavigationStrategyDataLoadingSettings>? loadingSettingsTask)
+        private async Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T>? query, Task<NavigationStrategyDataLoadingSettings> loadingSettingsTask)
         {
-            if (query is null || loadingSettingsTask is null)
+            if (query is null)
                 return new List<SmDataGridRowModel<T>>();
 
             IEnumerable<SmDataGridRowModel<T>> _retVal;
-
             var loadingSettings = await loadingSettingsTask;
+
             query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
 
             _stateService.DataSourceState.OnNext(DataSourceState.Loading);

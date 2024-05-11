@@ -7,7 +7,7 @@ namespace Samovar.Blazor
     public class VirtualScrollingNavigationStrategy<T>
         : IVirtualScrollingNavigationStrategy, IAsyncDisposable
     {
-        public IObservable<Task<NavigationStrategyDataLoadingSettings>>? DataLoadingSettings { get; private set; }
+        public required IObservable<Task<NavigationStrategyDataLoadingSettings>> DataLoadingSettings { get; set; }
         public BehaviorSubject<double> ScrollTop { get; private set; } = new BehaviorSubject<double>(0);
         public DotNetObjectReference<IVirtualScrollingNavigationStrategy> DotNetRef { get; }
 

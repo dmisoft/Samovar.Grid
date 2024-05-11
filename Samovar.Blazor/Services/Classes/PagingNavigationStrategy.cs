@@ -16,7 +16,7 @@ namespace Samovar.Blazor
 
         public BehaviorSubject<DataGridPagerInfo> PagerInfo { get; private set; } = new BehaviorSubject<DataGridPagerInfo>(DataGridPagerInfo.Empty);
 
-        public IObservable<Task<NavigationStrategyDataLoadingSettings>>? DataLoadingSettings { get; private set; }
+        public required IObservable<Task<NavigationStrategyDataLoadingSettings>> DataLoadingSettings { get; set; }
 
         private readonly IDataSourceService<T> _dataSourceService;
 
@@ -51,7 +51,6 @@ namespace Samovar.Blazor
 
         private Task<NavigationStrategyDataLoadingSettings> CalculateDataLoadingSetting(int pageSize, int currentPage)
         {
-            //ITaskObservable
             if (currentPage == 0)
                 return Task.FromResult(NavigationStrategyDataLoadingSettings.Empty);
 

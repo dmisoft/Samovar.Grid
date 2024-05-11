@@ -2,6 +2,6 @@
 {
     public interface INavigationStrategy
     {
-        IObservable<Task<NavigationStrategyDataLoadingSettings>>? DataLoadingSettings { get; }
+        IObservable<Task<NavigationStrategyDataLoadingSettings>> DataLoadingSettings { get; }
     }
 }
