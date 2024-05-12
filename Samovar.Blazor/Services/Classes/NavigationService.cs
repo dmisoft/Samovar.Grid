@@ -3,7 +3,7 @@ using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
 {
-    public class NavigationService<T>
+    public class NavigationService
         : INavigationService
     {
         public BehaviorSubject<DataGridNavigationMode> NavigationMode { get; } = new BehaviorSubject<DataGridNavigationMode>(DataGridNavigationMode.Paging);
@@ -11,7 +11,6 @@ namespace Samovar.Blazor
         public INavigationStrategy NavigationStrategy { get; private set; }
         private readonly IVirtualScrollingNavigationStrategy _virtualScrollingStrategy;
         private readonly IPagingNavigationStrategy _pagingStrategy;
-        private IInitService _initService;
 
         public NavigationService(
               IVirtualScrollingNavigationStrategy virtualScrollingService
@@ -19,13 +18,11 @@ namespace Samovar.Blazor
             , IInitService initService
             )
         {
-            _initService = initService;
             _virtualScrollingStrategy = virtualScrollingService;
             _pagingStrategy = pagingNavigationStrategy;
 
-            _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
+            initService.IsInitialized.Subscribe(DataGridInitializerCallback);
 
-            //std. value
             NavigationStrategy = pagingNavigationStrategy;
         }
 

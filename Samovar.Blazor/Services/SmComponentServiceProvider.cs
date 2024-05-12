@@ -14,7 +14,7 @@ namespace Samovar.Blazor
             _services = new ServiceCollection();
             _services.AddScoped<IColumnService, ColumnService>();
             _services.AddScoped<IRepositoryService<T>, RepositoryService<T>>();
-            _services.AddScoped<INavigationService, NavigationService<T>>();
+            _services.AddScoped<INavigationService, NavigationService>();
             _services.AddScoped<ILayoutService, LayoutService>();
             _services.AddScoped<IEditingService<T>, EditingService<T>>();
             _services.AddScoped<IInitService, InitService>();

@@ -3,9 +3,9 @@
 namespace Samovar.Blazor
 {
     public class RowDetailService<T>
-        : IRowDetailService<T>, IDisposable
+        : IRowDetailService<T>
     {
-        public BehaviorSubject<IList<T>> ExpandedRowDetails { get; } = new BehaviorSubject<IList<T>>(new List<T>());
+        public BehaviorSubject<IList<T>> ExpandedRowDetails { get; } = new BehaviorSubject<IList<T>>([]);
 
         public Task ExpandOrCloseRowDetails(T dataItem)
         {
@@ -32,11 +32,5 @@ namespace Samovar.Blazor
 
             return Task.CompletedTask;
         }
-
-        public void Dispose()
-        {
-        }
-
-
     }
 }
