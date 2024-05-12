@@ -3,10 +3,13 @@
 
 <div class=m-2>
     <GridRowEditing_Body RowModel=RowModel />
-    <div class="row">
-        <div class="col s-flex justify-content-end">
-            <button class="btn btn-outline-primary mx-1" @onclick="@(() => EditingService.RowInsertCommit(RowModel.EditingDataItem))">add</button>
-            <button class="btn btn-outline-secondary mx-1" @onclick="@(() => EditingService.RowInsertCancel())">cancel</button>
+    @if (RowModel.EditingDataItem is not null)
+    {
+        <div class="row">
+            <div class="col s-flex justify-content-end">
+                <button class="btn btn-outline-primary mx-1" @onclick="@(() => EditingService.RowInsertCommit(RowModel.EditingDataItem))">add</button>
+                <button class="btn btn-outline-secondary mx-1" @onclick="@(() => EditingService.RowInsertCancel())">cancel</button>
+            </div>
         </div>
-    </div>
+    }
 </div>

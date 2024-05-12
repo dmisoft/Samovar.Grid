@@ -9,7 +9,11 @@ namespace Samovar.Blazor
         public IColumnModel CreateModel<T>(ParameterView parameters)
         {
             PropertyInfo[] interfaceProps = typeof(T).GetProperties();
-            IColumnModel retVal = (IColumnModel)Activator.CreateInstance(typeof(T));
+            var instance = Activator.CreateInstance(typeof(T));
+            if (instance == null)
+                throw new ArgumentException("");
+
+            IColumnModel retVal = (IColumnModel)instance;
 
             foreach (PropertyInfo prop in interfaceProps)
             {

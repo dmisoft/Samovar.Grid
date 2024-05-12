@@ -12,10 +12,13 @@
 			<div class="modal-body">
 				<GridRowEditing_Body RowModel=RowModel />
 			</div>
-			<div class="modal-footer">
-				<button class="btn btn-outline-primary mx-1" @onclick=@(() => EditingService.RowInsertCommit(RowModel.EditingDataItem))>add</button>
-				<button class="btn btn-outline-secondary mx-1" @onclick=@(() => EditingService.RowInsertCancel())>cancel</button>
-			</div>
+			@if (RowModel.EditingDataItem is not null)
+			{
+				<div class="modal-footer">
+					<button class="btn btn-outline-primary mx-1" @onclick=@(() => EditingService.RowInsertCommit(RowModel.EditingDataItem))>add</button>
+					<button class="btn btn-outline-secondary mx-1" @onclick=@(() => EditingService.RowInsertCancel())>cancel</button>
+				</div>
+			}
 		</div>
 	</div>
 </div>

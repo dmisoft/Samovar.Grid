@@ -2,27 +2,17 @@
 
 namespace Samovar.Blazor
 {
-    public class JsService
-        : IJsService, IAsyncDisposable
+    public class JsService(IConstantService _constantService)
+                : IJsService, IAsyncDisposable
     {
-        private IConstantService _constantService;
-        //[Inject]
-        //public IJSRuntime JsRuntime { get; set; }
-
-        public JsService(IConstantService constantService)
-        {
-            _constantService = constantService;
-            //_module = new(() => JsRuntime.InvokeAsync<IJSObjectReference>(
-            //       "import", "./_content/Samovar.Blazor/samovar.blazor.js").AsTask());
-        }
-
-        Task<IJSObjectReference> jsmod => _module.Value;
         public async Task<IJSObjectReference> JsModule()
         {
+            if (_module is null)
+                throw new InvalidOperationException("JsModule is not initialized");
             return await _module.Value;
         }
 
-        private Lazy<Task<IJSObjectReference>> _module;
+        private Lazy<Task<IJSObjectReference>>? _module;
 
         public Task InitJsModule(Lazy<Task<IJSObjectReference>> module)
         {
@@ -116,7 +106,7 @@ namespace Samovar.Blazor
 
         public async ValueTask DisposeAsync()
         {
-            if (_module.IsValueCreated)
+            if (_module is not null && _module.IsValueCreated)
             {
                 var module = await _module.Value;
                 await module.DisposeAsync();
