@@ -1,8 +1,7 @@
 ﻿@typeparam T
 @inherits SmDesignComponentBase
 
-<!-- Modal -->
-<div style="display:block;" class="modal" @ref=Ref id=@Id data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div style="display:block;" class="modal" @ref=ElementReference id=@Id data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content"  style="resize:both;overflow: auto;">
 			<div class="modal-header" id=@($"{Id}header") style="cursor: move;">

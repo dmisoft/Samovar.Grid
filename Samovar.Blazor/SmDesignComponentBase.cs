@@ -17,8 +17,6 @@ namespace Samovar.Blazor
             await base.SetParametersAsync(parameters);
         }
 
-        public virtual void InitializeModel(in ParameterView parameters) { }
-
         public virtual void DependenciesInitialized() { }
 
         private Task InitializeDependencies(in ParameterView parameters)
@@ -27,34 +25,22 @@ namespace Samovar.Blazor
             {
                 _dependenciesInitialized = true;
 
-                Dictionary<string, Type> _dict = new Dictionary<string, Type>();
+                IComponentServiceProvider? componentServiceProvider = parameters.GetValueOrDefault<IComponentServiceProvider>("ServiceProvider");
+
+                if (componentServiceProvider is not null)
+                {
 #pragma warning disable S3011 // Reflection should not be used to increase accessibility of classes, methods, or fields
-                PropertyInfo[] props = GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                    var propertyInfos = GetType()
+                        .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                    var propertiesWithSmInjectAttribute = propertyInfos.Where(prop =>
+                        Attribute.IsDefined(prop, typeof(SmInjectAttribute)));
 #pragma warning restore S3011 // Reflection should not be used to increase accessibility of classes, methods, or fields
 
-                foreach (PropertyInfo prop in props)
-                {
-                    IEnumerable<SmInjectAttribute> attrs = prop.GetCustomAttributes<SmInjectAttribute>(true);
-                    foreach (SmInjectAttribute attr in attrs.Where(x => x is not null))
+                    propertiesWithSmInjectAttribute.ToList().ForEach(property =>
                     {
-                        string propName = prop.Name;
-                        _dict.Add(propName, prop.PropertyType);
-                    }
-                }
-
-                IComponentServiceProvider? componentServiceProvider;
-                parameters.TryGetValue<IComponentServiceProvider>("ServiceProvider", out componentServiceProvider);
-
-                if (componentServiceProvider != null)
-                {
-                    foreach (var pair in _dict)
-                    {
-                        object service = componentServiceProvider.ServiceProvider.GetService(pair.Value);
-#pragma warning disable S3011 // Reflection should not be used to increase accessibility of classes, methods, or fields
-                        PropertyInfo? piShared = this.GetType().GetProperty(pair.Key, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-#pragma warning restore S3011 // Reflection should not be used to increase accessibility of classes, methods, or fields
-                        piShared?.SetValue(this, service);
-                    }
+                        object service = componentServiceProvider.ServiceProvider.GetService(property.PropertyType);
+                        property.SetValue(this, service);
+                    });
                 }
                 DependenciesInitialized();
             }

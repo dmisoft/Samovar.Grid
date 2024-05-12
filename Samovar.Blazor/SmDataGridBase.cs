@@ -7,13 +7,11 @@ namespace Samovar.Blazor
     public class SmDataGridBase<T>
         : ComponentBase, IComponentServiceProvider
     {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         [Inject]
-        public IJSRuntime JsRuntime { get; set; } = default!;
+        public required IJSRuntime JsRuntime { get; set; } = default!;
 
         [SmInject]
-        public IJsService JsService { get; set; } = default!;
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public required IJsService JsService { get; set; } = default!;
 
         public SmComponentServiceProvider ServiceProvider { get; }
 

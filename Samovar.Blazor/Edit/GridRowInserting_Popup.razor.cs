@@ -17,12 +17,12 @@ namespace Samovar.Blazor.Edit
 
         protected string Id { get; set; } = Guid.NewGuid().ToString().Replace("-", "");
 
-        protected ElementReference Ref { get; set; }
+        protected ElementReference ElementReference { get; set; }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
-                await (await JsService.JsModule()).InvokeVoidAsync("dragElement", Ref);
+                await (await JsService.JsModule()).InvokeVoidAsync("dragElement", ElementReference);
         }
 
         public ValueTask DisposeAsync()
