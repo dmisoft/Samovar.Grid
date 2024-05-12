@@ -46,7 +46,7 @@ namespace Samovar.Blazor
 
         public RenderFragment? DataProcessingPanel { get; set; }
 
-        public DataGridStyleInfo Style { get; set; } //Default style
+        public required DataGridStyleInfo Style { get; set; }
 
         protected override Task OnInitializedAsync()
         {
@@ -91,34 +91,7 @@ namespace Samovar.Blazor
             //Paging footer
             StateService.ShowPagingPanelDelegate = () => { PagingPanel = ComponentBuilderService.GetPagingPanel<T>(); StateHasChanged(); return Task.CompletedTask; };
             StateService.HidePagingPanelDelegate = () => { PagingPanel = null; StateHasChanged(); return Task.CompletedTask; };
-
-            //StateService.DataSourceState.Subscribe(state =>
-            //InvokeAsync(() =>
-            //{
-            //    DataProcessingPanel = null;
-            //    DataPanel = null;
-            //    PagingPanel = null;
-            //    NoDataPanel = null;
-            //    StateHasChanged();
-
-            //    switch (state)
-            //    {
-            //        case DataSourceStateEnum.Idle:
-            //            DataPanel = ComponentBuilderService.GetDataPanel<T>();
-            //            if (NavigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
-            //                PagingPanel = ComponentBuilderService.GetPagingPanel<T>();
-            //            break;
-            //        case DataSourceStateEnum.Loading:
-            //            DataProcessingPanel = ComponentBuilderService.GetProcessingDataPanel();
-            //            break;
-            //        case DataSourceStateEnum.NoData:
-            //            NoDataPanel = ComponentBuilderService.GetNoDataPanel();
-            //            break;
-            //        default:
-            //            break;
-            //    }
-            //    StateHasChanged();
-            //}));
+            
             base.OnInitializedAsync();
 
             return Task.CompletedTask;

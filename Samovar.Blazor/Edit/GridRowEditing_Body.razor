@@ -6,7 +6,7 @@
     {
         <div class="col-6 mb-2">
             <label class="form-label">@cellModel.ColumnMetadata.Title.Value</label>
-            @if (cellModel.ColumnMetadata.CellEditTemplate.Value != null)
+            @if (cellModel.ColumnMetadata.CellEditTemplate.Value != null && RowModel.EditingDataItem is not null)
             {
                 <div style="overflow:hidden !important;width:100%;">
                     @cellModel.ColumnMetadata.CellEditTemplate.Value(RowModel.EditingDataItem)
@@ -75,7 +75,7 @@
                 }
                 else
                 {
-                    @if (cellModel.ColumnMetadata.CellShowTemplate.Value != null)
+                    @if (cellModel.ColumnMetadata.CellShowTemplate.Value != null && RowModel.DataItem is not null)
                     {
                         @cellModel.ColumnMetadata.CellShowTemplate.Value(RowModel.DataItem)
                     }

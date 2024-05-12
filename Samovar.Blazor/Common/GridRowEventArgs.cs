@@ -6,9 +6,13 @@
         public object RowData { get; private set; }
         public int RowPosition { get; private set; }
 
-        public GridRowEventArgs(object rowData, int rowPosition)
+        public GridRowEventArgs(object? rowData, int rowPosition)
             : base()
         {
+            if(rowData is null)
+            {
+                throw new ArgumentNullException(nameof(rowData));
+            }
             RowData = rowData;
             RowPosition = rowPosition;
         }
