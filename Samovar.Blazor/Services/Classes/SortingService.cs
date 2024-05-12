@@ -7,41 +7,41 @@ namespace Samovar.Blazor
     {
         public BehaviorSubject<DataGridColumnOrderInfo> ColumnOrderInfo { get; } = new BehaviorSubject<DataGridColumnOrderInfo>(DataGridColumnOrderInfo.Empty);
 
-        string _currenSortingField = string.Empty;
-        bool _ascSorting;
+        string _currentSortingFieldBy = string.Empty;
+        bool isAscendingSorting;
 
         public Task OnColumnClick(IDataColumnModel columnModel)
         {
             DataGridColumnOrderInfo orderInfo = DataGridColumnOrderInfo.Empty;
 
-            if (string.IsNullOrEmpty(_currenSortingField))
+            if (string.IsNullOrEmpty(_currentSortingFieldBy))
             {
-                _currenSortingField = columnModel.Field.Value;
-                _ascSorting = true;
+                _currentSortingFieldBy = columnModel.Field.Value;
+                isAscendingSorting = true;
             }
             else
             {
-                if (_currenSortingField == columnModel.Field.Value)
+                if (_currentSortingFieldBy == columnModel.Field.Value)
                 {
-                    if (!_ascSorting)
+                    if (!isAscendingSorting)
                     {
-                        _currenSortingField = "";
-                        _ascSorting = true;
+                        _currentSortingFieldBy = "";
+                        isAscendingSorting = true;
                     }
                     else
                     {
-                        _ascSorting = !_ascSorting;
+                        isAscendingSorting = !isAscendingSorting;
                     }
                 }
                 else
                 {
-                    _currenSortingField = columnModel.Field.Value;
-                    _ascSorting = true;
+                    _currentSortingFieldBy = columnModel.Field.Value;
+                    isAscendingSorting = true;
                 }
             }
 
-            if (!string.IsNullOrEmpty(_currenSortingField))
-                orderInfo = new DataGridColumnOrderInfo { Field = _currenSortingField, Asc = _ascSorting };
+            if (!string.IsNullOrEmpty(_currentSortingFieldBy))
+                orderInfo = new DataGridColumnOrderInfo { Field = _currentSortingFieldBy, Asc = isAscendingSorting };
 
             ColumnOrderInfo.OnNext(orderInfo);
 
