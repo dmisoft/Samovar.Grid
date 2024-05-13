@@ -6,18 +6,15 @@ namespace Samovar.Blazor.Filter
     public abstract partial class DataGridFilterCellBase<TFilterCell>
         : SmDesignComponentBase, IAsyncDisposable
     {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         [SmInject]
-        public IJsService JsService { get; set; }
+        public required IJsService JsService { get; set; }
 
         [SmInject]
-        public ILayoutService LayoutService { get; set; }
+        public required ILayoutService LayoutService { get; set; }
 
         [SmInject]
-        public IFilterService FilterService { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
+        public required IFilterService FilterService { get; set; }
 
         [Parameter]
         public required IDataColumnModel ColMetadata { get; set; }
@@ -34,14 +31,12 @@ namespace Samovar.Blazor.Filter
 
         private TFilterCell? _innerValue = default;
 
-        protected TFilterCell InnerValue
+        protected TFilterCell? InnerValue
         {
             set
             {
                 _innerValue = value;
-
                 FilterCellInfo = new DataGridFilterCellInfo { ColumnMetadata = ColMetadata, FilterCellValue = _innerValue, FilterCellMode = _menuMode };
-
                 FilterService.Filter(FilterCellInfo);
             }
             get

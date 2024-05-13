@@ -10,7 +10,7 @@ namespace Samovar.Blazor
         BehaviorSubject<IEnumerable<DataGridFilterCellInfo>> FilterInfo { get; }
         ObservableCollection<DataGridFilterCellInfo> ColumnFilters { get; }
         void Filter(DataGridFilterCellInfo filterCellInfo);
-        T TryGetFilterCellValue<T>(IDataColumnModel columnModel);
+        T? TryGetFilterCellValue<T>(IDataColumnModel columnModel);
         Task ClearFilter();
         event Func<Task> FilterCleared;
     }

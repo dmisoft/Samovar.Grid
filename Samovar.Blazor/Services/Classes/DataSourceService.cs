@@ -109,7 +109,7 @@ namespace Samovar.Blazor
                 switch (prop.PropertyType)
                 {
                     case var tt when tt == typeof(string):
-                        var filterCellValue = filterCellInfo.FilterCellValue.ToString() ?? "";
+                        var filterCellValue = filterCellInfo.FilterCellValue?.ToString() ?? "";
                         filterCellValue = filterCellValue.ToLower();
                         ConstantExpression valueExp = Expression.Constant(filterCellValue);
 
