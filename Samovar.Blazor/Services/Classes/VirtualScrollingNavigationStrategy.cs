@@ -3,14 +3,14 @@ using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
 {
-    internal class NewVirtualScrollingNavigationStrategy<T>
-        : INewVirtualScrollingNavigationStrategy
+    internal class VirtualScrollingNavigationStrategy<T>
+        : IVirtualScrollingNavigationStrategy
     {
         public required BehaviorSubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; set; } = new BehaviorSubject<NavigationStrategyDataLoadingSettings>(NavigationStrategyDataLoadingSettings.FetchAll);
 
         private readonly IDataSourceService<T> _dataSourceService;
 
-        public NewVirtualScrollingNavigationStrategy(
+        public VirtualScrollingNavigationStrategy(
               IInitService initService
             , IDataSourceService<T> dataSourceService)
         {

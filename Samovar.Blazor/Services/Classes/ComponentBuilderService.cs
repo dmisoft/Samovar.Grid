@@ -87,7 +87,7 @@ namespace Samovar.Blazor
             switch (model.RowState)
             {
                 case SmDataGridRowState.Editing:
-                    if (_navigationService.NavigationMode.Value == DataGridNavigationMode.NewVirtualScrolling)
+                    if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
                     {
                         return GetDefaultRow(model);
                     }

@@ -242,7 +242,7 @@ namespace Samovar.Blazor
                         builder2.CloseComponent();
                     };
                     break;
-                case DataGridNavigationMode.NewVirtualScrolling:
+                case DataGridNavigationMode.VirtualScrolling:
                     del = delegate (RenderTreeBuilder builder2)
                     {
                         Columns?.Invoke(builder2);

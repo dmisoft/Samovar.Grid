@@ -40,7 +40,7 @@ else
                 Height="450px" 
                 ShowDetailRow=false 
                 EditMode=DataGridEditMode.Popup
-                DataNavigationMode=DataGridNavigationMode.NewVirtualScrolling
+                DataNavigationMode=DataGridNavigationMode.VirtualScrolling
                 SelectionMode=GridSelectionMode.SingleSelectedDataRow
                 RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
                 RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))"

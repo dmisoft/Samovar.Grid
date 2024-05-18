@@ -2,7 +2,7 @@
 
 namespace Samovar.Blazor
 {
-    public interface INewVirtualScrollingNavigationStrategy
+    public interface IVirtualScrollingNavigationStrategy
         : INavigationStrategy
     {
     }
