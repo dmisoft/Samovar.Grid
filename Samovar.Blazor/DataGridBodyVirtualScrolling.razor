@@ -1,20 +1,16 @@
 ﻿@using System.Globalization
+@using Microsoft.AspNetCore.Components.Web.Virtualization
 @typeparam TItem
 @inherits SmDesignComponentBase
 
-<table id="@ConstantService.InnerGridBodyTableId" class=@LayoutService.TableTagClass.Value style=@ScrollStyle>
-    <DataGridHiddenHeader />
-    <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
-        @if (View != null)
-        {
-            <SmDataGridRowVirtualScrollingPlaceHolder TopPlaceHolder=true />
-
-            @foreach (var rowModel in View)
-            {
+@if (View != null)
+{
+    <table id="@ConstantService.InnerGridBodyTableId" class=@LayoutService.TableTagClass.Value>
+        <DataGridHiddenHeader />
+        <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
+            <Virtualize Items="@View.ToList()" Context="rowModel" SpacerElement="tr" @ref="virtualizeComponent">
                 <SmDataGridRow RowModel="rowModel" />
-            }
-
-            <SmDataGridRowVirtualScrollingPlaceHolder TopPlaceHolder=false  />
-        }
-    </tbody>
-</table>
+            </Virtualize>
+        </tbody>
+    </table>
+}

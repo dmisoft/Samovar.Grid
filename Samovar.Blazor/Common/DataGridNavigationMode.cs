@@ -3,6 +3,7 @@
     public enum DataGridNavigationMode
     {
         Paging,
-        VirtualScrolling
+        VirtualScrolling,
+        NewVirtualScrolling
     }
 }

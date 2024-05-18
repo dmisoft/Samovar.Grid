@@ -1,4 +1,5 @@
 ﻿using Samovar.Blazor.Filter;
+using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -83,6 +84,7 @@ namespace Samovar.Blazor
                 if (pr is not null)
                     query = tuple.Item2.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
             }
+            Debug.WriteLine("myfunc33");
             DataQuery.OnNext(query);
         }
 

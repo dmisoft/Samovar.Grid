@@ -6,7 +6,7 @@ namespace Samovar.Blazor
     public class GridStateService
         : IGridStateService
     {
-        public BehaviorSubject<DataSourceState> DataSourceState { get; } = new BehaviorSubject<DataSourceState>(Blazor.DataSourceState.NoData);
+        public BehaviorSubject<Task<DataSourceState>> DataSourceState { get; } = new BehaviorSubject<Task<DataSourceState>>(Task.FromResult(Blazor.DataSourceState.NoData));
         public BehaviorSubject<DataEditState> DataEditState { get; } = new BehaviorSubject<DataEditState>(Blazor.DataEditState.Idle);
 
         public Func<Task>? ShowDataPanelDelegate { get; set; }

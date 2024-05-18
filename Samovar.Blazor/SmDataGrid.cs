@@ -167,9 +167,6 @@ namespace Samovar.Blazor
             showDetailRow ??= false;
             LayoutService.ShowDetailRow.OnNext(showDetailRow.Value);
 
-            DataGridNavigationMode? dataNavigationMode = parameters.GetValueOrDefault<DataGridNavigationMode?>(nameof(DataNavigationMode));
-            dataNavigationMode ??= DataGridNavigationMode.Paging;
-            NavigationService.NavigationMode.OnNext(dataNavigationMode.Value);
 
             DataGridFilterMode? dataGridFilterMode = parameters.GetValueOrDefault<DataGridFilterMode?>(nameof(FilterMode));
             dataGridFilterMode ??= DataGridFilterMode.None;
@@ -224,7 +221,9 @@ namespace Samovar.Blazor
                 EditingService.OnRowRemoving.OnNext(rowRemoving);
 
 
-
+            DataGridNavigationMode? dataNavigationMode = parameters.GetValueOrDefault<DataGridNavigationMode?>(nameof(DataNavigationMode));
+            dataNavigationMode ??= DataGridNavigationMode.Paging;
+            NavigationService.NavigationMode.OnNext(dataNavigationMode.Value);
 
             IEnumerable<T>? data = parameters.GetValueOrDefault<IEnumerable<T>>(nameof(Data));
             if (data != null)
@@ -247,6 +246,15 @@ namespace Samovar.Blazor
                     };
                     break;
                 case DataGridNavigationMode.VirtualScrolling:
+                    del = delegate (RenderTreeBuilder builder2)
+                    {
+                        Columns?.Invoke(builder2);
+
+                        builder2.OpenComponent<SmDataGridVirtualTableInner<T>>(5);
+                        builder2.CloseComponent();
+                    };
+                    break;
+                case DataGridNavigationMode.NewVirtualScrolling:
                     del = delegate (RenderTreeBuilder builder2)
                     {
                         Columns?.Invoke(builder2);

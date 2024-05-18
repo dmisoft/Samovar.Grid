@@ -68,7 +68,8 @@ namespace Samovar.Blazor
         // Row editing
         protected async Task RowEditBegin(SmDataGridRowModel<T> rowMainModel)
         {
-            if (GridStateService.DataSourceState.Value != DataSourceState.Idle)
+            var actualState = await GridStateService.DataSourceState.Value;
+            if (actualState != DataSourceState.Idle)
                 await EditingService.RowEditCancel();
 
             await EditingService.RowEditBegin(rowMainModel);

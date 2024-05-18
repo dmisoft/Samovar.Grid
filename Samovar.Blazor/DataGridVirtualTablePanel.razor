@@ -1,9 +1,11 @@
 ﻿@using System.Globalization
-@using Samovar.Blazor;
+@using Samovar.Blazor
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+
 @typeparam T
 @inherits SmDesignComponentBase
 
-@switch (_dataSourceState)
+@switch (@dataSourceState)
 {
     case DataSourceState.NoData:
         <div class="s-flex s-align-content-center s-justify-content-center" style="height:100%;background:lightgray;">
@@ -11,11 +13,21 @@
         </div>
         break;
     case DataSourceState.Loading:
+        <div>Loading...</div>
+        break;
     case DataSourceState.Idle:
     default:
         <div id=@ConstantService.InnerGridBodyId>
-            <DataGridBodyVirtualScrolling TItem=T />
+            <table id="@ConstantService.InnerGridBodyTableId" class=@LayoutService.TableTagClass.Value>
+                <DataGridHiddenHeader />
+                <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
+                    <Virtualize Items="@View.ToList()" Context="rowModel" SpacerElement="tr" @ref="virtualizeComponent">
+                        <SmDataGridRow RowModel="rowModel" />
+                    </Virtualize>
+                </tbody>
+            </table>
+
         </div>
-        <DataGridScrollbar DeltaChangedCallback=@((offsetY) => VirtualScrollingService.ScrollTop.OnNext(-offsetY*(1000/200))) />
+        @* <DataGridScrollbar DeltaChangedCallback=@((offsetY) => VirtualScrollingService.ScrollTop.OnNext(-offsetY*(1000/200))) /> *@
         break;
 }

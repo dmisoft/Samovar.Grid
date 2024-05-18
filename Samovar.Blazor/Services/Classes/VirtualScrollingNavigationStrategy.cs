@@ -7,7 +7,7 @@ namespace Samovar.Blazor
     public class VirtualScrollingNavigationStrategy<T>
         : IVirtualScrollingNavigationStrategy, IAsyncDisposable
     {
-        public required IObservable<Task<NavigationStrategyDataLoadingSettings>> DataLoadingSettings { get; set; }
+        public required BehaviorSubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; set; } = new BehaviorSubject<NavigationStrategyDataLoadingSettings>(NavigationStrategyDataLoadingSettings.Empty);
         public BehaviorSubject<double> ScrollTop { get; private set; } = new BehaviorSubject<double>(0);
         public DotNetObjectReference<IVirtualScrollingNavigationStrategy> DotNetRef { get; }
 
@@ -57,8 +57,8 @@ namespace Samovar.Blazor
 
         private async Task DataGridInitializerCallback()
         {
-            DataLoadingSettings = ScrollTop.Select(async (scrollTop) => await GetDataLoadingSettings(scrollTop));
-            _dataSourceService.DataQuery.Where(x => x is not null).Subscribe(async (query) => await ProcessDataPrequery(query));
+            //DataLoadingSettings = ScrollTop.Select(async (scrollTop) => await GetDataLoadingSettings(scrollTop));
+            //_dataSourceService.DataQuery.Where(x => x is not null).Subscribe(async (query) => await ProcessDataPrequery(query));
             await Activate();
         }
 

@@ -11,6 +11,8 @@
         </div>
         break;
     case DataSourceState.Loading:
+        <div>Loading...</div>
+        break;
     case DataSourceState.Idle:
     default:
         <div class="@(_dataSourceState == DataSourceState.Loading ? "s-flex s-align-content-center s-justify-content-center s-visible" : "s-hidden")" style="height:100%;">

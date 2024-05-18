@@ -10,5 +10,6 @@ namespace Samovar.Blazor
         BehaviorSubject<HashSet<T>> Data { get; }
         public Dictionary<string, PropertyInfo> PropInfo { get; }
         List<EventCallback<IEnumerable<SmDataGridRowModel<T>>>> CollectionViewChangedEvList { get; set; }
+        IObservable<Task<IEnumerable<SmDataGridRowModel<T>>>> ViewCollectionObservableTask { get; set; }
     }
 }

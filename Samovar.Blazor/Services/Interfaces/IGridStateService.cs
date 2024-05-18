@@ -5,7 +5,7 @@ namespace Samovar.Blazor
 {
     public interface IGridStateService
     {
-        BehaviorSubject<DataSourceState> DataSourceState { get; }
+        BehaviorSubject<Task<DataSourceState>> DataSourceState { get; }
         List<EventCallback<DataSourceState>> DataSourceStateEvList { get; set; }
         BehaviorSubject<DataEditState> DataEditState { get; }
 

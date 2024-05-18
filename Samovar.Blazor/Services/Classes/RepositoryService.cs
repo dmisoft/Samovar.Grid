@@ -28,6 +28,7 @@ namespace Samovar.Blazor
         public static Dictionary<string, Func<T, string>> PropInfoDelegateString { get; } = new Dictionary<string, Func<T, string>>();
         public static Dictionary<string, Func<T, DateTime>> PropInfoDelegateDate { get; } = new Dictionary<string, Func<T, DateTime>>();
         public List<EventCallback<IEnumerable<SmDataGridRowModel<T>>>> CollectionViewChangedEvList { get; set; } = new List<EventCallback<IEnumerable<SmDataGridRowModel<T>>>>();
+        public IObservable<Task<IEnumerable<SmDataGridRowModel<T>>>> ViewCollectionObservableTask { get; set; }
 
         public RepositoryService(
               IDataSourceService<T> dataSourceService
@@ -67,6 +68,13 @@ namespace Samovar.Blazor
                 }
             }
 
+            _navigationService.NavigationMode.Subscribe(s => {
+                ViewCollectionObservableTask = Observable.Zip(
+                _dataSourceService.DataQuery,
+                _navigationService.NavigationStrategy.DataLoadingSettings,
+                ViewCollectionObservableMap);
+            });
+
             SubscribeInitializing();
         }
 
@@ -78,54 +86,62 @@ namespace Samovar.Blazor
 
         private void DataGridInitializerCallback(bool obj)
         {
-            IObservable<Task<IEnumerable<SmDataGridRowModel<T>>>> ViewCollectionObservableTask = Observable.CombineLatest(
-            _dataSourceService.DataQuery,
-            _navigationService.NavigationStrategy.DataLoadingSettings,
-            ViewCollectionObservableMap11);
+            
+            
 
-            _viewCollectionObservableTaskSubscription = ViewCollectionObservableTask.Subscribe(async getNewCollectionViewTask =>
-            {
-                try
-                {
-                    var newCollectionView = await getNewCollectionViewTask;
 
-                    if (!newCollectionView.Any())
-                    {
-                        _stateService.DataSourceState.OnNext(DataSourceState.NoData);
-                        _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceState.NoData));
-                    }
-                    else
-                    {
-                        _stateService.DataSourceState.OnNext(DataSourceState.Idle);
-                        _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceState.Idle));
-                    }
-                    CollectionViewChangedEvList.ForEach(x => x.InvokeAsync(newCollectionView));
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Task failed with error: {ex.Message}");
-                }
-            });
+            //_viewCollectionObservableTaskSubscription = ViewCollectionObservableTask.Subscribe(async getNewCollectionViewTask =>
+            //{
+            //    try
+            //    {
+            //        var newCollectionView = await getNewCollectionViewTask;
+
+            //        if (!newCollectionView.Any())
+            //        {
+            //            //_stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.NoData));
+            //            //_stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceState.NoData));
+            //        }
+            //        else
+            //        {
+            //            //_stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.Idle));
+            //            //_stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceState.Idle));
+            //        }
+            //        //CollectionViewChangedEvList.ForEach(x => x.InvokeAsync(newCollectionView));
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine($"Task failed with error: {ex.Message}");
+            //    }
+            //});
         }
 
-        private async Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap11(IQueryable<T>? query, Task<NavigationStrategyDataLoadingSettings> loadingSettingsTask)
+        private async Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap(IQueryable<T>? query, NavigationStrategyDataLoadingSettings navigationStrategyDataLoadingSettings)
         {
+            Debug.WriteLine("ViewCollectionObservableMap");
+            _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.Loading));
+
             if (query is null)
+            {
+                _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.NoData));
                 return new List<SmDataGridRowModel<T>>();
+            }
 
             IEnumerable<SmDataGridRowModel<T>> _retVal;
-            var loadingSettings = await loadingSettingsTask;
 
-            query = query.Skip(loadingSettings.Skip).Take(loadingSettings.Take);
+            if (!navigationStrategyDataLoadingSettings.ShowAll)
+                query = query.Skip(navigationStrategyDataLoadingSettings.Skip).Take(navigationStrategyDataLoadingSettings.Take);
 
-            _stateService.DataSourceState.OnNext(DataSourceState.Loading);
-            _stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceState.Loading));
+            //_stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceState.Loading));
 
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
             _retVal = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
-            stopWatch.Stop();
+            await Task.Delay(2000);
 
+            if(_retVal.Any())
+                _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.Idle));
+            else
+                _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.NoData));
+            
+            //_stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceState.Idle));
             return _retVal;
         }
 
@@ -151,18 +167,5 @@ namespace Samovar.Blazor
         }
     }
 
-    static class MyLocalExtension
-    {
-        public static Func<T1, TResult> CreatePropertyOrFieldReaderDelegate<T1, TResult>(string field)
-        {
-            var input = Expression.Parameter(typeof(T1));
-            return Expression.Lambda<Func<T1, TResult>>(Expression.PropertyOrField(input, field), input).Compile();
-        }
-        static public Func<S, T1> CreateGetPropertyDelegate<S, T1>(this PropertyInfo propInfo)
-        {
-            var instExp = Expression.Parameter(typeof(S));
-            var fieldExp = Expression.Property(instExp, propInfo);
-            return Expression.Lambda<Func<S, T1>>(fieldExp, instExp).Compile();
-        }
-    }
+   
 }
