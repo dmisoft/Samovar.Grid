@@ -166,7 +166,7 @@ namespace Samovar.Blazor
 
 
             DataGridFilterMode? dataGridFilterMode = parameters.GetValueOrDefault<DataGridFilterMode?>(nameof(FilterMode));
-            dataGridFilterMode ??= DataGridFilterMode.None;
+            dataGridFilterMode ??= DataGridFilterMode.FilterRow;
             LayoutService.FilterMode.OnNext(dataGridFilterMode.Value);
 
             DataGridEditMode? dataGridEditMode = parameters.GetValueOrDefault<DataGridEditMode?>(nameof(EditMode));

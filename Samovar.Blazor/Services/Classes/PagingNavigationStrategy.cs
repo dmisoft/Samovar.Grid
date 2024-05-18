@@ -31,8 +31,15 @@ namespace Samovar.Blazor
 
         private void DataGridInitializerCallback(bool obj)
         {
-            Observable.CombineLatest(
-                PagerSize,
+            PageSize.Subscribe(x => {
+				int totalPageCount = (int)Math.Ceiling(actualItemsCount / (decimal)x);
+                if(CurrentPage.Value > totalPageCount)
+					CurrentPage.OnNext(totalPageCount);
+				TotalPageCount.OnNext(totalPageCount);
+			});
+
+			Observable.CombineLatest(
+				PagerSize,
                 TotalPageCount,
                 CurrentPage,
                 PagerInfoChanged).Subscribe(PagerInfoSubscriber);
@@ -64,9 +71,10 @@ namespace Samovar.Blazor
             return new NavigationStrategyDataLoadingSettings(skip: skipPages * pageSize, take: pageSize);
         }
 
+        private int actualItemsCount = 0;
         private DataGridPagerInfo PagerInfoChanged(int pagerSize, int pageCount, int currentPage)
         {
-            if (currentPage == 0)
+			if (currentPage == 0)
                 return DataGridPagerInfo.Empty;
             int startPage = (int)Math.Ceiling((decimal)currentPage / (decimal)pagerSize) * pagerSize - pagerSize + 1;
             int endPage = Math.Min(startPage + pagerSize - 1, pageCount);
@@ -118,9 +126,9 @@ namespace Samovar.Blazor
             if (data is null)
                 return;
 
-            int items = data.Count();
+            actualItemsCount = data.Count();
 
-            int newTotalPageCount = (int)Math.Ceiling(items / (decimal)PageSize.Value);
+            int newTotalPageCount = (int)Math.Ceiling(actualItemsCount / (decimal)PageSize.Value);
             TotalPageCount.OnNext(newTotalPageCount);
 
             int newCurrentPage = CurrentPage.Value == 0 && newTotalPageCount > 0 ? 1 : Math.Min(newTotalPageCount, CurrentPage.Value);
