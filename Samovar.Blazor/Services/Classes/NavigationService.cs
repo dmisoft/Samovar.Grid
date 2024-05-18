@@ -13,17 +13,14 @@ namespace Samovar.Blazor
         public BehaviorSubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; set; } = new BehaviorSubject<NavigationStrategyDataLoadingSettings>(NavigationStrategyDataLoadingSettings.Empty);
 
         private readonly INewVirtualScrollingNavigationStrategy _newVirtualScrollingStrategy;
-        private readonly IVirtualScrollingNavigationStrategy _virtualScrollingStrategy;
         private readonly IPagingNavigationStrategy _pagingStrategy;
 
         public NavigationService(
               INewVirtualScrollingNavigationStrategy newVirtualScrollingService
-            , IVirtualScrollingNavigationStrategy virtualScrollingService
             , IPagingNavigationStrategy pagingNavigationStrategy
             )
         {
             _newVirtualScrollingStrategy = newVirtualScrollingService;
-            _virtualScrollingStrategy = virtualScrollingService;
             _pagingStrategy = pagingNavigationStrategy;
 
             NavigationMode.Subscribe(SetNavigationStrategy);
@@ -34,7 +31,6 @@ namespace Samovar.Blazor
             NavigationStrategy = strategy switch
             {
                 DataGridNavigationMode.Paging => _pagingStrategy,
-                DataGridNavigationMode.VirtualScrolling => _virtualScrollingStrategy,
                 DataGridNavigationMode.NewVirtualScrolling => _newVirtualScrollingStrategy,
                 _ => throw new NotImplementedException()
             };

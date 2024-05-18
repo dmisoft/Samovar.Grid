@@ -28,9 +28,6 @@ namespace Samovar.Blazor
         public required ILayoutService LayoutService { get; set; }
 
         [SmInject]
-        public required IVirtualScrollingNavigationStrategy VirtualScrollingService { get; set; }
-
-        [SmInject]
         public required ITemplateService<T> TemplateService { get; set; }
 
         [SmInject]
@@ -242,15 +239,6 @@ namespace Samovar.Blazor
                         Columns?.Invoke(builder2);
 
                         builder2.OpenComponent<SmDataGridPagingTableInner<T>>(5);
-                        builder2.CloseComponent();
-                    };
-                    break;
-                case DataGridNavigationMode.VirtualScrolling:
-                    del = delegate (RenderTreeBuilder builder2)
-                    {
-                        Columns?.Invoke(builder2);
-
-                        builder2.OpenComponent<SmDataGridVirtualTableInner<T>>(5);
                         builder2.CloseComponent();
                     };
                     break;

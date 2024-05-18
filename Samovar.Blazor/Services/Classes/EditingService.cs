@@ -61,7 +61,7 @@ namespace Samovar.Blazor
 
             _editingRowModel.CreateEditingModel();
 
-            if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
+            if (_navigationService.NavigationMode.Value == DataGridNavigationMode.NewVirtualScrolling)
             {
                 ShowEditingPopupDelegate?.Invoke(_editingRowModel);
             }
@@ -79,7 +79,7 @@ namespace Samovar.Blazor
             _editingRowModel!.RowState = SmDataGridRowState.Idle;
             _editingRowModel = null;
 
-            if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
+            if (_navigationService.NavigationMode.Value == DataGridNavigationMode.NewVirtualScrolling)
             {
                 CloseEditingPopupDelegate?.Invoke();
             }

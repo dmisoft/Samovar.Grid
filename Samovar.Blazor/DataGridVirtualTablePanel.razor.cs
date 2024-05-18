@@ -30,9 +30,6 @@ namespace Samovar.Blazor
         public required INavigationService NavigationService { get; set; }
 
         [SmInject]
-        public required IVirtualScrollingNavigationStrategy VirtualScrollingService { get; set; }
-
-        [SmInject]
         public required IGridStateService GridStateService { get; set; }
 
         public EventCallback<DataSourceState> DataSourceStateEv { get; set; }

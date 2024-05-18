@@ -80,7 +80,7 @@ else
                         RowEditBegin="@((WeatherForecast data) => RowEditBeginHandler(data))"
                         RowInsertBegin=@RowInsertBeginHandler
                         EditMode=DataGridEditMode.Form
-                        DataNavigationMode=DataGridNavigationMode.VirtualScrolling
+                        DataNavigationMode=DataGridNavigationMode.NewVirtualScrolling
                         SelectionMode=GridSelectionMode.MultipleSelectedDataRows
                         @bind-MultipleSelectedDataRows=selectedRows>
                 <Columns>
