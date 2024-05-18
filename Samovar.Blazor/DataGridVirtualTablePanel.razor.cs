@@ -51,7 +51,8 @@ namespace Samovar.Blazor
 
         public EventCallback<IEnumerable<SmDataGridRowModel<T>>> CollectionViewChangedEv { get; set; }
 
-        public DataSourceState dataSourceState = DataSourceState.NoData;
+        public DataSourceState DataSourceState { get; set; } = DataSourceState.NoData;
+
         private Virtualize<SmDataGridRowModel<T>>? virtualizeComponent;
 
         protected override Task OnInitializedAsync()
@@ -60,9 +61,8 @@ namespace Samovar.Blazor
 
             StateService.DataSourceState.Subscribe(async (stateTask) =>
             {
-                Debug.WriteLine($"DataGridVirtualTablePanel DataSourceState: {dataSourceState}");
                 await InvokeAsync(async () => {
-                    dataSourceState = await stateTask;
+                    DataSourceState = await stateTask;
                     StateHasChanged();
                 });
             });
@@ -71,9 +71,6 @@ namespace Samovar.Blazor
                 CssStyle = LayoutService.OuterStyle.Value,
                 ActualScrollbarWidth = LayoutService.ActualScrollbarWidth
             };
-
-            //DataSourceStateEv = new EventCallbackFactory().Create<DataSourceState>(this, async (data) => await _dataSourceStateEv(data));
-            //GridStateService.DataSourceStateEvList.Add(DataSourceStateEv);
 
             CollectionViewChangedEv = new EventCallbackFactory().Create<IEnumerable<SmDataGridRowModel<T>>>(this, async (data) => await _collectionViewChangedEv(data));
             RepositoryService.CollectionViewChangedEvList.Add(CollectionViewChangedEv);
@@ -85,15 +82,11 @@ namespace Samovar.Blazor
         {
             RepositoryService.ViewCollectionObservableTask.Subscribe(async (GetViewCollectionTask) =>
             {
-                //dataSourceState = DataSourceState.Loading;
-                //StateHasChanged();
-
                 View = await GetViewCollectionTask;
                 await InvokeAsync(async () =>
                 {
                     if (virtualizeComponent is not null)
                     {
-                        //dataSourceState = DataSourceState.Idle;
                         await virtualizeComponent.RefreshDataAsync();
                         StateHasChanged();
                     }

@@ -26,7 +26,6 @@ namespace Samovar.Blazor
         protected double ActualTopOffset = 0;
         private double _translatableDivHeight;
         private readonly IJsService _jsService;
-        private readonly IDataSourceService<T> _dataSourceService;
 
         private readonly IConstantService _constantService;
 
@@ -49,7 +48,6 @@ namespace Samovar.Blazor
             DotNetRef = DotNetObjectReference.Create(this as IVirtualScrollingNavigationStrategy);
 
             _jsService = jsService;
-            _dataSourceService = dataSourceService;
             _constantService = constantService;
 
             initService.IsInitialized.Subscribe(async (val) => await DataGridInitializerCallback());
@@ -57,8 +55,6 @@ namespace Samovar.Blazor
 
         private async Task DataGridInitializerCallback()
         {
-            //DataLoadingSettings = ScrollTop.Select(async (scrollTop) => await GetDataLoadingSettings(scrollTop));
-            //_dataSourceService.DataQuery.Where(x => x is not null).Subscribe(async (query) => await ProcessDataPrequery(query));
             await Activate();
         }
 

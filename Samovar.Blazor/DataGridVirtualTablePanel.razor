@@ -5,15 +5,13 @@
 @typeparam T
 @inherits SmDesignComponentBase
 
-@switch (@dataSourceState)
+@switch (DataSourceState)
 {
     case DataSourceState.NoData:
-        <div class="s-flex s-align-content-center s-justify-content-center" style="height:100%;background:lightgray;">
-            <div class="s-align-self-center">no data to show</div>
-        </div>
+        <NoDataPanel />
         break;
     case DataSourceState.Loading:
-        <div>Loading...</div>
+        <SmDataGridLoadingSpinner />
         break;
     case DataSourceState.Idle:
     default:

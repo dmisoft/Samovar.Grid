@@ -10,8 +10,6 @@ namespace Samovar.Blazor
     public class RepositoryService<T>
         : IRepositoryService<T>, IAsyncDisposable
     {
-        private IDisposable? _viewCollectionObservableTaskSubscription;
-
         public IEnumerable<SmDataGridRowModel<T>> ViewCollection { get; } = new List<SmDataGridRowModel<T>>();
 
         private readonly IDataSourceService<T> _dataSourceService;
@@ -19,7 +17,6 @@ namespace Samovar.Blazor
         private readonly IColumnService _columnService;
         private readonly IRowDetailService<T> _rowDetailService;
         private readonly IGridStateService _stateService;
-        private readonly IInitService _initService;
 
         public BehaviorSubject<HashSet<T>> Data { get; private set; } = new BehaviorSubject<HashSet<T>>(new HashSet<T>());
 
@@ -34,14 +31,12 @@ namespace Samovar.Blazor
               IDataSourceService<T> dataSourceService
             , INavigationService navigationService
             , IColumnService columnService
-            , IInitService initService
             , IRowDetailService<T> rowDetailService
             , IGridStateService stateService)
         {
             _dataSourceService = dataSourceService;
             _navigationService = navigationService;
             _columnService = columnService;
-            _initService = initService;
             _rowDetailService = rowDetailService;
             _stateService = stateService;
 
@@ -68,54 +63,20 @@ namespace Samovar.Blazor
                 }
             }
 
+            ViewCollectionObservableTask = Observable.CombineLatest(
+                _dataSourceService.DataQuery,
+                _navigationService.NavigationStrategy.DataLoadingSettings,
+                ViewCollectionObservableMap);
+
             _navigationService.NavigationMode.Subscribe(s => {
-                ViewCollectionObservableTask = Observable.Zip(
+                ViewCollectionObservableTask = Observable.CombineLatest(
                 _dataSourceService.DataQuery,
                 _navigationService.NavigationStrategy.DataLoadingSettings,
                 ViewCollectionObservableMap);
             });
-
-            SubscribeInitializing();
         }
 
-        private void SubscribeInitializing()
-        {
-            _initService.IsInitialized.Subscribe(DataGridInitializerCallback);
-        }
-
-
-        private void DataGridInitializerCallback(bool obj)
-        {
-            
-            
-
-
-            //_viewCollectionObservableTaskSubscription = ViewCollectionObservableTask.Subscribe(async getNewCollectionViewTask =>
-            //{
-            //    try
-            //    {
-            //        var newCollectionView = await getNewCollectionViewTask;
-
-            //        if (!newCollectionView.Any())
-            //        {
-            //            //_stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.NoData));
-            //            //_stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceState.NoData));
-            //        }
-            //        else
-            //        {
-            //            //_stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.Idle));
-            //            //_stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceState.Idle));
-            //        }
-            //        //CollectionViewChangedEvList.ForEach(x => x.InvokeAsync(newCollectionView));
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Console.WriteLine($"Task failed with error: {ex.Message}");
-            //    }
-            //});
-        }
-
-        private async Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap(IQueryable<T>? query, NavigationStrategyDataLoadingSettings navigationStrategyDataLoadingSettings)
+        private Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap(IQueryable<T>? query, NavigationStrategyDataLoadingSettings navigationStrategyDataLoadingSettings)
         {
             Debug.WriteLine("ViewCollectionObservableMap");
             _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.Loading));
@@ -123,7 +84,7 @@ namespace Samovar.Blazor
             if (query is null)
             {
                 _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.NoData));
-                return new List<SmDataGridRowModel<T>>();
+                return Task.FromResult(new List<SmDataGridRowModel<T>>().AsEnumerable());
             }
 
             IEnumerable<SmDataGridRowModel<T>> _retVal;
@@ -131,18 +92,14 @@ namespace Samovar.Blazor
             if (!navigationStrategyDataLoadingSettings.ShowAll)
                 query = query.Skip(navigationStrategyDataLoadingSettings.Skip).Take(navigationStrategyDataLoadingSettings.Take);
 
-            //_stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceState.Loading));
-
             _retVal = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
-            await Task.Delay(2000);
 
             if(_retVal.Any())
                 _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.Idle));
             else
                 _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.NoData));
             
-            //_stateService.DataSourceStateEvList.ForEach(x => x.InvokeAsync(DataSourceState.Idle));
-            return _retVal;
+            return Task.FromResult(_retVal);
         }
 
 
@@ -162,7 +119,6 @@ namespace Samovar.Blazor
 
         public ValueTask DisposeAsync()
         {
-            _viewCollectionObservableTaskSubscription?.Dispose();
             return ValueTask.CompletedTask;
         }
     }

@@ -25,15 +25,6 @@ namespace Samovar.Blazor
                 .Subscribe(x => {
                     DataLoadingSettings.OnNext(NavigationStrategyDataLoadingSettings.FetchAll);
                 });
-            //DataLoadingSettings = _dataSourceService.DataQuery.DistinctUntilChanged().Where(x => x != null).Select(x => Task.FromResult(NavigationStrategyDataLoadingSettings.FetchAll));
         }
-
-        //private Task<NavigationStrategyDataLoadingSettings> CalculateDataLoadingSetting(IQueryable<T>? query)
-        //{
-        //    if(query is null)
-        //        return Task.FromResult(NavigationStrategyDataLoadingSettings.Empty);
-
-        //    return Task.FromResult(NavigationStrategyDataLoadingSettings.FetchAll);
-        //}
     }
 }

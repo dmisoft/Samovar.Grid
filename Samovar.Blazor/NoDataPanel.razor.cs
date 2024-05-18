@@ -15,7 +15,7 @@
 
         public ValueTask DisposeAsync()
         {
-            throw new NotImplementedException();
+            return ValueTask.CompletedTask;
         }
     }
 }

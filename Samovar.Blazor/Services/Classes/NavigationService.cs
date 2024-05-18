@@ -8,7 +8,7 @@ namespace Samovar.Blazor
     {
         public BehaviorSubject<DataGridNavigationMode> NavigationMode { get; } = new BehaviorSubject<DataGridNavigationMode>(DataGridNavigationMode.Paging);
 
-        public INavigationStrategy NavigationStrategy { get; set; }
+        public required INavigationStrategy NavigationStrategy { get; set; }
 
         public BehaviorSubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; set; } = new BehaviorSubject<NavigationStrategyDataLoadingSettings>(NavigationStrategyDataLoadingSettings.Empty);
 
@@ -20,21 +20,12 @@ namespace Samovar.Blazor
               INewVirtualScrollingNavigationStrategy newVirtualScrollingService
             , IVirtualScrollingNavigationStrategy virtualScrollingService
             , IPagingNavigationStrategy pagingNavigationStrategy
-            , IInitService initService
             )
         {
             _newVirtualScrollingStrategy = newVirtualScrollingService;
             _virtualScrollingStrategy = virtualScrollingService;
             _pagingStrategy = pagingNavigationStrategy;
 
-            //initService.IsInitialized.Subscribe(DataGridInitializerCallback);
-            NavigationMode.Subscribe(SetNavigationStrategy);
-
-            //NavigationStrategy = pagingNavigationStrategy;
-        }
-
-        private void DataGridInitializerCallback(bool obj)
-        {
             NavigationMode.Subscribe(SetNavigationStrategy);
         }
 
