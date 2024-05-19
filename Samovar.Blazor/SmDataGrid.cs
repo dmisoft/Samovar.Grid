@@ -52,9 +52,6 @@ namespace Samovar.Blazor
         public int PageSize { get; set; }
 
         [Parameter]
-        public EventCallback<int> PageSizeChanged { get; set; }
-
-        [Parameter]
         public int PagerSize { get; set; }
 
         [Parameter]
@@ -279,14 +276,12 @@ namespace Samovar.Blazor
             if (firstRender)
             {
                 await JsService.AttachWindowResizeEvent(ConstantService.DataGridId, LayoutService.DataGridDotNetRef);
+				await LayoutService.InitHeader();
+				InitService.IsInitialized.OnNext(true);
+				StateHasChanged();
 
-                await LayoutService.InitHeader();
-
-                InitService.IsInitialized.OnNext(true);
-
-                StateHasChanged();
-            }
-        }
+			}
+		}
 
         public Task CancelRowEdit()
         {

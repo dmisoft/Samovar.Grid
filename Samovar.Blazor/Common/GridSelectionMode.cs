@@ -3,7 +3,7 @@
     public enum GridSelectionMode
     {
         None,
-        SingleSelectedDataRow,
-        MultipleSelectedDataRows
+        Single,
+        Multiple    
     }
 }

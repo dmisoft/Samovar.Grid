@@ -27,7 +27,7 @@ else
                         DataNavigationMode=DataGridNavigationMode.Paging
                         PageSize="5"
                         PagerSize="7"
-                        SelectionMode=GridSelectionMode.SingleSelectedDataRow
+                        SelectionMode=GridSelectionMode.Single
                         @bind-SingleSelectedDataRow=selectedRow>
                 <Columns>
                     <SmDataGridColumn Title="Date" Field="@nameof(WeatherForecast.Date)" Width="100px">
@@ -81,7 +81,7 @@ else
                         RowInsertBegin=@RowInsertBeginHandler
                         EditMode=DataGridEditMode.Form
                         DataNavigationMode=DataGridNavigationMode.VirtualScrolling
-                        SelectionMode=GridSelectionMode.MultipleSelectedDataRows
+                        SelectionMode=GridSelectionMode.Multiple
                         @bind-MultipleSelectedDataRows=selectedRows>
                 <Columns>
                     <SmDataGridCommandColumn EditButtonVisible=true NewButtonVisible=true Width="150px" />

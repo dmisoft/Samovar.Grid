@@ -36,7 +36,7 @@ namespace Samovar.Blazor
             {
                 case GridSelectionMode.None:
                     break;
-                case GridSelectionMode.SingleSelectedDataRow:
+                case GridSelectionMode.Single:
                     if (SingleSelectedDataRow.Value is not null && !arg.Any(x => x is not null && x.Equals(SingleSelectedDataRow.Value)))
                     {
                         SingleSelectedDataRow.OnNext(default);
@@ -44,7 +44,7 @@ namespace Samovar.Blazor
                         SingleSelectedRowCallback?.Invoke();
                     }
                     break;
-                case GridSelectionMode.MultipleSelectedDataRows:
+                case GridSelectionMode.Multiple:
                     if (MultipleSelectedDataRows.Value != null && MultipleSelectedDataRows.Value.Any())
                     {
                         MultipleSelectedDataRows.OnNext(MultipleSelectedDataRows.Value.Intersect(arg));
@@ -63,7 +63,7 @@ namespace Samovar.Blazor
             {
                 case GridSelectionMode.None:
                     break;
-                case GridSelectionMode.SingleSelectedDataRow:
+                case GridSelectionMode.Single:
                     if (_singleSelectedDataItem is not null && _singleSelectedDataItem.Equals(dataItem))
                     {
                         _singleSelectedDataItem = default;
@@ -85,7 +85,7 @@ namespace Samovar.Blazor
                     SingleSelectedRowCallback?.Invoke();
 
                     break;
-                case GridSelectionMode.MultipleSelectedDataRows:
+                case GridSelectionMode.Multiple:
                     if (await _jsService.IsWindowCtrlKeyDown())
                     {
                         if (MultipleSelectedDataRows.Value == null || !MultipleSelectedDataRows.Value.Any())//initial selection in the multiple selection mode

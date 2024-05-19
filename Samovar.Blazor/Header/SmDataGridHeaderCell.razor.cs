@@ -57,10 +57,8 @@ namespace Samovar.Blazor.Header
             StateHasChanged();
         }
 
-        internal Task ColumnCellClick()
-        {
-            return SortingService.OnColumnClick(Model);
-        }
+        protected string ColumnCellDraggable = "false";
+		internal Task ColumnCellClick() => SortingService.OnColumnClick(Model);
 
         protected async Task OnMouseDown(MouseEventArgs args, IDataColumnModel colMeta)
         {
@@ -97,6 +95,10 @@ namespace Samovar.Blazor.Header
                 LayoutService.FitColumnsToTableWidth,
                 colEmpty.VisibleAbsoluteWidthValue);
         }
+
+        private void ColumnCellMouseDown(MouseEventArgs e) => ColumnCellDraggable = "true";
+        
+        private void ColumnCellMouseUp(MouseEventArgs e) => ColumnCellDraggable = "false";
 
         public ValueTask DisposeAsync()
         {

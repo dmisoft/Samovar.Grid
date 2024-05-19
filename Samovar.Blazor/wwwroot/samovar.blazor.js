@@ -2,6 +2,7 @@
 
 export const gridStateVars =
 {
+    minColumnWidth: 50,
     gridDotNetRef: undefined,
     isMouseDown: false,
     colMetaId: '',
@@ -289,11 +290,12 @@ export function add_Window_MouseMove_EventListener(dotNetRef) {
     window.removeEventListener('mousemove', onWindowMouseMove);
     window.addEventListener('mousemove', onWindowMouseMove);
 }
+
 export function onWindowMouseMove (event) {
     if (gridStateVars.isMouseDown) {
         var delta = event.pageX - gridStateVars.startMouseMoveX;
-        if (gridStateVars.oldAbsoluteVisibleWidthValue + delta < 10) {
-            gridStateVars.newVisibleAbsoluteWidthValue = 10;
+        if (gridStateVars.oldAbsoluteVisibleWidthValue + delta < gridStateVars.minColumnWidth) {
+            gridStateVars.newVisibleAbsoluteWidthValue = gridStateVars.minColumnWidth;
             delta = gridStateVars.newVisibleAbsoluteWidthValue - gridStateVars.oldAbsoluteVisibleWidthValue;
         }
         else {

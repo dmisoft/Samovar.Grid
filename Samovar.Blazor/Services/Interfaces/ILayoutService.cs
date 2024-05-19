@@ -14,6 +14,7 @@ namespace Samovar.Blazor
 
         BehaviorSubject<string> FilterToggleButtonClass { get; }
 
+        double MinColumnWidth { get; }
         BehaviorSubject<double> MinGridWidth { get; }
         BehaviorSubject<bool> ShowDetailRow { get; }
         BehaviorSubject<DataGridFilterMode> FilterMode { get; }

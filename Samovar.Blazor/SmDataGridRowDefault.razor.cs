@@ -49,13 +49,13 @@ namespace Samovar.Blazor
             {
                 case GridSelectionMode.None:
                     break;
-                case GridSelectionMode.SingleSelectedDataRow:
+                case GridSelectionMode.Single:
                     var val = GridSelectionService.SingleSelectedDataRow.Value;
                     if (val is null)
                         break;
                     RowModel.RowSelected = !object.Equals(val, default(T)) && val.Equals(RowModel.DataItem);
                     break;
-                case GridSelectionMode.MultipleSelectedDataRows:
+                case GridSelectionMode.Multiple:
                     RowModel.RowSelected = GridSelectionService.MultipleSelectedDataRows.Value is not null && GridSelectionService.MultipleSelectedDataRows.Value.Any(a => a!.Equals(RowModel.DataItem));
                     break;
                 default:

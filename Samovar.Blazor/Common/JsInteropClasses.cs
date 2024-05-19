@@ -18,14 +18,14 @@ namespace Samovar.Blazor
             return jsModule.InvokeAsync<double>("measureTableRowHeight", tableClass, testId);
         }
 
-        internal static ValueTask<bool> IsWindowCtrlKeyDown(IJSObjectReference jsModule)
-        {
-            return jsModule.InvokeAsync<bool>("getWindowIsCtrlKeyDown");
-        }
-        internal static ValueTask<bool> IsWindowShiftKeyDown(IJSObjectReference jsModule)
-        {
-            return jsModule.InvokeAsync<bool>("getWindowIsShiftKeyDown");
-        }
+        //internal static ValueTask<bool> IsWindowCtrlKeyDown(IJSObjectReference jsModule)
+        //{
+        //    return jsModule.InvokeAsync<bool>("getWindowIsCtrlKeyDown");
+        //}
+        //internal static ValueTask<bool> IsWindowShiftKeyDown(IJSObjectReference jsModule)
+        //{
+        //    return jsModule.InvokeAsync<bool>("getWindowIsShiftKeyDown");
+        //}
 
 
         internal static ValueTask<double> GetElementWidthByRef(this ElementReference elementRef, IJSObjectReference jsModule)
@@ -57,14 +57,5 @@ namespace Samovar.Blazor
         {
             jsModule.InvokeVoidAsync("startColumnWidthChangeMode", GridColWidthSum, ColMetaId, InnerGridId, InnerGridBodyTableId, VisibleGridColumnCellId, HiddenGridColumnCellId, FilterGridColumnCellId, VisibleEmptyColumnId, HiddenEmptyColumnId, FilterEmptyColumnId, EmptyColumnDictId, StartMouseMoveX, OldAbsoluteVisibleWidthValue, FitColumnsToTableWidth, OldAbsoluteEmptyColVisibleWidthValue);
         }
-    }
-
-    public class HtmlItemInViewCheckInfo
-    {
-        public bool ProbablyNotInView { get; set; }
-        public float ElementTop { get; set; }
-        public float ElementBottom { get; set; }
-        public float ViewportTop { get; set; }
-        public float ViewportBottom { get; set; }
     }
 }

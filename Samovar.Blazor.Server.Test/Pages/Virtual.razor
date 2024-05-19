@@ -41,7 +41,7 @@ else
                 ShowDetailRow=false 
                 EditMode=DataGridEditMode.Popup
                 DataNavigationMode=DataGridNavigationMode.VirtualScrolling
-                SelectionMode=GridSelectionMode.SingleSelectedDataRow
+                SelectionMode=GridSelectionMode.Single
                 RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
                 RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))"
                 @bind-SingleSelectedDataRow=selectedRow >

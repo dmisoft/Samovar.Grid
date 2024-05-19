@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Reactive.Subjects;
+using System.Text.RegularExpressions;
 
 namespace Samovar.Blazor
 {
     public class LayoutService
         : ILayoutService, IAsyncDisposable
     {
+        public double MinColumnWidth { get; } = 50d;
+
         public BehaviorSubject<string> SelectedRowClass { get; } = new BehaviorSubject<string>("bg-warning");
 
         public BehaviorSubject<string> TableTagClass { get; } = new BehaviorSubject<string>("table table-bordered");
@@ -194,8 +197,15 @@ namespace Samovar.Blazor
 
         private async Task ShowFixHeader(int newWidth)
         {
-            double gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule());
-            Dictionary<IColumnModel, TempColumnMetadata> widthList = new Dictionary<IColumnModel, TempColumnMetadata>();
+            double gridInnerWidth = 0;
+
+			if (string.IsNullOrEmpty(Width.Value))
+                gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule());
+			else
+				gridInnerWidth = double.Parse(Regex.Match(Width.Value, @"\d+").Value);
+
+
+			Dictionary<IColumnModel, TempColumnMetadata> widthList = new Dictionary<IColumnModel, TempColumnMetadata>();
 
             foreach (var m in _columnService.AllColumnModels.Where(cmt => cmt.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Absolute))
             {

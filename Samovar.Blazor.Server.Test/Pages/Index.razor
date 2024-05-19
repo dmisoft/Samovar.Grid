@@ -40,18 +40,18 @@ else
                     Height="850px"
                     Width="1200px"
                     FilterMode=DataGridFilterMode.FilterRow
-                    ShowDetailRow=true
+                    ShowDetailRow=false
                     PageSize=pageSize
                     EditMode=DataGridEditMode.Form
                     EditingFormTitleDelegate="@((WeatherForecast data) => Task.FromResult(data.TemperatureC.ToString()))"
-                    SelectionMode=GridSelectionMode.SingleSelectedDataRow
+                    SelectionMode=GridSelectionMode.Multiple
                     @bind-SingleSelectedDataRow=selectedRow
                     @bind-MultipleSelectedDataRows=selectedRows
                     
                     RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
                     RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))">
                 <Columns>
-                    <SmDataGridColumn Title="Date1" Field="@nameof(WeatherForecast.Date)" Width="300px">
+                    <SmDataGridColumn Title="Date1" Field="@nameof(WeatherForecast.Date)" Width="100px">
                         <CellShowTemplate>
                             @{
                                 WeatherForecast data = context as WeatherForecast;
@@ -59,10 +59,10 @@ else
                             }
                         </CellShowTemplate>
                     </SmDataGridColumn>
-                    <SmDataGridColumn Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="300px" />
-                    <SmDataGridColumn Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="300px" />
-                    <SmDataGridColumn Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="300px" />
-                    <SmDataGridCommandColumn EditButtonVisible=true NewButtonVisible=true Width="300px" />
+                    <SmDataGridColumn Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="100px" />
+                    <SmDataGridColumn Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="100px" />
+                    <SmDataGridColumn Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="100px" />
+                    <SmDataGridCommandColumn EditButtonVisible=true NewButtonVisible=true Width="100px" />
                 </Columns>
                 <DetailRowTemplate Context="mydata">
                     @{

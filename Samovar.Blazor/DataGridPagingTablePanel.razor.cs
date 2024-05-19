@@ -29,7 +29,7 @@ namespace Samovar.Blazor
 
         public EventCallback<DataSourceState> DataSourceStateEv { get; set; }
 
-        public DataGridStyleInfo? Style { get; set; } //Default style
+        public DataGridStyleInfo? Style { get; set; }
 
         public ElementReference GridBodyRef { get; set; }
 

@@ -4,16 +4,15 @@
 
 <div @ref="@LayoutService.GridOuterRef" class="s-grid-container" style="@Style.CssStyle" @onkeydown:stopPropagation="true">
 	<div style="display:flex;flex-direction:column;">
-		<DataGridHeaderRow T=T />
-		<DataGridFilterRowMain T=T />
+		<DataGridHeaderRowPanel T=T />
+		@if (LayoutService.FilterMode.Value == DataGridFilterMode.FilterRow)
+		{
+			<DataGridFilterRowPanel T=T />
+		}
 	</div>
 	<div id="@ConstantService.InnerGridId" class="s-grid-content" @ref="@LayoutService.GridInnerRef" >
 		@if (InsertingForm != null){ @InsertingForm }@*ist hier inline inserting form gemeint?*@
-		@*@if (DataPanel != null){ @DataPanel }*@
 		<DataGridVirtualTablePanel T=T />
-		@*@if (NoDataPanel != null){ @NoDataPanel }*@
-		@*@if (NoDataFoundPanel != null){ @NoDataFoundPanel }*@
-		@*@if (DataProcessingPanel != null){ @DataProcessingPanel }*@
 	</div>
 </div>
 

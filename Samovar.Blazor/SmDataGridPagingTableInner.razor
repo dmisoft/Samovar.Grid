@@ -4,10 +4,10 @@
 
 <div @ref="@LayoutService.GridOuterRef" class="s-grid-container" style="@Style.CssStyle" @onkeydown:stopPropagation="true">
 	<div style="display:flex;flex-direction:column;">
-		<DataGridHeaderRow T=T />
+		<DataGridHeaderRowPanel T=T />
 		@if (LayoutService.FilterMode.Value == DataGridFilterMode.FilterRow)
 		{
-			<DataGridFilterRowMain T=T />
+			<DataGridFilterRowPanel T=T />
 		}
 	</div>
 	<div id="@ConstantService.InnerGridId" class="s-grid-content" @ref="@LayoutService.GridInnerRef" >
