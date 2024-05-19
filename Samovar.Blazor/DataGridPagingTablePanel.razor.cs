@@ -39,6 +39,14 @@ namespace Samovar.Blazor
 
         public EventCallback<IEnumerable<SmDataGridRowModel<T>>> CollectionViewChangedEv { get; set; }
 
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+            if (!firstRender)
+            {
+                await LayoutService.InitHeader();
+            }
+        }
         protected override Task OnInitializedAsync()
         {
             SubscribeViewCollectionChange();
@@ -65,7 +73,12 @@ namespace Samovar.Blazor
             RepositoryService.ViewCollectionObservableTask.Subscribe(async (GetViewCollectionTask) =>
             {
                 View = await GetViewCollectionTask;
-                StateHasChanged();
+                //StateHasChanged();
+                try
+                {
+                    await LayoutService.Test();
+                }
+                catch { }
             });
         }
 

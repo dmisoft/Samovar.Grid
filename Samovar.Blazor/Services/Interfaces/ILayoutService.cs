@@ -6,6 +6,7 @@ namespace Samovar.Blazor
 {
     public interface ILayoutService
     {
+        Task Test();
         DotNetObjectReference<ILayoutService> DataGridDotNetRef { get; }
         BehaviorSubject<string> SelectedRowClass { get; }
         BehaviorSubject<string> TableTagClass { get; }

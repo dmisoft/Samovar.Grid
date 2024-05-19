@@ -84,12 +84,6 @@ export function measureTableFilterHeight(tableClass, tableHeaderClass, filterTog
     document.body.removeChild(table);
 
     return rowHeight;
-    //<table style="margin:0;padding:0;table-layout:fixed;@(DataGrid.MinGridWidth > 0 ? " min-width:" + DataGrid.MinGridWidth.ToString(CultureInfo.InvariantCulture) + "px; " : "")" class="@DataGrid.TableTagClass" >
-    //    <thead class="@DataGrid.TheadTagClass">
-    //        <tr @ref="DataGrid.GridFilterRef">
-    //        @foreach (ColumnMetadata colMeta in GridColumnService.Columns.Values.Where(md => md.ColumnType == Grid.Data.GridColumnType.Data).OrderBy(cm => cm.ColumnOrder))
-    //        {
-    //            <th
 }
 
 export function measureTableRowHeight(tableClass, testId) {
@@ -302,20 +296,28 @@ export function onWindowMouseMove (event) {
             gridStateVars.newVisibleAbsoluteWidthValue = gridStateVars.oldAbsoluteVisibleWidthValue + delta;
         }
 
-        if (gridStateVars.gridColWidthSum + delta < gridStateVars.innerGridWidth && gridStateVars.fitColumnsToTableWidth === false) {
-            gridStateVars.emptyColWidth = gridStateVars.innerGridWidth - (gridStateVars.gridColWidthSum + delta) - 1;
+        if (gridStateVars.gridColWidthSum + delta > gridStateVars.innerGridWidth && gridStateVars.fitColumnsToTableWidth === false) {
+            gridStateVars.emptyColWidth = gridStateVars.gridColWidthSum + delta - gridStateVars.innerGridWidth;
         }
         else {
             gridStateVars.emptyColWidth = 0;
         }
-
         document.getElementById(gridStateVars.visibleGridColumnCellId).style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
         document.getElementById(gridStateVars.hiddenGridColumnCellId).style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
         document.getElementById(gridStateVars.filterGridColumnCellId).style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
 
-        document.getElementById(gridStateVars.visibleEmptyColumnId).style.width = gridStateVars.emptyColWidth + 'px';
-        document.getElementById(gridStateVars.hiddenEmptyColumnId).style.width = gridStateVars.emptyColWidth + 'px';
-        document.getElementById(gridStateVars.filterEmptyColumnId).style.width = gridStateVars.emptyColWidth + 'px';
+        if (gridStateVars.emptyColWidth !== 0) {
+            document.getElementById(gridStateVars.visibleEmptyColumnId).style.width = gridStateVars.emptyColWidth + 'px';
+            //document.getElementById(gridStateVars.hiddenEmptyColumnId).style.width = gridStateVars.emptyColWidth + 'px';
+            document.getElementById(gridStateVars.filterEmptyColumnId).style.width = gridStateVars.emptyColWidth + 'px';
+        }
+        else {
+            document.getElementById(gridStateVars.visibleEmptyColumnId).style.width = null;
+            //document.getElementById(gridStateVars.hiddenEmptyColumnId).style.width = undefined;
+            document.getElementById(gridStateVars.filterEmptyColumnId).style.width = null;
+
+        }
+        
     }
 }
 
@@ -382,21 +384,17 @@ export function showPrompt(message) {
 
 //Inner grid scroll handling
 export function raise_Js_InnerGrid_AfterScroll_OnDotNetRef(event) {
-    //var innerGridScrollTop = $('#' + event.data.innerGridId).scrollTop();
-    //event.data.ref.invokeMethodAsync("Js_InnerGrid_AfterScroll", innerGridScrollTop);
     for (var dataGridId in dataGridInstances) {
         dataGridInstances[dataGridId].invokeMethodAsync('JS_AfterWindowResize');
     }
 }
 export function add_GridInner_OnScroll_EventListener(innerGridId, dotNetRef) {
-    //dataGridInstances[innerGridId] = dotNetRef;
     document.getElementById(innerGridId).addEventListener('scroll', function (event) {
         var innerGridScrollTop = document.getElementById(innerGridId).scrollTop;
         dotNetRef.invokeMethodAsync("Js_InnerGrid_AfterScroll", innerGridScrollTop);
     })
 }
 export function remove_GridInner_OnScroll_EventListener(innerGridId, dotNetRef) {
-    //dataGridInstances[innerGridId] = dotNetRef;
     document.getElementById(innerGridId).removeEventListener('scroll', function (event) {
         var innerGridScrollTop = document.getElementById(innerGridId).scrollTop;
         dotNetRef.invokeMethodAsync("Js_InnerGrid_AfterScroll", innerGridScrollTop);
@@ -448,7 +446,6 @@ export function dragElement(elmnt) {
         document.onmousemove = null;
     }
 }
-
 
 window.addEventListener('click', function (event) {
     if (gridStateVars.filterMenuId !== '') {

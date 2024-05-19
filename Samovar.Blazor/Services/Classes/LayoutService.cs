@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System.Diagnostics;
 using System.Reactive.Subjects;
 using System.Text.RegularExpressions;
 
@@ -8,6 +9,11 @@ namespace Samovar.Blazor
     public class LayoutService
         : ILayoutService, IAsyncDisposable
     {
+        public async Task Test()
+        {
+            var gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule());
+            Debug.WriteLine($"GridInnerWidth: {gridInnerWidth}");
+        }
         public double MinColumnWidth { get; } = 50d;
 
         public BehaviorSubject<string> SelectedRowClass { get; } = new BehaviorSubject<string>("bg-warning");
@@ -199,13 +205,15 @@ namespace Samovar.Blazor
         {
             double gridInnerWidth = 0;
 
-			if (string.IsNullOrEmpty(Width.Value))
-                gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule());
-			else
-				gridInnerWidth = double.Parse(Regex.Match(Width.Value, @"\d+").Value);
+            gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule());
+
+            //if (string.IsNullOrEmpty(Width.Value))
+            //    gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule());
+            //else
+            //    gridInnerWidth = double.Parse(Regex.Match(Width.Value, @"\d+").Value);
 
 
-			Dictionary<IColumnModel, TempColumnMetadata> widthList = new Dictionary<IColumnModel, TempColumnMetadata>();
+            Dictionary<IColumnModel, TempColumnMetadata> widthList = new Dictionary<IColumnModel, TempColumnMetadata>();
 
             foreach (var m in _columnService.AllColumnModels.Where(cmt => cmt.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Absolute))
             {

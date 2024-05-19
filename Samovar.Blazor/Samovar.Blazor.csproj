@@ -27,11 +27,8 @@
   <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
-
+	
   <ItemGroup>
-    <Content Update="wwwroot\background.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Update="wwwroot\exampleJsInterop.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -43,10 +40,6 @@
     <Content Update="wwwroot\samovar.blazor.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Styles\" />
   </ItemGroup>
 
   <ItemGroup>
