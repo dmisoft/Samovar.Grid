@@ -134,18 +134,18 @@ namespace Samovar.Blazor
             GridColWidthSum = 0;
             MinGridWidth.OnNext(0);
 
-            var allCols = _columnService.AllColumnModels.Count + (ShowDetailRow.Value ? 1 : 0);
+            var allColumnsCount = _columnService.AllColumnModels.Count + (ShowDetailRow.Value ? 1 : 0);
 
-            var absCols = _columnService.AllColumnModels.Count(c => c.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Absolute) + (ShowDetailRow.Value ? 1 : 0);
+            var columnsCountWithAbsoluteWidth = _columnService.AllColumnModels.Count(c => c.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Absolute) + (ShowDetailRow.Value ? 1 : 0);
 
-            if (absCols != allCols)
+            if (columnsCountWithAbsoluteWidth != allColumnsCount)
             {
                 FitColumnsToTableWidth = true;
-                var absColsWidthSum = _columnService.AllColumnModels
+                var widthSumOfAllAbsoluteWidth = _columnService.AllColumnModels
                     .Where(c => c.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Absolute).Sum(c => c.WidthInfo.WidthValue) +
                     (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.WidthInfo.WidthValue : 0d);
 
-                MinGridWidth.OnNext(absColsWidthSum + _columnService.AllColumnModels
+                MinGridWidth.OnNext(widthSumOfAllAbsoluteWidth + _columnService.AllColumnModels
                     .Where(c => c.WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Relative).Sum(c => c.WidthInfo.MinWidthValue));
             }
             else
@@ -206,12 +206,6 @@ namespace Samovar.Blazor
             double gridInnerWidth = 0;
 
             gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule());
-
-            //if (string.IsNullOrEmpty(Width.Value))
-            //    gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule());
-            //else
-            //    gridInnerWidth = double.Parse(Regex.Match(Width.Value, @"\d+").Value);
-
 
             Dictionary<IColumnModel, TempColumnMetadata> widthList = new Dictionary<IColumnModel, TempColumnMetadata>();
 

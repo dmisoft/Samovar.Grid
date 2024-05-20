@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Samovar.Blazor
 {
-    public abstract class ColumnModelBase
+    public abstract partial class ColumnModelBase
         : IColumnModel
     {
         public string Id { get; } = $"columnmodel{Guid.NewGuid().ToString().Replace("-", "")}";
@@ -26,8 +26,6 @@ namespace Samovar.Blazor
         public string FilterMenuId { get; set; } = $"filtermenu{Guid.NewGuid().ToString().Replace("-", "")}";
 
         public bool? SortingAscending { get; set; } = null;
-
-        #region absolute column width
 
         public double VisibleAbsoluteWidthValue { get; set; }
         public string VisibleAbsoluteWidthCSS
@@ -53,9 +51,7 @@ namespace Samovar.Blazor
                 }
             }
         }
-        #endregion
 
-        #region relative column width
         public double VisiblePercentWidthValue { get; set; }
         public string VisiblePercentWidthCSS
         {
@@ -64,20 +60,20 @@ namespace Samovar.Blazor
                 return $"width:{VisiblePercentWidthValue.ToString(System.Globalization.CultureInfo.InvariantCulture)}%;";
             }
         }
-        #endregion
         public ColumnMetadataWidthInfo WidthInfo { get; set; } = new ColumnMetadataWidthInfo();
 
         public PropertyInfo ColumnDataItemPropertyInfo => throw new NotImplementedException();
 
         protected ColumnModelBase()
         {
-            Width.Subscribe(WidthSubjectCallback);
+            Width.Subscribe(WidthSubscriber);
         }
 
-        private void WidthSubjectCallback(string widthValue)
+        private void WidthSubscriber(string widthValue)
         {
-            bool isAbsoluteWidth = !string.IsNullOrEmpty(widthValue) && Regex.IsMatch(widthValue, "^[^0][0-9]*px$");
-            bool isRelativeWidth = !string.IsNullOrEmpty(widthValue) && Regex.IsMatch(widthValue, @"^[^0][0-9]*\*$");
+            bool isAbsoluteWidth = !string.IsNullOrEmpty(widthValue) && IsAbsoluteWidth().IsMatch(widthValue);
+            bool isRelativeWidth = !string.IsNullOrEmpty(widthValue) && IsRelativeWidth().IsMatch(widthValue);
+
             if (isAbsoluteWidth)
             {
                 WidthInfo.WidthMode = ColumnMetadataWidthInfo.ColumnWidthMode.Absolute;
@@ -89,5 +85,10 @@ namespace Samovar.Blazor
                 WidthInfo.WidthValue = int.Parse(widthValue.Replace("*", ""));
             }
         }
+
+        [GeneratedRegex(@"^[^0][0-9]*\*$")]
+        private static partial Regex IsRelativeWidth();
+        [GeneratedRegex("^[^0][0-9]*px$")]
+        private static partial Regex IsAbsoluteWidth();
     }
 }

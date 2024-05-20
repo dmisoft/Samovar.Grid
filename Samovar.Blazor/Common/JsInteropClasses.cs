@@ -18,14 +18,14 @@ namespace Samovar.Blazor
             return jsModule.InvokeAsync<double>("measureTableRowHeight", tableClass, testId);
         }
 
-        //internal static ValueTask<bool> IsWindowCtrlKeyDown(IJSObjectReference jsModule)
-        //{
-        //    return jsModule.InvokeAsync<bool>("getWindowIsCtrlKeyDown");
-        //}
-        //internal static ValueTask<bool> IsWindowShiftKeyDown(IJSObjectReference jsModule)
-        //{
-        //    return jsModule.InvokeAsync<bool>("getWindowIsShiftKeyDown");
-        //}
+        internal static ValueTask<bool> IsWindowCtrlKeyDown(IJSObjectReference jsModule)
+        {
+            return jsModule.InvokeAsync<bool>("getWindowIsCtrlKeyDown");
+        }
+        internal static ValueTask<bool> IsWindowShiftKeyDown(IJSObjectReference jsModule)
+        {
+            return jsModule.InvokeAsync<bool>("getWindowIsShiftKeyDown");
+        }
 
 
         internal static ValueTask<double> GetElementWidthByRef(this ElementReference elementRef, IJSObjectReference jsModule)

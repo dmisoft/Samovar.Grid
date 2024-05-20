@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System.Diagnostics;
 
 namespace Samovar.Blazor
 {
@@ -73,12 +74,13 @@ namespace Samovar.Blazor
             RepositoryService.ViewCollectionObservableTask.Subscribe(async (GetViewCollectionTask) =>
             {
                 View = await GetViewCollectionTask;
-                //StateHasChanged();
                 try
                 {
                     await LayoutService.Test();
                 }
-                catch { }
+                catch(Exception ex) { 
+                    Debug.WriteLine(ex.Message);
+                }
             });
         }
 

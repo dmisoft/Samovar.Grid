@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.Diagnostics;
 
 namespace Samovar.Blazor
 {
@@ -48,8 +49,10 @@ namespace Samovar.Blazor
             if (!string.IsNullOrEmpty(colMetaId))
             {
                 var col = _columnService.AllColumnModels.Find(c => c.Id == colMetaId);
-                if (col != default(IColumnModel))
+                if (col != default(IColumnModel)) {
+                    col.WidthInfo.WidthValue = newVisibleAbsoluteWidthValue;
                     col.VisibleAbsoluteWidthValue = newVisibleAbsoluteWidthValue;
+                }
             }
 
             _columnService.EmptyColumnModel.VisibleAbsoluteWidthValue = emptyColWidth;

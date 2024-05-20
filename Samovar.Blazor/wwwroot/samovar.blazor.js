@@ -302,6 +302,7 @@ export function onWindowMouseMove (event) {
         else {
             gridStateVars.emptyColWidth = 0;
         }
+
         document.getElementById(gridStateVars.visibleGridColumnCellId).style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
         document.getElementById(gridStateVars.hiddenGridColumnCellId).style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
         document.getElementById(gridStateVars.filterGridColumnCellId).style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
@@ -313,11 +314,9 @@ export function onWindowMouseMove (event) {
         }
         else {
             document.getElementById(gridStateVars.visibleEmptyColumnId).style.width = null;
-            //document.getElementById(gridStateVars.hiddenEmptyColumnId).style.width = undefined;
+            //document.getElementById(gridStateVars.hiddenEmptyColumnId).style.width = null;
             document.getElementById(gridStateVars.filterEmptyColumnId).style.width = null;
-
         }
-        
     }
 }
 
