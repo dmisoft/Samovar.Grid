@@ -11,7 +11,7 @@
             double detailExpanderColWidth = 30;
 
             ColumnMetadataWidthInfo widthInfo = new ColumnMetadataWidthInfo();
-            widthInfo.WidthMode = ColumnMetadataWidthInfo.ColumnWidthMode.Absolute;
+            widthInfo.DeclaratedWidthMode = ColumnMetadataWidthInfo.DeclaratedColumnWidthMode.Absolute;
             widthInfo.WidthValue = detailExpanderColWidth;
 
 

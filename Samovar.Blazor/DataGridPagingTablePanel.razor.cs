@@ -43,10 +43,10 @@ namespace Samovar.Blazor
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await base.OnAfterRenderAsync(firstRender);
-            if (!firstRender)
-            {
-                await LayoutService.InitHeader();
-            }
+            //if (!firstRender)
+            //{
+            //    await LayoutService.InitHeader();
+            //}
         }
         protected override Task OnInitializedAsync()
         {
@@ -74,13 +74,6 @@ namespace Samovar.Blazor
             RepositoryService.ViewCollectionObservableTask.Subscribe(async (GetViewCollectionTask) =>
             {
                 View = await GetViewCollectionTask;
-                try
-                {
-                    await LayoutService.Test();
-                }
-                catch(Exception ex) { 
-                    Debug.WriteLine(ex.Message);
-                }
             });
         }
 

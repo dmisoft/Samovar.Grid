@@ -2,11 +2,9 @@
 {
     public class ColumnMetadataWidthInfo
     {
-        public ColumnWidthMode WidthMode { get; set; } = ColumnWidthMode.Relative;
+        public DeclaratedColumnWidthMode DeclaratedWidthMode { get; set; } = DeclaratedColumnWidthMode.Relative;
         public double WidthValue { get; set; } = 1;
-        public int MinWidthValue { get; set; } = 50;
-
-        public enum ColumnWidthMode
+        public enum DeclaratedColumnWidthMode
         {
             Relative = 1,
             Absolute = 2

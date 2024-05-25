@@ -41,7 +41,7 @@ namespace Samovar.Blazor
             get
             {
 
-                if (WidthInfo.WidthMode == ColumnMetadataWidthInfo.ColumnWidthMode.Absolute)
+                if (WidthInfo.DeclaratedWidthMode == ColumnMetadataWidthInfo.DeclaratedColumnWidthMode.Absolute)
                 {
                     return VisibleAbsoluteWidthCSS;
                 }
@@ -76,12 +76,12 @@ namespace Samovar.Blazor
 
             if (isAbsoluteWidth)
             {
-                WidthInfo.WidthMode = ColumnMetadataWidthInfo.ColumnWidthMode.Absolute;
+                WidthInfo.DeclaratedWidthMode = ColumnMetadataWidthInfo.DeclaratedColumnWidthMode.Absolute;
                 WidthInfo.WidthValue = int.Parse(widthValue.Replace("px", ""));
             }
             else if (isRelativeWidth)
             {
-                WidthInfo.WidthMode = ColumnMetadataWidthInfo.ColumnWidthMode.Relative;
+                WidthInfo.DeclaratedWidthMode = ColumnMetadataWidthInfo.DeclaratedColumnWidthMode.Relative;
                 WidthInfo.WidthValue = int.Parse(widthValue.Replace("*", ""));
             }
         }

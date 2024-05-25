@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
 {
@@ -9,10 +10,7 @@ namespace Samovar.Blazor
         bool IsMouseDown { get; set; }
         double StartMouseMoveX { get; set; }
         double EndMouseMoveX { get; set; }
-        double OldAbsoluteVisibleWidthValue { get; set; }
-        double OldAbsoluteEmptyColVisibleWidthValue { get; set; }
         IDataColumnModel? MouseMoveCol { get; set; }
-
-        void Reset();
+        Subject<IColumnModel> ColumnResizingEndedObservable { get; }
     }
 }

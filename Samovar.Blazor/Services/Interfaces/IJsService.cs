@@ -37,8 +37,11 @@ namespace Samovar.Blazor
             string EmptyColumnDictId,
             double StartMouseMoveX,
             double OldAbsoluteVisibleWidthValue,
-            bool FitColumnsToTableWidth,
-            double OldAbsoluteEmptyColVisibleWidthValue);
+            string FitColumnsToTableWidth,
+            double OldAbsoluteEmptyColVisibleWidthValue,
+            string? RightSideColMetaId,
+            string? RightSideCellMetaId,
+            double? RightSideColumnWidth);
 
         ValueTask<double> MeasureScrollbar();
 

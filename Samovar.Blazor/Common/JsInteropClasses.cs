@@ -53,9 +53,9 @@ namespace Samovar.Blazor
             return jsModule.InvokeAsync<double>("getElementScrollTopByRef", elementRef);
         }
 
-        internal static void Start_ColumnWidthChange_Mode(IJSObjectReference jsModule, double GridColWidthSum, string ColMetaId, string InnerGridId, string InnerGridBodyTableId, string VisibleGridColumnCellId, string HiddenGridColumnCellId, string FilterGridColumnCellId, string VisibleEmptyColumnId, string HiddenEmptyColumnId, string FilterEmptyColumnId, string EmptyColumnDictId, double StartMouseMoveX, double OldAbsoluteVisibleWidthValue, bool FitColumnsToTableWidth, double OldAbsoluteEmptyColVisibleWidthValue)
-        {
-            jsModule.InvokeVoidAsync("startColumnWidthChangeMode", GridColWidthSum, ColMetaId, InnerGridId, InnerGridBodyTableId, VisibleGridColumnCellId, HiddenGridColumnCellId, FilterGridColumnCellId, VisibleEmptyColumnId, HiddenEmptyColumnId, FilterEmptyColumnId, EmptyColumnDictId, StartMouseMoveX, OldAbsoluteVisibleWidthValue, FitColumnsToTableWidth, OldAbsoluteEmptyColVisibleWidthValue);
-        }
+        //internal static void Start_ColumnWidthChange_Mode(IJSObjectReference jsModule, double GridColWidthSum, string ColMetaId, string InnerGridId, string InnerGridBodyTableId, string VisibleGridColumnCellId, string HiddenGridColumnCellId, string FilterGridColumnCellId, string VisibleEmptyColumnId, string HiddenEmptyColumnId, string FilterEmptyColumnId, string EmptyColumnDictId, double StartMouseMoveX, double OldAbsoluteVisibleWidthValue, bool FitColumnsToTableWidth, double OldAbsoluteEmptyColVisibleWidthValue)
+        //{
+        //    jsModule.InvokeVoidAsync("startColumnWidthChangeMode", GridColWidthSum, ColMetaId, InnerGridId, InnerGridBodyTableId, VisibleGridColumnCellId, HiddenGridColumnCellId, FilterGridColumnCellId, VisibleEmptyColumnId, HiddenEmptyColumnId, FilterEmptyColumnId, EmptyColumnDictId, StartMouseMoveX, OldAbsoluteVisibleWidthValue, FitColumnsToTableWidth, OldAbsoluteEmptyColVisibleWidthValue);
+        //}
     }
 }

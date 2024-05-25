@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Samovar.Blazor.Columns;
 using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
 {
     public interface ILayoutService
     {
-        Task Test();
         DotNetObjectReference<ILayoutService> DataGridDotNetRef { get; }
         BehaviorSubject<string> SelectedRowClass { get; }
         BehaviorSubject<string> TableTagClass { get; }
@@ -15,13 +15,10 @@ namespace Samovar.Blazor
 
         BehaviorSubject<string> FilterToggleButtonClass { get; }
 
-        double MinColumnWidth { get; }
         BehaviorSubject<double> MinGridWidth { get; }
         BehaviorSubject<bool> ShowDetailRow { get; }
         BehaviorSubject<DataGridFilterMode> FilterMode { get; }
         BehaviorSubject<bool> ShowFilterRow { get; }
-
-        double ScrollbarWidth { get; }
 
         double FilterRowHeight { get; }
 
@@ -47,7 +44,7 @@ namespace Samovar.Blazor
 
         event Func<DataGridStyleInfo, Task> DataGridInnerCssStyleChanged;
 
-        bool FitColumnsToTableWidth { get; set; }
-        double GridColWidthSum { get; set; }
+        BehaviorSubject<ColumnResizeMode> ColumnResizeMode { get; }
+        double GridColWidthSum { get; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.JSInterop;
-using System.Diagnostics;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
 {
@@ -31,39 +32,43 @@ namespace Samovar.Blazor
 
         public DotNetObjectReference<IColumnResizingService> ColumnResizingDotNetRef { get; private set; }
 
-        public void Reset()
-        {
-            IsMouseDown = false;
-            StartMouseMoveX = double.NaN;
-            EndMouseMoveX = double.NaN;
-            OldAbsoluteVisibleWidthValue = double.NaN;
-            OldAbsoluteEmptyColVisibleWidthValue = double.NaN;
-        }
+        public Subject<IColumnModel> ColumnResizingEndedObservable { get; } = new();
 
         [JSInvokable]
-        public async Task Js_Window_MouseUp(string colMetaId, double newVisibleAbsoluteWidthValue, string emptyColumnId, double emptyColWidth)
+        public async Task Js_Window_MouseUp(string colMetaId, double newVisibleAbsoluteWidthValue, string emptyColumnId, double emptyColWidth, string rightSideColumnId, double newRightSideColumnWidth)
         {
             await _jsService.DetachWindowMouseMoveEvent();
             await _jsService.DetachWindowMouseUpEvent();
 
-            if (!string.IsNullOrEmpty(colMetaId))
+            var col = _columnService.AllColumnModels.Find(c => c.Id == colMetaId);
+            if (col != default(IColumnModel))
             {
-                var col = _columnService.AllColumnModels.Find(c => c.Id == colMetaId);
-                if (col != default(IColumnModel)) {
-                    col.WidthInfo.WidthValue = newVisibleAbsoluteWidthValue;
-                    col.VisibleAbsoluteWidthValue = newVisibleAbsoluteWidthValue;
-                }
+                col.WidthInfo.WidthValue = newVisibleAbsoluteWidthValue;
+                col.VisibleAbsoluteWidthValue = newVisibleAbsoluteWidthValue;
+            }
+            var rightSideColumn = _columnService.AllColumnModels.Find(c => c.Id == rightSideColumnId);
+            if (rightSideColumn is not null)
+            {
+                rightSideColumn.WidthInfo.WidthValue = newRightSideColumnWidth;
+                rightSideColumn.VisibleAbsoluteWidthValue = newRightSideColumnWidth;
+                rightSideColumn.VisiblePercentWidthValue = newRightSideColumnWidth / _layoutService.GridColWidthSum * 100;
             }
 
             _columnService.EmptyColumnModel.VisibleAbsoluteWidthValue = emptyColWidth;
 
-            Reset();
+            var newGridColWidthSum = _columnService.AllColumnModels.Sum(c => c.VisibleAbsoluteWidthValue);
+            //_layoutService.GridColWidthSum = newGridColWidthSum;
 
-            if (!_layoutService.FitColumnsToTableWidth)
+            if (col is not null)
             {
-                var newGridColWidthSum = _columnService.AllColumnModels.Sum(c => c.VisibleAbsoluteWidthValue);
+                col.VisiblePercentWidthValue = newVisibleAbsoluteWidthValue / _layoutService.GridColWidthSum * 100;
+                ColumnResizingEndedObservable.OnNext(col);
+            }
 
-                _layoutService.GridColWidthSum = newGridColWidthSum;
+            if (rightSideColumn is not null)
+            {
+                rightSideColumn.VisiblePercentWidthValue = newRightSideColumnWidth / _layoutService.GridColWidthSum * 100;
+                ColumnResizingEndedObservable.OnNext(rightSideColumn);
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using Samovar.Blazor.Columns;
 
 namespace Samovar.Blazor
 {
@@ -105,6 +106,10 @@ namespace Samovar.Blazor
         public GridSelectionMode SelectionMode { get; set; }
 
         [Parameter]
+        public ColumnResizeMode ColumnResizeMode { get; set; }
+
+
+        [Parameter]
         public T? SingleSelectedDataRow { get; set; }
 
         [Parameter]
@@ -173,6 +178,10 @@ namespace Samovar.Blazor
             GridSelectionMode? dataGridSelectionMode = parameters.GetValueOrDefault<GridSelectionMode?>(nameof(SelectionMode));
             dataGridSelectionMode ??= GridSelectionMode.None;
             GridSelectionService.SelectionMode.OnNext(dataGridSelectionMode.Value);
+
+            ColumnResizeMode? columnResizeMode = parameters.GetValueOrDefault<ColumnResizeMode?>(nameof(ColumnResizeMode));
+            columnResizeMode ??= ColumnResizeMode.None;
+            LayoutService.ColumnResizeMode.OnNext(columnResizeMode.Value);
 
             T? singleSelectedDataRow = parameters.GetValueOrDefault<T?>(nameof(SingleSelectedDataRow));
             if (singleSelectedDataRow is not null)

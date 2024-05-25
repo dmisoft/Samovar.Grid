@@ -1,39 +1,38 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using System.Reactive.Linq;
 
 namespace Samovar.Blazor.Header
 {
     public partial class SmDataGridHeaderCell
         : SmDesignComponentBase, IAsyncDisposable
     {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
         [Parameter]
-        public IDataColumnModel Model { get; set; }
+        public required IDataColumnModel Model { get; set; }
 
         [SmInject]
-        public ISortingService SortingService { get; set; }
+        public required ISortingService SortingService { get; set; }
 
         [SmInject]
-        public ILayoutService LayoutService { get; set; }
+        public required ILayoutService LayoutService { get; set; }
 
         [SmInject]
-        public IColumnResizingService ColumnResizingService { get; set; }
+        public required IColumnResizingService ColumnResizingService { get; set; }
 
         [SmInject]
-        public IJsService JsService { get; set; }
+        public required IJsService JsService { get; set; }
 
         [SmInject]
-        public IColumnService ColumnService { get; set; }
+        public required IColumnService ColumnService { get; set; }
 
         [SmInject]
-        public IConstantService ConstantService { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public required IConstantService ConstantService { get; set; }
 
         IDisposable? _columnOrderInfoUnsubscriber = null;
         protected override Task OnInitializedAsync()
         {
             _columnOrderInfoUnsubscriber = SortingService.ColumnOrderInfo.Subscribe(OnOrderInfoChanged);
+            ColumnResizingService.ColumnResizingEndedObservable.Where(c => c.Id == Model.Id).Subscribe(c => StateHasChanged());
             return base.OnInitializedAsync();
         }
 
@@ -60,29 +59,31 @@ namespace Samovar.Blazor.Header
         protected string ColumnCellDraggable = "false";
 		internal Task ColumnCellClick() => SortingService.OnColumnClick(Model);
 
-        protected async Task OnMouseDown(MouseEventArgs args, IDataColumnModel colMeta)
+        protected async Task OnMouseDown(MouseEventArgs args, IDataColumnModel columnMetadata)
         {
             await JsService.AttachWindowMouseMoveEvent(LayoutService.DataGridDotNetRef);
             await JsService.AttachWindowMouseUpEvent(LayoutService.DataGridDotNetRef);
 
             ColumnResizingService.IsMouseDown = true;
             ColumnResizingService.StartMouseMoveX = args.ClientX;
-            ColumnResizingService.MouseMoveCol = colMeta;
-            ColumnResizingService.OldAbsoluteVisibleWidthValue = colMeta.VisibleAbsoluteWidthValue;
+            ColumnResizingService.MouseMoveCol = columnMetadata;
+            //ColumnResizingService.OldAbsoluteVisibleWidthValue = columnMetadata.VisibleAbsoluteWidthValue;
 
             IColumnModel colEmpty = ColumnService.EmptyColumnModel;
-            ColumnResizingService.OldAbsoluteEmptyColVisibleWidthValue = colEmpty.VisibleAbsoluteWidthValue;
+            //ColumnResizingService.OldAbsoluteEmptyColVisibleWidthValue = colEmpty.VisibleAbsoluteWidthValue;
+
+            var rightSideColumn = ColumnService.AllColumnModels.SkipWhile(c => c.Id != columnMetadata.Id).Skip(1).FirstOrDefault();
 
             await JsService.StartDataGridColumnWidthChangeMode(
                 ColumnResizingService.ColumnResizingDotNetRef,
                 LayoutService.GridColWidthSum,
-                colMeta.Id,
+                columnMetadata.Id,
                 ConstantService.InnerGridId,
                 ConstantService.InnerGridBodyTableId,
 
-                colMeta.VisibleGridColumnCellId.ToString(),
-                colMeta.HiddenGridColumnCellId.ToString(),
-                colMeta.FilterGridColumnCellId.ToString(),
+                columnMetadata.VisibleGridColumnCellId.ToString(),
+                columnMetadata.HiddenGridColumnCellId.ToString(),
+                columnMetadata.FilterGridColumnCellId.ToString(),
 
 
                 colEmpty.VisibleGridColumnCellId.ToString(),
@@ -91,9 +92,12 @@ namespace Samovar.Blazor.Header
 
                 ColumnService.EmptyColumnModel.Id,
                 args.ClientX,
-                colMeta.VisibleAbsoluteWidthValue,
-                LayoutService.FitColumnsToTableWidth,
-                colEmpty.VisibleAbsoluteWidthValue);
+                columnMetadata.VisibleAbsoluteWidthValue,
+                LayoutService.ColumnResizeMode.Value.ToString(),
+                colEmpty.VisibleAbsoluteWidthValue,
+                rightSideColumn?.Id,
+                rightSideColumn?.VisibleGridColumnCellId,
+                rightSideColumn?.VisibleAbsoluteWidthValue);
         }
 
         private void ColumnCellMouseDown(MouseEventArgs e) => ColumnCellDraggable = "true";

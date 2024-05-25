@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Subjects;
+using static Samovar.Blazor.ColumnMetadataWidthInfo;
 
 namespace Samovar.Blazor
 {
@@ -8,6 +9,7 @@ namespace Samovar.Blazor
         public DataGridColumnType ColumnType { get; }
         public Subject<string> Width { get; }
         public ColumnMetadataWidthInfo WidthInfo { get; set; }
+        //public DeclaratedColumnWidthMode DeclaratedWidthMode { get; set; }
 
         public int ColumnOrder { get; set; }
         public string VisibleWidthStyle { get; }
