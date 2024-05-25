@@ -12,12 +12,12 @@ public partial class DataGridHeaderRowPanel<T>
 
     protected override void OnInitialized()
     {
-        Style = new DataGridStyleInfo
-        {
-            CssStyle = GridLayoutService.OuterStyle.Value,
-            ActualScrollbarWidth = GridLayoutService.ActualScrollbarWidth
-        };
-        GridLayoutService.DataGridInnerCssStyleChanged += GridLayoutService_DataGridInnerCssStyleChanged;
+        //Style = new DataGridStyleInfo
+        //{
+        //    CssStyle = GridLayoutService.OuterStyle.Value,
+        //    ActualScrollbarWidth = GridLayoutService.ActualScrollbarWidth
+        //};
+        GridLayoutService.DataGridInnerStyle.Subscribe(async style => { Style = await style; StateHasChanged(); });
         base.OnInitialized();
     }
 
@@ -30,7 +30,7 @@ public partial class DataGridHeaderRowPanel<T>
 
     public ValueTask DisposeAsync()
     {
-        GridLayoutService.DataGridInnerCssStyleChanged -= GridLayoutService_DataGridInnerCssStyleChanged;
+        //GridLayoutService.DataGridInnerStyle -= GridLayoutService_DataGridInnerCssStyleChanged;
         return ValueTask.CompletedTask;
     }
 }

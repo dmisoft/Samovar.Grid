@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Samovar.Blazor.Columns;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
@@ -36,7 +37,7 @@ namespace Samovar.Blazor
         {
             get {
                 return _columnService.AllColumnModels.Sum(c => c.VisibleAbsoluteWidthValue) +
-                        (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.WidthInfo.WidthValue : 0d);
+                        (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.VisibleAbsoluteWidthValue : 0d);
             }
         }
 
@@ -61,16 +62,33 @@ namespace Samovar.Blazor
             initService.IsInitialized.Subscribe(DataGridInitializerCallback);
 
             DataGridDotNetRef = DotNetObjectReference.Create(this as ILayoutService);
+            DataGridInnerStyle = Observable.CombineLatest(Width, Height)
+                .Select(_ =>
+                {
+                    string outerStyle = $"height:{_[1]};";
+                    string footerStyle = "";
+                    if (!string.IsNullOrEmpty(_[0]))
+                    {
+                        outerStyle += $"width:{_[0]};";
+                        footerStyle = $"width:{_[0]};";
+                    }
 
-            TableRowHeightLazy = new(() => _jsService.MeasureTableRowHeight(TableTagClass.Value).AsTask());
+                    return Task.FromResult(new DataGridStyleInfo { CssStyle = outerStyle });
+                }
+
+                );
+            //TableRowHeightLazy = new(() => _jsService.MeasureTableRowHeight(TableTagClass.Value).AsTask());
+        }
+
+        private async Task<DataGridStyleInfo> test(object source1, object source2)
+        {
+            throw new NotImplementedException();
         }
 
         private void DataGridInitializerCallback(bool obj)
         {
             Task.Run(async () => await HeightWidthChanged(height: Height.Value, width: Width.Value));
         }
-
-
 
         public event Func<DataGridStyleInfo, Task>? DataGridInnerCssStyleChanged = null;
 
@@ -80,8 +98,8 @@ namespace Samovar.Blazor
         {
             return TableRowHeightLazy.Value;
         }
-        public double ActualScrollbarWidth { get; set; }
 
+        public double ActualScrollbarWidth { get; set; }
 
         public BehaviorSubject<string> OuterStyle { get; } = new BehaviorSubject<string>("");
 
@@ -95,6 +113,7 @@ namespace Samovar.Blazor
 
         public BehaviorSubject<bool> ShowDetailHeader => throw new NotImplementedException();
 
+        public IObservable<Task<DataGridStyleInfo>> DataGridInnerStyle { get; }
 
         private async Task HeightWidthChanged(string height, string width)
         {
@@ -129,11 +148,11 @@ namespace Samovar.Blazor
             FilterRowHeight = await _jsService.MeasureTableFilterHeight(TableTagClass.Value, TheadTagClass.Value, FilterToggleButtonClass.Value);
 
             //GridColWidthSum = 0;
-            MinGridWidth.OnNext(0);
+            //MinGridWidth.OnNext(0);
 
-            var allColumnsCount = _columnService.AllColumnModels.Count + (ShowDetailRow.Value ? 1 : 0);
+            //var allColumnsCount = _columnService.AllColumnModels.Count + (ShowDetailRow.Value ? 1 : 0);
 
-            var columnsCountWithAbsoluteWidth = _columnService.AllColumnModels.Count(c => c.WidthInfo.DeclaratedWidthMode == ColumnMetadataWidthInfo.DeclaratedColumnWidthMode.Absolute) + (ShowDetailRow.Value ? 1 : 0);
+            //var columnsCountWithAbsoluteWidth = _columnService.AllColumnModels.Count(c => c.WidthInfo.DeclaratedWidthMode == ColumnMetadataWidthInfo.DeclaratedColumnWidthMode.Absolute) + (ShowDetailRow.Value ? 1 : 0);
 
             //if (ColumnResizeMode.Value == Columns.ColumnResizeMode.Block)
             //{
@@ -161,32 +180,32 @@ namespace Samovar.Blazor
                 double gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule());
                 gridInnerWidth = Math.Max(gridInnerWidth, MinGridWidth.Value);
 
-                Dictionary<IColumnModel, TempColumnMetadata> widthList = new Dictionary<IColumnModel, TempColumnMetadata>();
+                Dictionary<IColumnModel, double> widthList = new Dictionary<IColumnModel, double>();
 
                 var absoluteWidthSum = _columnService.AllColumnModels.
-                    Where(cmt => cmt.WidthInfo.DeclaratedWidthMode == ColumnMetadataWidthInfo.DeclaratedColumnWidthMode.Absolute).Sum(cmt => cmt.WidthInfo.WidthValue) +
-                    (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.WidthInfo.WidthValue : 0d);
+                    Where(cmt => cmt.DeclaratedWidthMode == DeclaratedColumnWidthMode.Absolute).Sum(cmt => cmt.DeclaratedWidth) +
+                    (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.DeclaratedWidth : 0d);
 
-                var relativeWidthSum = _columnService.AllColumnModels.Where(cmt => cmt.WidthInfo.DeclaratedWidthMode == ColumnMetadataWidthInfo.DeclaratedColumnWidthMode.Relative).Sum(cmt => cmt.WidthInfo.WidthValue);
+                var relativePortionSum = _columnService.AllColumnModels.Where(cmt => cmt.DeclaratedWidthMode == DeclaratedColumnWidthMode.Relative).Sum(cmt => cmt.DeclaratedWidth);
 
-                var restForRelativePercent = (gridInnerWidth - absoluteWidthSum) / gridInnerWidth;
+                var portionValue = (gridInnerWidth - absoluteWidthSum) / relativePortionSum;
 
-                foreach (var m in _columnService.AllColumnModels.Where(cmt => cmt.WidthInfo.DeclaratedWidthMode == ColumnMetadataWidthInfo.DeclaratedColumnWidthMode.Relative))
+                foreach (var m in _columnService.AllColumnModels.Where(cmt => cmt.DeclaratedWidthMode == DeclaratedColumnWidthMode.Relative))
                 {
-                    double nw = restForRelativePercent * m.WidthInfo.WidthValue / relativeWidthSum;
-                    widthList.Add(m, new TempColumnMetadata { VisibleAbsoluteWidthValue = nw * gridInnerWidth, VisiblePercentWidthValue = nw * 100d });
+                    double nw = portionValue * m.DeclaratedWidth;
+                    widthList.Add(m, nw);
                 }
 
-                foreach (var m in _columnService.AllColumnModels.Where(cmt => cmt.WidthInfo.DeclaratedWidthMode == ColumnMetadataWidthInfo.DeclaratedColumnWidthMode.Absolute))
+                foreach (var m in _columnService.AllColumnModels.Where(cmt => cmt.DeclaratedWidthMode == DeclaratedColumnWidthMode.Absolute))
                 {
-                    double nw = m.WidthInfo.WidthValue / gridInnerWidth;
-                    widthList.Add(m, new TempColumnMetadata { VisibleAbsoluteWidthValue = m.WidthInfo.WidthValue, VisiblePercentWidthValue = nw * 100d });
+                    //double nw = m.DeclaratedWidth;
+                    widthList.Add(m, m.DeclaratedWidth);
                 }
 
                 foreach (var m in _columnService.AllColumnModels)
                 {
-                    m.VisibleAbsoluteWidthValue = widthList[m].VisibleAbsoluteWidthValue;
-                    m.VisiblePercentWidthValue = widthList[m].VisiblePercentWidthValue;
+                    m.VisibleAbsoluteWidthValue = widthList[m];
+                    //m.VisiblePercentWidthValue = widthList[m].VisiblePercentWidthValue;
                 }
                 var tBodyWidth = await GridOuterRef.GetElementWidthByRef(await _jsService.JsModule());
                 CalculateEmptyColumn(tBodyWidth);
@@ -198,35 +217,35 @@ namespace Samovar.Blazor
             }
         }
 
-        private async Task ShowFixHeader(int newWidth)
-        {
-            double gridInnerWidth = 0;
+        //private async Task ShowFixHeader(int newWidth)
+        //{
+        //    double gridInnerWidth = 0;
 
-            gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule());
+        //    gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule());
 
-            Dictionary<IColumnModel, TempColumnMetadata> widthList = new Dictionary<IColumnModel, TempColumnMetadata>();
+        //    Dictionary<IColumnModel, TempColumnMetadata> widthList = new Dictionary<IColumnModel, TempColumnMetadata>();
 
-            foreach (var m in _columnService.AllColumnModels.Where(cmt => cmt.WidthInfo.DeclaratedWidthMode == ColumnMetadataWidthInfo.DeclaratedColumnWidthMode.Absolute))
-            {
-                double nw = m.WidthInfo.WidthValue / gridInnerWidth;
-                widthList.Add(m, new TempColumnMetadata { VisibleAbsoluteWidthValue = m.WidthInfo.WidthValue, VisiblePercentWidthValue = nw * 100d });
-            }
+        //    foreach (var m in _columnService.AllColumnModels.Where(cmt => cmt.WidthInfo.DeclaratedWidthMode == DeclaratedColumnWidthMode.Absolute))
+        //    {
+        //        double nw = m.WidthInfo.WidthValue / gridInnerWidth;
+        //        widthList.Add(m, new TempColumnMetadata { VisibleAbsoluteWidthValue = m.WidthInfo.WidthValue, VisiblePercentWidthValue = nw * 100d });
+        //    }
 
-            //Werte aus TempObjekt transferieren
-            foreach (var m in _columnService.AllColumnModels.Where(widthList.ContainsKey))
-            {
-                m.VisibleAbsoluteWidthValue = widthList[m].VisibleAbsoluteWidthValue;
-                m.VisiblePercentWidthValue = widthList[m].VisiblePercentWidthValue;
-            }
+        //    //Werte aus TempObjekt transferieren
+        //    foreach (var m in _columnService.AllColumnModels.Where(widthList.ContainsKey))
+        //    {
+        //        m.VisibleAbsoluteWidthValue = widthList[m].VisibleAbsoluteWidthValue;
+        //        m.VisiblePercentWidthValue = widthList[m].VisiblePercentWidthValue;
+        //    }
 
-            double tBodyWidth = 0;
-            if (newWidth == 0)
-                tBodyWidth = await GridOuterRef.GetElementWidthByRef(await _jsService.JsModule());
-            else
-                tBodyWidth = newWidth;
+        //    double tBodyWidth = 0;
+        //    if (newWidth == 0)
+        //        tBodyWidth = await GridOuterRef.GetElementWidthByRef(await _jsService.JsModule());
+        //    else
+        //        tBodyWidth = newWidth;
 
-            CalculateEmptyColumn(tBodyWidth);
-        }
+        //    CalculateEmptyColumn(tBodyWidth);
+        //}
 
         private void CalculateEmptyColumn(double tBodyWidth)
         {
@@ -238,11 +257,11 @@ namespace Samovar.Blazor
                 emptyColWidth = Math.Max(0, emptyColWidth);
             }
 
-            emptyColWidth = emptyColWidth - (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.WidthInfo.WidthValue : 0d);
+            emptyColWidth = emptyColWidth - (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.VisibleAbsoluteWidthValue : 0d);
 
             _columnService.EmptyColumnModel.VisibleAbsoluteWidthValue = emptyColWidth;
 
-            _columnService.EmptyColumnModel.WidthInfo = new ColumnMetadataWidthInfo { DeclaratedWidthMode = ColumnMetadataWidthInfo.DeclaratedColumnWidthMode.Absolute, WidthValue = emptyColWidth };
+            //_columnService.EmptyColumnModel.WidthInfo = new ColumnMetadataWidthInfo { DeclaratedWidthMode = DeclaratedColumnWidthMode.Absolute, WidthValue = emptyColWidth };
         }
 
         internal async Task OnDataGridInnerCssStyleChanged()
@@ -263,10 +282,10 @@ namespace Samovar.Blazor
             return ValueTask.CompletedTask;
         }
 
-        class TempColumnMetadata
-        {
-            public double VisibleAbsoluteWidthValue { get; set; }
-            public double VisiblePercentWidthValue { get; set; }
-        }
+        //class TempColumnMetadata
+        //{
+        //    public double VisibleAbsoluteWidthValue { get; set; }
+        //    //public double VisiblePercentWidthValue { get; set; }
+        //}
     }
 }

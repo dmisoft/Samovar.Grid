@@ -10,12 +10,12 @@
         {
             double detailExpanderColWidth = 30;
 
-            ColumnMetadataWidthInfo widthInfo = new ColumnMetadataWidthInfo();
-            widthInfo.DeclaratedWidthMode = ColumnMetadataWidthInfo.DeclaratedColumnWidthMode.Absolute;
-            widthInfo.WidthValue = detailExpanderColWidth;
+            //ColumnMetadataWidthInfo widthInfo = new ColumnMetadataWidthInfo();
+            DeclaratedWidthMode = DeclaratedColumnWidthMode.Absolute;
+            DeclaratedWidth = detailExpanderColWidth;
 
 
-            WidthInfo = widthInfo;
+            //WidthInfo = widthInfo;
             VisibleAbsoluteWidthValue = detailExpanderColWidth;
         }
     }

@@ -288,7 +288,6 @@ namespace Samovar.Blazor
 				await LayoutService.InitHeader();
 				InitService.IsInitialized.OnNext(true);
 				StateHasChanged();
-
 			}
 		}
 

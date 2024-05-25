@@ -42,7 +42,7 @@ namespace Samovar.Blazor
 
         Task InitHeader();
 
-        event Func<DataGridStyleInfo, Task> DataGridInnerCssStyleChanged;
+        IObservable<Task<DataGridStyleInfo>> DataGridInnerStyle { get; }
 
         BehaviorSubject<ColumnResizeMode> ColumnResizeMode { get; }
         double GridColWidthSum { get; }

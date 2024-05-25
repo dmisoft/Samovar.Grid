@@ -43,15 +43,15 @@ namespace Samovar.Blazor
             var col = _columnService.AllColumnModels.Find(c => c.Id == colMetaId);
             if (col != default(IColumnModel))
             {
-                col.WidthInfo.WidthValue = newVisibleAbsoluteWidthValue;
+                //col.WidthInfo.WidthValue = newVisibleAbsoluteWidthValue;
                 col.VisibleAbsoluteWidthValue = newVisibleAbsoluteWidthValue;
             }
             var rightSideColumn = _columnService.AllColumnModels.Find(c => c.Id == rightSideColumnId);
             if (rightSideColumn is not null)
             {
-                rightSideColumn.WidthInfo.WidthValue = newRightSideColumnWidth;
+                //rightSideColumn.WidthInfo.WidthValue = newRightSideColumnWidth;
                 rightSideColumn.VisibleAbsoluteWidthValue = newRightSideColumnWidth;
-                rightSideColumn.VisiblePercentWidthValue = newRightSideColumnWidth / _layoutService.GridColWidthSum * 100;
+                //rightSideColumn.VisiblePercentWidthValue = newRightSideColumnWidth / _layoutService.GridColWidthSum * 100;
             }
 
             _columnService.EmptyColumnModel.VisibleAbsoluteWidthValue = emptyColWidth;
@@ -61,13 +61,13 @@ namespace Samovar.Blazor
 
             if (col is not null)
             {
-                col.VisiblePercentWidthValue = newVisibleAbsoluteWidthValue / _layoutService.GridColWidthSum * 100;
+                //col.VisiblePercentWidthValue = newVisibleAbsoluteWidthValue / _layoutService.GridColWidthSum * 100;
                 ColumnResizingEndedObservable.OnNext(col);
             }
 
             if (rightSideColumn is not null)
             {
-                rightSideColumn.VisiblePercentWidthValue = newRightSideColumnWidth / _layoutService.GridColWidthSum * 100;
+                //rightSideColumn.VisiblePercentWidthValue = newRightSideColumnWidth / _layoutService.GridColWidthSum * 100;
                 ColumnResizingEndedObservable.OnNext(rightSideColumn);
             }
         }

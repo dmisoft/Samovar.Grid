@@ -44,13 +44,10 @@ namespace Samovar.Blazor
 
         protected override Task OnInitializedAsync()
         {
-            Style = new DataGridStyleInfo
-            {
-                CssStyle = LayoutService.OuterStyle.Value,
-                ActualScrollbarWidth = LayoutService.ActualScrollbarWidth
-            };
-
-            LayoutService.DataGridInnerCssStyleChanged += GridLayoutService_DataGridInnerCssStyleChanged;
+            LayoutService.DataGridInnerStyle.Subscribe(async style => {
+                Style = await style;
+                StateHasChanged();
+            });
 
             //Popup editing
             EditingService.ShowEditingPopupDelegate = (SmDataGridRowModel<T> model) => { EditingPopup = ComponentBuilderService.GetEditingPopup(model); StateHasChanged(); return Task.CompletedTask; };
@@ -91,15 +88,8 @@ namespace Samovar.Blazor
             return Task.CompletedTask;
         }
 
-        private async Task GridLayoutService_DataGridInnerCssStyleChanged(DataGridStyleInfo arg)
-        {
-            Style = arg;
-            await InvokeAsync(StateHasChanged);
-        }
-
         public ValueTask DisposeAsync()
         {
-            LayoutService.DataGridInnerCssStyleChanged -= GridLayoutService_DataGridInnerCssStyleChanged;
             return ValueTask.CompletedTask;
         }
     }

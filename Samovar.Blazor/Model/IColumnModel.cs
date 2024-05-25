@@ -1,5 +1,4 @@
 ﻿using System.Reactive.Subjects;
-using static Samovar.Blazor.ColumnMetadataWidthInfo;
 
 namespace Samovar.Blazor
 {
@@ -8,15 +7,15 @@ namespace Samovar.Blazor
         public string Id { get; }
         public DataGridColumnType ColumnType { get; }
         public Subject<string> Width { get; }
-        public ColumnMetadataWidthInfo WidthInfo { get; set; }
-        //public DeclaratedColumnWidthMode DeclaratedWidthMode { get; set; }
+        //public ColumnMetadataWidthInfo WidthInfo { get; set; }
+        public DeclaratedColumnWidthMode DeclaratedWidthMode { get; set; }
+        public double DeclaratedWidth { get; set; }
 
         public int ColumnOrder { get; set; }
         public string VisibleWidthStyle { get; }
-        public string VisibleAbsoluteWidthCSS { get; }
-        public string VisiblePercentWidthCSS { get; }
+        //public string VisibleAbsoluteWidthCSS { get; }
         public double VisibleAbsoluteWidthValue { get; set; }
-        public double VisiblePercentWidthValue { get; set; }
+        //public double VisiblePercentWidthValue { get; set; }
 
         public string VisibleGridColumnCellId { get; }
         public string FilterGridColumnCellId { get; }

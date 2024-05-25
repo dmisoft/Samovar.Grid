@@ -7,6 +7,9 @@ namespace Samovar.Blazor
     public abstract partial class ColumnModelBase
         : IColumnModel
     {
+        public DeclaratedColumnWidthMode DeclaratedWidthMode { get; set; } = DeclaratedColumnWidthMode.Absolute;
+        public double DeclaratedWidth { get; set; } = 0;
+
         public string Id { get; } = $"columnmodel{Guid.NewGuid().ToString().Replace("-", "")}";
 
         public abstract DataGridColumnType ColumnType { get; }
@@ -28,7 +31,15 @@ namespace Samovar.Blazor
         public bool? SortingAscending { get; set; } = null;
 
         public double VisibleAbsoluteWidthValue { get; set; }
-        public string VisibleAbsoluteWidthCSS
+        //public string VisibleAbsoluteWidthCSS
+        //{
+        //    get
+        //    {
+        //        return $"width:{VisibleAbsoluteWidthValue.ToString(System.Globalization.CultureInfo.InvariantCulture)}px;";
+        //    }
+        //}
+
+        public string VisibleWidthStyle
         {
             get
             {
@@ -36,31 +47,15 @@ namespace Samovar.Blazor
             }
         }
 
-        public string VisibleWidthStyle
-        {
-            get
-            {
-
-                if (WidthInfo.DeclaratedWidthMode == ColumnMetadataWidthInfo.DeclaratedColumnWidthMode.Absolute)
-                {
-                    return VisibleAbsoluteWidthCSS;
-                }
-                else
-                {
-                    return VisiblePercentWidthCSS;
-                }
-            }
-        }
-
-        public double VisiblePercentWidthValue { get; set; }
-        public string VisiblePercentWidthCSS
-        {
-            get
-            {
-                return $"width:{VisiblePercentWidthValue.ToString(System.Globalization.CultureInfo.InvariantCulture)}%;";
-            }
-        }
-        public ColumnMetadataWidthInfo WidthInfo { get; set; } = new ColumnMetadataWidthInfo();
+        //public double VisiblePercentWidthValue { get; set; }
+        //public string VisiblePercentWidthCSS
+        //{
+        //    get
+        //    {
+        //        return $"width:{VisiblePercentWidthValue.ToString(System.Globalization.CultureInfo.InvariantCulture)}%;";
+        //    }
+        //}
+        //public ColumnMetadataWidthInfo WidthInfo { get; set; } = new ColumnMetadataWidthInfo();
 
         public PropertyInfo ColumnDataItemPropertyInfo => throw new NotImplementedException();
 
@@ -76,13 +71,13 @@ namespace Samovar.Blazor
 
             if (isAbsoluteWidth)
             {
-                WidthInfo.DeclaratedWidthMode = ColumnMetadataWidthInfo.DeclaratedColumnWidthMode.Absolute;
-                WidthInfo.WidthValue = int.Parse(widthValue.Replace("px", ""));
+                DeclaratedWidthMode = DeclaratedColumnWidthMode.Absolute;
+                DeclaratedWidth = double.Parse(widthValue.Replace("px", ""));
             }
             else if (isRelativeWidth)
             {
-                WidthInfo.DeclaratedWidthMode = ColumnMetadataWidthInfo.DeclaratedColumnWidthMode.Relative;
-                WidthInfo.WidthValue = int.Parse(widthValue.Replace("*", ""));
+                DeclaratedWidthMode = DeclaratedColumnWidthMode.Relative;
+                DeclaratedWidth = double.Parse(widthValue.Replace("*", ""));
             }
         }
 
