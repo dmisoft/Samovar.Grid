@@ -28,6 +28,8 @@ export const gridStateVars =
     gridColWidthSum: 0,
     rightSideColumnId: null,
     rightSideCellId: null,
+    rightSideFilterCellId: null,
+    rightSideHiddenCellId: null,
     oldRightSideColumnWidth: 0,
     newRightSideColumnWidth: 0
 }
@@ -187,7 +189,7 @@ export function getElementScrollTopByRef(element) {
     return element.scrollTop;
 }
 
-export function startColumnWidthChangeMode(_gridDotNetRef, _gridColWidthSum, _colMetaId, _innerGridId, _innerGridBodyTableId, _visibleGridColumnCellId, _hiddenGridColumnCellId, _filterGridColumnCellId, _visibleEmptyColumnId, _hiddenEmptyColumnId, _filterEmptyColumnId, _emptyColumnDictId, _startMouseMoveX, _oldAbsoluteVisibleWidthValue, _fitColumnsToTableWidth, _oldAbsoluteEmptyColVisibleWidthValue, _rightSideColumnId, _rightSideCellId, _rightSideColumnWidth) {
+export function startColumnWidthChangeMode(_gridDotNetRef, _gridColWidthSum, _colMetaId, _innerGridId, _innerGridBodyTableId, _visibleGridColumnCellId, _hiddenGridColumnCellId, _filterGridColumnCellId, _visibleEmptyColumnId, _hiddenEmptyColumnId, _filterEmptyColumnId, _emptyColumnDictId, _startMouseMoveX, _oldAbsoluteVisibleWidthValue, _fitColumnsToTableWidth, _oldAbsoluteEmptyColVisibleWidthValue, _rightSideColumnId, _rightSideCellId, _rightSideColumnWidth, _rightSideFilterCellId, _rightSideHiddenCellId) {
     gridStateVars.gridDotNetRef = _gridDotNetRef;
     gridStateVars.isMouseDown = true;
     gridStateVars.gridColWidthSum = _gridColWidthSum;
@@ -220,7 +222,8 @@ export function startColumnWidthChangeMode(_gridDotNetRef, _gridColWidthSum, _co
     gridStateVars.rightSideCellId = _rightSideCellId;
     gridStateVars.oldRightSideColumnWidth = _rightSideColumnWidth;
     gridStateVars.newRightSideColumnWidth = gridStateVars.oldRightSideColumnWidth;
-
+    gridStateVars.rightSideFilterCellId = _rightSideFilterCellId;
+    gridStateVars.rightSideHiddenCellId = _rightSideHiddenCellId;
 
     gridStateVars.emptyColWidth = 0;
     if (gridStateVars.gridColWidthSum < gridStateVars.innerGridWidth && gridStateVars.fitColumnsToTableWidth === 'Sliding') {
@@ -274,6 +277,8 @@ export function stopColumnWidthChangeMode(dotNetRef) {
     gridStateVars.rightSideCellId = '';
     gridStateVars.oldRightSideColumnWidth = 0;
     gridStateVars.newRightSideColumnWidth = 0;
+    gridStateVars.rightSideFilterCellId = '';
+    gridStateVars.rightSideHiddenCellId = '';
 }
 
 //Mouse up
@@ -334,6 +339,8 @@ export function onWindowMouseMove(event) {
 
             gridStateVars.newRightSideColumnWidth = newRightSideColumnWidth;
             document.getElementById(gridStateVars.rightSideCellId).style.width = gridStateVars.newRightSideColumnWidth + 'px';
+            document.getElementById(gridStateVars.rightSideFilterCellId).style.width = gridStateVars.newRightSideColumnWidth + 'px';
+            document.getElementById(gridStateVars.rightSideHiddenCellId).style.width = gridStateVars.newRightSideColumnWidth + 'px';
         }
 
         gridStateVars.newVisibleAbsoluteWidthValue = newTriggerColumnWidth;
@@ -364,9 +371,9 @@ export function onWindowMouseMove(event) {
             document.getElementById(gridStateVars.filterEmptyColumnId).style.width = gridStateVars.emptyColWidth + 'px';
         }
         else {
-            document.getElementById(gridStateVars.visibleEmptyColumnId).style.width = null;
-            document.getElementById(gridStateVars.hiddenEmptyColumnId).style.width = null;
-            document.getElementById(gridStateVars.filterEmptyColumnId).style.width = null;
+            document.getElementById(gridStateVars.visibleEmptyColumnId).style.width = undefined;
+            document.getElementById(gridStateVars.hiddenEmptyColumnId).style.width = undefined;
+            document.getElementById(gridStateVars.filterEmptyColumnId).style.width = undefined;
         }
 
 

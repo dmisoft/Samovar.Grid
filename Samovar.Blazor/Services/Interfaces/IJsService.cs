@@ -41,7 +41,9 @@ namespace Samovar.Blazor
             double OldAbsoluteEmptyColVisibleWidthValue,
             string? RightSideColMetaId,
             string? RightSideCellMetaId,
-            double? RightSideColumnWidth);
+            double? RightSideColumnWidth,
+            string? RightSideFilterCellId,
+            string? RightSideHiddenCellId);
 
         ValueTask<double> MeasureScrollbar();
 

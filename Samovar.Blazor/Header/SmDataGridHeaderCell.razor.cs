@@ -97,7 +97,9 @@ namespace Samovar.Blazor.Header
                 colEmpty.VisibleAbsoluteWidthValue,
                 rightSideColumn?.Id,
                 rightSideColumn?.VisibleGridColumnCellId,
-                rightSideColumn?.VisibleAbsoluteWidthValue);
+                rightSideColumn?.VisibleAbsoluteWidthValue,
+                rightSideColumn?.FilterGridColumnCellId,
+                rightSideColumn?.HiddenGridColumnCellId);
         }
 
         private void ColumnCellMouseDown(MouseEventArgs e) => ColumnCellDraggable = "true";
