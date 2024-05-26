@@ -7,6 +7,7 @@ namespace Samovar.Blazor
 {
     public interface ILayoutService
     {
+        bool OriginalColumnsWidthChanged { get; set; }
         DotNetObjectReference<ILayoutService> DataGridDotNetRef { get; }
         BehaviorSubject<string> SelectedRowClass { get; }
         BehaviorSubject<string> TableTagClass { get; }
@@ -35,7 +36,7 @@ namespace Samovar.Blazor
         ElementReference GridInnerRef { get; set; }
         ElementReference TableBodyInnerRef { get; set; }
 
-        double ActualScrollbarWidth { get; set; }
+        //double ActualScrollbarWidth { get; set; }
 
         BehaviorSubject<bool> ShowColumnHeader { get; }
         BehaviorSubject<bool> ShowDetailHeader { get; }
@@ -45,6 +46,6 @@ namespace Samovar.Blazor
         IObservable<Task<DataGridStyleInfo>> DataGridInnerStyle { get; }
 
         BehaviorSubject<ColumnResizeMode> ColumnResizeMode { get; }
-        double GridColWidthSum { get; }
+        double ActualColumnsWidthSum { get; }
     }
 }

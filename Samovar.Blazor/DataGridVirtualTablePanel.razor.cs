@@ -65,7 +65,7 @@ namespace Samovar.Blazor
             Style = new DataGridStyleInfo
             {
                 CssStyle = LayoutService.OuterStyle.Value,
-                ActualScrollbarWidth = LayoutService.ActualScrollbarWidth
+                ActualScrollbarWidth = 0// LayoutService.ActualScrollbarWidth
             };
 
             CollectionViewChangedEv = new EventCallbackFactory().Create<IEnumerable<SmDataGridRowModel<T>>>(this, async (data) => await _collectionViewChangedEv(data));

@@ -46,7 +46,7 @@ else
                     EditMode=DataGridEditMode.Form
                     EditingFormTitleDelegate="@((WeatherForecast data) => Task.FromResult(data.TemperatureC.ToString()))"
                     SelectionMode=GridSelectionMode.Multiple
-                    ColumnResizeMode=Columns.ColumnResizeMode.Sliding
+                    ColumnResizeMode=Columns.ColumnResizeMode.Block
                     @bind-SingleSelectedDataRow=selectedRow
                     @bind-MultipleSelectedDataRows=selectedRows
                     

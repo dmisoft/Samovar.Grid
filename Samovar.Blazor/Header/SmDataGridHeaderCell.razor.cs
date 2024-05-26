@@ -32,7 +32,7 @@ namespace Samovar.Blazor.Header
         protected override Task OnInitializedAsync()
         {
             _columnOrderInfoUnsubscriber = SortingService.ColumnOrderInfo.Subscribe(OnOrderInfoChanged);
-            ColumnResizingService.ColumnResizingEndedObservable.Where(c => c.Id == Model.Id).Subscribe(c => StateHasChanged());
+            ColumnService.ColumnResizingEndedObservable.Where(c => c.Id == Model.Id).Subscribe(c => StateHasChanged());
             return base.OnInitializedAsync();
         }
 
@@ -76,7 +76,7 @@ namespace Samovar.Blazor.Header
 
             await JsService.StartDataGridColumnWidthChangeMode(
                 ColumnResizingService.ColumnResizingDotNetRef,
-                LayoutService.GridColWidthSum,
+                LayoutService.ActualColumnsWidthSum,
                 columnMetadata.Id,
                 ConstantService.InnerGridId,
                 ConstantService.InnerGridBodyTableId,

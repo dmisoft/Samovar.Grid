@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System.Reactive.Linq;
+using System.Reflection;
 
 namespace Samovar.Blazor.Filter
 {
@@ -16,8 +18,13 @@ namespace Samovar.Blazor.Filter
         [SmInject]
         public required IFilterService FilterService { get; set; }
 
+        [SmInject]
+        public required IColumnService ColumnService { get; set; }
+
         [Parameter]
         public required IDataColumnModel ColMetadata { get; set; }
+
+
 
         protected string DropdownMenuButtonId { get; } = $"dropdownmenubtn{Guid.NewGuid().ToString().Replace("-", "")}";
 
@@ -49,6 +56,7 @@ namespace Samovar.Blazor.Filter
         {
             _innerValue = FilterService.TryGetFilterCellValue<TFilterCell>(ColMetadata);
             FilterService.FilterCleared += FilterService_FilterCleared;
+            ColumnService.ColumnResizingEndedObservable.Where(c => c.Id == ColMetadata.Id).Subscribe(c => StateHasChanged());
         }
 
         private Task FilterService_FilterCleared()

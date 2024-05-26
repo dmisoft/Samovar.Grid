@@ -1,7 +1,9 @@
 ﻿@using  System.Globalization
 
 @inherits DataGridFilterCellBase<string>
+<th style="@(((IDataColumnModel)ColMetadata).VisibleWidthStyle)" class="px-1" id="@(((IDataColumnModel)ColMetadata).FilterGridColumnCellId)" data-toggle="tooltip" data-placement="top" title="@(((IDataColumnModel)ColMetadata).Title.Value)">
 
 <div class="s-flex s-flex-row">
     <input type="text" style="min-width:10px;" class="flex-grow-1 form-control" @bind="InnerValue" @bind:event="onchange" />
 </div>
+</th>

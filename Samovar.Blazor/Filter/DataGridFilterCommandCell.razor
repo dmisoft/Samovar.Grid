@@ -1,0 +1,11 @@
+﻿@using  System.Globalization
+
+@inherits SmDesignComponentBase
+
+<th style="@(((ICommandColumnModel)Model).VisibleWidthStyle)" id="@(((ICommandColumnModel)Model).FilterGridColumnCellId)" data-toggle="tooltip" data-placement="top" title="@(((ICommandColumnModel)Model).Title)">
+    <div class="s-flex s-flex-row s-align-content-center s-justify-content-center">
+        <button class="btn btn-sm btn-primary" @onclick="@(async ()=>{ await FilterService.ClearFilter(); })">
+            Clear
+        </button>
+    </div>
+</th>

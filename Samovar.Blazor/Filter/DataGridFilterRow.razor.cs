@@ -3,20 +3,17 @@
     public partial class DataGridFilterRow<TItem>
         : SmDesignComponentBase, IAsyncDisposable
     {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        [SmInject]
+        public required IColumnService ColumnService { get; set; }
 
         [SmInject]
-        public IColumnService ColumnService { get; set; }
+        public required ILayoutService LayoutService { get; set; }
 
         [SmInject]
-        public ILayoutService LayoutService { get; set; }
+        public required IFilterService FilterService { get; set; }
 
         [SmInject]
-        public IFilterService FilterService { get; set; }
-
-        [SmInject]
-        public IRepositoryService<TItem> RepositoryService { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public required IRepositoryService<TItem> RepositoryService { get; set; }
 
         protected readonly List<Type> Numeric_Types_For_Constant_Expression = new List<Type>
 

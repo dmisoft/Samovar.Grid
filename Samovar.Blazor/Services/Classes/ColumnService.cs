@@ -1,4 +1,6 @@
-﻿namespace Samovar.Blazor
+﻿using System.Reactive.Subjects;
+
+namespace Samovar.Blazor
 {
     public class ColumnService
         : IColumnService
@@ -11,7 +13,9 @@
 
         public IEnumerable<IDataColumnModel> DataColumnModels => AllColumnModels.OfType<IDataColumnModel>();
 
-        public void RegisterColumn(IColumnModel columntModel)
+		public Subject<IColumnModel> ColumnResizingEndedObservable { get; } = new();
+
+		public void RegisterColumn(IColumnModel columntModel)
         {
             int _columnOrder = AllColumnModels.Count + 1;
             columntModel.ColumnOrder = _columnOrder;

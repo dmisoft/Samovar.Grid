@@ -16,76 +16,66 @@
                 switch (colMeta.ColumnType)
                 {
                     case DataGridColumnType.Data:
-                        <th style="@(((IDataColumnModel)colMeta).VisibleWidthStyle)" class="px-1" id="@(((IDataColumnModel)colMeta).FilterGridColumnCellId)" data-toggle="tooltip" data-placement="top" title="@(((IDataColumnModel)colMeta).Title.Value)">
-                            @if (((IDataColumnModel)colMeta).Field.Value != null && RepositoryService.PropInfo.ContainsKey(((IDataColumnModel)colMeta).Field.Value))
+                        @if (((IDataColumnModel)colMeta).Field.Value != null && RepositoryService.PropInfo.ContainsKey(((IDataColumnModel)colMeta).Field.Value))
+                        {
+                            @switch (RepositoryService.PropInfo[((IDataColumnModel)colMeta).Field.Value].PropertyType)
                             {
-                                @switch (RepositoryService.PropInfo[((IDataColumnModel)colMeta).Field.Value].PropertyType)
-                                {
-                                    case var t when t == typeof(DateTime) || t == typeof(DateTime?):
-                                        <DataGridFilterCellDate ColMetadata="(IDataColumnModel)colMeta" />
-                                        break;
-                                    case var t when t == typeof(string):
-                                        <DataGridFilterCellString ColMetadata="(IDataColumnModel)colMeta" />
-                                        break;
-                                    case var t when t == typeof(char):
-                                        <DataGridFilterCellChar ColMetadata="(IDataColumnModel)colMeta" />
-                                        break;
-                                    case var t when t == typeof(bool):
-                                        <DataGridFilterCellBoolean ColMetadata="(IDataColumnModel)colMeta" />
-                                        break;
-                                    case var t when t == typeof(byte) || t == typeof(byte?):
-                                        <DataGridFilterCellNumeric TValue="byte?" ColMetadata="(IDataColumnModel)colMeta" />
-                                        break;
-                                    case var t when t == typeof(sbyte) || t == typeof(sbyte?):
-                                        <DataGridFilterCellNumeric TValue="sbyte?" ColMetadata="(IDataColumnModel)colMeta" />
-                                        break;
-                                    case var t when t == typeof(short) || t == typeof(short?):
-                                        <DataGridFilterCellNumeric TValue="short?" ColMetadata="(IDataColumnModel)colMeta" />
-                                        break;
-                                    case var t when t == typeof(ushort) || t == typeof(ushort?):
-                                        <DataGridFilterCellNumeric TValue="ushort?" ColMetadata="(IDataColumnModel)colMeta" />
-                                        break;
-                                    case var t when t == typeof(int) || t == typeof(int?):
-                                        <DataGridFilterCellNumeric TValue="int?" ColMetadata="(IDataColumnModel)colMeta" />
-                                        break;
-                                    case var t when t == typeof(uint) || t == typeof(uint?):
-                                        <DataGridFilterCellNumeric TValue="uint?" ColMetadata="(IDataColumnModel)colMeta" />
-                                        break;
-                                    case var t when t == typeof(long) || t == typeof(long?):
-                                        <DataGridFilterCellNumeric TValue="long?" ColMetadata="(IDataColumnModel)colMeta" />
-                                        break;
-                                    case var t when t == typeof(ulong) || t == typeof(ulong?):
-                                        <DataGridFilterCellNumeric TValue="ulong?" ColMetadata="(IDataColumnModel)colMeta" />
-                                        break;
-                                    case var t when t == typeof(float) || t == typeof(float?):
-                                        <DataGridFilterCellNumeric TValue="float?" ColMetadata="(IDataColumnModel)colMeta" />
-                                        break;
-                                    case var t when t == typeof(double) || t == typeof(double?):
-                                        <DataGridFilterCellNumeric TValue="double?" ColMetadata="(IDataColumnModel)colMeta" />
-                                        break;
-                                    case var t when t == typeof(decimal) || t == typeof(decimal?):
-                                        <DataGridFilterCellNumeric TValue="decimal?" ColMetadata="(IDataColumnModel)colMeta" />
-                                        break;
-                                    default:
-                                        break;
-                                }
+                                case var t when t == typeof(DateTime) || t == typeof(DateTime?):
+                                    <DataGridFilterCellDate ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(string):
+                                    <DataGridFilterCellString ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(char):
+                                    <DataGridFilterCellChar ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(bool):
+                                    <DataGridFilterCellBoolean ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(byte) || t == typeof(byte?):
+                                    <DataGridFilterCellNumeric TValue="byte?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(sbyte) || t == typeof(sbyte?):
+                                    <DataGridFilterCellNumeric TValue="sbyte?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(short) || t == typeof(short?):
+                                    <DataGridFilterCellNumeric TValue="short?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(ushort) || t == typeof(ushort?):
+                                    <DataGridFilterCellNumeric TValue="ushort?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(int) || t == typeof(int?):
+                                    <DataGridFilterCellNumeric TValue="int?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(uint) || t == typeof(uint?):
+                                    <DataGridFilterCellNumeric TValue="uint?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(long) || t == typeof(long?):
+                                    <DataGridFilterCellNumeric TValue="long?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(ulong) || t == typeof(ulong?):
+                                    <DataGridFilterCellNumeric TValue="ulong?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(float) || t == typeof(float?):
+                                    <DataGridFilterCellNumeric TValue="float?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(double) || t == typeof(double?):
+                                    <DataGridFilterCellNumeric TValue="double?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(decimal) || t == typeof(decimal?):
+                                    <DataGridFilterCellNumeric TValue="decimal?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                default:
+                                    break;
                             }
-                        </th>
+                        }
                         break;
                     case DataGridColumnType.Command:
-                        <th style="@(((ICommandColumnModel)colMeta).VisibleWidthStyle)" id="@(((ICommandColumnModel)colMeta).FilterGridColumnCellId)" data-toggle="tooltip" data-placement="top" title="@(((ICommandColumnModel)colMeta).Title)">
-                            <div class="s-flex s-flex-row s-align-content-center s-justify-content-center">
-                                <button class="btn btn-sm btn-primary" @onclick="@(async ()=>{ await FilterService.ClearFilter(); })">
-                                    Clear
-                                </button>
-                            </div>
-                        </th>
-
+                        <DataGridFilterCommandCell Model="(ICommandColumnModel)colMeta" />
                         break;
                 }
             }
-@*             <th id="@(ColumnService.EmptyColumnModel.FilterGridColumnCellId)"></th> *@
-            <th style="@(ColumnService.EmptyColumnModel.VisibleWidthStyle)" id="@(ColumnService.EmptyColumnModel.FilterGridColumnCellId)"></th>
+            <DataGridFilterEmptyCell Model=@ColumnService.EmptyColumnModel />
         </tr>
     </thead>
 </table>

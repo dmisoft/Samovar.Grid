@@ -32,7 +32,6 @@ namespace Samovar.Blazor
 
         public DotNetObjectReference<IColumnResizingService> ColumnResizingDotNetRef { get; private set; }
 
-        public Subject<IColumnModel> ColumnResizingEndedObservable { get; } = new();
 
         [JSInvokable]
         public async Task Js_Window_MouseUp(string colMetaId, double newVisibleAbsoluteWidthValue, string emptyColumnId, double emptyColWidth, string rightSideColumnId, double newRightSideColumnWidth)
@@ -62,14 +61,15 @@ namespace Samovar.Blazor
             if (col is not null)
             {
                 //col.VisiblePercentWidthValue = newVisibleAbsoluteWidthValue / _layoutService.GridColWidthSum * 100;
-                ColumnResizingEndedObservable.OnNext(col);
+                _columnService.ColumnResizingEndedObservable.OnNext(col);
             }
 
             if (rightSideColumn is not null)
             {
                 //rightSideColumn.VisiblePercentWidthValue = newRightSideColumnWidth / _layoutService.GridColWidthSum * 100;
-                ColumnResizingEndedObservable.OnNext(rightSideColumn);
+                _columnService.ColumnResizingEndedObservable.OnNext(rightSideColumn);
             }
+            _layoutService.OriginalColumnsWidthChanged = true;
         }
 
         public ValueTask DisposeAsync()
