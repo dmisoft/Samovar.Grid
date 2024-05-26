@@ -4,6 +4,7 @@ namespace Samovar.Blazor
     public class ConstantService
         : IConstantService, IAsyncDisposable
     {
+        public string OuterGridId { get; } = $"outergrid{Guid.NewGuid().ToString().Replace("-", "")}";
         public string InnerGridId { get; } = $"innergrid{Guid.NewGuid().ToString().Replace("-", "")}";
 
         public string DataGridId { get; } = $"samovargrid{Guid.NewGuid().ToString().Replace("-", "")}";

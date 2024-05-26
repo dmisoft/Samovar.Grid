@@ -1,6 +1,6 @@
 ﻿namespace Samovar.Blazor
 {
-    public enum DataGridColumnType
+    public enum ColumnType
     {
         None,
         Data,

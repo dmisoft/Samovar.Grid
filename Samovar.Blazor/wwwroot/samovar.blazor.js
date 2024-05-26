@@ -13,18 +13,20 @@ export const gridStateVars =
     filterGridColumnCellId: '',
     filterMenuId: '',
 
-    visibleEmptyColumnId: '',
-    hiddenEmptyColumnId: '',
-    filterEmptyColumnId: '',
+    visibleHeaderEmptyColumnId: '',
+    hiddenHeaderEmptyColumnId: '',
+    filterHeaderEmptyColumnId: '',
 
     emptyColumnDictId: '',
     emptyColWidth: 0,
+    emptyHeaderColWidth: 0,
     startMouseMoveX: 0,
     oldAbsoluteVisibleWidthValue: 0,
     fitColumnsToTableWidth: undefined,
     oldAbsoluteEmptyColVisibleWidthValue: 0,
     newVisibleAbsoluteWidthValue: 0,
     innerGridWidth: 0,
+    outerGridWidth: 0,
     gridColWidthSum: 0,
     rightSideColumnId: null,
     rightSideCellId: null,
@@ -189,7 +191,7 @@ export function getElementScrollTopByRef(element) {
     return element.scrollTop;
 }
 
-export function startColumnWidthChangeMode(_gridDotNetRef, _gridColWidthSum, _colMetaId, _innerGridId, _innerGridBodyTableId, _visibleGridColumnCellId, _hiddenGridColumnCellId, _filterGridColumnCellId, _visibleEmptyColumnId, _hiddenEmptyColumnId, _filterEmptyColumnId, _emptyColumnDictId, _startMouseMoveX, _oldAbsoluteVisibleWidthValue, _fitColumnsToTableWidth, _oldAbsoluteEmptyColVisibleWidthValue, _rightSideColumnId, _rightSideCellId, _rightSideColumnWidth, _rightSideFilterCellId, _rightSideHiddenCellId) {
+export function startColumnWidthChangeMode(_gridDotNetRef, _gridColWidthSum, _colMetaId, _innerGridId, _innerGridBodyTableId, _visibleGridColumnCellId, _hiddenGridColumnCellId, _filterGridColumnCellId, _visibleEmptyColumnId, _hiddenEmptyColumnId, _filterEmptyColumnId, _emptyColumnDictId, _startMouseMoveX, _oldAbsoluteVisibleWidthValue, _fitColumnsToTableWidth, _oldAbsoluteEmptyColVisibleWidthValue, _rightSideColumnId, _rightSideCellId, _rightSideColumnWidth, _rightSideFilterCellId, _rightSideHiddenCellId, _outerGridId) {
     gridStateVars.gridDotNetRef = _gridDotNetRef;
     gridStateVars.isMouseDown = true;
     gridStateVars.gridColWidthSum = _gridColWidthSum;
@@ -201,9 +203,9 @@ export function startColumnWidthChangeMode(_gridDotNetRef, _gridColWidthSum, _co
     gridStateVars.hiddenGridColumnCellId = _hiddenGridColumnCellId;
     gridStateVars.filterGridColumnCellId = _filterGridColumnCellId;
 
-    gridStateVars.visibleEmptyColumnId = _visibleEmptyColumnId;
-    gridStateVars.hiddenEmptyColumnId = _hiddenEmptyColumnId;
-    gridStateVars.filterEmptyColumnId = _filterEmptyColumnId;
+    gridStateVars.visibleHeaderEmptyColumnId = _visibleEmptyColumnId;
+    gridStateVars.hiddenHeaderEmptyColumnId = _hiddenEmptyColumnId;
+    gridStateVars.filterHeaderEmptyColumnId = _filterEmptyColumnId;
 
     gridStateVars.emptyColumnDictId = _emptyColumnDictId;
 
@@ -216,6 +218,7 @@ export function startColumnWidthChangeMode(_gridDotNetRef, _gridColWidthSum, _co
     gridStateVars.oldAbsoluteEmptyColVisibleWidthValue = _oldAbsoluteEmptyColVisibleWidthValue;
 
     gridStateVars.innerGridWidth = getElementWidth(_innerGridId);
+    gridStateVars.outerGridWidth = getElementWidth(_outerGridId);
 
     //right side column
     gridStateVars.rightSideColumnId = _rightSideColumnId;
@@ -225,10 +228,10 @@ export function startColumnWidthChangeMode(_gridDotNetRef, _gridColWidthSum, _co
     gridStateVars.rightSideFilterCellId = _rightSideFilterCellId;
     gridStateVars.rightSideHiddenCellId = _rightSideHiddenCellId;
 
-    gridStateVars.emptyColWidth = 0;
-    if (gridStateVars.gridColWidthSum < gridStateVars.innerGridWidth && gridStateVars.fitColumnsToTableWidth === 'Sliding') {
-        gridStateVars.emptyColWidth = gridStateVars.innerGridWidth - gridStateVars.gridColWidthSum - 1;
-    }
+    //gridStateVars.emptyColWidth = 0;
+    //if (gridStateVars.gridColWidthSum < gridStateVars.innerGridWidth && gridStateVars.fitColumnsToTableWidth === 'Sliding') {
+    //    gridStateVars.emptyColWidth = gridStateVars.innerGridWidth - gridStateVars.gridColWidthSum - 1;
+    //}
 }
 
 export function toggleFilterPopupMenu(toggleFilterMenuButtonId, filterMenuContainerId, _filterMenuId, toogleToShow) {
@@ -257,9 +260,9 @@ export function stopColumnWidthChangeMode(dotNetRef) {
     gridStateVars.hiddenGridColumnCellId = '';
     gridStateVars.filterGridColumnCellId = '';
 
-    gridStateVars.visibleEmptyColumnId = '';
-    gridStateVars.hiddenEmptyColumnId = '';
-    gridStateVars.filterEmptyColumnId = '';
+    gridStateVars.visibleHeaderEmptyColumnId = '';
+    gridStateVars.hiddenHeaderEmptyColumnId = '';
+    gridStateVars.filterHeaderEmptyColumnId = '';
 
     gridStateVars.emptyColumnDictId = '';
     gridStateVars.emptyColWidth = 0;
@@ -272,6 +275,7 @@ export function stopColumnWidthChangeMode(dotNetRef) {
 
     gridStateVars.oldAbsoluteEmptyColVisibleWidthValue = 0;
     gridStateVars.innerGridWidth = 0;
+    gridStateVars.outerGridWidth = 0;
 
     gridStateVars.rightSideColumnId = '';
     gridStateVars.rightSideCellId = '';
@@ -284,7 +288,14 @@ export function stopColumnWidthChangeMode(dotNetRef) {
 //Mouse up
 export function raise_Js_Window_MouseUp_OnDotNetRef(event) {
     if (gridStateVars.isMouseDown === true) {
-        gridStateVars.gridDotNetRef.invokeMethodAsync('Js_Window_MouseUp', gridStateVars.colMetaId, gridStateVars.newVisibleAbsoluteWidthValue, gridStateVars.emptyColumnDictId, gridStateVars.emptyColWidth, gridStateVars.rightSideColumnId, gridStateVars.newRightSideColumnWidth);
+        gridStateVars.gridDotNetRef.invokeMethodAsync('Js_Window_MouseUp',
+            gridStateVars.colMetaId,
+            gridStateVars.newVisibleAbsoluteWidthValue,
+            gridStateVars.emptyColumnDictId,
+            gridStateVars.emptyColWidth,
+            gridStateVars.rightSideColumnId,
+            gridStateVars.newRightSideColumnWidth,
+            gridStateVars.emptyHeaderColWidth);
         stopColumnWidthChangeMode(gridStateVars.gridDotNetRef);
     }
 }
@@ -351,31 +362,41 @@ export function onWindowMouseMove(event) {
 
         if (gridStateVars.fitColumnsToTableWidth === 'Sliding' && gridStateVars.gridColWidthSum + delta < gridStateVars.innerGridWidth) {
             gridStateVars.emptyColWidth = gridStateVars.innerGridWidth - (gridStateVars.gridColWidthSum + delta);
-
-            console.log('delta: ' + delta);
-            console.log('gridColWidthSum: ' + gridStateVars.gridColWidthSum);
-            console.log('innerGridWidth: ' + gridStateVars.innerGridWidth);
-            console.log('emptyColWidth: ' + gridStateVars.emptyColWidth);
         }
         else {
             gridStateVars.emptyColWidth = 0;
+        }
+
+        if (gridStateVars.fitColumnsToTableWidth === 'Sliding' && gridStateVars.gridColWidthSum + delta < gridStateVars.outerGridWidth) {
+            gridStateVars.emptyHeaderColWidth = gridStateVars.outerGridWidth - (gridStateVars.gridColWidthSum + delta);
+        }
+        else {
+            gridStateVars.emptyHeaderColWidth = 0;
         }
 
         document.getElementById(gridStateVars.visibleGridColumnCellId).style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
         document.getElementById(gridStateVars.hiddenGridColumnCellId).style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
         document.getElementById(gridStateVars.filterGridColumnCellId).style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
 
-        if (gridStateVars.emptyColWidth !== 0) {
-            document.getElementById(gridStateVars.visibleEmptyColumnId).style.width = gridStateVars.emptyColWidth + 'px';
-            document.getElementById(gridStateVars.hiddenEmptyColumnId).style.width = gridStateVars.emptyColWidth + 'px';
-            document.getElementById(gridStateVars.filterEmptyColumnId).style.width = gridStateVars.emptyColWidth + 'px';
+        var visibleHeaderEmptyColumn = document.getElementById(gridStateVars.visibleHeaderEmptyColumnId);
+        var filterHeaderEmptyColumn = document.getElementById(gridStateVars.filterHeaderEmptyColumnId);
+
+        if (gridStateVars.emptyHeaderColWidth !== 0) {
+            // set new style instance to visibleHeaderEmptyColumn
+            visibleHeaderEmptyColumn.style.width = gridStateVars.emptyHeaderColWidth + 'px';
+            filterHeaderEmptyColumn.style.width = gridStateVars.emptyHeaderColWidth + 'px';
         }
         else {
-            document.getElementById(gridStateVars.visibleEmptyColumnId).style.width = undefined;
-            document.getElementById(gridStateVars.hiddenEmptyColumnId).style.width = undefined;
-            document.getElementById(gridStateVars.filterEmptyColumnId).style.width = undefined;
+            visibleHeaderEmptyColumn.style.width = undefined;
+            filterHeaderEmptyColumn.style.width = undefined;
         }
 
+        if (gridStateVars.emptyColWidth !== 0) {
+            document.getElementById(gridStateVars.hiddenHeaderEmptyColumnId).style.width = gridStateVars.emptyColWidth + 'px';
+        }
+        else {
+            document.getElementById(gridStateVars.hiddenHeaderEmptyColumnId).style.width = null;
+        }
 
     }
 }

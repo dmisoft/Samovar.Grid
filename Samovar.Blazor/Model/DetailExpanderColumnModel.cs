@@ -3,7 +3,7 @@
     public class DetailExpanderColumnModel
         : ColumnModelBase
     {
-        public override DataGridColumnType ColumnType { get; } = DataGridColumnType.DetailExpanderColumn;
+        public override ColumnType ColumnType { get; } = ColumnType.DetailExpanderColumn;
 
         public DetailExpanderColumnModel()
             : base()
@@ -11,12 +11,12 @@
             double detailExpanderColWidth = 30;
 
             //ColumnMetadataWidthInfo widthInfo = new ColumnMetadataWidthInfo();
-            DeclaratedWidthMode = DeclaratedColumnWidthMode.Absolute;
+            DeclaratedWidthMode = DeclarativeColumnWidthMode.Absolute;
             DeclaratedWidth = detailExpanderColWidth;
 
 
             //WidthInfo = widthInfo;
-            VisibleAbsoluteWidthValue = detailExpanderColWidth;
+            AbsoluteWidth = detailExpanderColWidth;
         }
     }
 }

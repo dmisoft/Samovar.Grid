@@ -17,7 +17,7 @@
     {
         switch (colModel.ColumnType)
         {
-            case DataGridColumnType.Data:
+            case ColumnType.Data:
                 var cellModel = RowModel.GridCellModels.SingleOrDefault(x => x.ColumnMetadata.Equals(colModel));
                 if (cellModel != null)
                 {
@@ -45,7 +45,7 @@
                 }
 
                 break;
-            case DataGridColumnType.Command:
+            case ColumnType.Command:
                 <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;">
                     <div class="s-flex s-flex-row s-align-content-center s-justify-content-center">
                         @if (((ICommandColumnModel)colModel).EditButtonVisible.Value)
@@ -71,7 +71,7 @@
             <div class="s-flex s-flex-row s-align-content-center s-justify-content-center">
             </div>
         </td>
-        <td colspan="@ColumnService.AllColumnModels.Where(c => c.ColumnType == DataGridColumnType.Data || c.ColumnType == DataGridColumnType.Command).Count()">
+        <td colspan="@ColumnService.AllColumnModels.Where(c => c.ColumnType == ColumnType.Data || c.ColumnType == ColumnType.Command).Count()">
             @TemplateService.DetailRowTemplate.Value(RowModel.DataItem)
         </td>
     </tr>

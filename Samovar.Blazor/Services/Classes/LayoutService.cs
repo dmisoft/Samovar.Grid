@@ -37,8 +37,8 @@ namespace Samovar.Blazor
 		{
 			get
 			{
-				return _columnService.AllColumnModels.Sum(c => c.VisibleAbsoluteWidthValue) +
-						(ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.VisibleAbsoluteWidthValue : 0d);
+				return _columnService.AllColumnModels.Sum(c => c.AbsoluteWidth) +
+						(ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.AbsoluteWidth : 0d);
 			}
 		}
 
@@ -181,27 +181,27 @@ namespace Samovar.Blazor
 				var tBodyWidth = await GridOuterRef.GetElementWidthByRef(await _jsService.JsModule());
 
 				var declaratedAbsoluteColumnsWidthSum = _columnService.AllColumnModels.
-					Where(cmt => cmt.DeclaratedWidthMode == DeclaratedColumnWidthMode.Absolute).Sum(cmt => cmt.DeclaratedWidth) +
+					Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Absolute).Sum(cmt => cmt.DeclaratedWidth) +
 					(ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.DeclaratedWidth : 0d);
 
-				var relativePortionSum = _columnService.AllColumnModels.Where(cmt => cmt.DeclaratedWidthMode == DeclaratedColumnWidthMode.Relative).Sum(cmt => cmt.DeclaratedWidth);
+				var relativePortionSum = _columnService.AllColumnModels.Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Relative).Sum(cmt => cmt.DeclaratedWidth);
 				var absoluteColumnsWidthSumForRelative = gridInnerWidth - declaratedAbsoluteColumnsWidthSum;
 
 				var emptyColWidth = tBodyWidth - declaratedAbsoluteColumnsWidthSum - absoluteColumnsWidthSumForRelative - 1;
 				var portionValue = (gridInnerWidth - declaratedAbsoluteColumnsWidthSum) / relativePortionSum;
 
-				_columnService.EmptyColumnModel.VisibleAbsoluteWidthValue = emptyColWidth;
+				_columnService.EmptyColumnModel.AbsoluteWidth = emptyColWidth;
 				_columnService.ColumnResizingEndedObservable.OnNext(_columnService.EmptyColumnModel);
 
 				Dictionary<IColumnModel, double> widthList = new Dictionary<IColumnModel, double>();
 
-				foreach (var m in _columnService.AllColumnModels.Where(cmt => cmt.DeclaratedWidthMode == DeclaratedColumnWidthMode.Relative))
+				foreach (var m in _columnService.AllColumnModels.Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Relative))
 				{
 					double nw = portionValue * m.DeclaratedWidth;
 					widthList.Add(m, nw);
 				}
 
-				foreach (var m in _columnService.AllColumnModels.Where(cmt => cmt.DeclaratedWidthMode == DeclaratedColumnWidthMode.Absolute))
+				foreach (var m in _columnService.AllColumnModels.Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Absolute))
 				{
 					//double nw = m.DeclaratedWidth;
 					widthList.Add(m, m.DeclaratedWidth);
@@ -209,7 +209,7 @@ namespace Samovar.Blazor
 
 				foreach (var m in _columnService.AllColumnModels)
 				{
-					m.VisibleAbsoluteWidthValue = widthList[m];
+					m.AbsoluteWidth = widthList[m];
 					_columnService.ColumnResizingEndedObservable.OnNext(m);
 
 					//m.VisiblePercentWidthValue = widthList[m].VisiblePercentWidthValue;
@@ -258,7 +258,7 @@ namespace Samovar.Blazor
 			double emptyColWidth = 0;
 
 			emptyColWidth = tBodyWidth - ActualColumnsWidthSum;// - ActualScrollbarWidth - 1;
-			_columnService.EmptyColumnModel.VisibleAbsoluteWidthValue = emptyColWidth;
+			_columnService.EmptyColumnModel.AbsoluteWidth = emptyColWidth;
 			_columnService.ColumnResizingEndedObservable.OnNext(_columnService.EmptyColumnModel);
 			return emptyColWidth;
 			//_columnService.EmptyColumnModel.WidthInfo = new ColumnMetadataWidthInfo { DeclaratedWidthMode = DeclaratedColumnWidthMode.Absolute, WidthValue = emptyColWidth };

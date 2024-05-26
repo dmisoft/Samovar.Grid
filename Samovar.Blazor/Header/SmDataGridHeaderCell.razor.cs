@@ -67,10 +67,8 @@ namespace Samovar.Blazor.Header
             ColumnResizingService.IsMouseDown = true;
             ColumnResizingService.StartMouseMoveX = args.ClientX;
             ColumnResizingService.MouseMoveCol = columnMetadata;
-            //ColumnResizingService.OldAbsoluteVisibleWidthValue = columnMetadata.VisibleAbsoluteWidthValue;
 
-            IColumnModel colEmpty = ColumnService.EmptyColumnModel;
-            //ColumnResizingService.OldAbsoluteEmptyColVisibleWidthValue = colEmpty.VisibleAbsoluteWidthValue;
+            IColumnModel emptyHeaderColumnModel = ColumnService.EmptyHeaderColumnModel;
 
             var rightSideColumn = ColumnService.AllColumnModels.SkipWhile(c => c.Id != columnMetadata.Id).Skip(1).FirstOrDefault();
 
@@ -81,25 +79,27 @@ namespace Samovar.Blazor.Header
                 ConstantService.InnerGridId,
                 ConstantService.InnerGridBodyTableId,
 
-                columnMetadata.VisibleGridColumnCellId.ToString(),
-                columnMetadata.HiddenGridColumnCellId.ToString(),
-                columnMetadata.FilterGridColumnCellId.ToString(),
+                columnMetadata.HeaderCellId.ToString(),
+                columnMetadata.HiddenHeaderCellId.ToString(),
+                columnMetadata.FilterCellId.ToString(),
 
 
-                colEmpty.VisibleGridColumnCellId.ToString(),
-                colEmpty.HiddenGridColumnCellId.ToString(),
-                colEmpty.FilterGridColumnCellId.ToString(),
+                emptyHeaderColumnModel.HeaderCellId.ToString(),
+                emptyHeaderColumnModel.HiddenHeaderCellId.ToString(),
+                emptyHeaderColumnModel.FilterCellId.ToString(),
 
                 ColumnService.EmptyColumnModel.Id,
                 args.ClientX,
-                columnMetadata.VisibleAbsoluteWidthValue,
+                columnMetadata.AbsoluteWidth,
                 LayoutService.ColumnResizeMode.Value.ToString(),
-                colEmpty.VisibleAbsoluteWidthValue,
+                emptyHeaderColumnModel.AbsoluteWidth,
                 rightSideColumn?.Id,
-                rightSideColumn?.VisibleGridColumnCellId,
-                rightSideColumn?.VisibleAbsoluteWidthValue,
-                rightSideColumn?.FilterGridColumnCellId,
-                rightSideColumn?.HiddenGridColumnCellId);
+                rightSideColumn?.HeaderCellId,
+                rightSideColumn?.AbsoluteWidth,
+                rightSideColumn?.FilterCellId,
+                rightSideColumn?.HiddenHeaderCellId,
+                ConstantService.OuterGridId
+				);
         }
 
         private void ColumnCellMouseDown(MouseEventArgs e) => ColumnCellDraggable = "true";

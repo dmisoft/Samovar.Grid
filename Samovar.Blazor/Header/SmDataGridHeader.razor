@@ -8,18 +8,18 @@
             @{
                 @if (LayoutService.ShowDetailRow.Value)
                 {
-                    <th style="@(GridColumnService.DetailExpanderColumnModel.VisibleWidthStyle + "padding-right:0;")" id="@(GridColumnService.DetailExpanderColumnModel.VisibleGridColumnCellId)"></th>
+                    <th style="@(GridColumnService.DetailExpanderColumnModel.WidthStyle + "padding-right:0;")" id="@(GridColumnService.DetailExpanderColumnModel.HeaderCellId)"></th>
                 }
 
                 foreach (var colMeta in GridColumnService.AllColumnModels)
                 {
                     switch (colMeta.ColumnType)
                     {
-                        case DataGridColumnType.Data:
+                        case ColumnType.Data:
                             <SmDataGridHeaderCell Model=@((IDataColumnModel)colMeta) />
                             break;
-                        case DataGridColumnType.Command:
-                            <th style="@(colMeta.VisibleWidthStyle)" id="@(colMeta.VisibleGridColumnCellId)">
+                        case ColumnType.Command:
+                            <th style="@(colMeta.WidthStyle)" id="@(colMeta.HeaderCellId)">
                                 @if (((ICommandColumnModel)colMeta).NewButtonVisible.Value)
                                 {
                                     <div class="s-flex s-flex-row s-align-content-center s-justify-content-center">
@@ -30,7 +30,7 @@
                             break;
                     }
                 }
-                <SmDataGridHeaderEmptyCell Model=@GridColumnService.EmptyColumnModel />
+                <SmDataGridHeaderEmptyCell Model=@GridColumnService.EmptyHeaderColumnModel />
             }
         </tr>
     </thead>

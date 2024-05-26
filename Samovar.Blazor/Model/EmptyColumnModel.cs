@@ -3,6 +3,6 @@
     public class EmptyColumnModel
         : ColumnModelBase
     {
-        public override DataGridColumnType ColumnType { get; } = DataGridColumnType.EmptyColumn;
+        public override ColumnType ColumnType { get; } = ColumnType.EmptyColumn;
     }
 }

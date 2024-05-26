@@ -6,8 +6,9 @@ namespace Samovar.Blazor
         : IColumnService
     {
         public IColumnModel EmptyColumnModel { get; } = new EmptyColumnModel();
+		public IColumnModel EmptyHeaderColumnModel { get; } = new EmptyColumnModel();
 
-        public IColumnModel DetailExpanderColumnModel { get; } = new DetailExpanderColumnModel();
+		public IColumnModel DetailExpanderColumnModel { get; } = new DetailExpanderColumnModel();
 
         public List<IColumnModel> AllColumnModels { get; } = new List<IColumnModel>();
 
@@ -18,7 +19,7 @@ namespace Samovar.Blazor
 		public void RegisterColumn(IColumnModel columntModel)
         {
             int _columnOrder = AllColumnModels.Count + 1;
-            columntModel.ColumnOrder = _columnOrder;
+            columntModel.Order = _columnOrder;
             AllColumnModels.Add(columntModel);
         }
     }

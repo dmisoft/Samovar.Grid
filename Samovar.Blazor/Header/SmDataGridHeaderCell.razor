@@ -2,7 +2,7 @@
 
 @inherits SmDesignComponentBase
 
-<th style="@(Model.VisibleWidthStyle + "padding-right:0;min-width:50px;")" id="@(Model.VisibleGridColumnCellId)" data-toggle="tooltip" data-placement="top" title="@(Model.Title.Value)">
+<th style="@(Model.WidthStyle + "padding-right:0;min-width:50px;")" id="@(Model.HeaderCellId)" data-toggle="tooltip" data-placement="top" title="@(Model.Title.Value)">
 	<div class="s-flex" style="margin:0px;padding:0px;">
 		<div @onmouseup=ColumnCellMouseUp @onmousedown=ColumnCellMouseDown @onclick=ColumnCellClick style="flex-grow:1;text-overflow:ellipsis;overflow:hidden;white-space: nowrap;cursor:pointer;display:block;"
 dropzone="DropZoneGridHeader" draggable=@ColumnCellDraggable ondragover="event.preventDefault()">

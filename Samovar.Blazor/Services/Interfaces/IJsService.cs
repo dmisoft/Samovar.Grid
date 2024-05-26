@@ -43,7 +43,8 @@ namespace Samovar.Blazor
             string? RightSideCellMetaId,
             double? RightSideColumnWidth,
             string? RightSideFilterCellId,
-            string? RightSideHiddenCellId);
+            string? RightSideHiddenCellId,
+            string OuterGridId);
 
         ValueTask<double> MeasureScrollbar();
 

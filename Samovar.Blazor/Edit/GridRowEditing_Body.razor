@@ -2,7 +2,7 @@
 @inherits SmDesignComponentBase
 
 <div class="row">
-    @foreach (var cellModel in RowModel.EditingGridCellModels.OrderBy(cm => cm.ColumnMetadata.ColumnOrder))
+    @foreach (var cellModel in RowModel.EditingGridCellModels.OrderBy(cm => cm.ColumnMetadata.Order))
     {
         <div class="col-6 mb-2">
             <label class="form-label">@cellModel.ColumnMetadata.Title.Value</label>

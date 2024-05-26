@@ -10,7 +10,7 @@
     }
     @if (TemplateService.EditFormTemplate.Value is not null)
     {
-        <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;" colspan="@(ColumnService.AllColumnModels.Where(c => c.ColumnType == DataGridColumnType.Data || c.ColumnType == DataGridColumnType.Command).Count())">
+        <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;" colspan="@(ColumnService.AllColumnModels.Where(c => c.ColumnType == ColumnType.Data || c.ColumnType == ColumnType.Command).Count())">
             @TemplateService.EditFormTemplate.Value(RowModel.DataItem)
         </td>
     }

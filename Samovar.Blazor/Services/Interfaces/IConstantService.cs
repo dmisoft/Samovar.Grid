@@ -2,6 +2,7 @@
 {
     public interface IConstantService
     {
+        string OuterGridId { get; }
         string InnerGridId { get; }
 
         string DataGridId { get; }

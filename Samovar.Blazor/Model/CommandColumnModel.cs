@@ -5,7 +5,7 @@ namespace Samovar.Blazor
     public class CommandColumnModel
         : ColumnModelBase, ICommandColumnModel
     {
-        public override DataGridColumnType ColumnType { get; } = DataGridColumnType.Command;
+        public override ColumnType ColumnType { get; } = ColumnType.Command;
 
         public BehaviorSubject<bool> NewButtonVisible { get; } = new BehaviorSubject<bool>(true);
 

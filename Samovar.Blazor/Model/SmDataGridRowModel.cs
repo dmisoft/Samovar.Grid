@@ -56,7 +56,7 @@ namespace Samovar.Blazor
         {
             List<DataGridRowCellModel<T>> gridCellModelCollection = new List<DataGridRowCellModel<T>>();
 
-            foreach (var cm in columnMetadata.Where(c => c.ColumnType == DataGridColumnType.Data))
+            foreach (var cm in columnMetadata.Where(c => c.ColumnType == ColumnType.Data))
             {
                 gridCellModelCollection.Add(new DataGridRowCellModel<T>(dataItem, PropDict[cm.Field.Value], cm));
             }

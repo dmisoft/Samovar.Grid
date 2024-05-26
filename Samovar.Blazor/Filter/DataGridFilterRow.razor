@@ -7,7 +7,7 @@
         <tr @ref="LayoutService.GridFilterRef">
             @if (LayoutService.ShowDetailRow.Value)
             {
-                <th style="@(ColumnService.DetailExpanderColumnModel.VisibleWidthStyle)" id="@(ColumnService.DetailExpanderColumnModel.FilterGridColumnCellId)">
+                <th style="@(ColumnService.DetailExpanderColumnModel.WidthStyle)" id="@(ColumnService.DetailExpanderColumnModel.FilterCellId)">
                     <div style="margin:0px;padding:0px;overflow:hidden;cursor:pointer;display:block;">&nbsp;</div>
                 </th>
             }
@@ -15,7 +15,7 @@
             {
                 switch (colMeta.ColumnType)
                 {
-                    case DataGridColumnType.Data:
+                    case ColumnType.Data:
                         @if (((IDataColumnModel)colMeta).Field.Value != null && RepositoryService.PropInfo.ContainsKey(((IDataColumnModel)colMeta).Field.Value))
                         {
                             @switch (RepositoryService.PropInfo[((IDataColumnModel)colMeta).Field.Value].PropertyType)
@@ -70,12 +70,12 @@
                             }
                         }
                         break;
-                    case DataGridColumnType.Command:
+                    case ColumnType.Command:
                         <DataGridFilterCommandCell Model="(ICommandColumnModel)colMeta" />
                         break;
                 }
             }
-            <DataGridFilterEmptyCell Model=@ColumnService.EmptyColumnModel />
+            <DataGridFilterEmptyCell Model=@ColumnService.EmptyHeaderColumnModel />
         </tr>
     </thead>
 </table>

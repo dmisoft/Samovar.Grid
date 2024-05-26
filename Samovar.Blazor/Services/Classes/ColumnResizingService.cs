@@ -34,42 +34,50 @@ namespace Samovar.Blazor
 
 
         [JSInvokable]
-        public async Task Js_Window_MouseUp(string colMetaId, double newVisibleAbsoluteWidthValue, string emptyColumnId, double emptyColWidth, string rightSideColumnId, double newRightSideColumnWidth)
+        public async Task Js_Window_MouseUp(
+            string colMetaId, 
+            double newVisibleAbsoluteWidthValue, 
+            string emptyColumnId, 
+            double emptyColWidth, 
+            string rightSideColumnId, 
+            double newRightSideColumnWidth, 
+            double emptyHeaderColWidth)
         {
             await _jsService.DetachWindowMouseMoveEvent();
             await _jsService.DetachWindowMouseUpEvent();
 
+            //var emptyMainHeaderColumn = _columnService.AllColumnModels.Find(c => c.Id == _columnService.EmptyHeaderColumnModel.Id);
+            //var emptyFilterHeaderColumn = _columnService.AllColumnModels.Find(c => c.Id == emptyHeaderColumnId);
+
+			//var emptyColumn = _columnService.AllColumnModels.Find(c => c.Id == emptyColumnId);
             var col = _columnService.AllColumnModels.Find(c => c.Id == colMetaId);
             if (col != default(IColumnModel))
             {
-                //col.WidthInfo.WidthValue = newVisibleAbsoluteWidthValue;
-                col.VisibleAbsoluteWidthValue = newVisibleAbsoluteWidthValue;
+                col.AbsoluteWidth = newVisibleAbsoluteWidthValue;
             }
             var rightSideColumn = _columnService.AllColumnModels.Find(c => c.Id == rightSideColumnId);
             if (rightSideColumn is not null)
             {
-                //rightSideColumn.WidthInfo.WidthValue = newRightSideColumnWidth;
-                rightSideColumn.VisibleAbsoluteWidthValue = newRightSideColumnWidth;
-                //rightSideColumn.VisiblePercentWidthValue = newRightSideColumnWidth / _layoutService.GridColWidthSum * 100;
+                rightSideColumn.AbsoluteWidth = newRightSideColumnWidth;
             }
 
-            _columnService.EmptyColumnModel.VisibleAbsoluteWidthValue = emptyColWidth;
+            _columnService.EmptyColumnModel.AbsoluteWidth = emptyColWidth;
+            _columnService.EmptyHeaderColumnModel.AbsoluteWidth = emptyHeaderColWidth;
 
-            var newGridColWidthSum = _columnService.AllColumnModels.Sum(c => c.VisibleAbsoluteWidthValue);
-            //_layoutService.GridColWidthSum = newGridColWidthSum;
+			_columnService.ColumnResizingEndedObservable.OnNext(_columnService.EmptyColumnModel);
+			_columnService.ColumnResizingEndedObservable.OnNext(_columnService.EmptyHeaderColumnModel);
 
-            if (col is not null)
+			if (col is not null)
             {
-                //col.VisiblePercentWidthValue = newVisibleAbsoluteWidthValue / _layoutService.GridColWidthSum * 100;
                 _columnService.ColumnResizingEndedObservable.OnNext(col);
             }
 
             if (rightSideColumn is not null)
             {
-                //rightSideColumn.VisiblePercentWidthValue = newRightSideColumnWidth / _layoutService.GridColWidthSum * 100;
                 _columnService.ColumnResizingEndedObservable.OnNext(rightSideColumn);
             }
-            _layoutService.OriginalColumnsWidthChanged = true;
+			
+			_layoutService.OriginalColumnsWidthChanged = true;
         }
 
         public ValueTask DisposeAsync()

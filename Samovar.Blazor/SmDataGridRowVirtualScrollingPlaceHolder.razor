@@ -6,7 +6,7 @@
     {
         switch (colModel.ColumnType)
         {
-            case DataGridColumnType.Data:
+            case ColumnType.Data:
                 <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;padding-right:0;">
                     <div class="s-flex" style="margin:0px;padding:0px;">
                         <div style="flex-grow:1;" class="ml-1 mr-0"></div>
@@ -14,7 +14,7 @@
                     </div>
                 </td>
                 break;
-            case DataGridColumnType.Command:
+            case ColumnType.Command:
                 <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;">
                     <div class="s-flex s-flex-row s-align-content-center s-justify-content-center">
                         @if (((ICommandColumnModel)colModel).EditButtonVisible.Value)

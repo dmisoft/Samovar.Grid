@@ -7,7 +7,7 @@
 		@{
 			@if (GridLayoutService.ShowDetailRow.Value)
 			{
-			    <th style="@(GridColumnService.DetailExpanderColumnModel.VisibleWidthStyle + "padding-right:0;border-bottom-width: 0px;border-top-width:0px;")" id="@(GridColumnService.DetailExpanderColumnModel.HiddenGridColumnCellId)" class="s-th-hidden p-0">
+			    <th style="@(GridColumnService.DetailExpanderColumnModel.WidthStyle + "padding-right:0;border-bottom-width: 0px;border-top-width:0px;")" id="@(GridColumnService.DetailExpanderColumnModel.HiddenHeaderCellId)" class="s-th-hidden p-0">
 			        <div style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;cursor:pointer;" />
 			    </th>
 			}
@@ -20,7 +20,7 @@
 				// </th>
 			}
 
-			 <th style="padding-right:0;border-bottom-width:0px;border-top-width:0px;" id="@(GridColumnService.EmptyColumnModel.HiddenGridColumnCellId)" class="s-th-hidden p-0"></th>
+			 <th style="padding-right:0;border-bottom-width:0px;border-top-width:0px;" id="@(GridColumnService.EmptyColumnModel.HiddenHeaderCellId)" class="s-th-hidden p-0"></th>
 		}
 	</tr>
 </thead>
