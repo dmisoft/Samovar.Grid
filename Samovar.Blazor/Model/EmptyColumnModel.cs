@@ -1,7 +1,7 @@
 ﻿namespace Samovar.Blazor
 {
     public class EmptyColumnModel
-        : ColumnModelBase
+        : ColumnModel
     {
         public override ColumnType ColumnType { get; } = ColumnType.EmptyColumn;
     }

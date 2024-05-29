@@ -17,7 +17,7 @@ namespace Samovar.Blazor.Edit
         public IEditingService<TItem> EditingService { get; set; }
 
         [Parameter]
-        public SmDataGridRowModel<TItem> RowModel { get; set; }
+        public GridRowModel<TItem> RowModel { get; set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         public ValueTask DisposeAsync()

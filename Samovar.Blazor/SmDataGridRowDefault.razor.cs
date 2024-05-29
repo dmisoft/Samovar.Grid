@@ -30,7 +30,7 @@ namespace Samovar.Blazor
         public required IRowDetailService<T> RowDetailService { get; set; }
 
         [Parameter]
-        public required SmDataGridRowModel<T> RowModel { get; set; }
+        public required GridRowModel<T> RowModel { get; set; }
 
         IDisposable? SingleSelectedDataRowsSubscription = null;
 
@@ -66,7 +66,7 @@ namespace Samovar.Blazor
         }
 
         // Row editing
-        protected async Task RowEditBegin(SmDataGridRowModel<T> rowMainModel)
+        protected async Task RowEditBegin(GridRowModel<T> rowMainModel)
         {
             var actualState = await GridStateService.DataSourceState.Value;
             if (actualState != DataSourceState.Idle)
@@ -76,12 +76,12 @@ namespace Samovar.Blazor
         }
 
         // Row deleting
-        protected async Task RowDeleteBegin(SmDataGridRowModel<T> rowMainModel)
+        protected async Task RowDeleteBegin(GridRowModel<T> rowMainModel)
         {
             await EditingService.RowDeleteBegin(rowMainModel);
         }
 
-        internal async Task RowSelectedIntern(GridRowEventArgs args, SmDataGridRowModel<T> selectedModel)
+        internal async Task RowSelectedIntern(GridRowEventArgs args, GridRowModel<T> selectedModel)
         {
             await GridSelectionService.OnRowSelected(selectedModel.DataItem);
         }

@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using System.Reactive.Linq;
-using System.Reflection;
 
 namespace Samovar.Blazor.Filter
 {
-    public abstract partial class DataGridFilterCellBase<TFilterCell>
+	public abstract partial class DataGridFilterCellBase<TFilterCell>
         : SmDesignComponentBase, IAsyncDisposable
     {
 
@@ -23,8 +21,6 @@ namespace Samovar.Blazor.Filter
 
         [Parameter]
         public required IDataColumnModel ColMetadata { get; set; }
-
-
 
         protected string DropdownMenuButtonId { get; } = $"dropdownmenubtn{Guid.NewGuid().ToString().Replace("-", "")}";
 
@@ -51,15 +47,20 @@ namespace Samovar.Blazor.Filter
                 return _innerValue;
             }
         }
-
-        protected override void OnInitialized()
+        protected string WidthStyle = "";
+        protected override Task OnInitializedAsync()
         {
             _innerValue = FilterService.TryGetFilterCellValue<TFilterCell>(ColMetadata);
             FilterService.FilterCleared += FilterService_FilterCleared;
             ColumnService.ColumnResizingEndedObservable.Where(c => c.Id == ColMetadata.Id).Subscribe(c => StateHasChanged());
-        }
+            
+			ColMetadata.WidthStyle.Subscribe(w => {
+				WidthStyle = w;
+			});
+			return base.OnInitializedAsync();
+		}
 
-        private Task FilterService_FilterCleared()
+		private Task FilterService_FilterCleared()
         {
             _innerValue = default;
             return Task.CompletedTask;
@@ -70,7 +71,7 @@ namespace Samovar.Blazor.Filter
         protected async Task ShowMenu()
         {
             filterMenuOpen = !filterMenuOpen;
-            await (await JsService.JsModule()).InvokeVoidAsync("toggleFilterPopupMenu", DropdownMenuButtonId, ColMetadata.FilterMenuContainerId, ColMetadata.FilterMenuId, filterMenuOpen);
+            //await (await JsService.JsModule()).InvokeVoidAsync("toggleFilterPopupMenu", DropdownMenuButtonId, ColMetadata.FilterMenuContainerId, ColMetadata.FilterMenuId, filterMenuOpen);
         }
 
         public ValueTask DisposeAsync()

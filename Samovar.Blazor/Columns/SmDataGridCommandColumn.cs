@@ -27,7 +27,7 @@ public class SmDataGridCommandColumn
 
         string? width = parameters.GetValueOrDefault<string>(nameof(Width));
         if (width != null)
-            Model.Width.OnNext(width);
+            Model.DeclaratedWidthParameter.OnNext(width);
 
         bool? newButtonVisible = parameters.GetValueOrDefault<bool?>(nameof(NewButtonVisible));
         newButtonVisible ??= true;

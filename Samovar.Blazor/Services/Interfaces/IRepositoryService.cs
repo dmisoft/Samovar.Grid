@@ -6,10 +6,10 @@ namespace Samovar.Blazor
 {
     public interface IRepositoryService<T>
     {
-        IEnumerable<SmDataGridRowModel<T>> ViewCollection { get; }
+        IEnumerable<GridRowModel<T>> ViewCollection { get; }
         BehaviorSubject<HashSet<T>> Data { get; }
         public Dictionary<string, PropertyInfo> PropInfo { get; }
-        List<EventCallback<IEnumerable<SmDataGridRowModel<T>>>> CollectionViewChangedEvList { get; set; }
-        IObservable<Task<IEnumerable<SmDataGridRowModel<T>>>> ViewCollectionObservableTask { get; set; }
+        List<EventCallback<IEnumerable<GridRowModel<T>>>> CollectionViewChangedEvList { get; set; }
+        IObservable<Task<IEnumerable<GridRowModel<T>>>> ViewCollectionObservableTask { get; set; }
     }
 }

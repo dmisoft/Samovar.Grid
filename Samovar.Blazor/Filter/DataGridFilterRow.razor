@@ -71,11 +71,11 @@
                         }
                         break;
                     case ColumnType.Command:
-                        <DataGridFilterCommandCell Model="(ICommandColumnModel)colMeta" />
+                        <DataGridFilterCommandCell ColumnModel="(ICommandColumnModel)colMeta" />
                         break;
                 }
             }
-            <DataGridFilterEmptyCell Model=@ColumnService.EmptyHeaderColumnModel />
+            <DataGridFilterEmptyCell Model=@ColumnService.EmptyColumnModel />
         </tr>
     </thead>
 </table>

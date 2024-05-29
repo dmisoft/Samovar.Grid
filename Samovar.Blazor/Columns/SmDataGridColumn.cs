@@ -23,6 +23,7 @@ public class SmDataGridColumn
     {
         ColumnService.RegisterColumn(Model);
     }
+
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         await base.SetParametersAsync(parameters);
@@ -39,7 +40,7 @@ public class SmDataGridColumn
 
         var width = parameters.GetValueOrDefault<string>(nameof(Width));
         if (width is not null)
-            Model.Width.OnNext(width);
+            Model.DeclaratedWidthParameter.OnNext(width);
 
         var cellShowTemplate = parameters.GetValueOrDefault<RenderFragment<object>>("CellShowTemplate");
         if (cellShowTemplate is not null)

@@ -21,7 +21,7 @@ namespace Samovar.Blazor
             _navigationService = navigationService;
         }
 
-        public RenderFragment GetInsertingPopup<U>(SmDataGridRowModel<U> model)
+        public RenderFragment GetInsertingPopup<U>(GridRowModel<U> model)
         {
             if (_templateService.EditFormTemplate.Value != null)
             {
@@ -44,7 +44,7 @@ namespace Samovar.Blazor
             }
         }
 
-        public RenderFragment GetEditingPopup<U>(SmDataGridRowModel<U> model)
+        public RenderFragment GetEditingPopup<U>(GridRowModel<U> model)
         {
             RenderFragment? rf;
 
@@ -70,7 +70,7 @@ namespace Samovar.Blazor
 
             return rf;
         }
-        public RenderFragment GetInsertingForm<U>(SmDataGridRowModel<U> model)
+        public RenderFragment GetInsertingForm<U>(GridRowModel<U> model)
         {
             RenderFragment rf = (builder) =>
             {
@@ -82,11 +82,11 @@ namespace Samovar.Blazor
             return rf;
         }
 
-        public RenderFragment GetRow<U>(SmDataGridRowModel<U> model)
+        public RenderFragment GetRow<U>(GridRowModel<U> model)
         {
             switch (model.RowState)
             {
-                case SmDataGridRowState.Editing:
+                case GridRowState.Editing:
                     if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
                     {
                         return GetDefaultRow(model);
@@ -126,7 +126,7 @@ namespace Samovar.Blazor
         }
 
 
-        private RenderFragment GetDefaultRow<U>(SmDataGridRowModel<U> model)
+        private RenderFragment GetDefaultRow<U>(GridRowModel<U> model)
         {
             RenderFragment rf = (builder) =>
                {

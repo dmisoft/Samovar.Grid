@@ -4,10 +4,10 @@ namespace Samovar.Blazor
 {
     public interface IComponentBuilderService
     {
-        RenderFragment GetEditingPopup<T>(SmDataGridRowModel<T> model);
-        RenderFragment GetInsertingPopup<T>(SmDataGridRowModel<T> model);
-        RenderFragment GetInsertingForm<T>(SmDataGridRowModel<T> model);
-        RenderFragment GetRow<T>(SmDataGridRowModel<T> model);
+        RenderFragment GetEditingPopup<T>(GridRowModel<T> model);
+        RenderFragment GetInsertingPopup<T>(GridRowModel<T> model);
+        RenderFragment GetInsertingForm<T>(GridRowModel<T> model);
+        RenderFragment GetRow<T>(GridRowModel<T> model);
         RenderFragment GetNoDataPanel();
         RenderFragment GetNoDataFoundPanel();
         RenderFragment GetProcessingDataPanel();

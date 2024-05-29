@@ -17,9 +17,9 @@ namespace Samovar.Blazor
 
         Task RowEditCancel();
 
-        Task RowEditBegin(SmDataGridRowModel<T> rowModel);
+        Task RowEditBegin(GridRowModel<T> rowModel);
 
-        Task RowDeleteBegin(SmDataGridRowModel<T> rowModel);
+        Task RowDeleteBegin(GridRowModel<T> rowModel);
 
         Task RowEditCommit();
 
@@ -27,13 +27,13 @@ namespace Samovar.Blazor
         Task RowInsertCommit(T dataItem);
         Task RowInsertCancel();
 
-        Func<SmDataGridRowModel<T>, Task>? ShowInsertingPopupDelegate { get; set; }
+        Func<GridRowModel<T>, Task>? ShowInsertingPopupDelegate { get; set; }
         Func<Task>? CloseInsertingPopupDelegate { get; set; }
 
-        Func<SmDataGridRowModel<T>, Task>? ShowEditingPopupDelegate { get; set; }
+        Func<GridRowModel<T>, Task>? ShowEditingPopupDelegate { get; set; }
         Func<Task>? CloseEditingPopupDelegate { get; set; }
 
-        Func<SmDataGridRowModel<T>, Task>? ShowInsertingFormDelegate { get; set; }
+        Func<GridRowModel<T>, Task>? ShowInsertingFormDelegate { get; set; }
 
         Func<Task>? CloseInsertingFormDelegate { get; set; }
 

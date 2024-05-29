@@ -34,11 +34,11 @@ namespace Samovar.Blazor
 
         public ElementReference GridBodyRef { get; set; }
 
-        protected IEnumerable<SmDataGridRowModel<T>> View { get; set; } = [];
+        protected IEnumerable<GridRowModel<T>> View { get; set; } = [];
 
         public DataSourceState DataSourceState { get; set; } = DataSourceState.NoData;
 
-        public EventCallback<IEnumerable<SmDataGridRowModel<T>>> CollectionViewChangedEv { get; set; }
+        public EventCallback<IEnumerable<GridRowModel<T>>> CollectionViewChangedEv { get; set; }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {

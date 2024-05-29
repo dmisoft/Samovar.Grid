@@ -15,7 +15,5 @@ public interface IDataColumnModel
 
 	public BehaviorSubject<string> Field { get; }
 
-	public BehaviorSubject<string> Title { get; }
-
 	public bool? SortingAscending { get; set; }
 }

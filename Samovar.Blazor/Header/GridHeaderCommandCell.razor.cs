@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Reactive.Linq;
 
-namespace Samovar.Blazor.Filter;
+namespace Samovar.Blazor.Header;
 
-public partial class DataGridFilterCommandCell
-        : SmDesignComponentBase, IAsyncDisposable
+public partial class GridHeaderCommandCell<T>
+		: SmDesignComponentBase, IAsyncDisposable
 {
     [Parameter]
     public required IColumnModel ColumnModel { get; set; }
@@ -27,7 +27,11 @@ public partial class DataGridFilterCommandCell
     [SmInject]
     public required IFilterService FilterService { get; set; }
 
-	protected string WidthStyle = "";
+    [SmInject]
+    public required IEditingService<T> EditingService { get; set; }
+
+
+    protected string WidthStyle = "";
 
 	protected override Task OnInitializedAsync()
     {
@@ -39,6 +43,10 @@ public partial class DataGridFilterCommandCell
     }
    
     protected string ColumnCellDraggable = "false";
+    protected Task RowInsering()
+    {
+       return EditingService.RowInsertBegin();
+    }
 
     public ValueTask DisposeAsync()
     {

@@ -37,19 +37,19 @@ namespace Samovar.Blazor
 
         public ElementReference GridBodyRef { get; set; }
 
-        protected IEnumerable<SmDataGridRowModel<T>> View { get; set; } = [];
+        protected IEnumerable<GridRowModel<T>> View { get; set; } = [];
 
-        private Task _collectionViewChangedEv(IEnumerable<SmDataGridRowModel<T>> collectionView)
+        private Task _collectionViewChangedEv(IEnumerable<GridRowModel<T>> collectionView)
         {
             View = collectionView;
             return Task.CompletedTask;
         }
 
-        public EventCallback<IEnumerable<SmDataGridRowModel<T>>> CollectionViewChangedEv { get; set; }
+        public EventCallback<IEnumerable<GridRowModel<T>>> CollectionViewChangedEv { get; set; }
 
         public DataSourceState DataSourceState { get; set; } = DataSourceState.NoData;
 
-        private Virtualize<SmDataGridRowModel<T>>? virtualizeComponent;
+        private Virtualize<GridRowModel<T>>? virtualizeComponent;
 
         protected override Task OnInitializedAsync()
         {
@@ -68,7 +68,7 @@ namespace Samovar.Blazor
                 ActualScrollbarWidth = 0// LayoutService.ActualScrollbarWidth
             };
 
-            CollectionViewChangedEv = new EventCallbackFactory().Create<IEnumerable<SmDataGridRowModel<T>>>(this, async (data) => await _collectionViewChangedEv(data));
+            CollectionViewChangedEv = new EventCallbackFactory().Create<IEnumerable<GridRowModel<T>>>(this, async (data) => await _collectionViewChangedEv(data));
             RepositoryService.CollectionViewChangedEvList.Add(CollectionViewChangedEv);
 
             return base.OnInitializedAsync();

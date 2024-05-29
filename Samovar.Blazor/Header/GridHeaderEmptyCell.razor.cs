@@ -3,11 +3,11 @@ using System.Reactive.Linq;
 
 namespace Samovar.Blazor.Header
 {
-    public partial class SmDataGridHeaderEmptyCell
+    public partial class GridHeaderEmptyCell
         : SmDesignComponentBase, IAsyncDisposable
     {
         [Parameter]
-        public required IColumnModel Model { get; set; }
+        public required IColumnModel ColumnModel { get; set; }
 
         [SmInject]
         public required ILayoutService LayoutService { get; set; }
@@ -26,7 +26,7 @@ namespace Samovar.Blazor.Header
 
         protected override Task OnInitializedAsync()
         {
-            ColumnService.ColumnResizingEndedObservable.Where(c => c.Id == Model.Id).Subscribe(c => StateHasChanged());
+            ColumnService.ColumnResizingEndedObservable.Where(c => c.Id == ColumnModel.Id).Subscribe(c => StateHasChanged());
             return base.OnInitializedAsync();
         }
        

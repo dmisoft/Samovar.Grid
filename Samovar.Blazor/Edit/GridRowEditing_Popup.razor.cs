@@ -19,7 +19,7 @@ namespace Samovar.Blazor.Edit
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         [Parameter]
-        public required SmDataGridRowModel<TItem> RowModel { get; set; }
+        public required GridRowModel<TItem> RowModel { get; set; }
 
         protected ElementReference Ref { get; set; }
 

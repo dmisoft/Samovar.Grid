@@ -13,7 +13,7 @@ namespace Samovar.Blazor.Edit
         public required IJsService JsService { get; set; }
 
         [Parameter]
-        public required SmDataGridRowModel<T> RowModel { get; set; }
+        public required GridRowModel<T> RowModel { get; set; }
 
         protected string Id { get; set; } = Guid.NewGuid().ToString().Replace("-", "");
 

@@ -2,14 +2,14 @@
 
 @inherits SmDesignComponentBase
 
-<th style="@(Model.WidthStyle + "padding-right:0;min-width:50px;")" id="@(Model.HeaderCellId)" data-toggle="tooltip" data-placement="top" title="@(Model.Title.Value)">
+<th style="@(WidthStyle + "padding-right:0;min-width:50px;")" id="@(ColumnModel.HeaderCellId)" data-toggle="tooltip" data-placement="top" title="@(ColumnModel.Title.Value)">
 	<div class="s-flex" style="margin:0px;padding:0px;">
 		<div @onmouseup=ColumnCellMouseUp @onmousedown=ColumnCellMouseDown @onclick=ColumnCellClick style="flex-grow:1;text-overflow:ellipsis;overflow:hidden;white-space: nowrap;cursor:pointer;display:block;"
 dropzone="DropZoneGridHeader" draggable=@ColumnCellDraggable ondragover="event.preventDefault()">
-			@(Model.Title.Value)
+			@(ColumnModel.Title.Value)
 		</div>
 		<div class="flex-grow">@((MarkupString)SortSymbol)</div>
-		<div style="cursor:ew-resize;float:right;width:10px" @onmousedown="((args) => OnMouseDown(args, Model))" draggable="false" ondrag="event.stopPropagation()" ondragover="event.stopPropagation()"></div>
+		<div style="cursor:ew-resize;float:right;width:10px" @onmousedown="((args) => OnMouseDown(args, ColumnModel))" draggable="false" ondrag="event.stopPropagation()" ondragover="event.stopPropagation()"></div>
 	</div>
 </th>
 

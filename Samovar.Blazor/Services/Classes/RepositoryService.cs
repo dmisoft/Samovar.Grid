@@ -10,7 +10,7 @@ namespace Samovar.Blazor
     public class RepositoryService<T>
         : IRepositoryService<T>, IAsyncDisposable
     {
-        public IEnumerable<SmDataGridRowModel<T>> ViewCollection { get; } = new List<SmDataGridRowModel<T>>();
+        public IEnumerable<GridRowModel<T>> ViewCollection { get; } = new List<GridRowModel<T>>();
 
         private readonly IDataSourceService<T> _dataSourceService;
         private readonly INavigationService _navigationService;
@@ -24,8 +24,8 @@ namespace Samovar.Blazor
         public static Dictionary<string, Func<T, int>> PropInfoDelegateInt { get; } = new Dictionary<string, Func<T, int>>();
         public static Dictionary<string, Func<T, string>> PropInfoDelegateString { get; } = new Dictionary<string, Func<T, string>>();
         public static Dictionary<string, Func<T, DateTime>> PropInfoDelegateDate { get; } = new Dictionary<string, Func<T, DateTime>>();
-        public List<EventCallback<IEnumerable<SmDataGridRowModel<T>>>> CollectionViewChangedEvList { get; set; } = new List<EventCallback<IEnumerable<SmDataGridRowModel<T>>>>();
-        public IObservable<Task<IEnumerable<SmDataGridRowModel<T>>>> ViewCollectionObservableTask { get; set; }
+        public List<EventCallback<IEnumerable<GridRowModel<T>>>> CollectionViewChangedEvList { get; set; } = new List<EventCallback<IEnumerable<GridRowModel<T>>>>();
+        public IObservable<Task<IEnumerable<GridRowModel<T>>>> ViewCollectionObservableTask { get; set; }
 
         public RepositoryService(
               IDataSourceService<T> dataSourceService
@@ -76,7 +76,7 @@ namespace Samovar.Blazor
             });
         }
 
-        private Task<IEnumerable<SmDataGridRowModel<T>>> ViewCollectionObservableMap(IQueryable<T>? query, NavigationStrategyDataLoadingSettings navigationStrategyDataLoadingSettings)
+        private Task<IEnumerable<GridRowModel<T>>> ViewCollectionObservableMap(IQueryable<T>? query, NavigationStrategyDataLoadingSettings navigationStrategyDataLoadingSettings)
         {
             Debug.WriteLine("ViewCollectionObservableMap");
             _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.Loading));
@@ -84,10 +84,10 @@ namespace Samovar.Blazor
             if (query is null)
             {
                 _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.NoData));
-                return Task.FromResult(new List<SmDataGridRowModel<T>>().AsEnumerable());
+                return Task.FromResult(new List<GridRowModel<T>>().AsEnumerable());
             }
 
-            IEnumerable<SmDataGridRowModel<T>> _retVal;
+            IEnumerable<GridRowModel<T>> _retVal;
 
             if (!navigationStrategyDataLoadingSettings.ShowAll)
                 query = query.Skip(navigationStrategyDataLoadingSettings.Skip).Take(navigationStrategyDataLoadingSettings.Take);
@@ -103,15 +103,15 @@ namespace Samovar.Blazor
         }
 
 
-        private List<SmDataGridRowModel<T>> CreateRowModelList(IQueryable<T> gridData, IEnumerable<IDataColumnModel> ColumnMetadataList, Dictionary<string, PropertyInfo> PropInfo)
+        private List<GridRowModel<T>> CreateRowModelList(IQueryable<T> gridData, IEnumerable<IDataColumnModel> ColumnMetadataList, Dictionary<string, PropertyInfo> PropInfo)
         {
-            var retVal = new List<SmDataGridRowModel<T>>();
+            var retVal = new List<GridRowModel<T>>();
             int rowPosition = 0;
 
             foreach (var keyDataPair in gridData.ToHashSet())
             {
                 rowPosition++;
-                retVal.Add(new SmDataGridRowModel<T>(keyDataPair, ColumnMetadataList, rowPosition, PropInfo, _rowDetailService.ExpandedRowDetails.Value.Any(r => r!.Equals(keyDataPair))));
+                retVal.Add(new GridRowModel<T>(keyDataPair, ColumnMetadataList, rowPosition, PropInfo, _rowDetailService.ExpandedRowDetails.Value.Any(r => r!.Equals(keyDataPair))));
             }
 
             return retVal;

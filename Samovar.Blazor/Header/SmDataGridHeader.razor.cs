@@ -19,15 +19,7 @@ namespace Samovar.Blazor.Header
         public required ISortingService GridOrderService { get; set; }
 
         [SmInject]
-        public required IEditingService<TItem> GridEditingService { get; set; }
-
-        [SmInject]
         public required IGridStateService GridStateService { get; set; }
-
-        protected Task RowInsering()
-        {
-            return GridEditingService.RowInsertBegin();
-        }
 
         internal Task ColumnCellClick(IDataColumnModel columnModel)
         {

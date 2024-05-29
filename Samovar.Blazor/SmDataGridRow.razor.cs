@@ -27,10 +27,10 @@ namespace Samovar.Blazor
         public required IComponentBuilderService ComponentBuilderService { get; set; }
 
         [Parameter]
-        public required SmDataGridRowModel<TItem> RowModel { get; set; }
+        public required GridRowModel<TItem> RowModel { get; set; }
 
         [Parameter]
-        public EventCallback<SmDataGridRowModel<TItem>> RowModelChanged { get; set; }
+        public EventCallback<GridRowModel<TItem>> RowModelChanged { get; set; }
 
         internal async Task DetailExpanderClick()
         {

@@ -15,7 +15,7 @@ namespace Samovar.Blazor.Edit
         public required IEditingService<TItem> EditingService { get; set; }
 
         [Parameter]
-        public required SmDataGridRowModel<TItem> RowModel { get; set; }
+        public required GridRowModel<TItem> RowModel { get; set; }
 
         public ValueTask DisposeAsync()
         {

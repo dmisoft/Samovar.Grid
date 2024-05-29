@@ -11,26 +11,19 @@
                     <th style="@(GridColumnService.DetailExpanderColumnModel.WidthStyle + "padding-right:0;")" id="@(GridColumnService.DetailExpanderColumnModel.HeaderCellId)"></th>
                 }
 
-                foreach (var colMeta in GridColumnService.AllColumnModels)
+                foreach (var columnModel in GridColumnService.AllColumnModels)
                 {
-                    switch (colMeta.ColumnType)
+                    switch (columnModel.ColumnType)
                     {
                         case ColumnType.Data:
-                            <SmDataGridHeaderCell Model=@((IDataColumnModel)colMeta) />
+                            <GridHeaderCell ColumnModel=@((IDataColumnModel)columnModel) />
                             break;
                         case ColumnType.Command:
-                            <th style="@(colMeta.WidthStyle)" id="@(colMeta.HeaderCellId)">
-                                @if (((ICommandColumnModel)colMeta).NewButtonVisible.Value)
-                                {
-                                    <div class="s-flex s-flex-row s-align-content-center s-justify-content-center">
-                                        <button class="btn btn-primary btn-sm" @onclick="@RowInsering">new</button>
-                                    </div>
-                                }
-                            </th>
+                            <GridHeaderCommandCell ColumnModel=@((ICommandColumnModel)columnModel) T="TItem" />
                             break;
                     }
                 }
-                <SmDataGridHeaderEmptyCell Model=@GridColumnService.EmptyHeaderColumnModel />
+                <GridHeaderEmptyCell ColumnModel=@GridColumnService.EmptyColumnModel />
             }
         </tr>
     </thead>

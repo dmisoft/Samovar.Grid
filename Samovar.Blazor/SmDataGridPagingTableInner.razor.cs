@@ -51,15 +51,15 @@ namespace Samovar.Blazor
             });
 
             //Popup editing
-            EditingService.ShowEditingPopupDelegate = (SmDataGridRowModel<T> model) => { EditingPopup = ComponentBuilderService.GetEditingPopup(model); StateHasChanged(); return Task.CompletedTask; };
+            EditingService.ShowEditingPopupDelegate = (GridRowModel<T> model) => { EditingPopup = ComponentBuilderService.GetEditingPopup(model); StateHasChanged(); return Task.CompletedTask; };
             EditingService.CloseEditingPopupDelegate = () => { EditingPopup = null; StateHasChanged(); return Task.CompletedTask; };
 
             //Popup inserting
-            EditingService.ShowInsertingPopupDelegate = (SmDataGridRowModel<T> model) => { InsertingPopup = ComponentBuilderService.GetInsertingPopup<T>(model); StateHasChanged(); return Task.CompletedTask; };
+            EditingService.ShowInsertingPopupDelegate = (GridRowModel<T> model) => { InsertingPopup = ComponentBuilderService.GetInsertingPopup<T>(model); StateHasChanged(); return Task.CompletedTask; };
             EditingService.CloseInsertingPopupDelegate = () => { InsertingPopup = null; StateHasChanged(); return Task.CompletedTask; };
 
             //Inline inserting form
-            EditingService.ShowInsertingFormDelegate = (SmDataGridRowModel<T> model) => { InsertingForm = ComponentBuilderService.GetInsertingForm(model); StateHasChanged(); return Task.CompletedTask; };
+            EditingService.ShowInsertingFormDelegate = (GridRowModel<T> model) => { InsertingForm = ComponentBuilderService.GetInsertingForm(model); StateHasChanged(); return Task.CompletedTask; };
             EditingService.CloseInsertingFormDelegate = () => { InsertingForm = null; StateHasChanged(); return Task.CompletedTask; };
 
             //Data processing panels

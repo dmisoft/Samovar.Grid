@@ -13,7 +13,7 @@ namespace Samovar.Blazor.Edit
         public required IJsService JsService { get; set; }
 
         [Parameter]
-        public required SmDataGridRowModel<TItem> RowModel { get; set; }
+        public required GridRowModel<TItem> RowModel { get; set; }
 
         [Parameter]
         public required RenderFragment<TItem> Template { get; set; }

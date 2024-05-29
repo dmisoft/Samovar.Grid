@@ -1,6 +1,6 @@
 ﻿@using System.Globalization
 @inherits DataGridFilterCellBase<DateTime?>
-<th style="@(((IDataColumnModel)ColMetadata).WidthStyle)" class="px-1" id="@(((IDataColumnModel)ColMetadata).FilterCellId)" data-toggle="tooltip" data-placement="top" title="@(((IDataColumnModel)ColMetadata).Title.Value)">
+<th style="@WidthStyle" class="px-1" id="@(((IDataColumnModel)ColMetadata).FilterCellId)" data-toggle="tooltip" data-placement="top" title="@(((IDataColumnModel)ColMetadata).Title.Value)">
 
 <div class="s-flex s-flex-row">
     <input style="min-width:10px;" type="date" class="flex-grow-1 form-control" @bind="InnerValue" @bind:event="onchange" @bind:format="yyyy-MM-dd" />

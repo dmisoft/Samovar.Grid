@@ -46,26 +46,20 @@ namespace Samovar.Blazor
             await _jsService.DetachWindowMouseMoveEvent();
             await _jsService.DetachWindowMouseUpEvent();
 
-            //var emptyMainHeaderColumn = _columnService.AllColumnModels.Find(c => c.Id == _columnService.EmptyHeaderColumnModel.Id);
-            //var emptyFilterHeaderColumn = _columnService.AllColumnModels.Find(c => c.Id == emptyHeaderColumnId);
-
-			//var emptyColumn = _columnService.AllColumnModels.Find(c => c.Id == emptyColumnId);
             var col = _columnService.AllColumnModels.Find(c => c.Id == colMetaId);
             if (col != default(IColumnModel))
             {
-                col.AbsoluteWidth = newVisibleAbsoluteWidthValue;
+                col.Width.OnNext(newVisibleAbsoluteWidthValue);
             }
             var rightSideColumn = _columnService.AllColumnModels.Find(c => c.Id == rightSideColumnId);
             if (rightSideColumn is not null)
             {
-                rightSideColumn.AbsoluteWidth = newRightSideColumnWidth;
+                rightSideColumn.Width.OnNext(newRightSideColumnWidth);
             }
 
-            _columnService.EmptyColumnModel.AbsoluteWidth = emptyColWidth;
-            _columnService.EmptyHeaderColumnModel.AbsoluteWidth = emptyHeaderColWidth;
+            _columnService.EmptyColumnModel.Width.OnNext(emptyColWidth);
 
 			_columnService.ColumnResizingEndedObservable.OnNext(_columnService.EmptyColumnModel);
-			_columnService.ColumnResizingEndedObservable.OnNext(_columnService.EmptyHeaderColumnModel);
 
 			if (col is not null)
             {
