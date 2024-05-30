@@ -23,8 +23,6 @@ namespace Samovar.Blazor
 
         double FilterRowHeight { get; }
 
-        Task<double> TableRowHeight();
-
         BehaviorSubject<string> Height { get; }
         BehaviorSubject<string> Width { get; }
 
@@ -35,8 +33,6 @@ namespace Samovar.Blazor
         ElementReference GridOuterRef { get; set; }
         ElementReference GridInnerRef { get; set; }
         ElementReference TableBodyInnerRef { get; set; }
-
-        //double ActualScrollbarWidth { get; set; }
 
         BehaviorSubject<bool> ShowColumnHeader { get; }
         BehaviorSubject<bool> ShowDetailHeader { get; }

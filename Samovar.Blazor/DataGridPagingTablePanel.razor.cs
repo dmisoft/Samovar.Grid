@@ -43,11 +43,9 @@ namespace Samovar.Blazor
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await base.OnAfterRenderAsync(firstRender);
-            //if (!firstRender)
-            {
-                await LayoutService.InitHeader();
-            }
+            await LayoutService.InitHeader();
         }
+
         protected override Task OnInitializedAsync()
         {
             SubscribeViewCollectionChange();
@@ -63,7 +61,7 @@ namespace Samovar.Blazor
             Style = new DataGridStyleInfo
             {
                 CssStyle = LayoutService.OuterStyle.Value,
-                ActualScrollbarWidth =0// LayoutService.ActualScrollbarWidth
+                ActualScrollbarWidth = 0// LayoutService.ActualScrollbarWidth
             };
 
             return base.OnInitializedAsync();

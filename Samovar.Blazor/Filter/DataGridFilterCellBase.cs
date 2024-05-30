@@ -52,7 +52,6 @@ namespace Samovar.Blazor.Filter
         {
             _innerValue = FilterService.TryGetFilterCellValue<TFilterCell>(ColMetadata);
             FilterService.FilterCleared += FilterService_FilterCleared;
-            //ColumnService.ColumnResizingEndedObservable.Where(c => c.Id == ColMetadata.Id).Subscribe(c => StateHasChanged());
             
 			ColMetadata.WidthStyle.Subscribe(w => {
 				WidthStyle = w;
@@ -69,10 +68,10 @@ namespace Samovar.Blazor.Filter
 
         bool filterMenuOpen = false;
 
-        protected async Task ShowMenu()
+        protected Task ShowMenu()
         {
             filterMenuOpen = !filterMenuOpen;
-            //await (await JsService.JsModule()).InvokeVoidAsync("toggleFilterPopupMenu", DropdownMenuButtonId, ColMetadata.FilterMenuContainerId, ColMetadata.FilterMenuId, filterMenuOpen);
+            return Task.CompletedTask;
         }
 
         public ValueTask DisposeAsync()

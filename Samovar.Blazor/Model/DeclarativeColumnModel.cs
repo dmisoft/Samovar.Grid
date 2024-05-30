@@ -11,7 +11,7 @@ public abstract partial class DeclarativeColumnModel
 	public DeclarativeColumnWidthMode DeclaratedWidthMode { get; set; }
 	public BehaviorSubject<string> Title { get; } = new BehaviorSubject<string>("");
 
-	public DeclarativeColumnModel()
+	protected DeclarativeColumnModel()
 		: base()
 	{
 		DeclaratedWidthParameter.Subscribe(WidthSubscriber);

@@ -28,7 +28,6 @@ public partial class DataGridFilterEmptyCell
 
     protected override Task OnInitializedAsync()
     {
-        //ColumnService.ColumnResizingEndedObservable.Where(c => c.Id == Model.Id).Subscribe(c => StateHasChanged());
         ColumnModel.WidthStyle.Subscribe(w => {
             WidthStyle = w;
         });
