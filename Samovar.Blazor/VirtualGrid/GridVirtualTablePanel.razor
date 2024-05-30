@@ -1,5 +1,6 @@
-﻿@using System.Globalization
+﻿@namespace Samovar.Blazor
 @using Samovar.Blazor
+@using System.Globalization
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 
 @typeparam T
@@ -11,7 +12,7 @@
         <NoDataPanel />
         break;
     case DataSourceState.Loading:
-        <SmDataGridLoadingSpinner />
+        <LoadingSpinner />
         break;
     case DataSourceState.Idle:
     default:
@@ -20,12 +21,11 @@
                 <DataGridHiddenHeader />
                 <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
                     <Virtualize Items="@View.ToList()" Context="rowModel" SpacerElement="tr" @ref="virtualizeComponent">
-                        <SmDataGridRow RowModel="rowModel" />
+                        <GridRow RowModel="rowModel" />
                     </Virtualize>
                 </tbody>
             </table>
 
         </div>
-        @* <DataGridScrollbar DeltaChangedCallback=@((offsetY) => VirtualScrollingService.ScrollTop.OnNext(-offsetY*(1000/200))) /> *@
         break;
 }

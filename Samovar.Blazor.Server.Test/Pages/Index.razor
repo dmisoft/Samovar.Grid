@@ -35,9 +35,13 @@ else
     <button class="btn btn-primary" @onclick="deselectSingleSelectedItem">deselct single selected item</button>
     <input type="text" @bind="pageSize" />
     <input type="text" @bind="gridWidth" />
+    <label>
+        Column width
+        <input type="text" @bind="columnWidth" />
+    </label>
     <div class="row">
         <div class="col-10">
-            <SmDataGrid Data="forecasts1"
+            <SmGrid Data="forecasts1"
                     Height="600px"
                     Width=@gridWidth
                     FilterMode=DataGridFilterMode.FilterRow
@@ -53,18 +57,18 @@ else
                     RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
                     RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))">
                 <Columns>
-                    <SmDataGridColumn Title="Date1" Field="@nameof(WeatherForecast.Date)" Width="100px">
+                    <Column Title="Date1" Field="@nameof(WeatherForecast.Date)" Width="100px">
                         <CellShowTemplate>
                             @{
                                 WeatherForecast data = context as WeatherForecast;
                                 <div>Template @data.Summary</div>
                             }
                         </CellShowTemplate>
-                    </SmDataGridColumn>
-                    <SmDataGridColumn Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="1*" />
-                    <SmDataGridColumn Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="150px" />
-                    <SmDataGridColumn Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="1*" />
-                    <SmDataGridCommandColumn EditButtonVisible=true NewButtonVisible=true Width="100px" />
+                    </Column>
+                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="1*" />
+                    <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width=@columnWidth />
+                    <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="1*" />
+                    <CommandColumn EditButtonVisible=true NewButtonVisible=true Width="100px" />
                 </Columns>
                 <DetailRowTemplate Context="mydata">
                     @{
@@ -74,7 +78,7 @@ else
                         <div>@data.TemperatureF</div>
                     }
                 </DetailRowTemplate>
-            </SmDataGrid>
+            </SmGrid>
         </div>
         <div class="col-2">
             @if (selectedRow != null)
@@ -103,18 +107,18 @@ else
                         RowRemoving="@((WeatherForecast data) => RowRemovingHandler2(data))"
             @bind-SingleSelectedDataRow=selectedRow>
                 <Columns>
-                    <SmDataGridColumn Title="Date1" Field="@nameof(WeatherForecast.Date)" Width="100px">
+                    <Column Title="Date1" Field="@nameof(WeatherForecast.Date)" Width="100px">
                         <CellShowTemplate>
                             @{
                                 WeatherForecast data = context as WeatherForecast;
                                 <div>Template @data.Summary</div>
                             }
                         </CellShowTemplate>
-                    </SmDataGridColumn>
-                    <SmDataGridColumn Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="200px" />
-                    <SmDataGridColumn Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="200px" />
-                    <SmDataGridColumn Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="200px" />
-                    <SmDataGridCommandColumn EditButtonVisible=true NewButtonVisible=true Width="250px" />
+                    </Column>
+                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="200px" />
+                    <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="200px" />
+                    <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="200px" />
+                    <CommandColumn EditButtonVisible=true NewButtonVisible=true Width="250px" />
                 </Columns>
                 <DetailRowTemplate Context="mydata">
                     @{
@@ -137,11 +141,12 @@ else
     private List<WeatherForecast> forecasts2;
     private HashSet<WeatherForecast> forecasts3;
     FormEditContext EditContext = null;
-    SmDataGrid<WeatherForecast> grid;
+    SmGrid<WeatherForecast> grid;
 
     WeatherForecast selectedRow = null;
     int pageSize = 10;
     string gridWidth = "1200px";
+    string columnWidth = "150px";
 
     IEnumerable<WeatherForecast> selectedRows = null;
 

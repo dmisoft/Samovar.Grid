@@ -156,7 +156,7 @@ namespace Samovar.Blazor
         {
             RenderFragment rf = (builder) =>
             {
-                builder.OpenComponent(0, typeof(SmDataGridLoadingSpinner));
+                builder.OpenComponent(0, typeof(LoadingSpinner));
                 builder.CloseComponent();
             };
             return rf;
@@ -167,7 +167,7 @@ namespace Samovar.Blazor
         {
             RenderFragment rf = (builder) =>
             {
-                builder.OpenComponent(0, typeof(DataGridPagingTablePanel<T>));
+                builder.OpenComponent(0, typeof(PagingGrid<T>));
                 builder.CloseComponent();
             };
             return rf;
@@ -177,7 +177,7 @@ namespace Samovar.Blazor
         {
             RenderFragment rf = (builder) =>
             {
-                builder.OpenComponent(0, typeof(DataGridPagingFooter));
+                builder.OpenComponent(0, typeof(PagingFooter));
                 builder.CloseComponent();
             };
             return rf;

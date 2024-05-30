@@ -6,7 +6,7 @@ namespace Samovar.Blazor
         : SmDesignComponentBase, IAsyncDisposable
     {
         [CascadingParameter(Name = "datagrid-row")]
-        public required SmDataGridRow<T> GridRow { get; set; }
+        public required GridRow<T> GridRow { get; set; }
 
         [SmInject]
         public required IColumnService ColumnService { get; set; }

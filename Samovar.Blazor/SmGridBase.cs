@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Samovar.Blazor
 {
-    public class SmDataGridBase<T>
+    public class SmGridBase<T>
         : ComponentBase, IComponentServiceProvider
     {
         [Inject]
@@ -18,7 +18,7 @@ namespace Samovar.Blazor
         [Parameter]
         public RenderFragment? ChildContent { get; set; }
 
-        public SmDataGridBase()
+        public SmGridBase()
         {
             ServiceProvider = new SmComponentServiceProvider();
             ServiceProvider.InitServices<T>();

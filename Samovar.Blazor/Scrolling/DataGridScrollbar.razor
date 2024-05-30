@@ -1,8 +1,0 @@
-﻿@using System.Globalization
-@using Microsoft.JSInterop
-
-@inherits SmDesignComponentBase
-
-<div class="custom-scrollbar" style=@Style>
-    <div class="custom-scrollbar-thumb" id="customScrollbarThumb" @onmousedown="HandleMouseDown" style=@($"transform:translateY({actualTranslateY.ToString(CultureInfo.InvariantCulture)}px);top:0;")></div>
-</div>

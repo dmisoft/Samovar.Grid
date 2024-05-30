@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 
 namespace Samovar.Blazor;
-public class SmDataGridCommandColumn
-    : SmDataGridColumnBase<ICommandColumnModel>
+public class CommandColumn
+    : ColumnBase<ICommandColumnModel>
 {
     [Parameter]
     public string Width { get; set; } = string.Empty;

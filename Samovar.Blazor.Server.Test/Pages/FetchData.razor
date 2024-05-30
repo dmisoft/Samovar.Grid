@@ -20,7 +20,7 @@ else
     <button class="btn btn-primary" @onclick="deselectSingleSelectedItem">deselct single selected item</button>
     <div class="row">
         <div class="col-10">
-            <SmDataGrid Data="forecasts1"
+            <SmGrid Data="forecasts1"
                         FilterMode=DataGridFilterMode.FilterRow
                         Height="450px" 
                         ShowDetailRow=true
@@ -31,37 +31,37 @@ else
                         SelectionMode=GridSelectionMode.Single
                         @bind-SingleSelectedDataRow=selectedRow>
                 <Columns>
-                    <SmDataGridColumn Title="Date" Field="@nameof(WeatherForecast.Date)" Width="100px">
+                    <Column Title="Date" Field="@nameof(WeatherForecast.Date)" Width="100px">
                         <CellShowTemplate>
                             @{
                                 WeatherForecast data = context as WeatherForecast;
                                 <div>Template @data?.Summary</div>
                             }
                         </CellShowTemplate>
-                    </SmDataGridColumn>
-                    <SmDataGridColumn Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="1*"></SmDataGridColumn>
-                    <SmDataGridColumn Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="2*"></SmDataGridColumn>
-                    <SmDataGridColumn Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="200px"></SmDataGridColumn>
-                    <SmDataGridColumn Title="NullableInterger" Field="@nameof(WeatherForecast.NullableInterger)" Width="100px"></SmDataGridColumn>
+                    </Column>
+                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="1*"></Column>
+                    <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="2*"></Column>
+                    <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="200px"></Column>
+                    <Column Title="NullableInterger" Field="@nameof(WeatherForecast.NullableInterger)" Width="100px"></Column>
 
-                    <SmDataGridCommandColumn EditButtonVisible=true NewButtonVisible=true Width="250px"></SmDataGridCommandColumn>
+                    <CommandColumn EditButtonVisible=true NewButtonVisible=true Width="250px"></CommandColumn>
                 </Columns>
                 <DetailRowTemplate Context="mydata">
                     @{
                         WeatherForecast data = mydata as WeatherForecast;
                         <div>
-                            <SmDataGrid Data="@forecasts1"
+                            <SmGrid Data="@forecasts1"
                                         PageSize="10">
                                 <Columns>
-                                    <SmDataGridColumn Title="Date" Field="@nameof(WeatherForecast.Date)" />
-                                    <SmDataGridColumn Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" />
-                                    <SmDataGridColumn Title="Summary" Field="@nameof(WeatherForecast.Summary)" />
+                                    <Column Title="Date" Field="@nameof(WeatherForecast.Date)" />
+                                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" />
+                                    <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)" />
                                 </Columns>
-                            </SmDataGrid>
+                            </SmGrid>
                         </div>
                     }
                 </DetailRowTemplate>
-            </SmDataGrid>
+            </SmGrid>
         </div>
         <div class="col-2">
             @if (selectedRow != null)
@@ -74,7 +74,7 @@ else
 
     <div class="row">
         <div class="col-10">
-            <SmDataGrid @ref=grid
+            <SmGrid @ref=grid
                         Data="forecasts2"
                         FilterMode=DataGridFilterMode.FilterRow
                         Height="@height"
@@ -85,12 +85,12 @@ else
                         SelectionMode=GridSelectionMode.Multiple
                         @bind-MultipleSelectedDataRows=selectedRows>
                 <Columns>
-                    <SmDataGridCommandColumn EditButtonVisible=true NewButtonVisible=true Width="150px" />
-                    <SmDataGridColumn Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="200px"></SmDataGridColumn>
-                    <SmDataGridColumn Title="Summary" Field="@nameof(WeatherForecast.Summary)"></SmDataGridColumn>
-                    <SmDataGridColumn Title="Date" Field="@nameof(WeatherForecast.Date)"></SmDataGridColumn>
-                    <SmDataGridColumn Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)"></SmDataGridColumn>
-                    <SmDataGridColumn Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)"></SmDataGridColumn>
+                    <CommandColumn EditButtonVisible=true NewButtonVisible=true Width="150px" />
+                    <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="200px"></Column>
+                    <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)"></Column>
+                    <Column Title="Date" Field="@nameof(WeatherForecast.Date)"></Column>
+                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)"></Column>
+                    <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)"></Column>
                 </Columns>
                 <EditFormTemplate>
                     <EditForm Model="@EditContext" Context="EditFormContext" OnValidSubmit=HandleValidSubmit>
@@ -138,7 +138,7 @@ else
                         </div>
                     </EditForm>
                 </InsertFormTemplate>
-            </SmDataGrid>
+            </SmGrid>
         </div>
         <div class="col-2">
             @if (selectedRows != null)
@@ -158,7 +158,7 @@ else
     private List<WeatherForecast> forecasts2;
     FormEditContext EditContext = null;
     FormInsertContext InsertContext = null;
-    SmDataGrid<WeatherForecast> grid;
+    SmGrid<WeatherForecast> grid;
 
     WeatherForecast selectedRow = null;
     IEnumerable<WeatherForecast> selectedRows = null;

@@ -1,8 +1,9 @@
-﻿@using System.Globalization
+﻿@namespace Samovar.Blazor
+@using System.Globalization
 @typeparam T
 @inherits SmDesignComponentBase
 
-<div id="@ConstantService.OuterGridId" @ref="@LayoutService.GridOuterRef" class="s-grid-container" style="@Style.CssStyle" @onkeydown:stopPropagation="true">
+<div @ref="@LayoutService.GridOuterRef" class="s-grid-container" style="@Style.CssStyle" @onkeydown:stopPropagation="true">
 	<div style="display:flex;flex-direction:column;">
 		<DataGridHeaderRowPanel T=T />
 		@if (LayoutService.FilterMode.Value == DataGridFilterMode.FilterRow)
@@ -11,10 +12,9 @@
 		}
 	</div>
 	<div id="@ConstantService.InnerGridId" class="s-grid-content" @ref="@LayoutService.GridInnerRef" >
-		@if (InsertingForm != null){ @InsertingForm }
-		<DataGridPagingTablePanel T=T />
+		@if (InsertingForm != null){ @InsertingForm }@*ist hier inline inserting form gemeint?*@
+		<GridVirtualTablePanel T=T />
 	</div>
-	<DataGridPagingFooter />
 </div>
 
 @if (EditingPopup != null){	@EditingPopup }

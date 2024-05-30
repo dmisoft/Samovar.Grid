@@ -1,5 +1,5 @@
 ﻿namespace Samovar.Blazor;
-public class SmDataGridColumnBase<T>
+public class ColumnBase<T>
     : SmDesignComponentBase
 {
     [SmInject]

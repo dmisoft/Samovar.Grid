@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 
 namespace Samovar.Blazor;
-public class SmDataGridColumn
-    : SmDataGridColumnBase<IDataColumnModel>
+public class Column
+    : ColumnBase<IDataColumnModel>
 {
     [Parameter]
     public required string Field { get; set; }

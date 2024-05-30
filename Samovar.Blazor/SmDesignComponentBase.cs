@@ -1,51 +1,50 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Reflection;
 
-namespace Samovar.Blazor
+namespace Samovar.Blazor;
+
+public class SmDesignComponentBase
+    : ComponentBase
 {
-    public class SmDesignComponentBase
-        : ComponentBase
+    [CascadingParameter(Name = "ServiceProvider")]
+    IComponentServiceProvider? ServiceProvider { get; set; }
+
+    private bool _dependenciesInitialized;
+
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
-        [CascadingParameter(Name = "ServiceProvider")]
-        IComponentServiceProvider? ServiceProvider { get; set; }
+        await InitializeDependencies(in parameters);
+        await base.SetParametersAsync(parameters);
+    }
 
-        private bool _dependenciesInitialized;
+    public virtual void DependenciesInitialized() { }
 
-        public override async Task SetParametersAsync(ParameterView parameters)
+    private Task InitializeDependencies(in ParameterView parameters)
+    {
+        if (!_dependenciesInitialized)
         {
-            await InitializeDependencies(in parameters);
-            await base.SetParametersAsync(parameters);
-        }
+            _dependenciesInitialized = true;
 
-        public virtual void DependenciesInitialized() { }
+            IComponentServiceProvider? componentServiceProvider = parameters.GetValueOrDefault<IComponentServiceProvider>("ServiceProvider");
 
-        private Task InitializeDependencies(in ParameterView parameters)
-        {
-            if (!_dependenciesInitialized)
+            if (componentServiceProvider is not null)
             {
-                _dependenciesInitialized = true;
-
-                IComponentServiceProvider? componentServiceProvider = parameters.GetValueOrDefault<IComponentServiceProvider>("ServiceProvider");
-
-                if (componentServiceProvider is not null)
-                {
 #pragma warning disable S3011 // Reflection should not be used to increase accessibility of classes, methods, or fields
-                    var propertyInfos = GetType()
-                        .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                    var propertiesWithSmInjectAttribute = propertyInfos.Where(prop =>
-                        Attribute.IsDefined(prop, typeof(SmInjectAttribute)));
+                var propertyInfos = GetType()
+                    .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                var propertiesWithSmInjectAttribute = propertyInfos.Where(prop =>
+                    Attribute.IsDefined(prop, typeof(SmInjectAttribute)));
 #pragma warning restore S3011 // Reflection should not be used to increase accessibility of classes, methods, or fields
 
-                    propertiesWithSmInjectAttribute.ToList().ForEach(property =>
-                    {
-                        object service = componentServiceProvider.ServiceProvider.GetService(property.PropertyType);
-                        property.SetValue(this, service);
-                    });
-                }
-                DependenciesInitialized();
+                propertiesWithSmInjectAttribute.ToList().ForEach(property =>
+                {
+                    object service = componentServiceProvider.ServiceProvider.GetService(property.PropertyType);
+                    property.SetValue(this, service);
+                });
             }
-
-            return Task.CompletedTask;
+            DependenciesInitialized();
         }
+
+        return Task.CompletedTask;
     }
 }

@@ -6,17 +6,14 @@ namespace Samovar.Blazor.Edit
     public partial class GridRowEditing_Popup<TItem>
         : SmDesignComponentBase, IAsyncDisposable
     {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
         [CascadingParameter(Name = "datagrid-row")]
-        public required SmDataGridRow<TItem> GridRow { get; set; }
+        public required GridRow<TItem> GridRow { get; set; }
 
         [SmInject]
-        public IEditingService<TItem> EditingService { get; set; }
+        public required IEditingService<TItem> EditingService { get; set; }
 
         [SmInject]
-        public IJsService JsService { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public required IJsService JsService { get; set; }
 
         [Parameter]
         public required GridRowModel<TItem> RowModel { get; set; }
