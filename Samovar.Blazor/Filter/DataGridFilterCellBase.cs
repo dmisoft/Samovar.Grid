@@ -52,11 +52,12 @@ namespace Samovar.Blazor.Filter
         {
             _innerValue = FilterService.TryGetFilterCellValue<TFilterCell>(ColMetadata);
             FilterService.FilterCleared += FilterService_FilterCleared;
-            ColumnService.ColumnResizingEndedObservable.Where(c => c.Id == ColMetadata.Id).Subscribe(c => StateHasChanged());
+            //ColumnService.ColumnResizingEndedObservable.Where(c => c.Id == ColMetadata.Id).Subscribe(c => StateHasChanged());
             
 			ColMetadata.WidthStyle.Subscribe(w => {
 				WidthStyle = w;
-			});
+                StateHasChanged();
+            });
 			return base.OnInitializedAsync();
 		}
 

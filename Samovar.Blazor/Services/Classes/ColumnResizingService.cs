@@ -57,7 +57,7 @@ namespace Samovar.Blazor
                 rightSideColumn.Width.OnNext(newRightSideColumnWidth);
             }
 
-            _columnService.EmptyColumnModel.Width.OnNext(emptyColWidth);
+            _columnService.EmptyColumnModel.Width.OnNext(emptyHeaderColWidth);
 
 			_columnService.ColumnResizingEndedObservable.OnNext(_columnService.EmptyColumnModel);
 

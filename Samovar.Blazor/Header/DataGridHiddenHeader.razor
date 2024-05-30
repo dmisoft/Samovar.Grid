@@ -14,10 +14,7 @@
 
 			foreach (var colMeta in GridColumnService.AllColumnModels)
 			{
-				<DataGridHiddenHeaderCell Model=@colMeta />
-				// <th style="@(colMeta.VisibleWidthStyle + "padding-right:0;border-bottom-width: 0px;border-top-width:0px;")" id="@(colMeta.HiddenGridColumnCellId)" class="s-th-hidden p-0">
-				// 	<div style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;cursor:pointer;" />
-				// </th>
+				<GridHiddenHeaderCell ColumnModel=@colMeta />
 			}
 
 			 <th style="padding-right:0;border-bottom-width:0px;border-top-width:0px;" id="@(GridColumnService.EmptyColumnModel.HiddenHeaderCellId)" class="s-th-hidden p-0"></th>

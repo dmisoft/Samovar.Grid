@@ -37,7 +37,6 @@ public abstract partial class DeclarativeColumnModel
 			DeclaratedWidth = 50;
 			DeclaratedWidthMode = DeclarativeColumnWidthMode.Absolute;
 		}
-		Width.OnNext(DeclaratedWidth);
 	}
 
 	[GeneratedRegex(@"^[^0][0-9]*\*$")]

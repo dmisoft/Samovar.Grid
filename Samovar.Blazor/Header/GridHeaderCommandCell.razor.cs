@@ -35,10 +35,11 @@ public partial class GridHeaderCommandCell<T>
 
 	protected override Task OnInitializedAsync()
     {
-        ColumnService.ColumnResizingEndedObservable.Where(c => c.Id == ColumnModel.Id).Subscribe(c => StateHasChanged());
+        //ColumnService.ColumnResizingEndedObservable.Where(c => c.Id == ColumnModel.Id).Subscribe(c => StateHasChanged());
 		ColumnModel.WidthStyle.Subscribe(w => {
 			WidthStyle = w;
-		});
+            StateHasChanged();
+        });
 		return base.OnInitializedAsync();
     }
    

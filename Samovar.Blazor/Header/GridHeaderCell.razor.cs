@@ -34,10 +34,11 @@ public partial class GridHeaderCell
 	protected override Task OnInitializedAsync()
     {
         _columnOrderInfoUnsubscriber = SortingService.ColumnOrderInfo.Subscribe(OnOrderInfoChanged);
-        ColumnService.ColumnResizingEndedObservable.Where(c => c.Id == ColumnModel.Id).Subscribe(c => StateHasChanged());
+        //ColumnService.ColumnResizingEndedObservable.Where(c => c.Id == ColumnModel.Id).Subscribe(c => StateHasChanged());
 		ColumnModel.WidthStyle.Subscribe(w =>
 		{
 			WidthStyle = w;
+            StateHasChanged();
 		});
 		return base.OnInitializedAsync();
     }
@@ -65,30 +66,29 @@ public partial class GridHeaderCell
     protected string ColumnCellDraggable = "false";
 		internal Task ColumnCellClick() => SortingService.OnColumnClick(ColumnModel);
 
-    protected async Task OnMouseDown(MouseEventArgs args, IDataColumnModel columnMetadata)
+    protected async Task OnMouseDown(MouseEventArgs args, IDataColumnModel triggerColumnModel)
     {
         await JsService.AttachWindowMouseMoveEvent(LayoutService.DataGridDotNetRef);
         await JsService.AttachWindowMouseUpEvent(LayoutService.DataGridDotNetRef);
 
         ColumnResizingService.IsMouseDown = true;
         ColumnResizingService.StartMouseMoveX = args.ClientX;
-        ColumnResizingService.MouseMoveCol = columnMetadata;
+        ColumnResizingService.MouseMoveCol = triggerColumnModel;
 
         IColumnModel emptyHeaderColumnModel = ColumnService.EmptyColumnModel;
 
-        var rightSideColumn = ColumnService.AllColumnModels.SkipWhile(c => c.Id != columnMetadata.Id).Skip(1).FirstOrDefault();
+        var rightSideColumn = ColumnService.AllColumnModels.SkipWhile(c => c.Id != triggerColumnModel.Id).Skip(1).FirstOrDefault();
 
         await JsService.StartDataGridColumnWidthChangeMode(
             ColumnResizingService.ColumnResizingDotNetRef,
             LayoutService.ActualColumnsWidthSum,
-            columnMetadata.Id,
+            triggerColumnModel.Id,
             ConstantService.InnerGridId,
             ConstantService.InnerGridBodyTableId,
 
-            columnMetadata.HeaderCellId.ToString(),
-            columnMetadata.HiddenHeaderCellId.ToString(),
-            columnMetadata.FilterCellId.ToString(),
-
+            triggerColumnModel.HeaderCellId.ToString(),
+            triggerColumnModel.HiddenHeaderCellId.ToString(),
+            triggerColumnModel.FilterCellId.ToString(),
 
             emptyHeaderColumnModel.HeaderCellId.ToString(),
             emptyHeaderColumnModel.HiddenHeaderCellId.ToString(),
@@ -96,7 +96,7 @@ public partial class GridHeaderCell
 
             ColumnService.EmptyColumnModel.Id,
             args.ClientX,
-            columnMetadata.Width.Value,
+            triggerColumnModel.Width.Value,
             LayoutService.ColumnResizeMode.Value.ToString(),
             emptyHeaderColumnModel.Width.Value,
             rightSideColumn?.Id,

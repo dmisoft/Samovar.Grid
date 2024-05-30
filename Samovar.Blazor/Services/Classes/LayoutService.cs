@@ -154,7 +154,7 @@ namespace Samovar.Blazor
 		{
 			try
 			{
-				double gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule()) - 1;
+				double gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule());// - 1;
 				var tBodyWidth = await GridOuterRef.GetElementWidthByRef(await _jsService.JsModule());
 
 				var declaratedAbsoluteColumnsWidthSum = _columnService.DeclarativeColumnModels.
@@ -164,11 +164,11 @@ namespace Samovar.Blazor
 				var relativePortionSum = _columnService.DeclarativeColumnModels.Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Relative).Sum(cmt => cmt.DeclaratedWidth);
 				var absoluteColumnsWidthSumForRelative = gridInnerWidth - declaratedAbsoluteColumnsWidthSum;
 
-				var emptyColWidth = tBodyWidth - declaratedAbsoluteColumnsWidthSum - absoluteColumnsWidthSumForRelative - 1;
+				var emptyColWidth = Math.Max(tBodyWidth - declaratedAbsoluteColumnsWidthSum - absoluteColumnsWidthSumForRelative - 1,0);
 				var portionValue = (gridInnerWidth - declaratedAbsoluteColumnsWidthSum) / relativePortionSum;
 
 				_columnService.EmptyColumnModel.Width.OnNext(emptyColWidth);
-				_columnService.ColumnResizingEndedObservable.OnNext(_columnService.EmptyColumnModel);
+				//_columnService.ColumnResizingEndedObservable.OnNext(_columnService.EmptyColumnModel);
 
 				Dictionary<IColumnModel, double> widthList = new Dictionary<IColumnModel, double>();
 
@@ -186,9 +186,10 @@ namespace Samovar.Blazor
 				foreach (var m in _columnService.AllColumnModels)
 				{
 					m.Width.OnNext(widthList[m]);
-					_columnService.ColumnResizingEndedObservable.OnNext(m);
+					//_columnService.ColumnResizingEndedObservable.OnNext(m);
 				}
-			}
+				//_columnService.EmptyColumnModel.Width.OnNext(emptyColWidth);
+            }
 			catch (Exception ex)
 			{
 				Console.WriteLine(ex.Message);
@@ -229,7 +230,7 @@ namespace Samovar.Blazor
 		{
 			double emptyColWidth = 0;
 
-			emptyColWidth = tBodyWidth - ActualColumnsWidthSum;// - ActualScrollbarWidth - 1;
+			emptyColWidth = tBodyWidth - ActualColumnsWidthSum - 1;// - ActualScrollbarWidth - 1;
 			_columnService.EmptyColumnModel.Width.OnNext(emptyColWidth);
 			_columnService.ColumnResizingEndedObservable.OnNext(_columnService.EmptyColumnModel);
 			return emptyColWidth;

@@ -7,7 +7,7 @@ public partial class DataGridFilterEmptyCell
 		: SmDesignComponentBase, IAsyncDisposable
 {
     [Parameter]
-    public required IColumnModel Model { get; set; }
+    public required IColumnModel ColumnModel { get; set; }
 
     [SmInject]
     public required ILayoutService LayoutService { get; set; }
@@ -24,9 +24,14 @@ public partial class DataGridFilterEmptyCell
     [SmInject]
     public required IConstantService ConstantService { get; set; }
 
+    protected string WidthStyle = "";
+
     protected override Task OnInitializedAsync()
     {
-        ColumnService.ColumnResizingEndedObservable.Where(c => c.Id == Model.Id).Subscribe(c => StateHasChanged());
+        //ColumnService.ColumnResizingEndedObservable.Where(c => c.Id == Model.Id).Subscribe(c => StateHasChanged());
+        ColumnModel.WidthStyle.Subscribe(w => {
+            WidthStyle = w;
+        });
         return base.OnInitializedAsync();
     }
    

@@ -360,19 +360,21 @@ export function onWindowMouseMove(event) {
         //    document.getElementById(gridStateVars.innerGridId).style.width = newInnerGridWidth + 'px';
         //}
 
-        if (gridStateVars.fitColumnsToTableWidth === 'Sliding' && gridStateVars.gridColWidthSum + delta < gridStateVars.innerGridWidth) {
-            gridStateVars.emptyColWidth = gridStateVars.innerGridWidth - (gridStateVars.gridColWidthSum + delta);
-        }
-        else {
-            gridStateVars.emptyColWidth = 0;
-        }
+        //if (gridStateVars.fitColumnsToTableWidth === 'Sliding' && gridStateVars.gridColWidthSum + delta < gridStateVars.innerGridWidth) {
+        //    gridStateVars.emptyColWidth = gridStateVars.innerGridWidth - (gridStateVars.gridColWidthSum + delta);
+        //}
+        //else {
+        //    gridStateVars.emptyColWidth = 0;
+        //}
 
         if (gridStateVars.fitColumnsToTableWidth === 'Sliding' && gridStateVars.gridColWidthSum + delta < gridStateVars.outerGridWidth) {
             gridStateVars.emptyHeaderColWidth = gridStateVars.outerGridWidth - (gridStateVars.gridColWidthSum + delta);
         }
         else {
             gridStateVars.emptyHeaderColWidth = 0;
+
         }
+        console.log('emptyHeaderColWidth: ' + gridStateVars.emptyHeaderColWidth);
 
         document.getElementById(gridStateVars.visibleGridColumnCellId).style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
         document.getElementById(gridStateVars.hiddenGridColumnCellId).style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
@@ -391,12 +393,12 @@ export function onWindowMouseMove(event) {
             filterHeaderEmptyColumn.style.width = undefined;
         }
 
-        if (gridStateVars.emptyColWidth !== 0) {
-            document.getElementById(gridStateVars.hiddenHeaderEmptyColumnId).style.width = gridStateVars.emptyColWidth + 'px';
-        }
-        else {
-            document.getElementById(gridStateVars.hiddenHeaderEmptyColumnId).style.width = null;
-        }
+        //if (gridStateVars.emptyColWidth !== 0) {
+        //    document.getElementById(gridStateVars.hiddenHeaderEmptyColumnId).style.width = gridStateVars.emptyColWidth + 'px';
+        //}
+        //else {
+        //    document.getElementById(gridStateVars.hiddenHeaderEmptyColumnId).style.width = null;
+        //}
 
     }
 }
