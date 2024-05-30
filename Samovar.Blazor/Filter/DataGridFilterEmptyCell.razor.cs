@@ -30,6 +30,7 @@ public partial class DataGridFilterEmptyCell
     {
         ColumnModel.WidthStyle.Subscribe(w => {
             WidthStyle = w;
+            StateHasChanged();
         });
         return base.OnInitializedAsync();
     }

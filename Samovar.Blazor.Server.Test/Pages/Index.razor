@@ -53,7 +53,7 @@ else
                     ColumnResizeMode=Columns.ColumnResizeMode.Sliding
                     @bind-SingleSelectedDataRow=selectedRow
                     @bind-MultipleSelectedDataRows=selectedRows
-                    
+                    CssClass="blueTable"
                     RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
                     RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))">
                 <Columns>

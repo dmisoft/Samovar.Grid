@@ -134,12 +134,12 @@ namespace Samovar.Blazor
 
             FilterRowHeight = await _jsService.MeasureTableFilterHeight(TableTagClass.Value, TheadTagClass.Value, FilterToggleButtonClass.Value);
 
-            await ShowDynamicHeader();
+            await CaculateHeader();
         }
 
-        private async Task ShowDynamicHeader()
+        private async Task CaculateHeader()
         {
-            double gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule());
+            double gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule())-1;
             var tBodyWidth = await GridOuterRef.GetElementWidthByRef(await _jsService.JsModule());
 
             var declaratedAbsoluteColumnsWidthSum = _columnService.DeclarativeColumnModels.
@@ -149,7 +149,7 @@ namespace Samovar.Blazor
             var relativePortionSum = _columnService.DeclarativeColumnModels.Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Relative).Sum(cmt => cmt.DeclaratedWidth);
             var absoluteColumnsWidthSumForRelative = gridInnerWidth - declaratedAbsoluteColumnsWidthSum;
 
-            var emptyColWidth = Math.Max(tBodyWidth - declaratedAbsoluteColumnsWidthSum - absoluteColumnsWidthSumForRelative - 1, 0);
+            var emptyColWidth = Math.Max(tBodyWidth - declaratedAbsoluteColumnsWidthSum - absoluteColumnsWidthSumForRelative, 0);
             var portionValue = (gridInnerWidth - declaratedAbsoluteColumnsWidthSum) / relativePortionSum;
 
             _columnService.EmptyColumnModel.Width.OnNext(emptyColWidth);
