@@ -253,7 +253,7 @@ public class SmGrid<T>
                 {
                     Columns?.Invoke(builder2);
 
-                    builder2.OpenComponent<SmDataGridVirtualTableInner<T>>(5);
+                    builder2.OpenComponent<VirtualGrid<T>>(5);
                     builder2.CloseComponent();
                 };
                 break;

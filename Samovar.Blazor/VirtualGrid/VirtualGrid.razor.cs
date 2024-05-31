@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web.Virtualization;
 
 namespace Samovar.Blazor
 {
-    public partial class SmDataGridVirtualTableInner<T>
+    public partial class VirtualGrid<T>
         : SmDesignComponentBase, IAsyncDisposable
     {
+        [SmInject]
+        public required IRepositoryService<T> RepositoryService { get; set; }
+
         [SmInject]
         public required IGridStateService StateService { get; set; }
 
@@ -13,12 +17,6 @@ namespace Samovar.Blazor
 
         [SmInject]
         public required IConstantService ConstantService { get; set; }
-
-        [SmInject]
-        public required IRepositoryService<T> RepositoryService { get; set; }
-
-        [SmInject]
-        public required INavigationService NavigationService { get; set; }
 
         [SmInject]
         public required IComponentBuilderService ComponentBuilderService { get; set; }
@@ -42,8 +40,23 @@ namespace Samovar.Blazor
 
         public required DataGridStyleInfo Style { get; set; }
 
+        public DataSourceState DataSourceState { get; set; } = DataSourceState.NoData;
+        public ElementReference GridBodyRef { get; set; }
+        protected IEnumerable<GridRowModel<T>> View { get; set; } = [];
+        private Virtualize<GridRowModel<T>>? virtualizeComponent;
+
         protected override Task OnInitializedAsync()
         {
+            SubscribeViewCollectionChange();
+
+            StateService.DataSourceState.Subscribe(async (stateTask) =>
+            {
+                await InvokeAsync(async () => {
+                    DataSourceState = await stateTask;
+                    StateHasChanged();
+                });
+            });
+
             LayoutService.DataGridInnerStyle.Subscribe(async style => {
                 Style = await style;
                 StateHasChanged();
@@ -86,6 +99,22 @@ namespace Samovar.Blazor
             base.OnInitializedAsync();
 
             return Task.CompletedTask;
+        }
+
+        private void SubscribeViewCollectionChange()
+        {
+            RepositoryService.ViewCollectionObservableTask.Subscribe(async (GetViewCollectionTask) =>
+            {
+                View = await GetViewCollectionTask;
+                await InvokeAsync(async () =>
+                {
+                    if (virtualizeComponent is not null)
+                    {
+                        await virtualizeComponent.RefreshDataAsync();
+                        StateHasChanged();
+                    }
+                });
+            });
         }
 
         public ValueTask DisposeAsync()

@@ -116,9 +116,9 @@ namespace Samovar.Blazor
         }
 
         [JSInvokable]
-        public Task JS_AfterWindowResize()
+        public async Task JS_AfterWindowResize()
         {
-            return Task.CompletedTask;
+            await InitHeader();
         }
 
         public async Task InitHeader()
@@ -143,10 +143,13 @@ namespace Samovar.Blazor
             var tBodyWidth = await GridOuterRef.GetElementWidthByRef(await _jsService.JsModule());
 
             var declaratedAbsoluteColumnsWidthSum = _columnService.DeclarativeColumnModels.
-                Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Absolute).Sum(cmt => cmt.DeclaratedWidth) +
-                (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.DeclaratedWidth : 0d);
+                Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Absolute)
+                .Sum(cmt => cmt.DeclaratedWidth) + (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.DeclaratedWidth : 0d);
 
-            var relativePortionSum = _columnService.DeclarativeColumnModels.Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Relative).Sum(cmt => cmt.DeclaratedWidth);
+            var relativePortionSum = _columnService.DeclarativeColumnModels
+                .Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Relative)
+                .Sum(cmt => cmt.DeclaratedWidth);
+
             var absoluteColumnsWidthSumForRelative = gridInnerWidth - declaratedAbsoluteColumnsWidthSum;
 
             var emptyColWidth = Math.Max(tBodyWidth - declaratedAbsoluteColumnsWidthSum - absoluteColumnsWidthSumForRelative, 0);

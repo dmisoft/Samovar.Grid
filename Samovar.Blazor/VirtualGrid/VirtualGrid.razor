@@ -1,5 +1,6 @@
 ﻿@namespace Samovar.Blazor
 @using System.Globalization
+@using Microsoft.AspNetCore.Components.Web.Virtualization
 @typeparam T
 @inherits SmDesignComponentBase
 
@@ -27,23 +28,18 @@
             case DataSourceState.Idle:
             default:
                 <div>
-                    <table id="@ConstantService.InnerGridBodyTableId" class="@LayoutService.TableTagClass.Value" style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
+                    <table id="@ConstantService.InnerGridBodyTableId" class=@LayoutService.TableTagClass.Value>
                         <GridHiddenHeader />
                         <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
-                            @if (View != null)
-                            {
-                                @foreach (var rowModel in View)
-                                {
-                                    <GridRow RowModel="rowModel" />
-                                }
-                            }
+                            <Virtualize Items="@View.ToList()" Context="rowModel" SpacerElement="tr" @ref="virtualizeComponent">
+                                <GridRow RowModel="rowModel" />
+                            </Virtualize>
                         </tbody>
                     </table>
                 </div>
                 break;
         }
     </div>
-    <PagingFooter />
 </div>
 
 @if (EditingPopup != null)
