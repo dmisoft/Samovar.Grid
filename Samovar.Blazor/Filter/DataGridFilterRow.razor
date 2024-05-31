@@ -7,9 +7,7 @@
         <tr @ref="LayoutService.GridFilterRef">
             @if (LayoutService.ShowDetailRow.Value)
             {
-                <th style="@(ColumnService.DetailExpanderColumnModel.WidthStyle)" id="@(ColumnService.DetailExpanderColumnModel.FilterCellId)">
-                    <div style="margin:0px;padding:0px;overflow:hidden;cursor:pointer;display:block;">&nbsp;</div>
-                </th>
+                <GridFilterDetailExpanderCell/>
             }
             @foreach (IColumnModel colMeta in ColumnService.AllColumnModels)
             {
