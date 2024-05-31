@@ -1,0 +1,36 @@
+﻿@using System.Globalization
+@typeparam T
+@inherits SmDesignComponentBase
+
+<div style="position:relative;display:flex;flex-direction:row;">
+    <div style="overflow:hidden;position:relative;flex-grow:1;" id="@ConstantService.GridHeaderContainerId">
+        <div style="position:relative;" class="s-noselect">
+            <table style="margin:0;padding:0;table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")" class="@LayoutService.TableTagClass.Value">
+                <thead class="@LayoutService.TheadTagClass.Value">
+                    <tr>
+                        @{
+                            @if (LayoutService.ShowDetailRow.Value)
+                            {
+                                <GridHeaderDetailExpanderCell />
+                            }
+
+                            foreach (var columnModel in GridColumnService.AllColumnModels)
+                            {
+                                switch (columnModel.ColumnType)
+                                {
+                                    case ColumnType.Data:
+                                        <GridHeaderCell ColumnModel=@((IDataColumnModel)columnModel) />
+                                        break;
+                                    case ColumnType.Command:
+                                        <GridHeaderCommandCell ColumnModel=@((ICommandColumnModel)columnModel) T="T" />
+                                        break;
+                                }
+                            }
+                            <GridHeaderEmptyCell ColumnModel=@GridColumnService.EmptyColumnModel />
+                        }
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>

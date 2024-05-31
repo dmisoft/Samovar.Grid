@@ -7,9 +7,10 @@
 		@{
 			@if (GridLayoutService.ShowDetailRow.Value)
 			{
-			    <th style="@(GridColumnService.DetailExpanderColumnModel.WidthStyle + "padding-right:0;border-bottom-width: 0px;border-top-width:0px;")" id="@(GridColumnService.DetailExpanderColumnModel.HiddenHeaderCellId)" class="s-th-hidden p-0">
-			        <div style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;cursor:pointer;" />
-			    </th>
+				<GridHiddenHeaderDetailExpanderCell />
+			    // <th style="@(GridColumnService.DetailExpanderColumnModel.WidthStyle + "padding-right:0;border-bottom-width: 0px;border-top-width:0px;")" id="@(GridColumnService.DetailExpanderColumnModel.HiddenHeaderCellId)" class="s-th-hidden p-0">
+			    //     <div style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;cursor:pointer;" />
+			    // </th>
 			}
 
 			foreach (var colMeta in GridColumnService.AllColumnModels)

@@ -18,14 +18,13 @@
     default:
         <div id=@ConstantService.InnerGridBodyId>
             <table id="@ConstantService.InnerGridBodyTableId" class=@LayoutService.TableTagClass.Value>
-                <DataGridHiddenHeader />
+                <GridHiddenHeader />
                 <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
                     <Virtualize Items="@View.ToList()" Context="rowModel" SpacerElement="tr" @ref="virtualizeComponent">
                         <GridRow RowModel="rowModel" />
                     </Virtualize>
                 </tbody>
             </table>
-
         </div>
         break;
 }

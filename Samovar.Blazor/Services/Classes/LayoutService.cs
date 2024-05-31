@@ -171,6 +171,11 @@ namespace Samovar.Blazor
             {
                 m.Width.OnNext(widthList[m]);
             }
+
+            if(ShowDetailRow.Value)
+            {
+                _columnService.DetailExpanderColumnModel.Width.OnNext(_columnService.DetailExpanderColumnModel.DeclaratedWidth);
+            }
         }
 
         internal async Task OnDataGridInnerCssStyleChanged()

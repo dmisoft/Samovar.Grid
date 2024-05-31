@@ -5,7 +5,7 @@
 
 <div @ref="@LayoutService.GridOuterRef" class="s-grid-container" style="@Style.CssStyle" @onkeydown:stopPropagation="true">
 	<div style="display:flex;flex-direction:column;">
-		<DataGridHeaderRowPanel T=T />
+		<GridHeader T=T />
 		@if (LayoutService.FilterMode.Value == DataGridFilterMode.FilterRow)
 		{
 			<DataGridFilterRowPanel T=T />
