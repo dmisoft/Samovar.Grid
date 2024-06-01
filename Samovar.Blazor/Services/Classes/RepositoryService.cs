@@ -8,7 +8,7 @@ namespace Samovar.Blazor;
 public class RepositoryService<T>
     : IRepositoryService<T>, IAsyncDisposable
 {
-    public IEnumerable<GridRowModel<T>> ViewCollection { get; } = new List<GridRowModel<T>>();
+    //public IEnumerable<GridRowModel<T>> ViewCollection { get; } = new List<GridRowModel<T>>();
 
     private readonly IDataSourceService<T> _dataSourceService;
     private readonly INavigationService _navigationService;

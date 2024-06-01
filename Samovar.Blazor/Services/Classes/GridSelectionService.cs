@@ -7,6 +7,8 @@ namespace Samovar.Blazor
         , IObserver<Task<IEnumerable<GridRowModel<T>>>>
         , IObserver<HashSet<T>>
     {
+        private IEnumerable<GridRowModel<T>> ViewCollection = new List<GridRowModel<T>>();
+
         public BehaviorSubject<RowSelectionMode> SelectionMode { get; } = new BehaviorSubject<RowSelectionMode>(RowSelectionMode.None);
 
         public BehaviorSubject<T?> SingleSelectedDataRow { get; } = new BehaviorSubject<T?>(default);
@@ -21,14 +23,11 @@ namespace Samovar.Blazor
 
         private readonly IJsService _jsService;
 
-        private readonly IRepositoryService<T> _repositoryService;
-
         public GridSelectionService(IJsService jsService, IRepositoryService<T> repositoryService)
         {
             _jsService = jsService;
-            _repositoryService = repositoryService;
-            _repositoryService.Data.Subscribe(this);
-            _repositoryService.ViewCollectionObservableTask.Subscribe(this);
+            repositoryService.Data.Subscribe(this);
+            repositoryService.ViewCollectionObservableTask.Subscribe(this);
         }
 
         public async Task OnRowSelected(T dataItem)
@@ -94,10 +93,10 @@ namespace Samovar.Blazor
                         {
                             var tList = MultipleSelectedDataRows.Value.ToList();
 
-                            var rm = _repositoryService.ViewCollection.SingleOrDefault(x => x.DataItem is not null && x.DataItem.Equals(dataItem));//. MultipleSelectedDataRows.OrderBy(dr => dr.)
+                            var rm = ViewCollection.SingleOrDefault(x => x.DataItem is not null && x.DataItem.Equals(dataItem));//. MultipleSelectedDataRows.OrderBy(dr => dr.)
                             if (rm != null)
                             {
-                                var pos = _repositoryService.ViewCollection.Single(y => y.DataItem is not null && y.DataItem.Equals(MultipleSelectedDataRows.Value.First()));
+                                var pos = ViewCollection.Single(y => y.DataItem is not null && y.DataItem.Equals(MultipleSelectedDataRows.Value.First()));
                                 
                                 int initPos = pos.DataItemPosition;
                                 int rmMin = initPos;
@@ -105,7 +104,7 @@ namespace Samovar.Blazor
                                 
                                 MultipleSelectedDataRows.Value.ToList().ForEach(x =>
                                 {
-                                    var currRm = _repositoryService.ViewCollection.SingleOrDefault(y => y.DataItem is not null && y.DataItem.Equals(x));
+                                    var currRm = ViewCollection.SingleOrDefault(y => y.DataItem is not null && y.DataItem.Equals(x));
                                     if (currRm != null && currRm.DataItemPosition <= rmMin) rmMin = currRm.DataItemPosition;
                                     if (currRm != null && currRm.DataItemPosition >= rmMax) rmMax = currRm.DataItemPosition;
 
@@ -123,7 +122,7 @@ namespace Samovar.Blazor
                                     iTo = rm.DataItemPosition;
                                 }
 
-                                var tempList = _repositoryService.ViewCollection.Where(rm => rm.DataItemPosition >= iFrom && rm.DataItemPosition <= iTo);
+                                var tempList = ViewCollection.Where(rm => rm.DataItemPosition >= iFrom && rm.DataItemPosition <= iTo);
                                 tempList.ToList().ForEach(item =>
                                 {
                                     if (!tList.Contains(item.DataItem))
@@ -168,9 +167,9 @@ namespace Samovar.Blazor
             throw new NotImplementedException();
         }
 
-        public void OnNext(Task<IEnumerable<GridRowModel<T>>> value)
+        public async void OnNext(Task<IEnumerable<GridRowModel<T>>> value)
         {
-            
+            ViewCollection = await value;
         }
 
         public void OnNext(HashSet<T> value)
