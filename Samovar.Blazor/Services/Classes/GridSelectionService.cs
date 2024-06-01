@@ -1,11 +1,13 @@
-﻿using System.Reactive.Subjects;
+﻿using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 namespace Samovar.Blazor
 {
     public class GridSelectionService<T>
         : IGridSelectionService<T>, IAsyncDisposable
         , IObserver<Task<IEnumerable<GridRowModel<T>>>>
-        , IObserver<HashSet<T>>
+        , IObserver<IEnumerable<T>>
+        , IObserver<RowSelectionMode>
     {
         private IEnumerable<GridRowModel<T>> ViewCollection = new List<GridRowModel<T>>();
 
@@ -23,11 +25,20 @@ namespace Samovar.Blazor
 
         private readonly IJsService _jsService;
 
-        public GridSelectionService(IJsService jsService, IRepositoryService<T> repositoryService)
+        public GridSelectionService(IJsService jsService, IRepositoryService<T> repositoryService, IDataSourceService<T> dataSourceService)
         {
             _jsService = jsService;
-            repositoryService.Data.Subscribe(this);
+            dataSourceService.Data.DistinctUntilChanged().Subscribe(this);
             repositoryService.ViewCollectionObservableTask.Subscribe(this);
+            SelectionMode.DistinctUntilChanged().Subscribe(this);
+            SingleSelectedDataRow.DistinctUntilChanged().Subscribe(SingleSelectedDataRow =>
+            {   
+                SingleSelectedRowCallback?.Invoke();
+            });
+            MultipleSelectedDataRows.DistinctUntilChanged().Subscribe(MultipleSelectedDataRows =>
+            {
+                MultipleSelectedRowsCallback?.Invoke();
+            });
         }
 
         public async Task OnRowSelected(T dataItem)
@@ -63,7 +74,7 @@ namespace Samovar.Blazor
                     {
                         if (MultipleSelectedDataRows.Value == null || !MultipleSelectedDataRows.Value.Any())//initial selection in the multiple selection mode
                         {
-                            MultipleSelectedDataRows.OnNext(new[] { dataItem });
+                            MultipleSelectedDataRows.OnNext([dataItem]);
                         }
                         else
                         {
@@ -87,7 +98,7 @@ namespace Samovar.Blazor
                     {
                         if (MultipleSelectedDataRows.Value == null || !MultipleSelectedDataRows.Value.Any())
                         {
-                            MultipleSelectedDataRows.OnNext(new[] { dataItem });
+                            MultipleSelectedDataRows.OnNext([dataItem]);
                         }
                         else
                         {
@@ -139,7 +150,7 @@ namespace Samovar.Blazor
                     }
                     else
                     {
-                        MultipleSelectedDataRows.OnNext(new[] { dataItem });
+                        MultipleSelectedDataRows.OnNext([dataItem]);
                         MultipleSelectedRowsCallback?.Invoke();
                     }
 
@@ -172,29 +183,23 @@ namespace Samovar.Blazor
             ViewCollection = await value;
         }
 
-        public void OnNext(HashSet<T> value)
+        public void OnNext(RowSelectionMode value)
         {
-            switch (SelectionMode.Value)
-            {
-                case RowSelectionMode.None:
-                    break;
-                case RowSelectionMode.Single:
-                    if (SingleSelectedDataRow.Value is not null && !value.Any(x => x is not null && x.Equals(SingleSelectedDataRow.Value)))
-                    {
-                        SingleSelectedDataRow.OnNext(default);
-                        SingleSelectedRowCallback?.Invoke();
-                    }
-                    break;
-                case RowSelectionMode.Multiple:
-                    if (MultipleSelectedDataRows.Value != null && MultipleSelectedDataRows.Value.Any())
-                    {
-                        MultipleSelectedDataRows.OnNext(MultipleSelectedDataRows.Value.Intersect(value));
-                        MultipleSelectedRowsCallback?.Invoke();
-                    }
-                    break;
-                default:
-                    break;
-            }
+            Reset();
+        }
+
+        public void OnNext(IEnumerable<T> value)
+        {
+            Reset();
+        }
+
+        private void Reset()
+        {
+            SingleSelectedDataRow.OnNext(default);
+            MultipleSelectedDataRows.OnNext(default);
+
+            SingleSelectedRowCallback?.Invoke();
+            MultipleSelectedRowsCallback?.Invoke();
         }
     }
 }

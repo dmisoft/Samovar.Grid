@@ -33,8 +33,16 @@ else
     <button class="btn btn-primary" @onclick="changeStyle">change style</button>
     <button class="btn btn-primary" @onclick="changeFirstDataItem">change first data item</button>
     <button class="btn btn-primary" @onclick="deselectSingleSelectedItem">deselct single selected item</button>
+    <button class="btn btn-primary" @onclick="selectSingleSelectedItem">select second single selected item</button>
     <input type="text" @bind="pageSize" />
     <input type="text" @bind="gridWidth" />
+
+    <select @bind=@selectionMode>
+        <option value=@RowSelectionMode.None>None</option>
+        <option value=@RowSelectionMode.Single>Single</option>
+        <option value=@RowSelectionMode.Multiple>Multiple</option>
+    </select>
+
     <label>
         Column width
         <input type="text" @bind="columnWidth" />
@@ -49,7 +57,7 @@ else
                     PageSize=pageSize
                     EditMode=GridEditMode.Form
                     EditingFormTitleDelegate="@((WeatherForecast data) => Task.FromResult(data.TemperatureC.ToString()))"
-                    SelectionMode=RowSelectionMode.Multiple
+                    SelectionMode=selectionMode
                     ColumnResizeMode=Columns.ColumnResizeMode.Sliding
                     @bind-SingleSelectedDataRow=selectedRow
                     @bind-MultipleSelectedDataRows=selectedRows
@@ -129,8 +137,8 @@ else
                 </DetailRowTemplate>
             </SmDataGrid>
         </div>
-        <div class="col-2">
-            
+ class="col-2">
+
         </div>
     </div>*@
 }
@@ -147,6 +155,7 @@ else
     string gridWidth = "1200px";
     string columnWidth = "150px";
 
+    RowSelectionMode selectionMode = RowSelectionMode.Single;
     IEnumerable<WeatherForecast> selectedRows = null;
 
     protected override async Task OnInitializedAsync()
@@ -175,7 +184,8 @@ else
         forecasts1 = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
         forecasts2 = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
 
-        selectedRows= forecasts1.Take(2);
+        //selectedRows = forecasts1.Take(2);
+        selectedRow = forecasts1.First();
     }
 
     Task changeStyle()
@@ -241,6 +251,12 @@ else
         return Task.CompletedTask;
     }
 
+    Task selectSingleSelectedItem()
+    {
+        selectedRow = forecasts1.Skip(1).First();
+        return Task.CompletedTask;
+    }
+
     class FormEditContext
     {
         public FormEditContext(WeatherForecast dataItem)
@@ -259,4 +275,5 @@ else
 
         //public Action StateHasChanged { get; set; }
     }
+
 }

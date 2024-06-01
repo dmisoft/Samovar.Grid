@@ -130,7 +130,7 @@ public class SmGrid<T>
 
         RenderFragment? columns = parameters.GetValueOrDefault<RenderFragment>(nameof(Columns));
         if (columns is null)
-            throw new ArgumentException(nameof(Columns));
+            throw new ArgumentException("No columns defined");
         else
             ChildContent = columns;
 
@@ -183,14 +183,6 @@ public class SmGrid<T>
         columnResizeMode ??= ColumnResizeMode.None;
         LayoutService.ColumnResizeMode.OnNext(columnResizeMode.Value);
 
-        T? singleSelectedDataRow = parameters.GetValueOrDefault<T?>(nameof(SingleSelectedDataRow));
-        if (singleSelectedDataRow is not null)
-            GridSelectionService.SingleSelectedDataRow.OnNext(singleSelectedDataRow);
-
-        IEnumerable<T>? multipleSelectedDataRows = parameters.GetValueOrDefault<IEnumerable<T>?>(nameof(MultipleSelectedDataRows));
-        if (multipleSelectedDataRows is not null && multipleSelectedDataRows.Any())
-            GridSelectionService.MultipleSelectedDataRows.OnNext(multipleSelectedDataRows);
-
         Func<T, Task<string>>? editingFormTitleDelegate = parameters.GetValueOrDefault<Func<T, Task<string>>?>(nameof(EditingFormTitleDelegate));
         if (editingFormTitleDelegate is not null)
             EditingService.EditingFormTitleDelegate = editingFormTitleDelegate;
@@ -231,7 +223,17 @@ public class SmGrid<T>
         IEnumerable<T>? data = parameters.GetValueOrDefault<IEnumerable<T>>(nameof(Data));
         if (data != null)
             DataSourceService.Data.OnNext(data);
+        
+        if (dataGridSelectionMode == RowSelectionMode.Multiple)
+        {
+            IEnumerable<T>? multipleSelectedDataRows = parameters.GetValueOrDefault<IEnumerable<T>?>(nameof(MultipleSelectedDataRows));
+            GridSelectionService.MultipleSelectedDataRows.OnNext(multipleSelectedDataRows);
 
+        }
+        else {
+            T? singleSelectedDataRow = parameters.GetValueOrDefault<T?>(nameof(SingleSelectedDataRow));
+            GridSelectionService.SingleSelectedDataRow.OnNext(singleSelectedDataRow);
+        }
     }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder)
@@ -270,11 +272,8 @@ public class SmGrid<T>
 
     protected override Task OnInitializedAsync()
     {
-
         GridSelectionService.SingleSelectedRowCallback = async () => { await SingleSelectedDataRowChanged.InvokeAsync(GridSelectionService.SingleSelectedDataRow.Value); };
-
         GridSelectionService.MultipleSelectedRowsCallback = async () => { await MultipleSelectedDataRowsChanged.InvokeAsync(GridSelectionService.MultipleSelectedDataRows.Value); };
-
         return base.OnInitializedAsync();
     }
 
@@ -285,11 +284,11 @@ public class SmGrid<T>
         if (firstRender)
         {
             await JsService.AttachWindowResizeEvent(ConstantService.DataGridId, LayoutService.DataGridDotNetRef);
-				await LayoutService.InitHeader();
-				InitService.IsInitialized.OnNext(true);
-				StateHasChanged();
-			}
-		}
+            await LayoutService.InitHeader();
+            InitService.IsInitialized.OnNext(true);
+            StateHasChanged();
+        }
+    }
 
     public Task CancelRowEdit()
     {

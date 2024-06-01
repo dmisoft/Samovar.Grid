@@ -40,10 +40,6 @@ public partial class GridRowDefault<T>
     {
         base.OnParametersSetAsync();
         RowModel.RowSelected = false;
-        if (GridSelectionService is null)
-        {
-            return Task.CompletedTask;
-        }
 
         switch (GridSelectionService.SelectionMode.Value)
         {
