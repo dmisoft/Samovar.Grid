@@ -86,11 +86,11 @@ else
                         @bind-MultipleSelectedDataRows=selectedRows>
                 <Columns>
                     <CommandColumn EditButtonVisible=true NewButtonVisible=true Width="150px" />
-                    <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="200px"></Column>
-                    <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)"></Column>
-                    <Column Title="Date" Field="@nameof(WeatherForecast.Date)"></Column>
-                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)"></Column>
-                    <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)"></Column>
+                    <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="200px"/>
+                    <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)"/>
+                    <Column Title="Date" Field="@nameof(WeatherForecast.Date)"/>
+                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)"/>
+                    <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)"/>
                 </Columns>
                 <EditFormTemplate>
                     <EditForm Model="@EditContext" Context="EditFormContext" OnValidSubmit=HandleValidSubmit>

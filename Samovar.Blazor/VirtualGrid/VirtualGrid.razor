@@ -4,7 +4,11 @@
 @typeparam T
 @inherits SmDesignComponentBase
 
-<div id="@ConstantService.OuterGridId" @ref="@LayoutService.GridOuterRef" class="s-grid-container" style="@Style.CssStyle" @onkeydown:stopPropagation="true">
+<div id="@ConstantService.OuterGridId"
+     @ref="@LayoutService.GridOuterRef"
+     class="s-grid-container"
+     style="@Style.CssStyle" @onkeydown:stopPropagation="true">
+
     <div style="display:flex;flex-direction:column;">
         <GridHeader T=T />
         @if (LayoutService.FilterMode.Value == DataGridFilterMode.FilterRow)
@@ -28,7 +32,9 @@
             case DataSourceState.Idle:
             default:
                 <div>
-                    <table id="@ConstantService.InnerGridBodyTableId" class=@LayoutService.TableTagClass.Value>
+                    <table id="@ConstantService.InnerGridBodyTableId"
+                           class="@LayoutService.TableTagClass.Value"
+                           style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
                         <GridHiddenHeader />
                         <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
                             <Virtualize Items="@View.ToList()" Context="rowModel" SpacerElement="tr" @ref="virtualizeComponent">

@@ -6,7 +6,7 @@ namespace Samovar.Blazor;
 public abstract partial class DeclarativeColumnModel
 	: ColumnModel, IDeclarativeColumnModel
 {
-	public BehaviorSubject<string> DeclaratedWidthParameter { get; set; } = new BehaviorSubject<string>("50px");
+	public BehaviorSubject<string> DeclaratedWidthParameter { get; set; } = new BehaviorSubject<string>("1*");
 	public double DeclaratedWidth { get; set; }
 	public DeclarativeColumnWidthMode DeclaratedWidthMode { get; set; }
 	public BehaviorSubject<string> Title { get; } = new BehaviorSubject<string>("");

@@ -42,14 +42,15 @@ else
                 EditMode=DataGridEditMode.Popup
                 DataNavigationMode=DataGridNavigationMode.VirtualScrolling
                 SelectionMode=GridSelectionMode.Single
-                RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
+                    ColumnResizeMode=Columns.ColumnResizeMode.Block
+                    RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
                 RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))"
                 @bind-SingleSelectedDataRow=selectedRow >
         <Columns>
             <Column Title="Pos." Field="@nameof(WeatherForecast.Position)" Width="50px"/>
             <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="200px"/>
             <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="200px"/>
-            <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="200px"/>
+            <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="1*"/>
             <CommandColumn EditButtonVisible=true NewButtonVisible=true Width="250px"/>
         </Columns>
         <DetailRowTemplate Context="mydata">
