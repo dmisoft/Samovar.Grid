@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 namespace Samovar.Blazor.Header;
 
 public partial class GridHeaderCell
-    : SmDesignComponentBase, IAsyncDisposable
+    : DesignComponentBase, IAsyncDisposable
 {
     [Parameter]
     public required IDataColumnModel ColumnModel { get; set; }
@@ -44,7 +44,7 @@ public partial class GridHeaderCell
 
     public string SortSymbol { get; private set; } = string.Empty;
 
-    private void OnOrderInfoChanged(DataGridColumnOrderInfo args)
+    private void OnOrderInfoChanged(ColumnOrderInfo args)
     {
         string sortSymbol = string.Empty;
 

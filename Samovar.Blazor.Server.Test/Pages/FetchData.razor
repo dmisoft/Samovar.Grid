@@ -21,14 +21,14 @@ else
     <div class="row">
         <div class="col-10">
             <SmGrid Data="forecasts1"
-                        FilterMode=DataGridFilterMode.FilterRow
+                        FilterMode=GridFilterMode.FilterRow
                         Height="450px" 
                         ShowDetailRow=true
-                        EditMode=DataGridEditMode.Popup
-                        DataNavigationMode=DataGridNavigationMode.Paging
+                        EditMode=GridEditMode.Popup
+                        DataNavigationMode=NavigationMode.Paging
                         PageSize="5"
                         PagerSize="7"
-                        SelectionMode=GridSelectionMode.Single
+                        SelectionMode=RowSelectionMode.Single
                         @bind-SingleSelectedDataRow=selectedRow>
                 <Columns>
                     <Column Title="Date" Field="@nameof(WeatherForecast.Date)" Width="100px">
@@ -76,13 +76,13 @@ else
         <div class="col-10">
             <SmGrid @ref=grid
                         Data="forecasts2"
-                        FilterMode=DataGridFilterMode.FilterRow
+                        FilterMode=GridFilterMode.FilterRow
                         Height="@height"
                         RowEditBegin="@((WeatherForecast data) => RowEditBeginHandler(data))"
                         RowInsertBegin=@RowInsertBeginHandler
-                        EditMode=DataGridEditMode.Form
-                        DataNavigationMode=DataGridNavigationMode.VirtualScrolling
-                        SelectionMode=GridSelectionMode.Multiple
+                        EditMode=GridEditMode.Form
+                        DataNavigationMode=NavigationMode.VirtualScrolling
+                        SelectionMode=RowSelectionMode.Multiple
                         @bind-MultipleSelectedDataRows=selectedRows>
                 <Columns>
                     <CommandColumn EditButtonVisible=true NewButtonVisible=true Width="150px" />

@@ -3,7 +3,7 @@
 namespace Samovar.Blazor;
 
 public partial class PagingGrid<T>
-    : SmDesignComponentBase, IAsyncDisposable
+    : DesignComponentBase, IAsyncDisposable
 {
     public ElementReference GridBodyRef { get; set; }
     protected IEnumerable<GridRowModel<T>> View { get; set; } = [];
@@ -44,7 +44,7 @@ public partial class PagingGrid<T>
 
     public RenderFragment? DataProcessingPanel { get; set; }
 
-    public required DataGridStyleInfo Style { get; set; }
+    public required GridStyleInfo Style { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

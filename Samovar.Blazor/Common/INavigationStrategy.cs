@@ -1,9 +1,8 @@
 ﻿using System.Reactive.Subjects;
 
-namespace Samovar.Blazor
+namespace Samovar.Blazor;
+
+public interface INavigationStrategy
 {
-    public interface INavigationStrategy
-    {
-        BehaviorSubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; }
-    }
+    BehaviorSubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; }
 }

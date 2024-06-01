@@ -6,7 +6,7 @@ namespace Samovar.Blazor
     public class NavigationService
         : INavigationService
     {
-        public BehaviorSubject<DataGridNavigationMode> NavigationMode { get; } = new BehaviorSubject<DataGridNavigationMode>(DataGridNavigationMode.Paging);
+        public BehaviorSubject<NavigationMode> NavigationMode { get; } = new BehaviorSubject<NavigationMode>(Blazor.NavigationMode.Paging);
 
         public required INavigationStrategy NavigationStrategy { get; set; }
 
@@ -26,12 +26,12 @@ namespace Samovar.Blazor
             NavigationMode.Subscribe(SetNavigationStrategy);
         }
 
-        void SetNavigationStrategy(DataGridNavigationMode strategy)
+        void SetNavigationStrategy(NavigationMode strategy)
         {
             NavigationStrategy = strategy switch
             {
-                DataGridNavigationMode.Paging => _pagingStrategy,
-                DataGridNavigationMode.VirtualScrolling => _virtualScrollingStrategy,
+                Blazor.NavigationMode.Paging => _pagingStrategy,
+                Blazor.NavigationMode.VirtualScrolling => _virtualScrollingStrategy,
                 _ => throw new NotImplementedException()
             };
         }

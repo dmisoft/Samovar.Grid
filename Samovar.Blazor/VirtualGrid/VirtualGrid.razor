@@ -2,7 +2,7 @@
 @using System.Globalization
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @typeparam T
-@inherits SmDesignComponentBase
+@inherits DesignComponentBase
 
 <div id="@ConstantService.OuterGridId"
      @ref="@LayoutService.GridOuterRef"
@@ -11,9 +11,9 @@
 
     <div style="display:flex;flex-direction:column;">
         <GridHeader T=T />
-        @if (LayoutService.FilterMode.Value == DataGridFilterMode.FilterRow)
+        @if (LayoutService.FilterMode.Value == GridFilterMode.FilterRow)
         {
-            <DataGridFilterRowPanel T=T />
+            <GridFilterRowPanel T=T />
         }
     </div>
     <div id="@ConstantService.InnerGridId" class="s-grid-content" @ref="@LayoutService.GridInnerRef">

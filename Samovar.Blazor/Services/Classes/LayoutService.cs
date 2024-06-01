@@ -26,7 +26,7 @@ namespace Samovar.Blazor
 
         public BehaviorSubject<bool> ShowFilterRow { get; } = new BehaviorSubject<bool>(false);
 
-        public BehaviorSubject<DataGridFilterMode> FilterMode { get; } = new BehaviorSubject<DataGridFilterMode>(DataGridFilterMode.None);
+        public BehaviorSubject<GridFilterMode> FilterMode { get; } = new BehaviorSubject<GridFilterMode>(GridFilterMode.None);
 
         public ElementReference GridFilterRef { get; set; }
         public ElementReference GridOuterRef { get; set; }
@@ -72,7 +72,7 @@ namespace Samovar.Blazor
                         footerStyle = $"width:{_[0]};";
                     }
 
-                    return Task.FromResult(new DataGridStyleInfo { CssStyle = outerStyle, FooterStyle = footerStyle });
+                    return Task.FromResult(new GridStyleInfo { CssStyle = outerStyle, FooterStyle = footerStyle });
                 });
         }
 
@@ -81,7 +81,7 @@ namespace Samovar.Blazor
             Task.Run(async () => await HeightWidthChanged(height: Height.Value, width: Width.Value));
         }
 
-        public event Func<DataGridStyleInfo, Task>? DataGridInnerCssStyleChanged = null;
+        public event Func<GridStyleInfo, Task>? DataGridInnerCssStyleChanged = null;
 
         public double FilterRowHeight { get; private set; }
 
@@ -97,7 +97,7 @@ namespace Samovar.Blazor
 
         public BehaviorSubject<bool> ShowDetailHeader => throw new NotImplementedException();
 
-        public IObservable<Task<DataGridStyleInfo>> DataGridInnerStyle { get; }
+        public IObservable<Task<GridStyleInfo>> DataGridInnerStyle { get; }
         public bool OriginalColumnsWidthChanged { get; set; }
 
         private async Task HeightWidthChanged(string height, string width)
@@ -127,7 +127,7 @@ namespace Samovar.Blazor
                 return;
 
             await GridInnerRef.SynchronizeGridHeaderScroll(await _jsService.JsModule(), _constantService.GridHeaderContainerId);
-            if (FilterMode.Value == DataGridFilterMode.FilterRow)
+            if (FilterMode.Value == GridFilterMode.FilterRow)
             {
                 await GridInnerRef.SynchronizeGridHeaderScroll(await _jsService.JsModule(), _constantService.GridFilterContainerId);
             }
@@ -185,7 +185,7 @@ namespace Samovar.Blazor
         {
             if (DataGridInnerCssStyleChanged != null)
             {
-                DataGridStyleInfo info = new DataGridStyleInfo
+                GridStyleInfo info = new GridStyleInfo
                 {
                     CssStyle = OuterStyle.Value,
                     ActualScrollbarWidth = 0

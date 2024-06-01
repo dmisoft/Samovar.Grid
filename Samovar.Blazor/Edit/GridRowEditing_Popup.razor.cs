@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 namespace Samovar.Blazor.Edit
 {
     public partial class GridRowEditing_Popup<TItem>
-        : SmDesignComponentBase, IAsyncDisposable
+        : DesignComponentBase, IAsyncDisposable
     {
         [CascadingParameter(Name = "datagrid-row")]
         public required GridRow<TItem> GridRow { get; set; }

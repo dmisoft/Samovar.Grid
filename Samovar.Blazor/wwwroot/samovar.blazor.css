@@ -141,6 +141,11 @@
     flex-direction: row !important;
 }
 
+.s-flex-column {
+    -ms-flex-direction: column !important;
+    flex-direction: column !important;
+}
+
 .s-align-content-center {
     -ms-flex-line-pack: center !important;
     align-content: center !important;

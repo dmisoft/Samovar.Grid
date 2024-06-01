@@ -15,7 +15,7 @@ namespace Samovar.Blazor
 
         public BehaviorSubject<int> CurrentPage { get; private set; } = new BehaviorSubject<int>(0);
 
-        public BehaviorSubject<DataGridPagerInfo> PagerInfo { get; private set; } = new BehaviorSubject<DataGridPagerInfo>(DataGridPagerInfo.Empty);
+        public BehaviorSubject<GridPagerInfo> PagerInfo { get; private set; } = new BehaviorSubject<GridPagerInfo>(GridPagerInfo.Empty);
 
         public required BehaviorSubject<NavigationStrategyDataLoadingSettings> DataLoadingSettings { get; set; } = new BehaviorSubject<NavigationStrategyDataLoadingSettings>(NavigationStrategyDataLoadingSettings.Empty);
 
@@ -57,7 +57,7 @@ namespace Samovar.Blazor
             DataLoadingSettings.OnNext(loadingSettings);
         }
 
-        private void PagerInfoSubscriber(DataGridPagerInfo info)
+        private void PagerInfoSubscriber(GridPagerInfo info)
         {
             PagerInfo.OnNext(info);
         }
@@ -72,13 +72,13 @@ namespace Samovar.Blazor
         }
 
         private int actualItemsCount = 0;
-        private DataGridPagerInfo PagerInfoChanged(int pagerSize, int pageCount, int currentPage)
+        private GridPagerInfo PagerInfoChanged(int pagerSize, int pageCount, int currentPage)
         {
 			if (currentPage == 0)
-                return DataGridPagerInfo.Empty;
+                return GridPagerInfo.Empty;
             int startPage = (int)Math.Ceiling((decimal)currentPage / (decimal)pagerSize) * pagerSize - pagerSize + 1;
             int endPage = Math.Min(startPage + pagerSize - 1, pageCount);
-            return new DataGridPagerInfo(startPage: startPage, endPage: endPage, currentPage: currentPage, totalPages: pageCount);
+            return new GridPagerInfo(startPage: startPage, endPage: endPage, currentPage: currentPage, totalPages: pageCount);
         }
 
         public Task NavigateToNextPage()

@@ -4,7 +4,7 @@ namespace Samovar.Blazor
 {
     public interface IGridSelectionService<T>
     {
-        BehaviorSubject<GridSelectionMode> SelectionMode { get; }
+        BehaviorSubject<RowSelectionMode> SelectionMode { get; }
 
         BehaviorSubject<T?> SingleSelectedDataRow { get; }
 

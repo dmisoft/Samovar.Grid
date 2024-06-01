@@ -5,7 +5,7 @@ namespace Samovar.Blazor
     public class GridSelectionService<T>
         : IGridSelectionService<T>, IAsyncDisposable
     {
-        public BehaviorSubject<GridSelectionMode> SelectionMode { get; } = new BehaviorSubject<GridSelectionMode>(GridSelectionMode.None);
+        public BehaviorSubject<RowSelectionMode> SelectionMode { get; } = new BehaviorSubject<RowSelectionMode>(RowSelectionMode.None);
 
         public BehaviorSubject<T?> SingleSelectedDataRow { get; } = new BehaviorSubject<T?>(default);
 
@@ -34,9 +34,9 @@ namespace Samovar.Blazor
         {
             switch (SelectionMode.Value)
             {
-                case GridSelectionMode.None:
+                case RowSelectionMode.None:
                     break;
-                case GridSelectionMode.Single:
+                case RowSelectionMode.Single:
                     if (SingleSelectedDataRow.Value is not null && !arg.Any(x => x is not null && x.Equals(SingleSelectedDataRow.Value)))
                     {
                         SingleSelectedDataRow.OnNext(default);
@@ -44,7 +44,7 @@ namespace Samovar.Blazor
                         SingleSelectedRowCallback?.Invoke();
                     }
                     break;
-                case GridSelectionMode.Multiple:
+                case RowSelectionMode.Multiple:
                     if (MultipleSelectedDataRows.Value != null && MultipleSelectedDataRows.Value.Any())
                     {
                         MultipleSelectedDataRows.OnNext(MultipleSelectedDataRows.Value.Intersect(arg));
@@ -61,9 +61,9 @@ namespace Samovar.Blazor
         {
             switch (SelectionMode.Value)
             {
-                case GridSelectionMode.None:
+                case RowSelectionMode.None:
                     break;
-                case GridSelectionMode.Single:
+                case RowSelectionMode.Single:
                     if (_singleSelectedDataItem is not null && _singleSelectedDataItem.Equals(dataItem))
                     {
                         _singleSelectedDataItem = default;
@@ -85,7 +85,7 @@ namespace Samovar.Blazor
                     SingleSelectedRowCallback?.Invoke();
 
                     break;
-                case GridSelectionMode.Multiple:
+                case RowSelectionMode.Multiple:
                     if (await _jsService.IsWindowCtrlKeyDown())
                     {
                         if (MultipleSelectedDataRows.Value == null || !MultipleSelectedDataRows.Value.Any())//initial selection in the multiple selection mode

@@ -1,0 +1,10 @@
+﻿@using System.Globalization
+
+@typeparam TValue
+@inherits GridFilterCellBase<TValue>
+<th style="@WidthStyle" class="px-1" id="@(((IDataColumnModel)ColMetadata).FilterCellId)" data-toggle="tooltip" data-placement="top" title="@(((IDataColumnModel)ColMetadata).Title.Value)">
+
+<div class="s-flex s-flex-row">
+    <input type="number" style="min-width:10px;" class="flex-grow-1 form-control" @bind="InnerValue" @bind:event="onchange" />
+</div>
+</th>

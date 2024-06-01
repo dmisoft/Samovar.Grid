@@ -47,7 +47,7 @@ public class SmGrid<T>
     public IEnumerable<T>? Data { get; set; }
 
     [Parameter]
-    public DataGridFilterMode? FilterMode { get; set; }
+    public GridFilterMode? FilterMode { get; set; }
 
     [Parameter]
     public int PageSize { get; set; }
@@ -75,10 +75,10 @@ public class SmGrid<T>
     public bool? ShowDetailRow { get; set; }
 
     [Parameter]
-    public DataGridNavigationMode? DataNavigationMode { get; set; }
+    public NavigationMode? DataNavigationMode { get; set; }
 
     [Parameter]
-    public DataGridEditMode EditMode { get; set; }
+    public GridEditMode EditMode { get; set; }
 
     [Parameter]
     public RenderFragment<T>? DetailRowTemplate { get; set; }
@@ -103,7 +103,7 @@ public class SmGrid<T>
     public EventCallback<T> RowRemoving { get; set; }
 
     [Parameter]
-    public GridSelectionMode SelectionMode { get; set; }
+    public RowSelectionMode SelectionMode { get; set; }
 
     [Parameter]
     public ColumnResizeMode ColumnResizeMode { get; set; }
@@ -167,16 +167,16 @@ public class SmGrid<T>
         LayoutService.ShowDetailRow.OnNext(showDetailRow.Value);
 
 
-        DataGridFilterMode? dataGridFilterMode = parameters.GetValueOrDefault<DataGridFilterMode?>(nameof(FilterMode));
-        dataGridFilterMode ??= DataGridFilterMode.FilterRow;
+        GridFilterMode? dataGridFilterMode = parameters.GetValueOrDefault<GridFilterMode?>(nameof(FilterMode));
+        dataGridFilterMode ??= GridFilterMode.FilterRow;
         LayoutService.FilterMode.OnNext(dataGridFilterMode.Value);
 
-        DataGridEditMode? dataGridEditMode = parameters.GetValueOrDefault<DataGridEditMode?>(nameof(EditMode));
-        dataGridEditMode ??= DataGridEditMode.None;
+        GridEditMode? dataGridEditMode = parameters.GetValueOrDefault<GridEditMode?>(nameof(EditMode));
+        dataGridEditMode ??= GridEditMode.None;
         EditingService.EditMode.OnNext(dataGridEditMode.Value);
 
-        GridSelectionMode? dataGridSelectionMode = parameters.GetValueOrDefault<GridSelectionMode?>(nameof(SelectionMode));
-        dataGridSelectionMode ??= GridSelectionMode.None;
+        RowSelectionMode? dataGridSelectionMode = parameters.GetValueOrDefault<RowSelectionMode?>(nameof(SelectionMode));
+        dataGridSelectionMode ??= RowSelectionMode.None;
         GridSelectionService.SelectionMode.OnNext(dataGridSelectionMode.Value);
 
         ColumnResizeMode? columnResizeMode = parameters.GetValueOrDefault<ColumnResizeMode?>(nameof(ColumnResizeMode));
@@ -224,8 +224,8 @@ public class SmGrid<T>
             EditingService.OnRowRemoving.OnNext(rowRemoving);
 
 
-        DataGridNavigationMode? dataNavigationMode = parameters.GetValueOrDefault<DataGridNavigationMode?>(nameof(DataNavigationMode));
-        dataNavigationMode ??= DataGridNavigationMode.Paging;
+        NavigationMode? dataNavigationMode = parameters.GetValueOrDefault<NavigationMode?>(nameof(DataNavigationMode));
+        dataNavigationMode ??= NavigationMode.Paging;
         NavigationService.NavigationMode.OnNext(dataNavigationMode.Value);
 
         IEnumerable<T>? data = parameters.GetValueOrDefault<IEnumerable<T>>(nameof(Data));
@@ -239,7 +239,7 @@ public class SmGrid<T>
         RenderFragment del;
         switch (NavigationService.NavigationMode.Value)
         {
-            case DataGridNavigationMode.Paging:
+            case NavigationMode.Paging:
                 del = delegate (RenderTreeBuilder builder2)
                 {
                     Columns?.Invoke(builder2);
@@ -248,7 +248,7 @@ public class SmGrid<T>
                     builder2.CloseComponent();
                 };
                 break;
-            case DataGridNavigationMode.VirtualScrolling:
+            case NavigationMode.VirtualScrolling:
                 del = delegate (RenderTreeBuilder builder2)
                 {
                     Columns?.Invoke(builder2);

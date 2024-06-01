@@ -23,7 +23,7 @@ namespace Samovar.Blazor
             }
         }
 
-        public BehaviorSubject<DataGridEditMode> EditMode { get; } = new BehaviorSubject<DataGridEditMode>(DataGridEditMode.Form);
+        public BehaviorSubject<GridEditMode> EditMode { get; } = new BehaviorSubject<GridEditMode>(GridEditMode.Form);
 
         public BehaviorSubject<EventCallback<T>> OnRowEditBegin { get; } = new BehaviorSubject<EventCallback<T>>(default(EventCallback<T>));
         public BehaviorSubject<EventCallback<Dictionary<string, object>>> OnInitializeNewRow { get; } = new BehaviorSubject<EventCallback<Dictionary<string, object>>>(default(EventCallback<Dictionary<string, object>>));
@@ -61,13 +61,13 @@ namespace Samovar.Blazor
 
             _editingRowModel.CreateEditingModel();
 
-            if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
+            if (_navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
             {
                 ShowEditingPopupDelegate?.Invoke(_editingRowModel);
             }
             else
             {
-                if (EditMode.Value == DataGridEditMode.Popup)
+                if (EditMode.Value == GridEditMode.Popup)
                     ShowEditingPopupDelegate?.Invoke(_editingRowModel);
             }
 
@@ -79,13 +79,13 @@ namespace Samovar.Blazor
             _editingRowModel!.RowState = GridRowState.Idle;
             _editingRowModel = null;
 
-            if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
+            if (_navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
             {
                 CloseEditingPopupDelegate?.Invoke();
             }
             else
             {
-                if (EditMode.Value == DataGridEditMode.Popup)
+                if (EditMode.Value == GridEditMode.Popup)
                     CloseEditingPopupDelegate?.Invoke();
             }
 
@@ -98,7 +98,7 @@ namespace Samovar.Blazor
             _editingRowModel.CommitEditingModel();
             _editingRowModel = null;
 
-            if (EditMode.Value == DataGridEditMode.Popup)
+            if (EditMode.Value == GridEditMode.Popup)
                 CloseEditingPopupDelegate?.Invoke();
 
             await OnRowEditingEnded();
@@ -120,9 +120,9 @@ namespace Samovar.Blazor
 
             await OnRowInsertBegin.Value.InvokeAsync();
 
-            if (EditMode.Value == DataGridEditMode.Popup)
+            if (EditMode.Value == GridEditMode.Popup)
                 ShowInsertingPopupDelegate?.Invoke(rowModel);
-            else if (EditMode.Value == DataGridEditMode.Form)
+            else if (EditMode.Value == GridEditMode.Form)
                 ShowInsertingFormDelegate?.Invoke(rowModel);
 
             _stateService.DataEditState.OnNext(DataEditState.Inserting);
@@ -132,17 +132,17 @@ namespace Samovar.Blazor
         {
             await OnRowInserting.Value.InvokeAsync(dataItem);
 
-            if (EditMode.Value == DataGridEditMode.Popup)
+            if (EditMode.Value == GridEditMode.Popup)
                 CloseInsertingPopupDelegate?.Invoke();
-            else if (EditMode.Value == DataGridEditMode.Form)
+            else if (EditMode.Value == GridEditMode.Form)
                 CloseInsertingFormDelegate?.Invoke();
         }
 
         public Task RowInsertCancel()
         {
-            if (EditMode.Value == DataGridEditMode.Popup)
+            if (EditMode.Value == GridEditMode.Popup)
                 CloseInsertingPopupDelegate?.Invoke();
-            else if (EditMode.Value == DataGridEditMode.Form)
+            else if (EditMode.Value == GridEditMode.Form)
                 CloseInsertingFormDelegate?.Invoke();
 
             return Task.CompletedTask;

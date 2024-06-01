@@ -1,7 +1,7 @@
 ﻿namespace Samovar.Blazor.Header;
 
 public partial class GridHiddenHeader
-    : SmDesignComponentBase, IAsyncDisposable
+    : DesignComponentBase, IAsyncDisposable
 {
     [SmInject]
     public required IColumnService GridColumnService { get; set; }

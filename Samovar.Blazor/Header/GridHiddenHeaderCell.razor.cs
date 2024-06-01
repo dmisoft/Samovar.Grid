@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 namespace Samovar.Blazor.Header
 {
     public partial class GridHiddenHeaderCell
-        : SmDesignComponentBase, IAsyncDisposable
+        : DesignComponentBase, IAsyncDisposable
     {
         [Parameter]
         public required IColumnModel ColumnModel { get; set; }

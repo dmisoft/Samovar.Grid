@@ -36,12 +36,12 @@ else
         <div class="col-10">
             <SmGrid 
                 Data="forecasts1" 
-                FilterMode=DataGridFilterMode.FilterRow 
+                FilterMode=GridFilterMode.FilterRow 
                 Height="450px" 
                 ShowDetailRow=false 
-                EditMode=DataGridEditMode.Popup
-                DataNavigationMode=DataGridNavigationMode.VirtualScrolling
-                SelectionMode=GridSelectionMode.Single
+                EditMode=GridEditMode.Popup
+                DataNavigationMode=NavigationMode.VirtualScrolling
+                SelectionMode=RowSelectionMode.Single
                     ColumnResizeMode=Columns.ColumnResizeMode.Block
                     RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
                 RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))"

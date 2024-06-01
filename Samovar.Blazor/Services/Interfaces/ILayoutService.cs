@@ -18,7 +18,7 @@ namespace Samovar.Blazor
 
         BehaviorSubject<double> MinGridWidth { get; }
         BehaviorSubject<bool> ShowDetailRow { get; }
-        BehaviorSubject<DataGridFilterMode> FilterMode { get; }
+        BehaviorSubject<GridFilterMode> FilterMode { get; }
         BehaviorSubject<bool> ShowFilterRow { get; }
 
         double FilterRowHeight { get; }
@@ -39,7 +39,7 @@ namespace Samovar.Blazor
 
         Task InitHeader();
 
-        IObservable<Task<DataGridStyleInfo>> DataGridInnerStyle { get; }
+        IObservable<Task<GridStyleInfo>> DataGridInnerStyle { get; }
 
         BehaviorSubject<ColumnResizeMode> ColumnResizeMode { get; }
         double ActualColumnsWidthSum { get; }

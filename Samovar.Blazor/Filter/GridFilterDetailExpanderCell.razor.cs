@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 namespace Samovar.Blazor.Filter;
 
 public partial class GridFilterDetailExpanderCell
-    : SmDesignComponentBase, IAsyncDisposable
+    : DesignComponentBase, IAsyncDisposable
 {
     [Parameter]
     public required IColumnModel ColumnModel { get; set; }

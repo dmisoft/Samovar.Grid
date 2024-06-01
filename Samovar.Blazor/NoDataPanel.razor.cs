@@ -1,7 +1,7 @@
 ﻿namespace Samovar.Blazor
 {
     public partial class NoDataPanel
-        : SmDesignComponentBase, IAsyncDisposable
+        : DesignComponentBase, IAsyncDisposable
     {
         protected double ContainerHeight = 0;
 

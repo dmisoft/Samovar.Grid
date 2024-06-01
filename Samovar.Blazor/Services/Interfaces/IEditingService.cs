@@ -5,7 +5,7 @@ namespace Samovar.Blazor
 {
     public interface IEditingService<T>
     {
-        BehaviorSubject<DataGridEditMode> EditMode { get; }
+        BehaviorSubject<GridEditMode> EditMode { get; }
 
         public BehaviorSubject<EventCallback<T>> OnRowEditBegin { get; }
 

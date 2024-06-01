@@ -7,16 +7,16 @@ namespace Samovar.Blazor
     public class FilterService
         : IFilterService, IAsyncDisposable
     {
-        public ObservableCollection<DataGridFilterCellInfo> ColumnFilters { get; } = new ObservableCollection<DataGridFilterCellInfo>();
+        public ObservableCollection<GridFilterCellInfo> ColumnFilters { get; } = new ObservableCollection<GridFilterCellInfo>();
 
-        public BehaviorSubject<IEnumerable<DataGridFilterCellInfo>> FilterInfo { get; } = new BehaviorSubject<IEnumerable<DataGridFilterCellInfo>>(new List<DataGridFilterCellInfo>());
+        public BehaviorSubject<IEnumerable<GridFilterCellInfo>> FilterInfo { get; } = new BehaviorSubject<IEnumerable<GridFilterCellInfo>>(new List<GridFilterCellInfo>());
 
         public FilterService()
         {
             ColumnFilters.CollectionChanged += ColumnFilters_CollectionChanged;
         }
 
-        public void Filter(DataGridFilterCellInfo filterCellInfo)
+        public void Filter(GridFilterCellInfo filterCellInfo)
         {
             if (!ColumnFilters.Contains(filterCellInfo))
             {
@@ -54,11 +54,11 @@ namespace Samovar.Blazor
 
         public T? TryGetFilterCellValue<T>(IDataColumnModel columnModel)
         {
-            if (!ColumnFilters.Any(f => f.ColumnMetadata is not null && f.ColumnMetadata.Equals(columnModel)))
+            if (!ColumnFilters.Any(f => f.ColumnModel is not null && f.ColumnModel.Equals(columnModel)))
             {
                 return default;
             }
-            return (T?)ColumnFilters.Single(f => f.ColumnMetadata is not null && f.ColumnMetadata.Equals(columnModel)).FilterCellValue;
+            return (T?)ColumnFilters.Single(f => f.ColumnModel is not null && f.ColumnModel.Equals(columnModel)).FilterCellValue;
         }
 
         public ValueTask DisposeAsync()

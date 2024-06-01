@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components.Web.Virtualization;
 namespace Samovar.Blazor
 {
     public partial class VirtualGrid<T>
-        : SmDesignComponentBase, IAsyncDisposable
+        : DesignComponentBase, IAsyncDisposable
     {
         [SmInject]
         public required IRepositoryService<T> RepositoryService { get; set; }
@@ -38,7 +38,7 @@ namespace Samovar.Blazor
 
         public RenderFragment? DataProcessingPanel { get; set; }
 
-        public required DataGridStyleInfo Style { get; set; }
+        public required GridStyleInfo Style { get; set; }
 
         public DataSourceState DataSourceState { get; set; } = DataSourceState.NoData;
         public ElementReference GridBodyRef { get; set; }

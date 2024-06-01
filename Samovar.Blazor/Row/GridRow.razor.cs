@@ -3,7 +3,7 @@
 namespace Samovar.Blazor;
 
 public partial class GridRow<TItem>
-    : SmDesignComponentBase, IAsyncDisposable
+    : DesignComponentBase, IAsyncDisposable
 {
     [SmInject]
     public required IColumnService GridColumnService { get; set; }

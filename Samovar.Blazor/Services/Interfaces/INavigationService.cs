@@ -4,7 +4,7 @@ namespace Samovar.Blazor
 {
     public interface INavigationService
     {
-        BehaviorSubject<DataGridNavigationMode> NavigationMode { get; }
+        BehaviorSubject<NavigationMode> NavigationMode { get; }
         INavigationStrategy NavigationStrategy { get; }
     }
 }

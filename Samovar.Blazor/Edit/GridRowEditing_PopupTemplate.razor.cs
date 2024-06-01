@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 namespace Samovar.Blazor.Edit
 {
     public partial class GridRowEditing_PopupTemplate<TItem>
-        : SmDesignComponentBase, IAsyncDisposable
+        : DesignComponentBase, IAsyncDisposable
     {
         [SmInject]
         public required IEditingService<TItem> EditingService { get; set; }

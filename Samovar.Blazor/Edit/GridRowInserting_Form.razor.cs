@@ -3,7 +3,7 @@
 namespace Samovar.Blazor.Edit
 {
     public partial class GridRowInserting_Form<TItem>
-        : SmDesignComponentBase, IAsyncDisposable
+        : DesignComponentBase, IAsyncDisposable
     {
         [SmInject]
         public required ILayoutService LayoutService { get; set; }

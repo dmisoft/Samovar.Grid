@@ -1,8 +1,7 @@
-﻿namespace Samovar.Blazor
+﻿namespace Samovar.Blazor;
+
+[AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
+public class SmInjectAttribute
+    : Attribute
 {
-    [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
-    public class SmInjectAttribute
-        : Attribute
-    {
-    }
 }

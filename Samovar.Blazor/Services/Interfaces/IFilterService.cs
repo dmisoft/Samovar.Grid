@@ -7,9 +7,9 @@ namespace Samovar.Blazor
 {
     public interface IFilterService
     {
-        BehaviorSubject<IEnumerable<DataGridFilterCellInfo>> FilterInfo { get; }
-        ObservableCollection<DataGridFilterCellInfo> ColumnFilters { get; }
-        void Filter(DataGridFilterCellInfo filterCellInfo);
+        BehaviorSubject<IEnumerable<GridFilterCellInfo>> FilterInfo { get; }
+        ObservableCollection<GridFilterCellInfo> ColumnFilters { get; }
+        void Filter(GridFilterCellInfo filterCellInfo);
         T? TryGetFilterCellValue<T>(IDataColumnModel columnModel);
         Task ClearFilter();
         event Func<Task> FilterCleared;

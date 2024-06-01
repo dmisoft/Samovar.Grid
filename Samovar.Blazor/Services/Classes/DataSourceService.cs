@@ -68,7 +68,7 @@ namespace Samovar.Blazor
             rr.Subscribe(myfunc33);
         }
 
-        private void myfunc33(Tuple<IEnumerable<DataGridFilterCellInfo>, DataGridColumnOrderInfo, IEnumerable<T>> tuple)
+        private void myfunc33(Tuple<IEnumerable<GridFilterCellInfo>, ColumnOrderInfo, IEnumerable<T>> tuple)
         {
             if (tuple.Item3 == null)
                 return;
@@ -78,7 +78,7 @@ namespace Samovar.Blazor
             if (tuple.Item1.Any())
                 query = AttachFilter(query, tuple.Item1);
 
-            if (tuple.Item2 != null && !tuple.Item2.Equals(DataGridColumnOrderInfo.Empty))
+            if (tuple.Item2 != null && !tuple.Item2.Equals(ColumnOrderInfo.Empty))
             {
                 var pr = typeof(T).GetProperty(tuple.Item2.Field);
                 if (pr is not null)
@@ -88,7 +88,7 @@ namespace Samovar.Blazor
             DataQuery.OnNext(query);
         }
 
-        private IQueryable<T> AttachFilter(IQueryable<T> data, IEnumerable<DataGridFilterCellInfo> filterInfo)
+        private IQueryable<T> AttachFilter(IQueryable<T> data, IEnumerable<GridFilterCellInfo> filterInfo)
         {
             Type t = typeof(T);
             ParameterExpression obj = Expression.Parameter(typeof(T));
@@ -99,8 +99,8 @@ namespace Samovar.Blazor
 
             foreach (var pair in filterInfo)
             {
-                string field = pair.ColumnMetadata!.Field.Value;
-                DataGridFilterCellInfo filterCellInfo = pair;
+                string field = pair.ColumnModel!.Field.Value;
+                GridFilterCellInfo filterCellInfo = pair;
 
                 MemberExpression memberExp = Expression.Property(obj, field);
 

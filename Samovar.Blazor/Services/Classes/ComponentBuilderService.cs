@@ -87,15 +87,15 @@ namespace Samovar.Blazor
             switch (model.RowState)
             {
                 case GridRowState.Editing:
-                    if (_navigationService.NavigationMode.Value == DataGridNavigationMode.VirtualScrolling)
+                    if (_navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
                     {
                         return GetDefaultRow(model);
                     }
-                    else if (_navigationService.NavigationMode.Value == DataGridNavigationMode.Paging)
+                    else if (_navigationService.NavigationMode.Value == NavigationMode.Paging)
                     {
                         switch (_editingService.EditMode.Value)
                         {
-                            case DataGridEditMode.Form:
+                            case GridEditMode.Form:
                                 if (_templateService.EditFormTemplate.Value != null)
                                 {
                                     return (builder) =>
@@ -114,7 +114,7 @@ namespace Samovar.Blazor
                                         builder.CloseComponent();
                                     };
                                 }
-                            case DataGridEditMode.Popup:
+                            case GridEditMode.Popup:
                                 return GetDefaultRow(model);
                         }
                     }
@@ -130,7 +130,7 @@ namespace Samovar.Blazor
         {
             RenderFragment rf = (builder) =>
                {
-                   builder.OpenComponent(0, typeof(SmDataGridRowDefault<U>));
+                   builder.OpenComponent(0, typeof(GridRowDefault<U>));
                    builder.AddAttribute(1, "RowModel", model);
                    builder.CloseComponent();
                };

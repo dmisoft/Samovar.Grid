@@ -3,7 +3,7 @@
 namespace Samovar.Blazor.Edit
 {
     public partial class GridRowEditing_Body<TItem>
-        : SmDesignComponentBase, IAsyncDisposable
+        : DesignComponentBase, IAsyncDisposable
     {
 
         [Parameter]

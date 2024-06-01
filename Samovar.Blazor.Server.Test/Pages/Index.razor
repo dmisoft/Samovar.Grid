@@ -44,12 +44,12 @@ else
             <SmGrid Data="forecasts1"
                     Height="600px"
                     Width=@gridWidth
-                    FilterMode=DataGridFilterMode.FilterRow
+                    FilterMode=GridFilterMode.FilterRow
                     ShowDetailRow=true
                     PageSize=pageSize
-                    EditMode=DataGridEditMode.Form
+                    EditMode=GridEditMode.Form
                     EditingFormTitleDelegate="@((WeatherForecast data) => Task.FromResult(data.TemperatureC.ToString()))"
-                    SelectionMode=GridSelectionMode.Multiple
+                    SelectionMode=RowSelectionMode.Multiple
                     ColumnResizeMode=Columns.ColumnResizeMode.Sliding
                     @bind-SingleSelectedDataRow=selectedRow
                     @bind-MultipleSelectedDataRows=selectedRows
@@ -67,7 +67,7 @@ else
                     <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="1*" />
                     <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width=@columnWidth />
                     <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="1*" />
-                    <CommandColumn EditButtonVisible=true NewButtonVisible=true Width="150px" />
+                    <CommandColumn EditButtonVisible=true NewButtonVisible=true Width="100px" />
                 </Columns>
                 <DetailRowTemplate Context="mydata">
                     @{

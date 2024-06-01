@@ -1,0 +1,22 @@
+﻿@inherits GridFilterCellBase<bool?>
+<th style="@(((IDataColumnModel)ColMetadata).WidthStyle)" class="px-1" id="@(((IDataColumnModel)ColMetadata).FilterCellId)" data-toggle="tooltip" data-placement="top" title="@(((IDataColumnModel)ColMetadata).Title.Value)">
+
+    <div class="s-flex s-flex-row">
+        @*    <button class="@(LayoutService.FilterToggleButtonClass) dropdown-toggle" @onclick="ShowMenu" id="@DropdownMenuButtonId" style="padding-right:3px;padding-left:3px;" />*@
+        @if (!InnerValue.HasValue)
+        {
+            <input type="text" disabled style="min-width:10px;" class="flex-grow-1" value="" />
+        }
+        else
+        {
+            if (InnerValue.Value)
+            {
+                <input type="text" disabled style="min-width:10px;" class="flex-grow-1" value="=true" />
+            }
+            else
+            {
+                <input type="text" disabled style="min-width:10px;" class="flex-grow-1" value="=false" />
+            }
+        }
+    </div>
+</th>

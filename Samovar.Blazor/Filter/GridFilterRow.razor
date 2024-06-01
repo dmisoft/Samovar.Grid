@@ -1,0 +1,79 @@
+﻿@using System.Globalization
+@typeparam TItem
+@inherits DesignComponentBase
+
+<table style="margin:0;padding:0;table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")" class="@LayoutService.TableTagClass.Value">
+    <thead class="@LayoutService.TheadTagClass.Value">
+        <tr @ref="LayoutService.GridFilterRef">
+            @if (LayoutService.ShowDetailRow.Value)
+            {
+                <GridFilterDetailExpanderCell/>
+            }
+            @foreach (IColumnModel colMeta in ColumnService.AllColumnModels)
+            {
+                switch (colMeta.ColumnType)
+                {
+                    case ColumnType.Data:
+                        @if (((IDataColumnModel)colMeta).Field.Value != null && RepositoryService.PropInfo.ContainsKey(((IDataColumnModel)colMeta).Field.Value))
+                        {
+                            @switch (RepositoryService.PropInfo[((IDataColumnModel)colMeta).Field.Value].PropertyType)
+                            {
+                                case var t when t == typeof(DateTime) || t == typeof(DateTime?):
+                                    <GridFilterCellDate ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(string):
+                                    <GridFilterCellString ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(char):
+                                    <GridFilterCellChar ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(bool):
+                                    <GridFilterCellBoolean ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(byte) || t == typeof(byte?):
+                                    <GridFilterCellNumeric TValue="byte?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(sbyte) || t == typeof(sbyte?):
+                                    <GridFilterCellNumeric TValue="sbyte?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(short) || t == typeof(short?):
+                                    <GridFilterCellNumeric TValue="short?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(ushort) || t == typeof(ushort?):
+                                    <GridFilterCellNumeric TValue="ushort?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(int) || t == typeof(int?):
+                                    <GridFilterCellNumeric TValue="int?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(uint) || t == typeof(uint?):
+                                    <GridFilterCellNumeric TValue="uint?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(long) || t == typeof(long?):
+                                    <GridFilterCellNumeric TValue="long?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(ulong) || t == typeof(ulong?):
+                                    <GridFilterCellNumeric TValue="ulong?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(float) || t == typeof(float?):
+                                    <GridFilterCellNumeric TValue="float?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(double) || t == typeof(double?):
+                                    <GridFilterCellNumeric TValue="double?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                case var t when t == typeof(decimal) || t == typeof(decimal?):
+                                    <GridFilterCellNumeric TValue="decimal?" ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        break;
+                    case ColumnType.Command:
+                        <GridFilterCommandCell ColumnModel="(ICommandColumnModel)colMeta" />
+                        break;
+                }
+            }
+            <GridFilterEmptyCell ColumnModel=@ColumnService.EmptyColumnModel />
+        </tr>
+    </thead>
+</table>

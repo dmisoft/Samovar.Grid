@@ -3,7 +3,7 @@
 namespace Samovar.Blazor;
 
 public partial class PagingFooter
-    : SmDesignComponentBase, IAsyncDisposable, IObserver<DataGridPagerInfo>
+    : DesignComponentBase, IAsyncDisposable, IObserver<GridPagerInfo>
 {
     [SmInject]
     public required ILayoutService LayoutService { get; set; }
@@ -28,7 +28,7 @@ public partial class PagingFooter
         throw new NotImplementedException();
     }
 
-    public void OnNext(DataGridPagerInfo value)
+    public void OnNext(GridPagerInfo value)
     {
         InvokeAsync(StateHasChanged);
     }

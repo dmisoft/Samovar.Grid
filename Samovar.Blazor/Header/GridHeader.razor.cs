@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 namespace Samovar.Blazor.Header;
 
 public partial class GridHeader<T>
-    : SmDesignComponentBase, IAsyncDisposable
+    : DesignComponentBase, IAsyncDisposable
 {
     [Inject]
     public required IJSRuntime JsRuntime { get; set; }

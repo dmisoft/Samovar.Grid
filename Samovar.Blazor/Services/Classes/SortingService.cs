@@ -5,14 +5,14 @@ namespace Samovar.Blazor
     public class SortingService
         : ISortingService
     {
-        public BehaviorSubject<DataGridColumnOrderInfo> ColumnOrderInfo { get; } = new BehaviorSubject<DataGridColumnOrderInfo>(DataGridColumnOrderInfo.Empty);
+        public BehaviorSubject<ColumnOrderInfo> ColumnOrderInfo { get; } = new BehaviorSubject<ColumnOrderInfo>(Blazor.ColumnOrderInfo.Empty);
 
         string _currentSortingFieldBy = string.Empty;
         bool isAscendingSorting;
 
         public Task OnColumnClick(IDataColumnModel columnModel)
         {
-            DataGridColumnOrderInfo orderInfo = DataGridColumnOrderInfo.Empty;
+            ColumnOrderInfo orderInfo = Blazor.ColumnOrderInfo.Empty;
 
             if (string.IsNullOrEmpty(_currentSortingFieldBy))
             {
@@ -41,7 +41,7 @@ namespace Samovar.Blazor
             }
 
             if (!string.IsNullOrEmpty(_currentSortingFieldBy))
-                orderInfo = new DataGridColumnOrderInfo { Field = _currentSortingFieldBy, Asc = isAscendingSorting };
+                orderInfo = new ColumnOrderInfo { Field = _currentSortingFieldBy, Asc = isAscendingSorting };
 
             ColumnOrderInfo.OnNext(orderInfo);
 
