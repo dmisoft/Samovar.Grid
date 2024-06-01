@@ -4,6 +4,8 @@ namespace Samovar.Blazor
 {
     public class GridSelectionService<T>
         : IGridSelectionService<T>, IAsyncDisposable
+        , IObserver<Task<IEnumerable<GridRowModel<T>>>>
+        , IObserver<HashSet<T>>
     {
         public BehaviorSubject<RowSelectionMode> SelectionMode { get; } = new BehaviorSubject<RowSelectionMode>(RowSelectionMode.None);
 
@@ -24,37 +26,9 @@ namespace Samovar.Blazor
         public GridSelectionService(IJsService jsService, IRepositoryService<T> repositoryService)
         {
             _jsService = jsService;
-
             _repositoryService = repositoryService;
-
-            _repositoryService.Data.Subscribe(RepositoryDataSourceChanged);
-        }
-
-        private void RepositoryDataSourceChanged(HashSet<T> arg)
-        {
-            switch (SelectionMode.Value)
-            {
-                case RowSelectionMode.None:
-                    break;
-                case RowSelectionMode.Single:
-                    if (SingleSelectedDataRow.Value is not null && !arg.Any(x => x is not null && x.Equals(SingleSelectedDataRow.Value)))
-                    {
-                        SingleSelectedDataRow.OnNext(default);
-
-                        SingleSelectedRowCallback?.Invoke();
-                    }
-                    break;
-                case RowSelectionMode.Multiple:
-                    if (MultipleSelectedDataRows.Value != null && MultipleSelectedDataRows.Value.Any())
-                    {
-                        MultipleSelectedDataRows.OnNext(MultipleSelectedDataRows.Value.Intersect(arg));
-
-                        MultipleSelectedRowsCallback?.Invoke();
-                    }
-                    break;
-                default:
-                    break;
-            }
+            _repositoryService.Data.Subscribe(this);
+            _repositoryService.ViewCollectionObservableTask.Subscribe(this);
         }
 
         public async Task OnRowSelected(T dataItem)
@@ -167,7 +141,6 @@ namespace Samovar.Blazor
                     else
                     {
                         MultipleSelectedDataRows.OnNext(new[] { dataItem });
-
                         MultipleSelectedRowsCallback?.Invoke();
                     }
 
@@ -183,6 +156,46 @@ namespace Samovar.Blazor
             MultipleSelectedRowsCallback = null;
 
             return ValueTask.CompletedTask;
+        }
+
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnNext(Task<IEnumerable<GridRowModel<T>>> value)
+        {
+            
+        }
+
+        public void OnNext(HashSet<T> value)
+        {
+            switch (SelectionMode.Value)
+            {
+                case RowSelectionMode.None:
+                    break;
+                case RowSelectionMode.Single:
+                    if (SingleSelectedDataRow.Value is not null && !value.Any(x => x is not null && x.Equals(SingleSelectedDataRow.Value)))
+                    {
+                        SingleSelectedDataRow.OnNext(default);
+                        SingleSelectedRowCallback?.Invoke();
+                    }
+                    break;
+                case RowSelectionMode.Multiple:
+                    if (MultipleSelectedDataRows.Value != null && MultipleSelectedDataRows.Value.Any())
+                    {
+                        MultipleSelectedDataRows.OnNext(MultipleSelectedDataRows.Value.Intersect(value));
+                        MultipleSelectedRowsCallback?.Invoke();
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
