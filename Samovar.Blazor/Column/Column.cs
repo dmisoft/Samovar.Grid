@@ -35,7 +35,7 @@ public class Column
         Model.Field.OnNext(field);
 
         var title = parameters.GetValueOrDefault<string>(nameof(Title));
-        title??=nameof(Model.Field);
+        title??=field;
         Model.Title.OnNext(title);
 
         var width = parameters.GetValueOrDefault<string>(nameof(Width));

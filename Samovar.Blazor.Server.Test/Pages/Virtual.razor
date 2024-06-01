@@ -8,19 +8,19 @@
 
 <h1>Weather forecast Test</h1>
 <div class="card" aria-hidden="true">
-  <div class="card-body">
-    <h5 class="card-title placeholder-glow">
-      <span class="placeholder col-6"></span>
-    </h5>
-    <p class="card-text placeholder-glow">
-      <span class="placeholder col-7"></span>
-      <span class="placeholder col-4"></span>
-      <span class="placeholder col-4"></span>
-      <span class="placeholder col-6"></span>
-      <span class="placeholder col-8"></span>
-    </p>
-    <a href="#" tabindex="-1" class="btn btn-primary disabled placeholder col-6"></a>
-  </div>
+    <div class="card-body">
+        <h5 class="card-title placeholder-glow">
+            <span class="placeholder col-6"></span>
+        </h5>
+        <p class="card-text placeholder-glow">
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-6"></span>
+            <span class="placeholder col-8"></span>
+        </p>
+        <a href="#" tabindex="-1" class="btn btn-primary disabled placeholder col-6"></a>
+    </div>
 </div>
 @if (false)
 {
@@ -34,37 +34,36 @@ else
     <button class="btn btn-primary" @onclick="deselectSingleSelectedItem">deselct single selected item</button>
     <div class="row">
         <div class="col-10">
-            <SmGrid 
-                Data="forecasts1" 
-                FilterMode=GridFilterMode.FilterRow 
-                Height="450px" 
-                ShowDetailRow=false 
-                EditMode=GridEditMode.Popup
-                DataNavigationMode=NavigationMode.VirtualScrolling
-                SelectionMode=RowSelectionMode.Single
+            <SmGrid Data="forecasts1"
+                    FilterMode=GridFilterMode.FilterRow
+                    Height="450px"
+                    ShowDetailRow=false
+                    EditMode=GridEditMode.Popup
+                    DataNavigationMode=NavigationMode.VirtualScrolling
+                    SelectionMode=RowSelectionMode.Single
                     ColumnResizeMode=Columns.ColumnResizeMode.Block
                     RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
-                RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))"
-                @bind-SingleSelectedDataRow=selectedRow >
-        <Columns>
-            <Column Title="Pos." Field="@nameof(WeatherForecast.Position)" Width="50px"/>
-            <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="200px"/>
-            <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="200px"/>
-            <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="1*"/>
-            <CommandColumn EditButtonVisible=true NewButtonVisible=true Width="250px"/>
-        </Columns>
-        <DetailRowTemplate Context="mydata">
-        @{
-            WeatherForecast data = mydata as WeatherForecast;
-                <div>@data.Date</div>
-                <div>@data.TemperatureC</div>
-                <div>@data.TemperatureF</div>
-        }
-    </DetailRowTemplate>
-    </SmGrid>
+                    RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))"
+                    @bind-SingleSelectedDataRow=selectedRow>
+                <Columns>
+                    <Column Title="Pos." Field="@nameof(WeatherForecast.Position)" Width="50px" />
+                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="200px" />
+                    <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="200px" />
+                    <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="1*" />
+                    <CommandColumn EditButtonVisible=true NewButtonVisible=true Width="250px" />
+                </Columns>
+                <DetailRowTemplate Context="mydata">
+                    @{
+                        WeatherForecast data = mydata as WeatherForecast;
+                        <div>@data.Date</div>
+                        <div>@data.TemperatureC</div>
+                        <div>@data.TemperatureF</div>
+                    }
+                </DetailRowTemplate>
+            </SmGrid>
         </div>
         <div class="col-2">
-        @if(selectedRow != null)
+            @if (selectedRow != null)
             {
                 <div>@("Summary " + selectedRow.Summary + " Temp. " + selectedRow.TemperatureC)</div>
             }
@@ -111,7 +110,7 @@ else
 
     Task RowInsertingHandler(WeatherForecast item)
     {
-        forecasts1 ??=new List<WeatherForecast>();
+        forecasts1 ??= new List<WeatherForecast>();
         forecasts1 = ((new WeatherForecast[] { item }).Concat(forecasts1)).ToList();
         StateHasChanged();
         return Task.CompletedTask;
@@ -155,7 +154,7 @@ else
         [Required]
         [StringLength(maximumLength: 32, MinimumLength = 4, ErrorMessage = "The description should be 4 to 32 characters.")]
         public string Summary { get; set; }
-        
+
         //public Action StateHasChanged { get; set; }
     }
 }

@@ -60,13 +60,13 @@ else
                         <CellShowTemplate>
                             @{
                                 WeatherForecast data = context as WeatherForecast;
-                                <div>Template @data.Summary</div>
+                                <div style="white-space:break-spaces">Template @data.Summary</div>
                             }
                         </CellShowTemplate>
                     </Column>
                     <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="1*" />
                     <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width=@columnWidth />
-                    <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="1*" />
+                    <Column Field="@nameof(WeatherForecast.Summary)" Width="1*" />
                     <CommandColumn EditButtonVisible=true NewButtonVisible=true Width="100px" />
                 </Columns>
                 <DetailRowTemplate Context="mydata">
@@ -201,14 +201,12 @@ else
     {
         forecasts1 ??= new List<WeatherForecast>();
         forecasts1 = ((new WeatherForecast[] { item }).Concat(forecasts1)).ToList();
-        StateHasChanged();
         return Task.CompletedTask;
     }
 
     Task RowRemovingHandler(WeatherForecast item)
     {
         forecasts1 = forecasts1.Except(new List<WeatherForecast> { item }).ToList();
-        StateHasChanged();
         return Task.CompletedTask;
     }
 
@@ -216,14 +214,12 @@ else
     {
         forecasts2 ??= new List<WeatherForecast>();
         forecasts2 = ((new WeatherForecast[] { item }).Concat(forecasts2)).ToList();
-        StateHasChanged();
         return Task.CompletedTask;
     }
 
     Task RowRemovingHandler2(WeatherForecast item)
     {
         forecasts2 = forecasts2.Except(new List<WeatherForecast> { item }).ToList();
-        StateHasChanged();
         return Task.CompletedTask;
     }
 
