@@ -46,12 +46,6 @@ namespace Samovar.Blazor
             string? RightSideHiddenCellId,
             string OuterGridId);
 
-        ValueTask<double> MeasureScrollbar();
-
-        ValueTask<double> MeasureTableFilterHeight(string tableClass, string tableHeaderClass, string filterToggleButtonClass);
-
-        ValueTask<double> MeasureTableRowHeight(string tableClass);
-
         ValueTask<double> GetInnerGridHeight();
 
         ValueTask<double> GetElementHeightById(string elementId);

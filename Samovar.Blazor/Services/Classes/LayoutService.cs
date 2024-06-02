@@ -132,8 +132,6 @@ namespace Samovar.Blazor
                 await GridInnerRef.SynchronizeGridHeaderScroll(await _jsService.JsModule(), _constantService.GridFilterContainerId);
             }
 
-            FilterRowHeight = await _jsService.MeasureTableFilterHeight(TableTagClass.Value, TheadTagClass.Value, FilterToggleButtonClass.Value);
-
             await CaculateHeader();
         }
 

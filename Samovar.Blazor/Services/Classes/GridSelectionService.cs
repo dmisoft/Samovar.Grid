@@ -192,7 +192,18 @@ public class GridSelectionService<T>
 
     public void OnNext(IEnumerable<T> value)
     {
-        Reset();
+        if (SingleSelectedDataRow.Value is not null && !value.Any(x=> x.Equals(SingleSelectedDataRow.Value)))
+        {
+            SingleSelectedDataRow.OnNext(default);
+            SingleSelectedRowCallback?.Invoke();
+        }
+
+        if (MultipleSelectedDataRows.Value is not null)
+        {
+            var intersectionList = MultipleSelectedDataRows.Value.Intersect(value);
+            MultipleSelectedDataRows.OnNext(intersectionList);
+            MultipleSelectedRowsCallback?.Invoke();
+        }
     }
 
     private void Reset()

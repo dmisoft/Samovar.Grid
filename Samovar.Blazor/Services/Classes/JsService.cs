@@ -60,19 +60,6 @@ namespace Samovar.Blazor
             return await (await JsModule()).InvokeAsync<bool>("getWindowIsShiftKeyDown");
         }
 
-        public async ValueTask<double> MeasureScrollbar()
-        {
-            return await JsInteropClasses.MeasureScrollbar(await JsModule());
-        }
-        public async ValueTask<double> MeasureTableFilterHeight(string tableClass, string tableHeaderClass, string filterToggleButtonClass)
-        {
-            return await JsInteropClasses.MeasureTableFilterHeight(await JsModule(), tableClass, tableHeaderClass, filterToggleButtonClass, $"measure{Guid.NewGuid().ToString().Replace("-", "")}");
-        }
-        public async ValueTask<double> MeasureTableRowHeight(string tableClass)
-        {
-            return await JsInteropClasses.MeasureTableRowHeight(await JsModule(), tableClass, $"measure{Guid.NewGuid().ToString().Replace("-", "")}");
-        }
-
         public async ValueTask<double> GetInnerGridHeight()
         {
             return await (await JsModule()).InvokeAsync<double>("getElementHeight", new[] { _constantService.InnerGridId });

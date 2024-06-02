@@ -42,80 +42,6 @@ export const windowStateVars =
     isShiftKeyDown: false
 }
 
-export function measureScrollbar() {
-    var scrollDiv = document.createElement('div');
-    scrollDiv.className = 's-scrollbar-measure';
-    document.body.appendChild(scrollDiv);
-
-    // Get the scrollbar width
-    var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
-    // Delete the div 
-    document.body.removeChild(scrollDiv);
-
-    return scrollbarWidth;
-}
-export function measureTableFilterHeight(tableClass, tableHeaderClass, filterToggleButtonClass, testId) {
-    var table = document.createElement('table');
-    table.setAttribute('style', 'margin:0;padding:0;table-layout:fixed;')
-    table.className = tableClass;
-
-    var thead = document.createElement('thead');
-    thead.className = tableHeaderClass;
-    table.appendChild(thead);
-
-    var tr = document.createElement('tr');
-    tr.id = testId;
-    thead.appendChild(tr);
-
-    var th = document.createElement('th');
-    tr.appendChild(th);
-
-    var div = document.createElement('div');
-    div.setAttribute('style', 'display:flex !important;display:-ms-flexbox!important;-ms-flex-direction:row !important;flex-direction:row !important;');
-    th.appendChild(div);
-
-    var button = document.createElement('button');
-    button.textContent = '*a*';
-    button.className = filterToggleButtonClass;
-    button.setAttribute('style', 'padding-right:3px;padding-left:3px;');
-    div.appendChild(button);
-
-    var input = document.createElement('input');
-    input.className = 'form-control';
-    div.appendChild(input);
-
-    document.body.appendChild(table);
-
-    // Get the scrollbar width
-    var rowHeight = document.getElementById(testId).clientHeight;
-    // Delete the table
-    document.body.removeChild(table);
-
-    return rowHeight;
-}
-
-export function measureTableRowHeight(tableClass, testId) {
-    let table = document.createElement('table');
-    let tr = document.createElement('tr');
-    let td = document.createElement('td');
-
-    table.appendChild(tr);
-    tr.id = testId;
-    tr.appendChild(td);
-    td.textContent = 'CONTENT';
-
-    table.className = tableClass;
-    document.body.appendChild(table);
-
-    // Get the scrollbar width
-    let rowHeight = document.getElementById(testId).clientHeight;
-
-    // Delete the table 
-    document.body.removeChild(table);
-
-    return rowHeight;
-}
-
 export function getWindowIsCtrlKeyDown() {
     return windowStateVars.isCtrlKeyDown;
 }
@@ -143,17 +69,6 @@ export function synchronizeGridHeaderScroll(elementRef, gridHeaderContainerId) {
     });
 }
 
-//export function synchronizeGridInnerBodyScroll(elementRef, gridInnerBodyId) {
-//    elementRef.addEventListener("scroll", function (event) {
-//        translateYOffset = $("#" + gridInnerBodyId).attr("translate_y_offset");
-//        if (isNaN(translateYOffset) || isNaN(elementRef.scrollTop)) {
-//            return;
-//        }
-//        translateY = parseInt(translateYOffset) + parseInt(elementRef.scrollTop);
-//        $("#" + gridInnerBodyId).css("transform", "translateY(" + translateY + "px)");
-//    });
-//}
-
 export function isPartialInView(elementId, innerGridId) {
     //var elementTopValue = $("#" + elementId).offset().top;
     let elmnt = document.getElementById(elementId);
@@ -168,15 +83,6 @@ export function isPartialInView(elementId, innerGridId) {
 
         return JSON.stringify({ ProbablyNotInView: probablyNotInView, elementTop: elementTopValue, elementBottom: elementBottomValue, viewportTop: viewportTopValue, viewportBottom: viewportBottomValue });
     }
-
-    //var elementTopValue = $("#" + elementId).offset().top;
-    //var viewportTopValue = $("#" + innerGridId).offset().top;
-
-    //var elementBottomValue = elementTopValue + $("#" + elementId).outerHeight();
-    //var viewportBottomValue = viewportTopValue + $("#" + innerGridId).height();
-    //var probablyNotInView = Boolean(elementBottomValue > viewportBottomValue || elementTopValue < viewportTopValue);
-
-    //return JSON.stringify({ ProbablyNotInView: probablyNotInView, elementTop: elementTopValue, elementBottom: elementBottomValue, viewportTop: viewportTopValue, viewportBottom: viewportBottomValue });
 }
 
 export function isScrollbarVisible(innerGridId) {
@@ -227,11 +133,6 @@ export function startColumnWidthChangeMode(_gridDotNetRef, _gridColWidthSum, _co
     gridStateVars.newRightSideColumnWidth = gridStateVars.oldRightSideColumnWidth;
     gridStateVars.rightSideFilterCellId = _rightSideFilterCellId;
     gridStateVars.rightSideHiddenCellId = _rightSideHiddenCellId;
-
-    //gridStateVars.emptyColWidth = 0;
-    //if (gridStateVars.gridColWidthSum < gridStateVars.innerGridWidth && gridStateVars.fitColumnsToTableWidth === 'Sliding') {
-    //    gridStateVars.emptyColWidth = gridStateVars.innerGridWidth - gridStateVars.gridColWidthSum - 1;
-    //}
 }
 
 export function toggleFilterPopupMenu(toggleFilterMenuButtonId, filterMenuContainerId, _filterMenuId, toogleToShow) {
@@ -355,17 +256,6 @@ export function onWindowMouseMove(event) {
         }
 
         gridStateVars.newVisibleAbsoluteWidthValue = newTriggerColumnWidth;
-        //if (gridStateVars.fitColumnsToTableWidth === 'Sliding') {
-        //    const newInnerGridWidth = gridStateVars.innerGridWidth + delta;
-        //    document.getElementById(gridStateVars.innerGridId).style.width = newInnerGridWidth + 'px';
-        //}
-
-        //if (gridStateVars.fitColumnsToTableWidth === 'Sliding' && gridStateVars.gridColWidthSum + delta < gridStateVars.innerGridWidth) {
-        //    gridStateVars.emptyColWidth = gridStateVars.innerGridWidth - (gridStateVars.gridColWidthSum + delta);
-        //}
-        //else {
-        //    gridStateVars.emptyColWidth = 0;
-        //}
 
         if (gridStateVars.fitColumnsToTableWidth === 'Sliding' && gridStateVars.gridColWidthSum + delta < gridStateVars.outerGridWidth) {
             gridStateVars.emptyHeaderColWidth = gridStateVars.outerGridWidth - (gridStateVars.gridColWidthSum + delta);
@@ -392,14 +282,6 @@ export function onWindowMouseMove(event) {
             visibleHeaderEmptyColumn.style.width = undefined;
             filterHeaderEmptyColumn.style.width = undefined;
         }
-
-        //if (gridStateVars.emptyColWidth !== 0) {
-        //    document.getElementById(gridStateVars.hiddenHeaderEmptyColumnId).style.width = gridStateVars.emptyColWidth + 'px';
-        //}
-        //else {
-        //    document.getElementById(gridStateVars.hiddenHeaderEmptyColumnId).style.width = null;
-        //}
-
     }
 }
 
@@ -615,34 +497,5 @@ window.GridFunctions = {
     },
     getElementScrollLeftByRef: function (element) {
         return element.scrollLeft;
-    }
-};
-
-window.dataGridScrollbar = {
-    handleMouseDown: function (dotNetObjectRef) {
-        document.addEventListener('mousemove', handleMouseMove);
-        document.addEventListener('mouseup', handleMouseUp);
-
-        function handleMouseMove(e) {
-            dotNetObjectRef.invokeMethodAsync('HandleMouseMove', e.clientY);
-            console.log("Test:" + e.clientY);
-        }
-
-        function handleMouseUp() {
-            dotNetObjectRef.invokeMethodAsync('HandleMouseUp');
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mouseup', handleMouseUp);
-        }
-    },
-
-    handleMouseMove: function (deltaY) {
-        //var thumb = document.getElementById('customScrollbarThumb');
-        //if (thumb && thumb.style) {
-        //    thumb.style.top = Math.max(0, thumb.offsetTop + deltaY) + 'px';
-        //}
-    },
-
-    handleMouseUp: function () {
-        // Clean up any resources if needed
     }
 };

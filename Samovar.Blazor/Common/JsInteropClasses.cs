@@ -5,21 +5,6 @@ namespace Samovar.Blazor;
 
 internal static class JsInteropClasses
 {
-    internal static ValueTask<double> MeasureScrollbar(IJSObjectReference jsModule)
-    {
-        return jsModule.InvokeAsync<double>("measureScrollbar");
-    }
-
-    internal static ValueTask<double> MeasureTableFilterHeight(IJSObjectReference jsModule, string tableClass, string tableHeaderClass, string filterToggleButtonClass, string testId)
-    {
-        return jsModule.InvokeAsync<double>("measureTableFilterHeight", tableClass, tableHeaderClass, filterToggleButtonClass, testId);
-    }
-
-    internal static ValueTask<double> MeasureTableRowHeight(IJSObjectReference jsModule, string tableClass, string testId)
-    {
-        return jsModule.InvokeAsync<double>("measureTableRowHeight", tableClass, testId);
-    }
-
     internal static ValueTask<bool> IsWindowCtrlKeyDown(IJSObjectReference jsModule)
     {
         return jsModule.InvokeAsync<bool>("getWindowIsCtrlKeyDown");
