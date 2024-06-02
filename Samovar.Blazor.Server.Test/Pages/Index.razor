@@ -37,7 +37,8 @@ else
     <input type="text" @bind="pageSize" />
     <input type="text" @bind="gridWidth" />
 
-    <select @bind=@selectionMode>
+    // get bootstrap css class for "option"" tag in select
+    <select class="form-select form-select-lg" @bind=@selectionMode>
         <option value=@RowSelectionMode.None>None</option>
         <option value=@RowSelectionMode.Single>Single</option>
         <option value=@RowSelectionMode.Multiple>Multiple</option>
