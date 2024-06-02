@@ -113,13 +113,13 @@ public class SmGrid<T>
     public T? SingleSelectedDataRow { get; set; }
 
     [Parameter]
-    public EventCallback<T> SingleSelectedDataRowChanged { get; set; }
+    public EventCallback<T?> SingleSelectedDataRowChanged { get; set; }
 
     [Parameter]
     public IEnumerable<T>? MultipleSelectedDataRows { get; set; }
 
     [Parameter]
-    public EventCallback<IEnumerable<T>> MultipleSelectedDataRowsChanged { get; set; }
+    public EventCallback<IEnumerable<T>?> MultipleSelectedDataRowsChanged { get; set; }
 
     [Parameter]
     public Func<T, Task<string>>? EditingFormTitleDelegate { get; set; }

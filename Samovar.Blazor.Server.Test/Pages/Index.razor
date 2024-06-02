@@ -186,7 +186,8 @@ else
         forecasts2 = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
 
         //selectedRows = forecasts1.Take(2);
-        selectedRow = forecasts1.First();
+        // selectedRow = forecasts1.First();
+        StateHasChanged();
     }
 
     Task changeStyle()

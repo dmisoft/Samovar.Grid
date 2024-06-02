@@ -13,9 +13,9 @@ public class GridSelectionService<T>
 
     public BehaviorSubject<RowSelectionMode> SelectionMode { get; } = new BehaviorSubject<RowSelectionMode>(RowSelectionMode.None);
 
-    public BehaviorSubject<T?> SingleSelectedDataRow { get; } = new BehaviorSubject<T?>(default);
+    public BehaviorSubject<T?> SingleSelectedDataRow { get; private set; } = new BehaviorSubject<T?>(default);
 
-    public BehaviorSubject<IEnumerable<T>?> MultipleSelectedDataRows { get; } = new BehaviorSubject<IEnumerable<T>?>(default);
+    public BehaviorSubject<IEnumerable<T>?> MultipleSelectedDataRows { get; private set; } = new BehaviorSubject<IEnumerable<T>?>(default);
 
     public Func<Task>? SingleSelectedRowCallback { get; set; }
 
@@ -197,8 +197,11 @@ public class GridSelectionService<T>
 
     private void Reset()
     {
-        SingleSelectedDataRow.OnNext(default);
-        MultipleSelectedDataRows.OnNext(default);
+        SingleSelectedDataRow.OnCompleted();
+        SingleSelectedDataRow = new BehaviorSubject<T?>(default);
+
+        MultipleSelectedDataRows.OnCompleted();
+        MultipleSelectedDataRows = new BehaviorSubject<IEnumerable<T>?>(default);
 
         SingleSelectedRowCallback?.Invoke();
         MultipleSelectedRowsCallback?.Invoke();
