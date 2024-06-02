@@ -35,45 +35,14 @@ public class GridRowModel<T>
 		, IEnumerable<IDataColumnModel> columnModel
 		, int dataItemPosition
 		, Dictionary<string, PropertyInfo> propDict
-		, bool detailExpanded
-
-        )
-		//, IGridSelectionService<T> gridSelectionService)
+		, bool detailExpanded)
 	{
-        //get an service from the service provider
-        //var gridSelectionService = serviceProvider.GetRequiredService<IGridSelectionService<T>>();
-        // inject the service into the constructor
-        //public GridRowModel(
-        //    T dataItem
-        //    , IEnumerable<IDataColumnModel> columnModel
-        //    , int dataItemPosition
-        //    , Dictionary<string, PropertyInfo> propDict
-        //    , bool detailExpanded
-        //    , IGridSelectionService<T> gridSelectionService)
-        //{
-
-        // can be inject an service in my class before custom constructor?
-
-
-        //services.AddSingleton<IGridSelectionService<T>, GridSelectionService<T>>();
-
-
-
         DataItemPosition = dataItemPosition;
 		DataItem = dataItem;
 		ColumnMetadata = columnModel;
 		PropDict = propDict;
 		RowDetailExpanded = detailExpanded;
 		GridCellModels = CreateGridRowCellModelCollection2(dataItem);
-		//gridSelectionService.MultipleSelectedDataRows.Subscribe(selectedItems =>
-  //      {
-  //          IsRowSelected = selectedItems is not null && selectedItems.Any(a => a!.Equals(DataItem));
-            
-  //      });		
-		//gridSelectionService.SingleSelectedDataRow.Subscribe(selectedItem =>
-  //      {
-  //          IsRowSelected = selectedItem is not null && selectedItem.Equals(DataItem);
-  //      });
     }
 
 	internal List<DataGridRowCellModel<T>> CreateGridRowCellModelCollection(IEnumerable<IDataColumnModel> columnMetadata, T dataItem)//, CancellationToken token)

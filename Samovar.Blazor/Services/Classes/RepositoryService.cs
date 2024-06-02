@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Reflection;
 
 namespace Samovar.Blazor;
@@ -8,15 +7,11 @@ namespace Samovar.Blazor;
 public class RepositoryService<T>
     : IRepositoryService<T>, IAsyncDisposable
 {
-    //public IEnumerable<GridRowModel<T>> ViewCollection { get; } = new List<GridRowModel<T>>();
-
     private readonly IDataSourceService<T> _dataSourceService;
     private readonly INavigationService _navigationService;
     private readonly IColumnService _columnService;
     private readonly IRowDetailService<T> _rowDetailService;
     private readonly IGridStateService _stateService;
-
-    //public BehaviorSubject<HashSet<T>> Data { get; private set; } = new BehaviorSubject<HashSet<T>>(new HashSet<T>());
 
     public Dictionary<string, PropertyInfo> PropInfo { get; } = new Dictionary<string, PropertyInfo>();
     public static Dictionary<string, Func<T, int>> PropInfoDelegateInt { get; } = new Dictionary<string, Func<T, int>>();
