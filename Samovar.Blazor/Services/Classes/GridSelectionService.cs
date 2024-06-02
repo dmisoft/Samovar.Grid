@@ -31,10 +31,12 @@ namespace Samovar.Blazor
             dataSourceService.Data.DistinctUntilChanged().Subscribe(this);
             repositoryService.ViewCollectionObservableTask.Subscribe(this);
             SelectionMode.DistinctUntilChanged().Subscribe(this);
+            
             SingleSelectedDataRow.DistinctUntilChanged().Subscribe(SingleSelectedDataRow =>
             {   
                 SingleSelectedRowCallback?.Invoke();
             });
+            
             MultipleSelectedDataRows.DistinctUntilChanged().Subscribe(MultipleSelectedDataRows =>
             {
                 MultipleSelectedRowsCallback?.Invoke();

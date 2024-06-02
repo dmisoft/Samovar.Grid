@@ -39,8 +39,8 @@ public partial class GridRowDefault<T>
     protected override Task OnParametersSetAsync()
     {
         base.OnParametersSetAsync();
-        RowModel.RowSelected = false;
-
+        RowModel.IsRowSelected = false;
+        //subscribtion am besten in row model?!
         switch (GridSelectionService.SelectionMode.Value)
         {
             case RowSelectionMode.None:
@@ -49,10 +49,10 @@ public partial class GridRowDefault<T>
                 var val = GridSelectionService.SingleSelectedDataRow.Value;
                 if (val is null)
                     break;
-                RowModel.RowSelected = !object.Equals(val, default(T)) && val.Equals(RowModel.DataItem);
+                RowModel.IsRowSelected = !object.Equals(val, default(T)) && val.Equals(RowModel.DataItem);
                 break;
             case RowSelectionMode.Multiple:
-                RowModel.RowSelected = GridSelectionService.MultipleSelectedDataRows.Value is not null && GridSelectionService.MultipleSelectedDataRows.Value.Any(a => a!.Equals(RowModel.DataItem));
+                RowModel.IsRowSelected = GridSelectionService.MultipleSelectedDataRows.Value is not null && GridSelectionService.MultipleSelectedDataRows.Value.Any(a => a!.Equals(RowModel.DataItem));
                 break;
             default:
                 break;
@@ -99,13 +99,13 @@ public partial class GridRowDefault<T>
 
     private void MultipleSelectedDataRowsChanged(IEnumerable<T>? arg)
     {
-        RowModel.RowSelected = arg is not null && arg.Any(a => a!.Equals(RowModel.DataItem));
+        RowModel.IsRowSelected = arg is not null && arg.Any(a => a!.Equals(RowModel.DataItem));
         StateHasChanged();
     }
 
     private void SingleSelectedDataRowsChanged(T? arg)
     {
-        RowModel.RowSelected = arg is not null && arg.Equals(RowModel.DataItem);
+        RowModel.IsRowSelected = arg is not null && arg.Equals(RowModel.DataItem);
         StateHasChanged();
     }
 

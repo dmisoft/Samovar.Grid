@@ -223,16 +223,21 @@ public class SmGrid<T>
         IEnumerable<T>? data = parameters.GetValueOrDefault<IEnumerable<T>>(nameof(Data));
         if (data != null)
             DataSourceService.Data.OnNext(data);
-        
+
         if (dataGridSelectionMode == RowSelectionMode.Multiple)
         {
             IEnumerable<T>? multipleSelectedDataRows = parameters.GetValueOrDefault<IEnumerable<T>?>(nameof(MultipleSelectedDataRows));
             GridSelectionService.MultipleSelectedDataRows.OnNext(multipleSelectedDataRows);
 
         }
-        else {
+        else if (dataGridSelectionMode == RowSelectionMode.Single)
+        {
             T? singleSelectedDataRow = parameters.GetValueOrDefault<T?>(nameof(SingleSelectedDataRow));
             GridSelectionService.SingleSelectedDataRow.OnNext(singleSelectedDataRow);
+        }
+        else {
+            GridSelectionService.SingleSelectedDataRow.OnNext(default);
+            GridSelectionService.MultipleSelectedDataRows.OnNext(default);
         }
     }
 

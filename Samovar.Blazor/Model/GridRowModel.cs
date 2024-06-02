@@ -11,7 +11,7 @@ public interface IComponentModel
 public class GridRowModel<T>
 	: IGridRowModel<T>, IAsyncDisposable
 {
-	public bool RowDetailExpanded { get; set; }
+    public bool RowDetailExpanded { get; set; }
 
 	public string HtmlElementId { get; } = $"sdatagridrow{Guid.NewGuid().ToString().Replace("-", "")}";
 
@@ -19,7 +19,7 @@ public class GridRowModel<T>
 
 	public int DataItemPosition { get; set; }
 	public int DataItemIndex { get => DataItemPosition - 1; }
-	public bool RowSelected { get; set; }
+	public bool IsRowSelected { get; set; }
 	public T DataItem { get; set; }
 	public T? EditingDataItem { get; set; }
 	public List<DataGridRowCellModel<T>> GridCellModels { get; set; }
@@ -29,22 +29,52 @@ public class GridRowModel<T>
 
 	private readonly Dictionary<string, PropertyInfo> PropDict;
 
-	#region ctor
+	
+	public GridRowModel(
+		T dataItem
+		, IEnumerable<IDataColumnModel> columnModel
+		, int dataItemPosition
+		, Dictionary<string, PropertyInfo> propDict
+		, bool detailExpanded
 
-	public GridRowModel(T dataItem, IEnumerable<IDataColumnModel> columnMetadata, int dataItemPosition, Dictionary<string, PropertyInfo> propDict, bool detailExpanded)
+        )
+		//, IGridSelectionService<T> gridSelectionService)
 	{
-		DataItemPosition = dataItemPosition;
+        //get an service from the service provider
+        //var gridSelectionService = serviceProvider.GetRequiredService<IGridSelectionService<T>>();
+        // inject the service into the constructor
+        //public GridRowModel(
+        //    T dataItem
+        //    , IEnumerable<IDataColumnModel> columnModel
+        //    , int dataItemPosition
+        //    , Dictionary<string, PropertyInfo> propDict
+        //    , bool detailExpanded
+        //    , IGridSelectionService<T> gridSelectionService)
+        //{
+
+        // can be inject an service in my class before custom constructor?
+
+
+        //services.AddSingleton<IGridSelectionService<T>, GridSelectionService<T>>();
+
+
+
+        DataItemPosition = dataItemPosition;
 		DataItem = dataItem;
-		ColumnMetadata = columnMetadata;
+		ColumnMetadata = columnModel;
 		PropDict = propDict;
 		RowDetailExpanded = detailExpanded;
-		Stopwatch stopWatch = new Stopwatch();
-		stopWatch.Start();
 		GridCellModels = CreateGridRowCellModelCollection2(dataItem);
-		stopWatch.Stop();
-	}
-
-	#endregion
+		//gridSelectionService.MultipleSelectedDataRows.Subscribe(selectedItems =>
+  //      {
+  //          IsRowSelected = selectedItems is not null && selectedItems.Any(a => a!.Equals(DataItem));
+            
+  //      });		
+		//gridSelectionService.SingleSelectedDataRow.Subscribe(selectedItem =>
+  //      {
+  //          IsRowSelected = selectedItem is not null && selectedItem.Equals(DataItem);
+  //      });
+    }
 
 	internal List<DataGridRowCellModel<T>> CreateGridRowCellModelCollection(IEnumerable<IDataColumnModel> columnMetadata, T dataItem)//, CancellationToken token)
 	{
