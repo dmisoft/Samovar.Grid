@@ -1,7 +1,0 @@
-﻿@namespace Samovar.Blazor
-@typeparam TItem
-@inherits DesignComponentBase
-
-<CascadingValue Value=this Name="datagrid-row">
-	@ComponentBuilderService.GetRow(RowModel)
-</CascadingValue>

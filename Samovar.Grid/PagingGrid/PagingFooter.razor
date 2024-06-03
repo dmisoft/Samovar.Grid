@@ -1,0 +1,33 @@
+﻿@namespace Samovar.Grid
+@using System.Globalization
+
+@inherits DesignComponentBase
+@if (!PagingNavigationStrategy.PagerInfo.Value.Equals(GridPagerInfo.Empty))
+{
+	<table @ref="GridFooterRef" style="width:100%;" class="@LayoutService.TableTagClass.Value">
+		<tfoot>
+			<tr>
+				<td>
+					<div class="s-flex s-flex-row s-justify-content-between s-align-items-center">
+						<div>
+							<ul class="@LayoutService.PaginationClass.Value" style="margin:10px 0">
+								@*<li class="page-item s-noselect" style="cursor:pointer;" @onclick=@(()=>DataGrid.SetPagerSize("back"))><a class="page-link">&laquo;</a></li>*@
+								<li class="page-item s-noselect" style="cursor: pointer;" @onclick=@(async ()=>await PagingNavigationStrategy.NavigateToPreviousPage())><a class="page-link">&lsaquo;</a></li>
+								@for (uint i = PagingNavigationStrategy.PagerInfo.Value.StartPage; i <= PagingNavigationStrategy.PagerInfo.Value.EndPage; i++)
+								{
+									var currentPage = i;
+									<li class="page-item s-noselect @(currentPage==PagingNavigationStrategy.PagerInfo.Value.CurrentPage?"active":"")" style="cursor: pointer;" @onclick=@(()=>PagingNavigationStrategy.NavigateToPage(currentPage))><a class="page-link">@currentPage</a></li>
+								}
+								<li class="page-item s-noselect" style="cursor: pointer;" @onclick=@(async ()=> await PagingNavigationStrategy.NavigateToNextPage())><a class="page-link">&rsaquo;</a></li>
+								@*<li class="page-item s-noselect" style="cursor: pointer;" @onclick=@(()=>DataGrid.SetPagerSize("forward"))><a class="page-link">&raquo;</a></li>*@
+							</ul>
+						</div>
+						<div>
+							<span class="btn disabled">Page @PagingNavigationStrategy.PagerInfo.Value.CurrentPage of @PagingNavigationStrategy.PagerInfo.Value.TotalPages</span>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+}

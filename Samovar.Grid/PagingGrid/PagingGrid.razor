@@ -1,0 +1,62 @@
+﻿@namespace Samovar.Grid
+@using System.Globalization
+@typeparam T
+@inherits DesignComponentBase
+
+<div id="@ConstantService.OuterGridId"
+     @ref="@LayoutService.GridOuterRef"
+     class="s-grid-container"
+     style="@Style.CssStyle" @onkeydown:stopPropagation="true">
+
+    <div style="display:flex;flex-direction:column;">
+        <GridHeader T=T />
+        @if (LayoutService.FilterMode.Value == GridFilterMode.FilterRow)
+        {
+            <GridFilterRowPanel T=T />
+        }
+    </div>
+    <div id="@ConstantService.InnerGridId" class="s-grid-content" @ref="@LayoutService.GridInnerRef">
+        @if (InsertingForm != null)
+        {
+            @InsertingForm
+        }
+        @switch (DataSourceState)
+        {
+            case DataSourceState.NoData:
+                <NoDataPanel />
+                break;
+            case DataSourceState.Loading:
+                <LoadingSpinner />
+                break;
+            case DataSourceState.Idle:
+            default:
+                <div>
+                    <table id="@ConstantService.InnerGridBodyTableId" 
+                    class="@LayoutService.TableTagClass.Value" 
+                    style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
+                        <GridHiddenHeader />
+                        <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
+                            @if (View != null)
+                            {
+                                @foreach (var rowModel in View)
+                                {
+                                    <GridRow RowModel="rowModel" />
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                break;
+        }
+    </div>
+    <PagingFooter />
+</div>
+
+@if (EditingPopup != null)
+{
+    @EditingPopup
+}
+@if (InsertingPopup != null)
+{
+    @InsertingPopup
+}
