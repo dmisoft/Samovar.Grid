@@ -4,13 +4,13 @@ public readonly struct GridPagerInfo
 {
     public static readonly GridPagerInfo Empty = new GridPagerInfo(0, 0, 0);
 
-    public readonly int StartPage;
-    public readonly int EndPage;
-    public readonly int CurrentPage;
-    public readonly int TotalPages;
-    public readonly int TotalItemsCount;
+    public readonly uint StartPage;
+    public readonly uint EndPage;
+    public readonly uint CurrentPage;
+    public readonly uint TotalPages;
+    public readonly uint TotalItemsCount;
 
-    public GridPagerInfo(int startPage, int endPage, int currentPage, int totalPages = 0, int totalItemsCount = 0)
+    public GridPagerInfo(uint startPage, uint endPage, uint currentPage, uint totalPages = 0, uint totalItemsCount = 0)
     {
         StartPage = startPage;
         EndPage = endPage;

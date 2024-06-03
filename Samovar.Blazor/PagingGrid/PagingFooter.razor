@@ -13,7 +13,7 @@
 							<ul class="@LayoutService.PaginationClass.Value" style="margin:10px 0">
 								@*<li class="page-item s-noselect" style="cursor:pointer;" @onclick=@(()=>DataGrid.SetPagerSize("back"))><a class="page-link">&laquo;</a></li>*@
 								<li class="page-item s-noselect" style="cursor: pointer;" @onclick=@(async ()=>await PagingNavigationStrategy.NavigateToPreviousPage())><a class="page-link">&lsaquo;</a></li>
-								@for (int i = PagingNavigationStrategy.PagerInfo.Value.StartPage; i <= PagingNavigationStrategy.PagerInfo.Value.EndPage; i++)
+								@for (uint i = PagingNavigationStrategy.PagerInfo.Value.StartPage; i <= PagingNavigationStrategy.PagerInfo.Value.EndPage; i++)
 								{
 									var currentPage = i;
 									<li class="page-item s-noselect @(currentPage==PagingNavigationStrategy.PagerInfo.Value.CurrentPage?"active":"")" style="cursor: pointer;" @onclick=@(()=>PagingNavigationStrategy.NavigateToPage(currentPage))><a class="page-link">@currentPage</a></li>

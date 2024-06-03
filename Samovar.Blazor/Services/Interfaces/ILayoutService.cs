@@ -3,45 +3,41 @@ using Microsoft.JSInterop;
 using Samovar.Blazor.Columns;
 using System.Reactive.Subjects;
 
-namespace Samovar.Blazor
+namespace Samovar.Blazor;
+
+public interface ILayoutService
 {
-    public interface ILayoutService
-    {
-        bool OriginalColumnsWidthChanged { get; set; }
-        DotNetObjectReference<ILayoutService> DataGridDotNetRef { get; }
-        BehaviorSubject<string> SelectedRowClass { get; }
-        BehaviorSubject<string> TableTagClass { get; }
-        BehaviorSubject<string> TheadTagClass { get; }
-        BehaviorSubject<string> PaginationClass { get; }
+    bool OriginalColumnsWidthChanged { get; set; }
+    DotNetObjectReference<ILayoutService> DataGridDotNetRef { get; }
+    BehaviorSubject<string> SelectedRowClass { get; }
+    BehaviorSubject<string> TableTagClass { get; }
+    BehaviorSubject<string> TheadTagClass { get; }
+    BehaviorSubject<string> PaginationClass { get; }
 
-        BehaviorSubject<string> FilterToggleButtonClass { get; }
+    BehaviorSubject<string> FilterToggleButtonClass { get; }
 
-        BehaviorSubject<double> MinGridWidth { get; }
-        BehaviorSubject<bool> ShowDetailRow { get; }
-        BehaviorSubject<GridFilterMode> FilterMode { get; }
-        BehaviorSubject<bool> ShowFilterRow { get; }
+    BehaviorSubject<double> MinGridWidth { get; }
+    BehaviorSubject<bool> ShowDetailRow { get; }
+    BehaviorSubject<GridFilterMode> FilterMode { get; }
+    BehaviorSubject<bool> ShowFilterRow { get; }
+    BehaviorSubject<string> Height { get; }
+    BehaviorSubject<string> Width { get; }
 
-        double FilterRowHeight { get; }
+    BehaviorSubject<string> OuterStyle { get; }
+    BehaviorSubject<string> FooterStyle { get; }
 
-        BehaviorSubject<string> Height { get; }
-        BehaviorSubject<string> Width { get; }
+    ElementReference GridFilterRef { get; set; }
+    ElementReference GridOuterRef { get; set; }
+    ElementReference GridInnerRef { get; set; }
+    ElementReference TableBodyInnerRef { get; set; }
 
-        BehaviorSubject<string> OuterStyle { get; }
-        BehaviorSubject<string> FooterStyle { get; }
+    BehaviorSubject<bool> ShowColumnHeader { get; }
+    BehaviorSubject<bool> ShowDetailHeader { get; }
 
-        ElementReference GridFilterRef { get; set; }
-        ElementReference GridOuterRef { get; set; }
-        ElementReference GridInnerRef { get; set; }
-        ElementReference TableBodyInnerRef { get; set; }
+    Task InitHeader();
 
-        BehaviorSubject<bool> ShowColumnHeader { get; }
-        BehaviorSubject<bool> ShowDetailHeader { get; }
+    IObservable<Task<GridStyleInfo>> DataGridInnerStyle { get; }
 
-        Task InitHeader();
-
-        IObservable<Task<GridStyleInfo>> DataGridInnerStyle { get; }
-
-        BehaviorSubject<ColumnResizeMode> ColumnResizeMode { get; }
-        double ActualColumnsWidthSum { get; }
-    }
+    BehaviorSubject<ColumnResizeMode> ColumnResizeMode { get; }
+    double ActualColumnsWidthSum { get; }
 }

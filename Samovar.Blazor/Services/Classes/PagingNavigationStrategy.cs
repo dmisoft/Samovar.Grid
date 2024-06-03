@@ -7,13 +7,13 @@ namespace Samovar.Blazor
     internal class PagingNavigationStrategy<T>
         : IPagingNavigationStrategy
     {
-        public BehaviorSubject<int> PageSize { get; } = new BehaviorSubject<int>(50);
+        public BehaviorSubject<uint> PageSize { get; } = new BehaviorSubject<uint>(50);
 
-        public BehaviorSubject<int> PagerSize { get; } = new BehaviorSubject<int>(10);
+        public BehaviorSubject<uint> PagerSize { get; } = new BehaviorSubject<uint>(10);
 
-        public BehaviorSubject<int> TotalPageCount { get; set; } = new BehaviorSubject<int>(0);
+        public BehaviorSubject<uint> TotalPageCount { get; set; } = new BehaviorSubject<uint>(0);
 
-        public BehaviorSubject<int> CurrentPage { get; private set; } = new BehaviorSubject<int>(0);
+        public BehaviorSubject<uint> CurrentPage { get; private set; } = new BehaviorSubject<uint>(0);
 
         public BehaviorSubject<GridPagerInfo> PagerInfo { get; private set; } = new BehaviorSubject<GridPagerInfo>(GridPagerInfo.Empty);
 
@@ -32,7 +32,7 @@ namespace Samovar.Blazor
         private void DataGridInitializerCallback(bool obj)
         {
             PageSize.Subscribe(x => {
-				int totalPageCount = (int)Math.Ceiling(actualItemsCount / (decimal)x);
+				uint totalPageCount = (uint)Math.Ceiling(actualItemsCount / (decimal)x);
                 if(CurrentPage.Value > totalPageCount)
 					CurrentPage.OnNext(totalPageCount);
 				TotalPageCount.OnNext(totalPageCount);
@@ -62,7 +62,7 @@ namespace Samovar.Blazor
             PagerInfo.OnNext(info);
         }
 
-        private NavigationStrategyDataLoadingSettings CalculateDataLoadingSetting(int pageSize, int currentPage)
+        private NavigationStrategyDataLoadingSettings CalculateDataLoadingSetting(uint pageSize, uint currentPage)
         {
             if (currentPage == 0)
                 return NavigationStrategyDataLoadingSettings.Empty;
@@ -72,23 +72,23 @@ namespace Samovar.Blazor
         }
 
         private int actualItemsCount = 0;
-        private GridPagerInfo PagerInfoChanged(int pagerSize, int pageCount, int currentPage)
+        private GridPagerInfo PagerInfoChanged(uint pagerSize, uint pageCount, uint currentPage)
         {
 			if (currentPage == 0)
                 return GridPagerInfo.Empty;
-            int startPage = (int)Math.Ceiling((decimal)currentPage / (decimal)pagerSize) * pagerSize - pagerSize + 1;
-            int endPage = Math.Min(startPage + pagerSize - 1, pageCount);
+            uint startPage = (uint)Math.Ceiling((decimal)currentPage / (decimal)pagerSize) * pagerSize - pagerSize + 1;
+            uint endPage = Math.Min(startPage + pagerSize - 1, pageCount);
             return new GridPagerInfo(startPage: startPage, endPage: endPage, currentPage: currentPage, totalPages: pageCount);
         }
 
         public Task NavigateToNextPage()
         {
-            int newPage = CurrentPage.Value < TotalPageCount.Value ? CurrentPage.Value + 1 : CurrentPage.Value;
+            uint newPage = CurrentPage.Value < TotalPageCount.Value ? CurrentPage.Value + 1 : CurrentPage.Value;
             CurrentPage.OnNext(newPage);
             return Task.CompletedTask;
         }
 
-        public Task NavigateToPage(int pageNumber)
+        public Task NavigateToPage(uint pageNumber)
         {
             CurrentPage.OnNext(pageNumber);
             return Task.CompletedTask;
@@ -96,7 +96,7 @@ namespace Samovar.Blazor
 
         public Task NavigateToPreviousPage()
         {
-            int newPage = PagerInfo.Value.CurrentPage > 1 ? PagerInfo.Value.CurrentPage - 1 : 1;
+            uint newPage = PagerInfo.Value.CurrentPage > 1 ? PagerInfo.Value.CurrentPage - 1 : 1;
             CurrentPage.OnNext(newPage);
             return Task.CompletedTask;
         }
@@ -128,10 +128,10 @@ namespace Samovar.Blazor
 
             actualItemsCount = data.Count();
 
-            int newTotalPageCount = (int)Math.Ceiling(actualItemsCount / (decimal)PageSize.Value);
+            uint newTotalPageCount = (uint)Math.Ceiling(actualItemsCount / (decimal)PageSize.Value);
             TotalPageCount.OnNext(newTotalPageCount);
 
-            int newCurrentPage = CurrentPage.Value == 0 && newTotalPageCount > 0 ? 1 : Math.Min(newTotalPageCount, CurrentPage.Value);
+            uint newCurrentPage = CurrentPage.Value == 0 && newTotalPageCount > 0 ? 1 : Math.Min(newTotalPageCount, CurrentPage.Value);
             CurrentPage.OnNext(newCurrentPage);
         }
 

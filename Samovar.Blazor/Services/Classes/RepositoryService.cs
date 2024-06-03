@@ -79,21 +79,20 @@ public class RepositoryService<T>
             return Task.FromResult(new List<GridRowModel<T>>().AsEnumerable());
         }
 
-        IEnumerable<GridRowModel<T>> _retVal;
+        IEnumerable<GridRowModel<T>> rowModelCollection;
 
         if (!navigationStrategyDataLoadingSettings.ShowAll)
-            query = query.Skip(navigationStrategyDataLoadingSettings.Skip).Take(navigationStrategyDataLoadingSettings.Take);
+            query = query.Skip((int)navigationStrategyDataLoadingSettings.Skip).Take((int)navigationStrategyDataLoadingSettings.Take);
 
-        _retVal = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
+        rowModelCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
 
-        if(_retVal.Any())
+        if(rowModelCollection.Any())
             _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.Idle));
         else
             _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.NoData));
         
-        return Task.FromResult(_retVal);
+        return Task.FromResult(rowModelCollection);
     }
-
 
     private List<GridRowModel<T>> CreateRowModelList(IQueryable<T> gridData, IEnumerable<IDataColumnModel> ColumnMetadataList, Dictionary<string, PropertyInfo> PropInfo)
     {

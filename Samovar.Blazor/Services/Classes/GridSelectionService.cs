@@ -31,12 +31,12 @@ public class GridSelectionService<T>
         dataSourceService.Data.DistinctUntilChanged().Subscribe(this);
         repositoryService.ViewCollectionObservableTask.Subscribe(this);
         SelectionMode.DistinctUntilChanged().Subscribe(this);
-        
+
         SingleSelectedDataRow.DistinctUntilChanged().Subscribe(SingleSelectedDataRow =>
-        {   
+        {
             SingleSelectedRowCallback?.Invoke();
         });
-        
+
         MultipleSelectedDataRows.DistinctUntilChanged().Subscribe(MultipleSelectedDataRows =>
         {
             MultipleSelectedRowsCallback?.Invoke();
@@ -110,11 +110,11 @@ public class GridSelectionService<T>
                         if (rm != null)
                         {
                             var pos = ViewCollection.Single(y => y.DataItem is not null && y.DataItem.Equals(MultipleSelectedDataRows.Value.First()));
-                            
+
                             int initPos = pos.DataItemPosition;
                             int rmMin = initPos;
                             int rmMax = initPos;
-                            
+
                             MultipleSelectedDataRows.Value.ToList().ForEach(x =>
                             {
                                 var currRm = ViewCollection.SingleOrDefault(y => y.DataItem is not null && y.DataItem.Equals(x));
@@ -192,7 +192,7 @@ public class GridSelectionService<T>
 
     public void OnNext(IEnumerable<T> value)
     {
-        if (SingleSelectedDataRow.Value is not null && !value.Any(x=> x.Equals(SingleSelectedDataRow.Value)))
+        if (SingleSelectedDataRow.Value is not null && !value.Any(x => x is not null && x.Equals(SingleSelectedDataRow.Value)))
         {
             SingleSelectedDataRow.OnNext(default);
             SingleSelectedRowCallback?.Invoke();

@@ -50,7 +50,7 @@ public class SmGrid<T>
     public GridFilterMode? FilterMode { get; set; }
 
     [Parameter]
-    public int PageSize { get; set; }
+    public uint PageSize { get; set; }
 
     [Parameter]
     public int PagerSize { get; set; }
@@ -134,11 +134,11 @@ public class SmGrid<T>
         else
             ChildContent = columns;
 
-        int pageSize = parameters.GetValueOrDefault<int>(nameof(PageSize));
+        uint pageSize = parameters.GetValueOrDefault<uint>(nameof(PageSize));
         pageSize = pageSize == 0 ? 50 : pageSize;
         PagingNavigationStrategy.PageSize.OnNext(pageSize);
 
-        int pagerSize = parameters.GetValueOrDefault<int>(nameof(PagerSize));
+        uint pagerSize = parameters.GetValueOrDefault<uint>(nameof(PagerSize));
         pagerSize = pagerSize == 0 ? 10 : pagerSize;
         PagingNavigationStrategy.PagerSize.OnNext(pagerSize);
 

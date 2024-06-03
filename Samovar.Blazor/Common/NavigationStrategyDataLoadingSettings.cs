@@ -5,15 +5,15 @@ public readonly struct NavigationStrategyDataLoadingSettings
 {
     public static readonly NavigationStrategyDataLoadingSettings Empty = new NavigationStrategyDataLoadingSettings(0, 0);
 
-    public static readonly NavigationStrategyDataLoadingSettings FetchAll = new NavigationStrategyDataLoadingSettings(0, -1, showAll: true);
+    public static readonly NavigationStrategyDataLoadingSettings FetchAll = new NavigationStrategyDataLoadingSettings(0, 0, showAll: true);
 
-    public readonly int Skip;
+    public readonly uint Skip;
 
-    public readonly int Take;
+    public readonly uint Take;
 
     public readonly bool ShowAll;
 
-    public NavigationStrategyDataLoadingSettings(int skip, int take, bool showAll = false)
+    public NavigationStrategyDataLoadingSettings(uint skip, uint take, bool showAll = false)
     {
         Skip = skip;
         Take = take;
@@ -40,7 +40,7 @@ public readonly struct NavigationStrategyDataLoadingSettings
         return EqualityComparer<NavigationStrategyDataLoadingSettings>.Default.Equals(settings, Empty);
     }
 
-    public static NavigationStrategyDataLoadingSettings FromOffsets(int skip, int take)
+    public static NavigationStrategyDataLoadingSettings FromOffsets(uint skip, uint take)
     {
         return new NavigationStrategyDataLoadingSettings(skip, take);
     }
