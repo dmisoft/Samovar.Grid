@@ -53,7 +53,7 @@ public class SmGrid<T>
     public uint PageSize { get; set; }
 
     [Parameter]
-    public int PagerSize { get; set; }
+    public uint PagerSize { get; set; }
 
     [Parameter]
     public string? Height { get; set; }
