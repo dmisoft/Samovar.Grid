@@ -84,7 +84,7 @@ public class ComponentBuilderService<T1>
 
     public RenderFragment GetRow<U>(GridRowModel<U> model)
     {
-        switch (model.RowState)
+        switch (model.RowState.Value)
         {
             case GridRowState.Editing:
                 if (_navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)

@@ -8,146 +8,107 @@
 @inject WeatherForecastService ForecastService
 
 <h1>Weather forecast Test</h1>
-<div class="card" aria-hidden="true">
-    <div class="card-body">
-        <h5 class="card-title placeholder-glow">
-            <span class="placeholder col-6"></span>
-        </h5>
-        <p class="card-text placeholder-glow">
-            <span class="placeholder col-7"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-6"></span>
-            <span class="placeholder col-8"></span>
-        </p>
-        <a href="#" tabindex="-1" class="btn btn-primary disabled placeholder col-6"></a>
+
+
+<button class="btn btn-primary" @onclick="loadData">load data</button>
+<button class="btn btn-primary" @onclick="changeStyle">change style</button>
+<button class="btn btn-primary" @onclick="changeFirstDataItem">change first data item</button>
+<button class="btn btn-primary" @onclick="deselectSingleSelectedItem">deselct single selected item</button>
+<button class="btn btn-primary" @onclick="selectSingleSelectedItem">select second single selected item</button>
+
+<div class="row">
+    <div class="col-10">
+        <SmGrid Data="forecasts"
+                Height="600px"
+                Width=@gridWidth
+                FilterMode=GridFilterMode.FilterRow
+                ShowDetailRow=true
+                PageSize=pageSize
+                EditMode=gridEditMode
+                EditingFormTitleDelegate="@((WeatherForecast data) => Task.FromResult(data.TemperatureC.ToString()))"
+                SelectionMode=selectionMode
+                ColumnResizeMode=columnResizeMode
+                @bind-SingleSelectedDataRow=selectedRow
+                @bind-MultipleSelectedDataRows=selectedRows
+                RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
+                RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))">
+            <Columns>
+                <Column Title="Date1" Field="@nameof(WeatherForecast.Date)" Width="100px">
+                    <CellShowTemplate>
+                        @{
+                            WeatherForecast data = context as WeatherForecast;
+                            <div style="white-space:break-spaces">Template @data.Summary</div>
+                        }
+                    </CellShowTemplate>
+                </Column>
+                <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="1*" />
+                <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width=@columnWidth />
+                <Column Field="@nameof(WeatherForecast.Summary)" Width="1*" />
+                <CommandColumn EditButtonVisible=true NewButtonVisible=true Width="150px" />
+            </Columns>
+            <DetailRowTemplate Context="mydata">
+                @{
+                    WeatherForecast data = mydata as WeatherForecast;
+                    <div>@data.Date</div>
+                    <div>@data.TemperatureC</div>
+                    <div>@data.TemperatureF</div>
+                }
+            </DetailRowTemplate>
+        </SmGrid>
+    </div>
+    <div class="col-2">
+        <div class="mb-3">
+            <label for="pageSize" class="form-label">Page size</label>
+            <input type="text" class="form-control" id="pageSize" @bind="pageSize" />
+        </div>
+        <div class="mb-3">
+            <label for="columnWidth">Column width</label>
+            <input type="text" class="form-control" id="columnWidth" @bind="columnWidth" />
+        </div>
+        <div class="mb-3">
+            <label for="gridWidth">Grid width</label>
+            <input type="text" class="form-control" id="gridWidth" @bind="gridWidth" />
+        </div>
+        <div class="mb-3">
+            <label for="gridEditMode" class="form-label">Grid edit mode</label>
+            <select id="gridEditMode" class="form-select form-select-lg" @bind=@gridEditMode>
+                <option value=@GridEditMode.None>None</option>
+                <option value=@GridEditMode.Form>Form</option>
+                <option value=@GridEditMode.Popup>Popup</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="columnResizeMode" class="form-label">Column resize mode</label>
+            <select id="columnResizeMode" class="form-select form-select-lg" @bind=@columnResizeMode>
+                <option value=@GridColumnResizeMode.None>None</option>
+                <option value=@GridColumnResizeMode.Sliding>Sliding</option>
+                <option value=@GridColumnResizeMode.Block>Block</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="rowSelectionMode" class="form-label">Row selection mode</label>
+            <select id="rowSelectionMode" class="form-select form-select-lg" @bind=@selectionMode>
+                <option value=@RowSelectionMode.None>None</option>
+                <option value=@RowSelectionMode.Single>Single</option>
+                <option value=@RowSelectionMode.Multiple>Multiple</option>
+            </select>
+        </div>
+        @if (selectedRow != null)
+        {
+            <div>@("Summary " + selectedRow.Summary + " Temp. " + selectedRow.TemperatureC)</div>
+        }
+        @if (selectedRows != null)
+        {
+            @foreach (var item in selectedRows)
+            {
+                <div>@("Summary " + item.Summary + " Temp. " + item.TemperatureC)</div>
+            }
+        }
     </div>
 </div>
-@if (false)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <button class="btn btn-primary" @onclick="loadData">load data</button>
-    <button class="btn btn-primary" @onclick="changeStyle">change style</button>
-    <button class="btn btn-primary" @onclick="changeFirstDataItem">change first data item</button>
-    <button class="btn btn-primary" @onclick="deselectSingleSelectedItem">deselct single selected item</button>
-    <button class="btn btn-primary" @onclick="selectSingleSelectedItem">select second single selected item</button>
-    <input type="text" @bind="pageSize" />
-    <input type="text" @bind="gridWidth" />
-
-    // get bootstrap css class for "option"" tag in select
-    <select class="form-select form-select-lg" @bind=@selectionMode>
-        <option value=@RowSelectionMode.None>None</option>
-        <option value=@RowSelectionMode.Single>Single</option>
-        <option value=@RowSelectionMode.Multiple>Multiple</option>
-    </select>
-
-    <label>
-        Column width
-        <input type="text" @bind="columnWidth" />
-    </label>
-    <div class="row">
-        <div class="col-10">
-            <SmGrid Data="forecasts1"
-                    Height="600px"
-                    Width=@gridWidth
-                    FilterMode=GridFilterMode.FilterRow
-                    ShowDetailRow=true
-                    PageSize=pageSize
-                    EditMode=GridEditMode.Form
-                    EditingFormTitleDelegate="@((WeatherForecast data) => Task.FromResult(data.TemperatureC.ToString()))"
-                    SelectionMode=selectionMode
-                    ColumnResizeMode=GridColumnResizeMode.Sliding
-                    @bind-SingleSelectedDataRow=selectedRow
-                    @bind-MultipleSelectedDataRows=selectedRows
-                    RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
-                    RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))">
-                <Columns>
-                    <Column Title="Date1" Field="@nameof(WeatherForecast.Date)" Width="100px">
-                        <CellShowTemplate>
-                            @{
-                                WeatherForecast data = context as WeatherForecast;
-                                <div style="white-space:break-spaces">Template @data.Summary</div>
-                            }
-                        </CellShowTemplate>
-                    </Column>
-                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="1*" />
-                    <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width=@columnWidth />
-                    <Column Field="@nameof(WeatherForecast.Summary)" Width="1*" />
-                    <CommandColumn EditButtonVisible=true NewButtonVisible=true Width="150px" />
-                </Columns>
-                <DetailRowTemplate Context="mydata">
-                    @{
-                        WeatherForecast data = mydata as WeatherForecast;
-                        <div>@data.Date</div>
-                        <div>@data.TemperatureC</div>
-                        <div>@data.TemperatureF</div>
-                    }
-                </DetailRowTemplate>
-            </SmGrid>
-        </div>
-        <div class="col-2">
-            @if (selectedRow != null)
-            {
-                <div>@("Summary " + selectedRow.Summary + " Temp. " + selectedRow.TemperatureC)</div>
-            }
-            @if (selectedRows != null)
-            {
-                @foreach (var item in selectedRows)
-                {
-                    <div>@("Summary " + item.Summary + " Temp. " + item.TemperatureC)</div>
-                }
-            }
-        </div>
-    </div>
-
-    @*<div class="row">
-        <div class="col-10">
-            <SmDataGrid Data="forecasts2"
-                        FilterMode=DataGridFilterMode.FilterRow
-                        Height="450px" ShowDetailRow=true
-                        EditMode=GridEditMode.Form
-                        DataNavigationMode=DataGridNavigationMode.Paging
-                        SelectionMode=GridSelectionMode.SingleSelectedDataRow
-                        RowInserting="@((WeatherForecast data) => RowInsertingHandler2(data))"
-                        RowRemoving="@((WeatherForecast data) => RowRemovingHandler2(data))"
-            @bind-SingleSelectedDataRow=selectedRow>
-                <Columns>
-                    <Column Title="Date1" Field="@nameof(WeatherForecast.Date)" Width="100px">
-                        <CellShowTemplate>
-                            @{
-                                WeatherForecast data = context as WeatherForecast;
-                                <div>Template @data.Summary</div>
-                            }
-                        </CellShowTemplate>
-                    </Column>
-                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="200px" />
-                    <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="200px" />
-                    <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="200px" />
-                    <CommandColumn EditButtonVisible=true NewButtonVisible=true Width="250px" />
-                </Columns>
-                <DetailRowTemplate Context="mydata">
-                    @{
-                        WeatherForecast data = mydata as WeatherForecast;
-                        <div>@data.Date</div>
-                        <div>@data.TemperatureC</div>
-                        <div>@data.TemperatureF</div>
-                    }
-                </DetailRowTemplate>
-            </SmDataGrid>
-        </div>
- class="col-2">
-
-        </div>
-    </div>*@
-}
 
 @code {
-    private List<WeatherForecast> forecasts1;
-    private List<WeatherForecast> forecasts2;
-    private HashSet<WeatherForecast> forecasts3;
+    private List<WeatherForecast> forecasts;
     FormEditContext EditContext = null;
     SmGrid<WeatherForecast> grid;
 
@@ -157,37 +118,13 @@ else
     string columnWidth = "150px";
 
     RowSelectionMode selectionMode = RowSelectionMode.Single;
-    IEnumerable<WeatherForecast> selectedRows = null;
-
-    protected override async Task OnInitializedAsync()
-    {
-        //forecasts1 = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
-        //forecasts3 = (await ForecastService.GetForecastHashSetAsync(DateTime.Now));
-
-        //Stopwatch stopWatch = new Stopwatch();
-        //stopWatch.Start();
-        //var ret1 = forecasts1.Where(x => x.Summary.Contains("ild")).OrderByDescending(p=>p.TemperatureC);// Skip(20000).Take(100);// Take(200000, (x => x.Position <= 5000);
-        //stopWatch.Stop();
-        //var time1 = stopWatch.Elapsed;
-
-        //stopWatch.Reset();
-        //stopWatch.Start();
-
-        //var ret3 = forecasts3.Where(x => x.Summary.Contains("ild")).OrderByDescending(p => p.TemperatureC);//.Skip(20000).Take(100);//.Where(x => x.Position <= 5000);
-
-        //stopWatch.Stop();
-        //var time2 = stopWatch.Elapsed;
-
-    }
+    GridEditMode gridEditMode = GridEditMode.Form;
+    GridColumnResizeMode columnResizeMode = GridColumnResizeMode.Sliding;
+    IEnumerable<WeatherForecast> selectedRows = [];
 
     async Task loadData()
     {
-        forecasts1 = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
-        forecasts2 = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
-
-        //selectedRows = forecasts1.Take(2);
-        // selectedRow = forecasts1.First();
-        StateHasChanged();
+        forecasts = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
     }
 
     Task changeStyle()
@@ -197,7 +134,7 @@ else
 
     Task changeFirstDataItem()
     {
-        forecasts1[0].Summary = "my summary 1";
+        forecasts[0].Summary = "my summary 1";
         return Task.CompletedTask;
     }
 
@@ -213,27 +150,14 @@ else
 
     Task RowInsertingHandler(WeatherForecast item)
     {
-        forecasts1 ??= new List<WeatherForecast>();
-        forecasts1 = ((new WeatherForecast[] { item }).Concat(forecasts1)).ToList();
+        forecasts ??= new List<WeatherForecast>();
+        forecasts = ((new WeatherForecast[] { item }).Concat(forecasts)).ToList();
         return Task.CompletedTask;
     }
 
     Task RowRemovingHandler(WeatherForecast item)
     {
-        forecasts1 = forecasts1.Except(new List<WeatherForecast> { item }).ToList();
-        return Task.CompletedTask;
-    }
-
-    Task RowInsertingHandler2(WeatherForecast item)
-    {
-        forecasts2 ??= new List<WeatherForecast>();
-        forecasts2 = ((new WeatherForecast[] { item }).Concat(forecasts2)).ToList();
-        return Task.CompletedTask;
-    }
-
-    Task RowRemovingHandler2(WeatherForecast item)
-    {
-        forecasts2 = forecasts2.Except(new List<WeatherForecast> { item }).ToList();
+        forecasts = forecasts.Except(new List<WeatherForecast> { item }).ToList();
         return Task.CompletedTask;
     }
 
@@ -242,11 +166,13 @@ else
         EditContext.DataItem.Summary = EditContext.Summary;
         await grid.CancelRowEdit();
     }
+
     async Task OnCancelButtonClick()
     {
         await grid.CancelRowEdit();
         EditContext = null;
     }
+
     Task deselectSingleSelectedItem()
     {
         selectedRow = null;
@@ -255,7 +181,7 @@ else
 
     Task selectSingleSelectedItem()
     {
-        selectedRow = forecasts1.Skip(1).First();
+        selectedRow = forecasts.Skip(1).First();
         return Task.CompletedTask;
     }
 

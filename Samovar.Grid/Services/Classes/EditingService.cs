@@ -25,7 +25,7 @@ namespace Samovar.Grid
 
         public BehaviorSubject<GridEditMode> EditMode { get; } = new BehaviorSubject<GridEditMode>(GridEditMode.Form);
 
-        public BehaviorSubject<EventCallback<T>> OnRowEditBegin { get; } = new BehaviorSubject<EventCallback<T>>(default(EventCallback<T>));
+        public EventCallback<T> OnRowEditBegin { get; set; }
         public BehaviorSubject<EventCallback<Dictionary<string, object>>> OnInitializeNewRow { get; } = new BehaviorSubject<EventCallback<Dictionary<string, object>>>(default(EventCallback<Dictionary<string, object>>));
         public BehaviorSubject<EventCallback> OnRowInsertBegin { get; } = new BehaviorSubject<EventCallback>(default(EventCallback));
         public BehaviorSubject<EventCallback<T>> OnRowInserting { get; } = new BehaviorSubject<EventCallback<T>>(default(EventCallback<T>));
@@ -54,10 +54,10 @@ namespace Samovar.Grid
 
         public async Task RowEditBegin(GridRowModel<T> rowModel)
         {
-            await OnRowEditBegin.Value.InvokeAsync(rowModel.DataItem);
+            await OnRowEditBegin.InvokeAsync(rowModel.DataItem);
 
             _editingRowModel = rowModel;
-            _editingRowModel.RowState = GridRowState.Editing;
+            _editingRowModel.RowState.OnNext(GridRowState.Editing);
 
             _editingRowModel.CreateEditingModel();
 
@@ -76,7 +76,7 @@ namespace Samovar.Grid
 
         public Task RowEditCancel()
         {
-            _editingRowModel!.RowState = GridRowState.Idle;
+            _editingRowModel!.RowState.OnNext(GridRowState.Idle);
             _editingRowModel = null;
 
             if (_navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
@@ -94,7 +94,7 @@ namespace Samovar.Grid
 
         public async Task RowEditCommit()
         {
-            _editingRowModel!.RowState = GridRowState.Idle;
+            _editingRowModel!.RowState.OnNext(GridRowState.Idle);
             _editingRowModel.CommitEditingModel();
             _editingRowModel = null;
 

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Reactive.Subjects;
 using System.Reflection;
 
 namespace Samovar.Grid;
@@ -15,7 +16,7 @@ public class GridRowModel<T>
 
 	public string HtmlElementId { get; } = $"sdatagridrow{Guid.NewGuid().ToString().Replace("-", "")}";
 
-	internal GridRowState RowState { get; set; } = GridRowState.Idle;
+	internal BehaviorSubject<GridRowState> RowState { get; set; } = new BehaviorSubject<GridRowState>(GridRowState.Idle);
 
 	public int DataItemPosition { get; set; }
 	public int DataItemIndex { get => DataItemPosition - 1; }

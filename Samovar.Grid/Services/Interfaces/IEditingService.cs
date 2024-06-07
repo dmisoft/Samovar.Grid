@@ -7,7 +7,7 @@ namespace Samovar.Grid
     {
         BehaviorSubject<GridEditMode> EditMode { get; }
 
-        public BehaviorSubject<EventCallback<T>> OnRowEditBegin { get; }
+        public EventCallback<T> OnRowEditBegin { get; set; }
 
         public BehaviorSubject<EventCallback> OnRowInsertBegin { get; }
 

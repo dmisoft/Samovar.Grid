@@ -200,7 +200,7 @@ public class SmGrid<T>
 
         EventCallback<T> rowEditBegin = parameters.GetValueOrDefault<EventCallback<T>>(nameof(RowEditBegin));
         if (rowEditBegin.HasDelegate)
-            EditingService.OnRowEditBegin.OnNext(rowEditBegin);
+            EditingService.OnRowEditBegin = rowEditBegin;
 
         EventCallback rowInsertBegin = parameters.GetValueOrDefault<EventCallback>(nameof(RowInsertBegin));
         if (rowInsertBegin.HasDelegate)
