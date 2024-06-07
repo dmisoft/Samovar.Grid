@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using Samovar.Grid.Columns;
 
 namespace Samovar.Grid;
 
@@ -106,7 +105,7 @@ public class SmGrid<T>
     public RowSelectionMode SelectionMode { get; set; }
 
     [Parameter]
-    public ColumnResizeMode ColumnResizeMode { get; set; }
+    public GridColumnResizeMode ColumnResizeMode { get; set; }
 
 
     [Parameter]
@@ -179,8 +178,8 @@ public class SmGrid<T>
         dataGridSelectionMode ??= RowSelectionMode.None;
         GridSelectionService.SelectionMode.OnNext(dataGridSelectionMode.Value);
 
-        ColumnResizeMode? columnResizeMode = parameters.GetValueOrDefault<ColumnResizeMode?>(nameof(ColumnResizeMode));
-        columnResizeMode ??= ColumnResizeMode.None;
+        GridColumnResizeMode? columnResizeMode = parameters.GetValueOrDefault<GridColumnResizeMode?>(nameof(ColumnResizeMode));
+        columnResizeMode ??= GridColumnResizeMode.None;
         LayoutService.ColumnResizeMode.OnNext(columnResizeMode.Value);
 
         Func<T, Task<string>>? editingFormTitleDelegate = parameters.GetValueOrDefault<Func<T, Task<string>>?>(nameof(EditingFormTitleDelegate));

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using Samovar.Grid.Columns;
 using System.Reactive.Subjects;
 
 namespace Samovar.Grid;
@@ -38,6 +37,6 @@ public interface ILayoutService
 
     IObservable<Task<GridStyleInfo>> DataGridInnerStyle { get; }
 
-    BehaviorSubject<ColumnResizeMode> ColumnResizeMode { get; }
+    BehaviorSubject<GridColumnResizeMode> ColumnResizeMode { get; }
     double ActualColumnsWidthSum { get; }
 }

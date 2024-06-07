@@ -41,7 +41,7 @@ else
                     EditMode=GridEditMode.Popup
                     DataNavigationMode=NavigationMode.VirtualScrolling
                     SelectionMode=RowSelectionMode.Single
-                    ColumnResizeMode=Columns.ColumnResizeMode.Block
+                    ColumnResizeMode=GridColumnResizeMode.Block
                     RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
                     RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))"
                     @bind-SingleSelectedDataRow=selectedRow>

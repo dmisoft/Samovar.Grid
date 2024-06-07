@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using Samovar.Grid.Columns;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
@@ -9,7 +8,7 @@ namespace Samovar.Grid;
 public class LayoutService
     : ILayoutService, IAsyncDisposable
 {
-    public BehaviorSubject<ColumnResizeMode> ColumnResizeMode { get; } = new BehaviorSubject<ColumnResizeMode>(Columns.ColumnResizeMode.None);
+    public BehaviorSubject<GridColumnResizeMode> ColumnResizeMode { get; } = new BehaviorSubject<GridColumnResizeMode>(GridColumnResizeMode.None);
 
     public BehaviorSubject<string> SelectedRowClass { get; } = new BehaviorSubject<string>("bg-warning");
 

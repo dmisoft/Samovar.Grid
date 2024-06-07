@@ -59,7 +59,7 @@ else
                     EditMode=GridEditMode.Form
                     EditingFormTitleDelegate="@((WeatherForecast data) => Task.FromResult(data.TemperatureC.ToString()))"
                     SelectionMode=selectionMode
-                    ColumnResizeMode=Columns.ColumnResizeMode.Sliding
+                    ColumnResizeMode=GridColumnResizeMode.Sliding
                     @bind-SingleSelectedDataRow=selectedRow
                     @bind-MultipleSelectedDataRows=selectedRows
                     RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
