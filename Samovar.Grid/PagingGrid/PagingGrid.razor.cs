@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System.Reactive.Linq;
 
 namespace Samovar.Grid;
 
@@ -110,7 +111,9 @@ public partial class PagingGrid<T>
 
     private void SubscribeViewCollectionChange()
     {
-        RepositoryService.ViewCollectionObservableTask.Subscribe(async (GetViewCollectionTask) =>
+        RepositoryService.ViewCollectionObservableTask
+            .DistinctUntilChanged()
+            .Subscribe(async (GetViewCollectionTask) =>
         {
             View = await GetViewCollectionTask;
         });

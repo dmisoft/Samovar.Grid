@@ -13,7 +13,7 @@
 <button class="btn btn-primary" @onclick="loadData">load data</button>
 <button class="btn btn-primary" @onclick="changeStyle">change style</button>
 <button class="btn btn-primary" @onclick="changeFirstDataItem">change first data item</button>
-<button class="btn btn-primary" @onclick="deselectSingleSelectedItem">deselct single selected item</button>
+<button class="btn btn-primary" @onclick="deselectSingleSelectedItem2">deselct single selected item</button>
 <button class="btn btn-primary" @onclick="selectSingleSelectedItem">select second single selected item</button>
 
 <div class="row">
@@ -30,6 +30,7 @@
                 ColumnResizeMode=columnResizeMode
                 @bind-SingleSelectedDataRow=selectedRow
                 @bind-MultipleSelectedDataRows=selectedRows
+                RowEditBegin="@((WeatherForecast data) => RowEditBegin(data))"
                 RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
                 RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))">
             <Columns>
@@ -37,7 +38,7 @@
                     <CellShowTemplate>
                         @{
                             WeatherForecast data = context as WeatherForecast;
-                            <div style="white-space:break-spaces">Template @data.Summary</div>
+                            <div style="white-space:break-spaces">@data.GetHashCode()</div>
                         }
                     </CellShowTemplate>
                 </Column>
@@ -105,117 +106,29 @@
                 <option value=@RowSelectionMode.Multiple>Multiple</option>
             </select>
         </div>
-        @if (selectedRow != null)
+
+        @if (selectedRow is not null)
         {
-            <div>@("Summary " + selectedRow.Summary + " Temp. " + selectedRow.TemperatureC)</div>
+            <div class="mb-3 row">
+                <div class="col-8">@($"{selectedRow.Summary} Temp. {selectedRow.TemperatureC} C")</div>
+                <div class="col-4">
+                    <button class="btn btn-danger mb-3" @onclick="deselectSingleSelectedItem">deselect</button>
+                </div>
+            </div>
         }
+
         @if (selectedRows != null)
         {
             @foreach (var item in selectedRows)
             {
-                <div>@("Summary " + item.Summary + " Temp. " + item.TemperatureC)</div>
+                <div class="mb-3 row">
+                    <div class="col-8">@($"{item.Summary} Temp. {item.TemperatureC} C")</div>
+
+                    <div class="col-4">
+                        <button class="btn btn-danger mb-3" @onclick=@(()=>{selectedRows = selectedRows.Except([item]);})>deselect</button>
+                    </div>
+                </div>
             }
         }
     </div>
 </div>
-
-@code {
-    private List<WeatherForecast> forecasts;
-    FormEditContext EditContext = null;
-    SmGrid<WeatherForecast> grid;
-
-    WeatherForecast selectedRow = null;
-    uint pageSize = 10;
-    string gridWidth = "1200px";
-    string gridHeight = "600px";
-    string columnWidth = "150px";
-
-    RowSelectionMode selectionMode = RowSelectionMode.Single;
-    GridEditMode gridEditMode = GridEditMode.Form;
-    GridColumnResizeMode columnResizeMode = GridColumnResizeMode.Sliding;
-    IEnumerable<WeatherForecast> selectedRows = [];
-    bool showDetailRow = true;
-
-    async Task loadData()
-    {
-        forecasts = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
-    }
-
-    Task changeStyle()
-    {
-        return Task.CompletedTask;
-    }
-
-    Task changeFirstDataItem()
-    {
-        forecasts[0].Summary = "my summary 1";
-        return Task.CompletedTask;
-    }
-
-    void RowEditBeginHandler(WeatherForecast item)
-    {
-        EditContext = new FormEditContext(item);
-    }
-
-    Task<string> EditingFormTitle(WeatherForecast item)
-    {
-        return Task.FromResult(item.TemperatureC.ToString());
-    }
-
-    Task RowInsertingHandler(WeatherForecast item)
-    {
-        forecasts ??= new List<WeatherForecast>();
-        forecasts.Insert(0, item);
-        return Task.CompletedTask;
-    }
-
-    Task RowRemovingHandler(WeatherForecast item)
-    {
-        forecasts.Remove(item);
-        return Task.CompletedTask;
-    }
-
-    async Task HandleValidSubmit()
-    {
-        EditContext.DataItem.Summary = EditContext.Summary;
-        await grid.CancelRowEdit();
-    }
-
-    async Task OnCancelButtonClick()
-    {
-        await grid.CancelRowEdit();
-        EditContext = null;
-    }
-
-    Task deselectSingleSelectedItem()
-    {
-        selectedRow = null;
-        return Task.CompletedTask;
-    }
-
-    Task selectSingleSelectedItem()
-    {
-        selectedRow = forecasts.Skip(1).First();
-        return Task.CompletedTask;
-    }
-
-    class FormEditContext
-    {
-        public FormEditContext(WeatherForecast dataItem)
-        {
-            DataItem = dataItem;
-            //Summary = DataItem.Summary;
-            //Region = DataItem.Region;
-            //City = DataItem.City;
-        }
-
-        public WeatherForecast DataItem { get; set; }
-
-        [Required]
-        [StringLength(maximumLength: 32, MinimumLength = 4, ErrorMessage = "The description should be 4 to 32 characters.")]
-        public string Summary { get; set; }
-
-        //public Action StateHasChanged { get; set; }
-    }
-
-}

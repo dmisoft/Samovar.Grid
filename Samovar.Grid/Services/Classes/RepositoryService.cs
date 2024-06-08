@@ -59,7 +59,7 @@ public class RepositoryService<T>
             _dataSourceService.DataQuery,
             _navigationService.NavigationStrategy.DataLoadingSettings,
             ViewCollectionObservableMap);
-
+        
         _navigationService.NavigationMode.Subscribe(s => {
             ViewCollectionObservableTask = Observable.CombineLatest(
             _dataSourceService.DataQuery,

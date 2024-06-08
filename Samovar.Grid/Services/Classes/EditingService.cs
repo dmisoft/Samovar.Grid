@@ -76,7 +76,7 @@ namespace Samovar.Grid
 
         public Task RowEditCancel()
         {
-            _editingRowModel!.RowState.OnNext(GridRowState.Idle);
+            _editingRowModel.RowState.OnNext(GridRowState.Idle);
             _editingRowModel = null;
 
             if (_navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
@@ -94,7 +94,7 @@ namespace Samovar.Grid
 
         public async Task RowEditCommit()
         {
-            _editingRowModel!.RowState.OnNext(GridRowState.Idle);
+            _editingRowModel.RowState.OnNext(GridRowState.Idle);
             _editingRowModel.CommitEditingModel();
             _editingRowModel = null;
 

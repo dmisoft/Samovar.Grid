@@ -33,15 +33,19 @@ public partial class GridRow<TItem>
     //[Parameter]
     //public EventCallback<GridRowModel<TItem>> RowModelChanged { get; set; }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    IDisposable? rowStateSubscriber;
+
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
-        await base.OnAfterRenderAsync(firstRender);
-        if (firstRender) {
-            RowModel.RowState.DistinctUntilChanged().Subscribe(state =>
+        await base.SetParametersAsync(parameters);
+
+        rowStateSubscriber?.Dispose();
+        var rowModel = parameters.GetValueOrDefault<GridRowModel<TItem>>(nameof(RowModel));
+        if (rowModel is not null)
+            rowStateSubscriber = rowModel.RowState.Subscribe(async (state) =>
             {
-                StateHasChanged();
+                await InvokeAsync(StateHasChanged);
             });
-        }
     }
 
     internal async Task DetailExpanderClick()
@@ -52,6 +56,7 @@ public partial class GridRow<TItem>
 
     public ValueTask DisposeAsync()
     {
+        rowStateSubscriber?.Dispose();
         return ValueTask.CompletedTask;
     }
 }

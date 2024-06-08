@@ -42,12 +42,12 @@ namespace Samovar.Grid
 				PagerSize,
                 TotalPageCount,
                 CurrentPage,
-                PagerInfoChanged).Subscribe(PagerInfoSubscriber);
+                PagerInfoChanged).DistinctUntilChanged().Subscribe(PagerInfoSubscriber);
 
             Observable.CombineLatest(
                 PageSize,
                 CurrentPage,
-                CalculateDataLoadingSetting).Subscribe(DataLoadingSettingSubscriber);
+                CalculateDataLoadingSetting).DistinctUntilChanged().Subscribe(DataLoadingSettingSubscriber);
 
             _dataSourceService.DataQuery.Where(x => x != null).Subscribe(ProcessDataPrequery);
         }

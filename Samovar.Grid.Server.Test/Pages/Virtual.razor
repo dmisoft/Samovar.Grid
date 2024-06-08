@@ -65,7 +65,12 @@ else
         <div class="col-2">
             @if (selectedRow != null)
             {
-                <div>@("Summary " + selectedRow.Summary + " Temp. " + selectedRow.TemperatureC)</div>
+                <form class="row g-3">
+                    <div class="col-auto">@("Summary " + selectedRow.Summary + " Temp. " + selectedRow.TemperatureC)</div>
+                    <div class="col-auto">
+                        <button class="btn btn-primary mb-3" @onclick="deselectSingleSelectedItem">delete selection</button>
+                    </div>
+                </form>
             }
         </div>
     </div>

@@ -59,13 +59,13 @@ namespace Samovar.Grid
         private void DataGridInitializerCallback(bool obj)
         {
             //combine
-            var rr = Observable.CombineLatest(
+            Observable.CombineLatest(
                 _filterService.FilterInfo,
                 _orderService.ColumnOrderInfo,
                 Data,
-                (filterInfo, columnOrderInfo, data) => Tuple.Create(filterInfo, columnOrderInfo, data)
-             ).DistinctUntilChanged();
-            rr.Subscribe(myfunc33);
+                (filterInfo, columnOrderInfo, data) => Tuple.Create(filterInfo, columnOrderInfo, data))
+                .DistinctUntilChanged()
+                .Subscribe(myfunc33);
         }
 
         private void myfunc33(Tuple<IEnumerable<GridFilterCellInfo>, ColumnOrderInfo, IEnumerable<T>> tuple)
