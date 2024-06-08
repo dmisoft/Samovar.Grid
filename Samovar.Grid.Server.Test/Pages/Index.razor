@@ -19,10 +19,10 @@
 <div class="row">
     <div class="col-10">
         <SmGrid Data="forecasts"
-                Height="600px"
+                Height=@gridHeight
                 Width=@gridWidth
                 FilterMode=GridFilterMode.FilterRow
-                ShowDetailRow=true
+                ShowDetailRow=showDetailRow
                 PageSize=pageSize
                 EditMode=gridEditMode
                 EditingFormTitleDelegate="@((WeatherForecast data) => Task.FromResult(data.TemperatureC.ToString()))"
@@ -59,19 +59,23 @@
     <div class="col-2">
         <div class="mb-3">
             <label for="pageSize" class="form-label">Page size</label>
-            <input type="text" class="form-control" id="pageSize" @bind="pageSize" />
+            <input type="text" class="form-control" id="pageSize" @bind=pageSize />
         </div>
         <div class="mb-3">
             <label for="columnWidth">Column width</label>
-            <input type="text" class="form-control" id="columnWidth" @bind="columnWidth" />
+            <input type="text" class="form-control" id="columnWidth" @bind=columnWidth />
+        </div>
+        <div class="mb-3">
+            <label for="gridHeight">Grid height</label>
+            <input type="text" class="form-control" id="gridHeight" @bind=gridHeight />
         </div>
         <div class="mb-3">
             <label for="gridWidth">Grid width</label>
-            <input type="text" class="form-control" id="gridWidth" @bind="gridWidth" />
+            <input type="text" class="form-control" id="gridWidth" @bind=gridWidth />
         </div>
         <div class="mb-3">
             <label for="gridEditMode" class="form-label">Grid edit mode</label>
-            <select id="gridEditMode" class="form-select form-select-lg" @bind=@gridEditMode>
+            <select id="gridEditMode" class="form-select form-select-lg" @bind=gridEditMode>
                 <option value=@GridEditMode.None>None</option>
                 <option value=@GridEditMode.Form>Form</option>
                 <option value=@GridEditMode.Popup>Popup</option>
@@ -79,15 +83,23 @@
         </div>
         <div class="mb-3">
             <label for="columnResizeMode" class="form-label">Column resize mode</label>
-            <select id="columnResizeMode" class="form-select form-select-lg" @bind=@columnResizeMode>
+            <select id="columnResizeMode" class="form-select form-select-lg" @bind=columnResizeMode>
                 <option value=@GridColumnResizeMode.None>None</option>
                 <option value=@GridColumnResizeMode.Sliding>Sliding</option>
                 <option value=@GridColumnResizeMode.Block>Block</option>
             </select>
         </div>
         <div class="mb-3">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" @bind=showDetailRow id="showDetailRow">
+                <label class="form-check-label" for="showDetailRow">
+                    Show detail row
+                </label>
+            </div>
+        </div>
+        <div class="mb-3">
             <label for="rowSelectionMode" class="form-label">Row selection mode</label>
-            <select id="rowSelectionMode" class="form-select form-select-lg" @bind=@selectionMode>
+            <select id="rowSelectionMode" class="form-select form-select-lg" @bind=selectionMode>
                 <option value=@RowSelectionMode.None>None</option>
                 <option value=@RowSelectionMode.Single>Single</option>
                 <option value=@RowSelectionMode.Multiple>Multiple</option>
@@ -115,12 +127,14 @@
     WeatherForecast selectedRow = null;
     uint pageSize = 10;
     string gridWidth = "1200px";
+    string gridHeight = "600px";
     string columnWidth = "150px";
 
     RowSelectionMode selectionMode = RowSelectionMode.Single;
     GridEditMode gridEditMode = GridEditMode.Form;
     GridColumnResizeMode columnResizeMode = GridColumnResizeMode.Sliding;
     IEnumerable<WeatherForecast> selectedRows = [];
+    bool showDetailRow = true;
 
     async Task loadData()
     {
@@ -151,13 +165,13 @@
     Task RowInsertingHandler(WeatherForecast item)
     {
         forecasts ??= new List<WeatherForecast>();
-        forecasts = ((new WeatherForecast[] { item }).Concat(forecasts)).ToList();
+        forecasts.Insert(0, item);
         return Task.CompletedTask;
     }
 
     Task RowRemovingHandler(WeatherForecast item)
     {
-        forecasts = forecasts.Except(new List<WeatherForecast> { item }).ToList();
+        forecasts.Remove(item);
         return Task.CompletedTask;
     }
 

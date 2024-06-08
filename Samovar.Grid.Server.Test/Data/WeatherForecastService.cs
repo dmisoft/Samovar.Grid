@@ -14,7 +14,7 @@ public class WeatherForecastService
 
     public Task<WeatherForecast[]> GetForecastAsync(DateTime startDate)
     {
-        return Task.FromResult(Enumerable.Range(1, 100000).Select(index => new WeatherForecast
+        return Task.FromResult(Enumerable.Range(1, 20).Select(index => new WeatherForecast
         {
             Position = index,
             Date = startDate.AddDays(index),
