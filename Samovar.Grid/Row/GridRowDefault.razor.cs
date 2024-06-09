@@ -66,9 +66,9 @@ public partial class GridRowDefault<T>
     {
         var actualState = await GridStateService.DataSourceState.Value;
         if (actualState != DataSourceState.Idle)
-            await EditingService.RowEditCancel();
+            await EditingService.EditCancel();
 
-        await EditingService.RowEditBegin(rowMainModel);
+        await EditingService.EditBegin(rowMainModel);
     }
 
     // Row deleting

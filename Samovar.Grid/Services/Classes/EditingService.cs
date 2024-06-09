@@ -1,156 +1,144 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Reactive.Subjects;
 
-namespace Samovar.Grid
+namespace Samovar.Grid;
+
+public class EditingService<T>(
+          IGridStateService _stateService
+        , IRepositoryService<T> _repositoryService
+        , IColumnService _columnService
+        , INavigationService _navigationService)
+    : IEditingService<T>, IAsyncDisposable
 {
-    public class EditingService<T>
-        : IEditingService<T>, IAsyncDisposable
+    GridRowModel<T>? _editingRowModel;
+
+
+    public event Func<Task>? RowEditingEnded;
+
+    public async Task OnRowEditingEnded()
     {
-        GridRowModel<T>? _editingRowModel;
-
-        readonly IGridStateService _stateService;
-        readonly IRepositoryService<T> _repositoryService;
-        readonly IColumnService _columnService;
-        readonly INavigationService _navigationService;
-
-        public event Func<Task>? RowEditingEnded;
-
-        public async Task OnRowEditingEnded()
+        if (RowEditingEnded != null)
         {
-            if (RowEditingEnded != null)
-            {
-                await RowEditingEnded.Invoke();
-            }
+            await RowEditingEnded.Invoke();
         }
+    }
 
-        public BehaviorSubject<GridEditMode> EditMode { get; } = new BehaviorSubject<GridEditMode>(GridEditMode.Form);
+    public BehaviorSubject<GridEditMode> EditMode { get; } = new BehaviorSubject<GridEditMode>(GridEditMode.Form);
 
-        public EventCallback<T> OnRowEditBegin { get; set; }
-        public BehaviorSubject<EventCallback<Dictionary<string, object>>> OnInitializeNewRow { get; } = new BehaviorSubject<EventCallback<Dictionary<string, object>>>(default(EventCallback<Dictionary<string, object>>));
-        public BehaviorSubject<EventCallback> OnRowInsertBegin { get; } = new BehaviorSubject<EventCallback>(default(EventCallback));
-        public BehaviorSubject<EventCallback<T>> OnRowInserting { get; } = new BehaviorSubject<EventCallback<T>>(default(EventCallback<T>));
-        public BehaviorSubject<EventCallback<T>> OnRowRemoving { get; } = new BehaviorSubject<EventCallback<T>>(default(EventCallback<T>));
+    public EventCallback<T> OnRowEditBegin { get; set; }
+    public BehaviorSubject<EventCallback<Dictionary<string, object>>> OnInitializeNewRow { get; } = new BehaviorSubject<EventCallback<Dictionary<string, object>>>(default(EventCallback<Dictionary<string, object>>));
+    public BehaviorSubject<EventCallback> OnRowInsertBegin { get; } = new BehaviorSubject<EventCallback>(default(EventCallback));
+    public BehaviorSubject<EventCallback<T>> OnRowInserting { get; } = new BehaviorSubject<EventCallback<T>>(default(EventCallback<T>));
+    public BehaviorSubject<EventCallback<T>> OnRowRemoving { get; } = new BehaviorSubject<EventCallback<T>>(default(EventCallback<T>));
 
-        public Func<GridRowModel<T>, Task>? ShowInsertingPopupDelegate { get; set; }
-        public Func<Task>? CloseInsertingPopupDelegate { get; set; }
-        public Func<GridRowModel<T>, Task>? ShowEditingPopupDelegate { get; set; }
-        public Func<Task>? CloseEditingPopupDelegate { get; set; }
+    public Func<GridRowModel<T>, Task>? ShowInsertingPopupDelegate { get; set; }
+    public Func<Task>? CloseInsertingPopupDelegate { get; set; }
+    public Func<GridRowModel<T>, Task>? ShowEditingPopupDelegate { get; set; }
+    public Func<Task>? CloseEditingPopupDelegate { get; set; }
 
-        public Func<GridRowModel<T>, Task>? ShowInsertingFormDelegate { get; set; }
-        public Func<Task>? CloseInsertingFormDelegate { get; set; }
-        public Func<T, Task<string>>? EditingFormTitleDelegate { get; set; }
+    public Func<GridRowModel<T>, Task>? ShowInsertingFormDelegate { get; set; }
+    public Func<Task>? CloseInsertingFormDelegate { get; set; }
+    public Func<T, Task<string>>? EditingFormTitleDelegate { get; set; }
 
-        public EditingService(
-              IGridStateService stateService
-            , IRepositoryService<T> repositoryService
-            , IColumnService columnService
-            , INavigationService navigationService)
+
+    public async Task EditBegin(GridRowModel<T> rowModel)
+    {
+        await OnRowEditBegin.InvokeAsync(rowModel.DataItem);
+
+        _editingRowModel = rowModel;
+        _editingRowModel.RowState.OnNext(GridRowState.Editing);
+
+        _editingRowModel.CreateEditingModel();
+
+        if (_navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
         {
-            _stateService = stateService;
-            _repositoryService = repositoryService;
-            _columnService = columnService;
-            _navigationService = navigationService;
+            ShowEditingPopupDelegate?.Invoke(_editingRowModel);
         }
-
-        public async Task RowEditBegin(GridRowModel<T> rowModel)
+        else
         {
-            await OnRowEditBegin.InvokeAsync(rowModel.DataItem);
-
-            _editingRowModel = rowModel;
-            _editingRowModel.RowState.OnNext(GridRowState.Editing);
-
-            _editingRowModel.CreateEditingModel();
-
-            if (_navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
-            {
+            if (EditMode.Value == GridEditMode.Popup)
                 ShowEditingPopupDelegate?.Invoke(_editingRowModel);
-            }
-            else
-            {
-                if (EditMode.Value == GridEditMode.Popup)
-                    ShowEditingPopupDelegate?.Invoke(_editingRowModel);
-            }
-
-            _stateService.DataEditState.OnNext(DataEditState.Editing);
         }
 
-        public Task RowEditCancel()
+        _stateService.DataEditState.OnNext(DataEditState.Editing);
+    }
+
+    public Task EditCancel()
+    {
+        _editingRowModel?.RowState.OnNext(GridRowState.Idle);
+        _editingRowModel = null;
+
+        if (_navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
         {
-            _editingRowModel.RowState.OnNext(GridRowState.Idle);
-            _editingRowModel = null;
-
-            if (_navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
-            {
-                CloseEditingPopupDelegate?.Invoke();
-            }
-            else
-            {
-                if (EditMode.Value == GridEditMode.Popup)
-                    CloseEditingPopupDelegate?.Invoke();
-            }
-
-            return Task.CompletedTask;
+            CloseEditingPopupDelegate?.Invoke();
         }
-
-        public async Task RowEditCommit()
+        else
         {
-            _editingRowModel.RowState.OnNext(GridRowState.Idle);
-            _editingRowModel.CommitEditingModel();
-            _editingRowModel = null;
-
             if (EditMode.Value == GridEditMode.Popup)
                 CloseEditingPopupDelegate?.Invoke();
-
-            await OnRowEditingEnded();
         }
 
-        public async Task RowDeleteBegin(GridRowModel<T> rowModel)
-        {
-            await OnRowRemoving.Value.InvokeAsync(rowModel.DataItem);
-        }
+        return Task.CompletedTask;
+    }
 
-        public async Task RowInsertBegin()
-        {
-            var insertModel = (T?)Activator.CreateInstance(typeof(T));
-            if (insertModel is null)
-                throw new InvalidOperationException("Failed to create instance of type T");
+    public async Task EditCommit()
+    {
+        _editingRowModel?.RowState.OnNext(GridRowState.Idle);
+        _editingRowModel?.EditCommit();
+        _editingRowModel = null;
 
-            var rowModel = new GridRowModel<T>(insertModel, _columnService.DataColumnModels, 0, _repositoryService.PropInfo, false);
-            rowModel.CreateEditingModel();
+        if (EditMode.Value == GridEditMode.Popup)
+            CloseEditingPopupDelegate?.Invoke();
 
-            await OnRowInsertBegin.Value.InvokeAsync();
+        await OnRowEditingEnded();
+    }
 
-            if (EditMode.Value == GridEditMode.Popup)
-                ShowInsertingPopupDelegate?.Invoke(rowModel);
-            else if (EditMode.Value == GridEditMode.Form)
-                ShowInsertingFormDelegate?.Invoke(rowModel);
+    public async Task RowDeleteBegin(GridRowModel<T> rowModel)
+    {
+        await OnRowRemoving.Value.InvokeAsync(rowModel.DataItem);
+    }
 
-            _stateService.DataEditState.OnNext(DataEditState.Inserting);
-        }
+    public async Task RowInsertBegin()
+    {
+        var insertModel = (T?)Activator.CreateInstance(typeof(T));
+        if (insertModel is null)
+            throw new InvalidOperationException("Failed to create instance of type T");
 
-        public async Task RowInsertCommit(T dataItem)
-        {
-            await OnRowInserting.Value.InvokeAsync(dataItem);
+        var rowModel = new GridRowModel<T>(insertModel, _columnService.DataColumnModels, 0, _repositoryService.PropInfo, false);
+        rowModel.CreateEditingModel();
 
-            if (EditMode.Value == GridEditMode.Popup)
-                CloseInsertingPopupDelegate?.Invoke();
-            else if (EditMode.Value == GridEditMode.Form)
-                CloseInsertingFormDelegate?.Invoke();
-        }
+        await OnRowInsertBegin.Value.InvokeAsync();
 
-        public Task RowInsertCancel()
-        {
-            if (EditMode.Value == GridEditMode.Popup)
-                CloseInsertingPopupDelegate?.Invoke();
-            else if (EditMode.Value == GridEditMode.Form)
-                CloseInsertingFormDelegate?.Invoke();
+        if (EditMode.Value == GridEditMode.Popup)
+            ShowInsertingPopupDelegate?.Invoke(rowModel);
+        else if (EditMode.Value == GridEditMode.Form)
+            ShowInsertingFormDelegate?.Invoke(rowModel);
 
-            return Task.CompletedTask;
-        }
+        _stateService.DataEditState.OnNext(DataEditState.Inserting);
+    }
 
-        public ValueTask DisposeAsync()
-        {
-            return ValueTask.CompletedTask;
-        }
+    public async Task RowInsertCommit(T dataItem)
+    {
+        await OnRowInserting.Value.InvokeAsync(dataItem);
+
+        if (EditMode.Value == GridEditMode.Popup)
+            CloseInsertingPopupDelegate?.Invoke();
+        else if (EditMode.Value == GridEditMode.Form)
+            CloseInsertingFormDelegate?.Invoke();
+    }
+
+    public Task RowInsertCancel()
+    {
+        if (EditMode.Value == GridEditMode.Popup)
+            CloseInsertingPopupDelegate?.Invoke();
+        else if (EditMode.Value == GridEditMode.Form)
+            CloseInsertingFormDelegate?.Invoke();
+
+        return Task.CompletedTask;
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        return ValueTask.CompletedTask;
     }
 }

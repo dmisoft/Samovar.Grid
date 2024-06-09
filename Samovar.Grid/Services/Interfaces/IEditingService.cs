@@ -15,13 +15,13 @@ namespace Samovar.Grid
 
         public BehaviorSubject<EventCallback<T>> OnRowRemoving { get; }
 
-        Task RowEditCancel();
+        Task EditCancel();
 
-        Task RowEditBegin(GridRowModel<T> rowModel);
+        Task EditBegin(GridRowModel<T> rowModel);
 
         Task RowDeleteBegin(GridRowModel<T> rowModel);
 
-        Task RowEditCommit();
+        Task EditCommit();
 
         Task RowInsertBegin();
         Task RowInsertCommit(T dataItem);

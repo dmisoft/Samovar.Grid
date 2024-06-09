@@ -296,7 +296,7 @@ public class SmGrid<T>
 
     public Task CancelRowEdit()
     {
-        return EditingService.RowEditCancel();
+        return EditingService.EditCancel();
     }
 
     public Task CancelRowInsert()

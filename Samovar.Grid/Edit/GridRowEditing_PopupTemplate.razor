@@ -7,7 +7,7 @@
         <div class="modal-content">
             <div class="modal-header" id=@($"{Id}header") style="cursor: move;">
                 <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                <button type="button" class="btn-close" aria-label="Close" @onclick="@(() => EditingService.RowEditCancel())"></button>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="@(() => EditingService.EditCancel())"></button>
             </div>
             <div class="modal-body">
                 @Template(RowModel.DataItem)

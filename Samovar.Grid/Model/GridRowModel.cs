@@ -79,7 +79,7 @@ public class GridRowModel<T>
 		EditingDataItem = CloneRowItem(DataItem);
 		EditingGridCellModels = CreateGridRowCellModelCollection(ColumnMetadata, EditingDataItem);
 	}
-	internal void CommitEditingModel()
+	internal void EditCommit()
 	{
 		if (EditingDataItem is null)
 			return;
