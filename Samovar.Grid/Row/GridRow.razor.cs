@@ -7,7 +7,7 @@ public partial class GridRow<TItem>
     : DesignComponentBase, IAsyncDisposable
 {
     [SmInject]
-    public required IRowDetailService<TItem> RowDetailService { get; set; }
+    public required IDetailRowService<TItem> RowDetailService { get; set; }
 
     [SmInject]
     public required IComponentBuilderService ComponentBuilderService { get; set; }
@@ -33,7 +33,7 @@ public partial class GridRow<TItem>
     internal async Task DetailExpanderClick()
     {
         RowModel.RowDetailExpanded = !RowModel.RowDetailExpanded;
-        await RowDetailService.ExpandOrCloseRowDetails(RowModel.DataItem);
+        await RowDetailService.ExpandOrCollapseDetailRow(RowModel);
     }
 
     public ValueTask DisposeAsync()

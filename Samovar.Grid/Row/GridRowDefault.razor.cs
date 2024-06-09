@@ -27,7 +27,7 @@ public partial class GridRowDefault<T>
     public required IGridSelectionService<T> GridSelectionService { get; set; }
 
     [SmInject]
-    public required IRowDetailService<T> RowDetailService { get; set; }
+    public required IDetailRowService<T> RowDetailService { get; set; }
 
     [Parameter]
     public required GridRowModel<T> RowModel { get; set; }

@@ -32,7 +32,7 @@ namespace Samovar.Grid
             _services.AddScoped<IColumnResizingService, ColumnResizingService>();
             _services.AddScoped<IGridSelectionService<T>, GridSelectionService<T>>();
             _services.AddScoped<IComponentBuilderService, ComponentBuilderService<T>>();
-            _services.AddScoped<IRowDetailService<T>, RowDetailService<T>>();
+            _services.AddScoped<IDetailRowService<T>, DetailRowService<T>>();
             _services.AddScoped<IDataSourceService<T>, DataSourceService<T>>();
 
             _services.AddTransient<IDataColumnModel, DataColumnModel>();

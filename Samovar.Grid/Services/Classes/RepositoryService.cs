@@ -10,7 +10,7 @@ public class RepositoryService<T>
     private readonly IDataSourceService<T> _dataSourceService;
     private readonly INavigationService _navigationService;
     private readonly IColumnService _columnService;
-    private readonly IRowDetailService<T> _rowDetailService;
+    private readonly IDetailRowService<T> _rowDetailService;
     private readonly IGridStateService _stateService;
 
     public Dictionary<string, PropertyInfo> PropInfo { get; } = new Dictionary<string, PropertyInfo>();
@@ -23,7 +23,7 @@ public class RepositoryService<T>
           IDataSourceService<T> dataSourceService
         , INavigationService navigationService
         , IColumnService columnService
-        , IRowDetailService<T> rowDetailService
+        , IDetailRowService<T> rowDetailService
         , IGridStateService stateService)
     {
         _dataSourceService = dataSourceService;
@@ -102,7 +102,7 @@ public class RepositoryService<T>
         foreach (var keyDataPair in gridData.ToHashSet())
         {
             rowPosition++;
-            retVal.Add(new GridRowModel<T>(keyDataPair, ColumnMetadataList, rowPosition, PropInfo, _rowDetailService.ExpandedRowDetails.Value.Any(r => r!.Equals(keyDataPair))));
+            retVal.Add(new GridRowModel<T>(keyDataPair, ColumnMetadataList, rowPosition, PropInfo, _rowDetailService.ExpandedGridRows.Any(r => r!.Equals(keyDataPair))));
         }
 
         return retVal;

@@ -65,7 +65,7 @@
     }
     <th id="@(ColumnService.EmptyColumnModel.MainCellId)"></th>
 </tr>
-@if (TemplateService.DetailRowTemplate.Value != null && RowDetailService.ExpandedRowDetails.Value.Contains(RowModel.DataItem))
+@if (TemplateService.DetailRowTemplate.Value != null && RowDetailService.ExpandedGridRows.Contains(RowModel))
 {
     <tr>
         <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;">

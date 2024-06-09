@@ -234,7 +234,8 @@ public class SmGrid<T>
             T? singleSelectedDataRow = parameters.GetValueOrDefault<T?>(nameof(SingleSelectedDataRow));
             GridSelectionService.SingleSelectedDataRow.OnNext(singleSelectedDataRow);
         }
-        else {
+        else
+        {
             GridSelectionService.SingleSelectedDataRow.OnNext(default);
             GridSelectionService.MultipleSelectedDataRows.OnNext(default);
         }
@@ -294,17 +295,18 @@ public class SmGrid<T>
         }
     }
 
-  //  public Task CancelRowEdit()
-  //  {
-  //      //return Task.CompletedTask;
-		//return EditingService.CancelRowEdit(null);
-  //  }
+    //  public Task CancelRowEdit()
+    //  {
+    //      //return Task.CompletedTask;
+    //return EditingService.CancelRowEdit(null);
+    //  }
 
     public Task CommitCustomRowEdit(T item)
     {
         return EditingService.CommitCustomRowEdit(item);
     }
-    public Task CancelCustomRowEdit(T item) {
+    public Task CancelCustomRowEdit(T item)
+    {
         return EditingService.CancelCustomRowEdit(item);
     }
     public Task CancelRowInsert()
