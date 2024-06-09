@@ -7,14 +7,14 @@
 		<div class="modal-content" style="resize:both;overflow: auto;">
 			<div class="modal-header" id=@($"{Id}header") style="cursor: move;">
 				<h5 class="modal-title" id="staticBackdropLabel">@(EditingService.EditingFormTitleDelegate==null?"Edit item":EditingService.EditingFormTitleDelegate(RowModel.DataItem).Result)</h5>
-				<button type="button" class="btn-close" aria-label="Close" @onclick="@(() => EditingService.EditCancel())"></button>
+				<button type="button" class="btn-close" aria-label="Close" @onclick="@(() => EditingService.CancelRowEdit(RowModel))"></button>
 			</div>
 			<div class="modal-body">
 				<GridRowEditing_Body RowModel=RowModel />
 			</div>
 			<div class="modal-footer">
-				<button class="btn btn-outline-primary mx-1" @onclick=@(() => EditingService.EditCommit())>update</button>
-				<button class="btn btn-outline-secondary mx-1" @onclick=@(() => EditingService.EditCancel())>cancel</button>
+				<button class="btn btn-outline-primary mx-1" @onclick=@(() => EditingService.EditCommit(RowModel))>update</button>
+				<button class="btn btn-outline-secondary mx-1" @onclick=@(() => EditingService.CancelRowEdit(RowModel))>cancel</button>
 			</div>
 		</div>
 	</div>

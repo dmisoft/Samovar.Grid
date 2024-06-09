@@ -10,8 +10,7 @@ public class EditingService<T>(
         , INavigationService _navigationService)
     : IEditingService<T>, IAsyncDisposable
 {
-    GridRowModel<T>? _editingRowModel;
-
+    List<GridRowModel<T>> _editingRowModels = [];
 
     public event Func<Task>? RowEditingEnded;
 
@@ -43,54 +42,83 @@ public class EditingService<T>(
 
     public async Task EditBegin(GridRowModel<T> rowModel)
     {
+        if (!_editingRowModels.Contains(rowModel))
+            _editingRowModels.Add(rowModel);
         await OnRowEditBegin.InvokeAsync(rowModel.DataItem);
 
-        _editingRowModel = rowModel;
-        _editingRowModel.RowState.OnNext(GridRowState.Editing);
-
-        _editingRowModel.CreateEditingModel();
+        //_editingRowModel = rowModel;
+        rowModel.RowState.OnNext(GridRowState.Editing);
+        rowModel.CreateEditingModel();
 
         if (_navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
         {
-            ShowEditingPopupDelegate?.Invoke(_editingRowModel);
+            ShowEditingPopupDelegate?.Invoke(rowModel);
         }
         else
         {
             if (EditMode.Value == GridEditMode.Popup)
-                ShowEditingPopupDelegate?.Invoke(_editingRowModel);
+                ShowEditingPopupDelegate?.Invoke(rowModel);
         }
 
         _stateService.DataEditState.OnNext(DataEditState.Editing);
     }
 
-    public Task EditCancel()
+    public Task CancelRowEdit(GridRowModel<T> rowModel)
     {
-        _editingRowModel?.RowState.OnNext(GridRowState.Idle);
-        _editingRowModel = null;
+        rowModel.RowState.OnNext(GridRowState.Idle);
+        if (_editingRowModels.Contains(rowModel))
+            _editingRowModels.Remove(rowModel);
 
-        if (_navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
-        {
+        if (EditMode.Value == GridEditMode.Popup || _navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
             CloseEditingPopupDelegate?.Invoke();
-        }
-        else
-        {
-            if (EditMode.Value == GridEditMode.Popup)
-                CloseEditingPopupDelegate?.Invoke();
-        }
 
         return Task.CompletedTask;
     }
 
-    public async Task EditCommit()
-    {
-        _editingRowModel?.RowState.OnNext(GridRowState.Idle);
-        _editingRowModel?.EditCommit();
-        _editingRowModel = null;
 
-        if (EditMode.Value == GridEditMode.Popup)
+    public async Task EditCommit(GridRowModel<T> rowModel)
+    {
+        rowModel.RowState.OnNext(GridRowState.Idle);
+        rowModel.EditCommit();
+        if (_editingRowModels.Contains(rowModel))
+            _editingRowModels.Remove(rowModel);
+
+        if (EditMode.Value == GridEditMode.Popup || _navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
             CloseEditingPopupDelegate?.Invoke();
 
         await OnRowEditingEnded();
+    }
+
+    public async Task CommitCustomRowEdit(T item)
+    {
+        GridRowModel<T>? rowModel = _editingRowModels.Find(r => r.DataItem.Equals(item));
+        if (rowModel is not null)
+        {
+            rowModel.RowState.OnNext(GridRowState.Idle);
+            rowModel.CommitCustomEdit();
+            if (_editingRowModels.Contains(rowModel))
+                _editingRowModels.Remove(rowModel);
+
+            if (EditMode.Value == GridEditMode.Popup || _navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
+                CloseEditingPopupDelegate?.Invoke();
+        }
+
+        await OnRowEditingEnded();
+    }
+
+    public Task CancelCustomRowEdit(T item)
+    {
+        GridRowModel<T>? rowModel = _editingRowModels.Find(r => r.DataItem.Equals(item));
+        if (rowModel is not null)
+        {
+            rowModel.RowState.OnNext(GridRowState.Idle);
+            if (_editingRowModels.Contains(rowModel))
+                _editingRowModels.Remove(rowModel);
+
+            if (EditMode.Value == GridEditMode.Popup || _navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
+                CloseEditingPopupDelegate?.Invoke();
+        }
+        return Task.CompletedTask;
     }
 
     public async Task RowDeleteBegin(GridRowModel<T> rowModel)

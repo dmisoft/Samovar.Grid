@@ -15,17 +15,19 @@ namespace Samovar.Grid
 
         public BehaviorSubject<EventCallback<T>> OnRowRemoving { get; }
 
-        Task EditCancel();
+        Task CancelRowEdit(GridRowModel<T> rowModel);
+        Task CommitCustomRowEdit(T item);
 
         Task EditBegin(GridRowModel<T> rowModel);
 
         Task RowDeleteBegin(GridRowModel<T> rowModel);
 
-        Task EditCommit();
+        Task EditCommit(GridRowModel<T> rowModel);
 
         Task RowInsertBegin();
         Task RowInsertCommit(T dataItem);
         Task RowInsertCancel();
+        Task CancelCustomRowEdit(T item);
 
         Func<GridRowModel<T>, Task>? ShowInsertingPopupDelegate { get; set; }
         Func<Task>? CloseInsertingPopupDelegate { get; set; }

@@ -59,17 +59,12 @@ public class GridRowModel<T>
 
 	internal List<DataGridRowCellModel<T>> CreateGridRowCellModelCollection2(T dataItem)
 	{
-		Stopwatch stopWatch = new Stopwatch();
-		stopWatch.Start();
-
 		List<DataGridRowCellModel<T>> gridCellModelCollection = new List<DataGridRowCellModel<T>>();
 
 		foreach (var cm in ColumnMetadata)
 		{
 			gridCellModelCollection.Add(new DataGridRowCellModel<T>(dataItem, PropDict[cm.Field.Value], cm));
 		}
-
-		stopWatch.Stop();
 
 		return gridCellModelCollection;
 	}
@@ -86,7 +81,13 @@ public class GridRowModel<T>
 		DataItem = CopyRowModelData(EditingDataItem, DataItem);
 		GridCellModels = CreateGridRowCellModelCollection2(DataItem);
 	}
-	public static T CloneRowItem(T sourceData)
+
+    internal void CommitCustomEdit()
+    {
+        GridCellModels = CreateGridRowCellModelCollection2(DataItem);
+    }
+
+    public static T CloneRowItem(T sourceData)
 	{
 		T? retVal = (T?)Activator.CreateInstance(typeof(T));
 		if (retVal is null)

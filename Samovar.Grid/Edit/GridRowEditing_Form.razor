@@ -14,8 +14,8 @@
         </div>
         <div class="row">
             <div class="col s-flex justify-content-end">
-                <button class="btn btn-outline-primary mx-1" @onclick="@(() => EditingService.EditCommit())">update</button>
-                <button class="btn btn-outline-secondary mx-1" @onclick="@(() => EditingService.EditCancel())">cancel</button>
+                <button class="btn btn-outline-primary mx-1" @onclick="@(() => EditingService.EditCommit(RowModel))">update</button>
+                <button class="btn btn-outline-secondary mx-1" @onclick="@(() => EditingService.CancelRowEdit(RowModel))">cancel</button>
             </div>
         </div>
     </td>

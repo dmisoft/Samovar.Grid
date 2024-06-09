@@ -68,17 +68,17 @@ namespace Samovar.Grid.Server.Test.Pages
             return Task.CompletedTask;
         }
 
-        async Task HandleValidSubmit()
-        {
-            EditContext.DataItem.Summary = EditContext.Summary;
-            await grid.CancelRowEdit();
-        }
+        //async Task HandleValidSubmit()
+        //{
+        //    EditContext.DataItem.Summary = EditContext.Summary;
+        //    await grid.CancelRowEdit();
+        //}
 
-        async Task OnCancelButtonClick()
-        {
-            await grid.CancelRowEdit();
-            EditContext = null;
-        }
+        //async Task OnCancelButtonClick()
+        //{
+        //    await grid.CancelRowEdit();
+        //    EditContext = null;
+        //}
 
         Task deselectSingleSelectedItem()
         {

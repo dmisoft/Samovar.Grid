@@ -86,14 +86,13 @@ else
                         @bind-MultipleSelectedDataRows=selectedRows>
                 <Columns>
                     <CommandColumn EditButtonVisible=true NewButtonVisible=true Width="150px" />
-                    <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)" Width="200px"/>
                     <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)"/>
                     <Column Title="Date" Field="@nameof(WeatherForecast.Date)"/>
                     <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)"/>
                     <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)"/>
                 </Columns>
                 <EditFormTemplate>
-                    <EditForm Model="@EditContext" Context="EditFormContext" OnValidSubmit=HandleValidSubmit>
+                    <EditForm Model="@EditContext" Context="EditFormContext" OnValidSubmit=HandleValidCustomEditSubmit>
                         <DataAnnotationsValidator />
                         <h5>Edit-Modus</h5>
                         <div class="row">
@@ -110,7 +109,7 @@ else
                         <div class="row">
                             <div class="col s-flex justify-content-end">
                                 <button type="submit" class="btn btn-outline-primary mx-1">aktuallisieren</button>
-                                <button type="button" class="btn btn-outline-secondary mx-1" @onclick="OnCancelButtonClick">abbrechen</button>
+                                <button type="button" class="btn btn-outline-secondary mx-1" @onclick="HandleCancelCustomEdit">abbrechen</button>
                             </div>
                         </div>
                     </EditForm>
@@ -201,10 +200,11 @@ else
         InsertContext = new FormInsertContext();
     }
 
-    async Task HandleValidSubmit()
+    async Task HandleValidCustomEditSubmit()
     {
+        EditContext.DataItem.TemperatureC = EditContext.TemperatureC;
         EditContext.DataItem.Summary = EditContext.Summary;
-        await grid.CancelRowEdit();
+        await grid.CommitCustomRowEdit(EditContext.DataItem);
     }
 
     async Task HandleValidInsertingSubmit()
@@ -223,11 +223,12 @@ else
         StateHasChanged();
     }
 
-    async Task OnCancelButtonClick()
+    async Task HandleCancelCustomEdit()
     {
-        await grid.CancelRowEdit();
+        await grid.CancelCustomRowEdit(EditContext.DataItem);
         EditContext = null;
-    }
+     }
+
     async Task OnCancelInsertingButtonClick()
     {
         await grid.CancelRowInsert();
@@ -254,8 +255,8 @@ else
         [Required]
         [StringLength(maximumLength: 32, MinimumLength = 4, ErrorMessage = "The description should be 4 to 32 characters.")]
         public string Summary { get; set; }
-
-        //public Action StateHasChanged { get; set; }
+        
+        public int TemperatureC { get; set; }
     }
 
     internal class FormInsertContext
