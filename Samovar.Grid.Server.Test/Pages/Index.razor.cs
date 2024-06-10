@@ -68,18 +68,6 @@ namespace Samovar.Grid.Server.Test.Pages
             return Task.CompletedTask;
         }
 
-        //async Task HandleValidSubmit()
-        //{
-        //    EditContext.DataItem.Summary = EditContext.Summary;
-        //    await grid.CancelRowEdit();
-        //}
-
-        //async Task OnCancelButtonClick()
-        //{
-        //    await grid.CancelRowEdit();
-        //    EditContext = null;
-        //}
-
         Task deselectSingleSelectedItem()
         {
             selectedRow = null;
@@ -101,6 +89,11 @@ namespace Samovar.Grid.Server.Test.Pages
         protected override Task OnInitializedAsync()
         {
             return base.OnInitializedAsync();
+        }
+        async Task collapseAllDetailRows()
+        {
+            await grid.CollapseAllDetailRows();
+            //return Task.CompletedTask;
         }
 
         class FormEditContext

@@ -39,6 +39,9 @@ public class SmGrid<T>
     [SmInject]
     public required IDataSourceService<T> DataSourceService { get; set; }
 
+    [SmInject]
+    public required IDetailRowService<T> DetailRowService { get; set; }
+
     [Parameter]
     public required RenderFragment Columns { get; set; }
 
@@ -295,12 +298,6 @@ public class SmGrid<T>
         }
     }
 
-    //  public Task CancelRowEdit()
-    //  {
-    //      //return Task.CompletedTask;
-    //return EditingService.CancelRowEdit(null);
-    //  }
-
     public Task CommitCustomRowEdit(T item)
     {
         return EditingService.CommitCustomRowEdit(item);
@@ -314,14 +311,8 @@ public class SmGrid<T>
         return EditingService.RowInsertCancel();
     }
 
-    public Task ExpandAllDetailRows()
-    {
-
-        return Task.CompletedTask;
-    }
-
     public Task CollapseAllDetailRows()
     {
-        return Task.CompletedTask;
+        return DetailRowService.CollapseAllDetailRows();
     }
 }

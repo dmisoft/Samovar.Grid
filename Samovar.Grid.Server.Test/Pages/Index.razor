@@ -18,7 +18,8 @@
 
 <div class="row">
     <div class="col-10">
-        <SmGrid Data="forecasts"
+        <SmGrid @ref=grid
+                Data ="forecasts"
                 Height=@gridHeight
                 Width=@gridWidth
                 FilterMode=GridFilterMode.FilterRow
@@ -98,6 +99,10 @@
                 </label>
             </div>
         </div>
+        <div class="mb-3">
+            <button class="btn btn-primary" @onclick="collapseAllDetailRows">Collapse all detail rows</button>
+        </div>
+
         <div class="mb-3">
             <label for="rowSelectionMode" class="form-label">Row selection mode</label>
             <select id="rowSelectionMode" class="form-select form-select-lg" @bind=selectionMode>
