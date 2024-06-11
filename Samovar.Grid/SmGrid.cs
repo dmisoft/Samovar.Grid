@@ -158,7 +158,7 @@ public class SmGrid<T>
 
         string? cssClass = parameters.GetValueOrDefault<string>(nameof(CssClass));
         if (cssClass != null)
-            LayoutService.TableTagClass.OnNext(cssClass);
+            LayoutService.CssClass.OnNext(cssClass);
 
         bool? showColumnHeader = parameters.GetValueOrDefault<bool?>(nameof(ShowColumnHeader));
         showColumnHeader ??= true;

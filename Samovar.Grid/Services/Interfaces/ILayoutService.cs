@@ -9,8 +9,7 @@ public interface ILayoutService
     bool OriginalColumnsWidthChanged { get; set; }
     DotNetObjectReference<ILayoutService> DataGridDotNetRef { get; }
     BehaviorSubject<string> SelectedRowClass { get; }
-    BehaviorSubject<string> TableTagClass { get; }
-    BehaviorSubject<string> TheadTagClass { get; }
+    BehaviorSubject<string> CssClass { get; }
     BehaviorSubject<string> PaginationClass { get; }
 
     BehaviorSubject<string> FilterToggleButtonClass { get; }

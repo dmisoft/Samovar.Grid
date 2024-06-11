@@ -44,10 +44,13 @@ namespace Samovar.Grid
         public ElementReference GridBodyRef { get; set; }
         protected IEnumerable<GridRowModel<T>> View { get; set; } = [];
         private Virtualize<GridRowModel<T>>? virtualizeComponent;
-
+        protected string CssClass = "";
+        
         protected override Task OnInitializedAsync()
         {
             SubscribeViewCollectionChange();
+
+            LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
 
             StateService.DataSourceState.Subscribe(async (stateTask) =>
             {

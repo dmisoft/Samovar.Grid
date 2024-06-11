@@ -12,9 +12,7 @@ public class LayoutService
 
     public BehaviorSubject<string> SelectedRowClass { get; } = new BehaviorSubject<string>("bg-warning");
 
-    public BehaviorSubject<string> TableTagClass { get; } = new BehaviorSubject<string>("table table-bordered");
-
-    public BehaviorSubject<string> TheadTagClass { get; } = new BehaviorSubject<string>("table-light");
+    public BehaviorSubject<string> CssClass { get; } = new BehaviorSubject<string>("table table-bordered");
 
     public BehaviorSubject<double> MinGridWidth { get; } = new BehaviorSubject<double>(0d);
 
@@ -64,14 +62,12 @@ public class LayoutService
             .Select(_ =>
             {
                 string outerStyle = $"height:{_[1]};";
-                string footerStyle = "";
                 if (!string.IsNullOrEmpty(_[0]))
                 {
                     outerStyle += $"width:{_[0]};";
-                    footerStyle = $"width:{_[0]};";
                 }
 
-                return Task.FromResult(new GridStyleInfo { CssStyle = outerStyle, FooterStyle = footerStyle });
+                return Task.FromResult(new GridStyleInfo { CssStyle = outerStyle });
             });
     }
 
@@ -134,7 +130,7 @@ public class LayoutService
 
     private async Task CaculateHeader()
     {
-        double gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule())-1;
+        double gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule()) - 1;
         var tBodyWidth = await GridOuterRef.GetElementWidthByRef(await _jsService.JsModule());
 
         var declaratedAbsoluteColumnsWidthSum = _columnService.DeclarativeColumnModels.
@@ -170,7 +166,7 @@ public class LayoutService
             m.Width.OnNext(widthList[m]);
         }
 
-        if(ShowDetailRow.Value)
+        if (ShowDetailRow.Value)
         {
             _columnService.DetailExpanderColumnModel.Width.OnNext(_columnService.DetailExpanderColumnModel.DeclaratedWidth);
         }
@@ -183,7 +179,6 @@ public class LayoutService
             GridStyleInfo info = new GridStyleInfo
             {
                 CssStyle = OuterStyle.Value,
-                ActualScrollbarWidth = 0
             };
             await DataGridInnerCssStyleChanged.Invoke(info);
         }

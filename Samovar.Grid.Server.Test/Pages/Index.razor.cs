@@ -17,6 +17,7 @@ namespace Samovar.Grid.Server.Test.Pages
         string gridWidth = "1200px";
         string gridHeight = "600px";
         string columnWidth = "150px";
+        string? cssClass;
 
         RowSelectionMode selectionMode = RowSelectionMode.Single;
         GridEditMode gridEditMode = GridEditMode.Form;
@@ -31,12 +32,7 @@ namespace Samovar.Grid.Server.Test.Pages
 
         Task changeStyle()
         {
-            return Task.CompletedTask;
-        }
-
-        Task changeFirstDataItem()
-        {
-            forecasts[0].Summary = "my summary 1";
+            cssClass = "blueTable";
             return Task.CompletedTask;
         }
 
@@ -72,12 +68,6 @@ namespace Samovar.Grid.Server.Test.Pages
         {
             selectedRow = null;
             return Task.CompletedTask;
-        }
-
-        private void deselectSingleSelectedItem2(MouseEventArgs e)
-        {
-            selectedRow = null;
-
         }
 
         Task selectSingleSelectedItem()

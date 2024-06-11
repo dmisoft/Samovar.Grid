@@ -7,30 +7,27 @@
 
 @inject WeatherForecastService ForecastService
 
-<h1>Weather forecast Test</h1>
-
+<h1>Common tests</h1>
 
 <button class="btn btn-primary" @onclick="loadData">load data</button>
-<button class="btn btn-primary" @onclick="changeStyle">change style</button>
-<button class="btn btn-primary" @onclick="changeFirstDataItem">change first data item</button>
-<button class="btn btn-primary" @onclick="deselectSingleSelectedItem2">deselct single selected item</button>
-<button class="btn btn-primary" @onclick="selectSingleSelectedItem">select second single selected item</button>
+<button class="btn btn-primary" @onclick="selectSingleSelectedItem">select second item</button>
 
 <div class="row">
     <div class="col-10">
-        <SmGrid @ref=grid
-                Data ="forecasts"
+        <SmGrid @ref=@grid
+                Data=@forecasts
                 Height=@gridHeight
                 Width=@gridWidth
                 FilterMode=GridFilterMode.FilterRow
-                ShowDetailRow=showDetailRow
-                PageSize=pageSize
-                EditMode=gridEditMode
+                ShowDetailRow=@showDetailRow
+                PageSize=@pageSize
+                EditMode=@gridEditMode
                 EditingFormTitleDelegate="@((WeatherForecast data) => Task.FromResult(data.TemperatureC.ToString()))"
-                SelectionMode=selectionMode
-                ColumnResizeMode=columnResizeMode
-                @bind-SingleSelectedDataRow=selectedRow
-                @bind-MultipleSelectedDataRows=selectedRows
+                SelectionMode=@selectionMode
+                ColumnResizeMode=@columnResizeMode
+                CssClass=@cssClass
+                @bind-SingleSelectedDataRow=@selectedRow
+                @bind-MultipleSelectedDataRows=@selectedRows
                 RowEditBegin="@((WeatherForecast data) => RowEditBegin(data))"
                 RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
                 RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))">
@@ -99,10 +96,15 @@
                 </label>
             </div>
         </div>
+        
         <div class="mb-3">
             <button class="btn btn-primary" @onclick="collapseAllDetailRows">Collapse all detail rows</button>
         </div>
 
+        <div class="mb-3">
+            <button class="btn btn-primary" @onclick="changeStyle">Change table style</button>
+        </div>
+        
         <div class="mb-3">
             <label for="rowSelectionMode" class="form-label">Row selection mode</label>
             <select id="rowSelectionMode" class="form-select form-select-lg" @bind=selectionMode>

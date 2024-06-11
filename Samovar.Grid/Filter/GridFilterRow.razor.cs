@@ -15,6 +15,14 @@ public partial class GridFilterRow<TItem>
     [SmInject]
     public required IRepositoryService<TItem> RepositoryService { get; set; }
 
+    protected string CssClass = "";
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
+    }
+
     protected readonly List<Type> Numeric_Types_For_Constant_Expression = new List<Type>
 
             {

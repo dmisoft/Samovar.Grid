@@ -32,7 +32,7 @@
             default:
                 <div>
                     <table id="@ConstantService.InnerGridBodyTableId" 
-                    class="@LayoutService.TableTagClass.Value" 
+                    class=@CssClass 
                     style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
                         <GridHiddenHeader />
                         <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">

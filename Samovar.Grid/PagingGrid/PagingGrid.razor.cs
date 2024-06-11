@@ -53,21 +53,26 @@ public partial class PagingGrid<T>
         await LayoutService.InitHeader();
     }
 
+    protected string CssClass = "";
+
     protected override Task OnInitializedAsync()
     {
         SubscribeViewCollectionChange();
+        
+        LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
+
         StateService.DataSourceState.Subscribe(async (stateTask) =>
         {
             await InvokeAsync(async () =>
             {
                 DataSourceState = await stateTask;
-                StateHasChanged();
+              //  StateHasChanged();
             });
         });
         LayoutService.DataGridInnerStyle.Subscribe(async style =>
         {
             Style = await style;
-            StateHasChanged();
+            //StateHasChanged();
         });
 
         //Popup editing
@@ -116,6 +121,7 @@ public partial class PagingGrid<T>
             .Subscribe(async (GetViewCollectionTask) =>
         {
             View = await GetViewCollectionTask;
+            StateHasChanged();
         });
     }
 

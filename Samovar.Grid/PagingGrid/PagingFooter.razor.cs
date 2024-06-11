@@ -13,9 +13,13 @@ public partial class PagingFooter
 
     internal ElementReference GridFooterRef { get; set; }
 
-    protected override void OnInitialized()
+    protected string CssClass = "";
+
+    protected async override Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
         PagingNavigationStrategy.PagerInfo.Subscribe(this);
+        LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
     }
 
     public void OnCompleted()

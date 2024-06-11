@@ -2,8 +2,8 @@
 @typeparam TItem
 @inherits DesignComponentBase
 
-<table style="margin:0;padding:0;table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")" class="@LayoutService.TableTagClass.Value">
-    <thead class="@LayoutService.TheadTagClass.Value">
+<table style="margin:0;padding:0;table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")" class=@CssClass>
+    <thead>
         <tr @ref="LayoutService.GridFilterRef">
             @if (LayoutService.ShowDetailRow.Value)
             {

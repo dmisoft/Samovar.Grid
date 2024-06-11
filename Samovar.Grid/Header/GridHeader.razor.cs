@@ -24,6 +24,14 @@ public partial class GridHeader<T>
     [SmInject]
     public required IGridStateService GridStateService { get; set; }
 
+    protected string CssClass = "";
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
+    }
+
     internal Task ColumnCellClick(IDataColumnModel columnModel)
     {
         return GridOrderService.OnColumnClick(columnModel);
