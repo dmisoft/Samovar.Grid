@@ -102,7 +102,7 @@ public class RepositoryService<T>
         foreach (var keyDataPair in gridData.ToHashSet())
         {
             rowPosition++;
-            retVal.Add(new GridRowModel<T>(keyDataPair, ColumnMetadataList, rowPosition, PropInfo, _rowDetailService.ExpandedGridRows.Any(r => r!.Equals(keyDataPair))));
+            retVal.Add(new GridRowModel<T>(keyDataPair, ColumnMetadataList, rowPosition, PropInfo, _rowDetailService.ExpandedGridRows.Exists(r => r!.Equals(keyDataPair))));
         }
 
         return retVal;

@@ -10,7 +10,7 @@ public class EditingService<T>(
         , INavigationService _navigationService)
     : IEditingService<T>, IAsyncDisposable
 {
-    List<GridRowModel<T>> _editingRowModels = [];
+    readonly List<GridRowModel<T>> _editingRowModels = [];
 
     public event Func<Task>? RowEditingEnded;
 
@@ -46,7 +46,6 @@ public class EditingService<T>(
             _editingRowModels.Add(rowModel);
         await OnRowEditBegin.InvokeAsync(rowModel.DataItem);
 
-        //_editingRowModel = rowModel;
         rowModel.RowState.OnNext(GridRowState.Editing);
         rowModel.CreateEditingModel();
 
@@ -91,7 +90,7 @@ public class EditingService<T>(
 
     public async Task CommitCustomRowEdit(T item)
     {
-        GridRowModel<T>? rowModel = _editingRowModels.Find(r => r.DataItem.Equals(item));
+        GridRowModel<T>? rowModel = _editingRowModels.Find(r => r.DataItem is not null && r.DataItem.Equals(item));
         if (rowModel is not null)
         {
             rowModel.RowState.OnNext(GridRowState.Idle);
@@ -108,7 +107,7 @@ public class EditingService<T>(
 
     public Task CancelCustomRowEdit(T item)
     {
-        GridRowModel<T>? rowModel = _editingRowModels.Find(r => r.DataItem.Equals(item));
+        GridRowModel<T>? rowModel = _editingRowModels.Find(r => r.DataItem is not null && r.DataItem.Equals(item));
         if (rowModel is not null)
         {
             rowModel.RowState.OnNext(GridRowState.Idle);
