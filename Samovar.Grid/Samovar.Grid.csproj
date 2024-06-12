@@ -3,13 +3,13 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<PackageId>$(AssemblyName)</PackageId>
+		<PackageId>SamovarGrid</PackageId>
 		<Authors>Dimi</Authors>
 		<Company>DmiSoft</Company>
 		<PackageIcon>SamovarGrid_Logo.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>8.0.0-alpha.1</Version>
+		<Version>8.0.0-alpha.4</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Product>SamovarGrid</Product>
 		<Description>Data grid component for Blazor. Sorting, paging, editing, deleting. Filter. Row single and multiple selection. Cell show/edit templating. Row edit templating.</Description>
@@ -43,10 +43,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" />
-		<PackageReference Include="SonarAnalyzer.CSharp">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 		<PackageReference Include="System.Reactive" />
 	</ItemGroup>
 

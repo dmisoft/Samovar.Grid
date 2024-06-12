@@ -72,7 +72,7 @@ namespace Samovar.Grid
             if (firstRender)
             {
                 Lazy<Task<IJSObjectReference>> moduleTask = new(() => JsRuntime.InvokeAsync<IJSObjectReference>(
-                   "import", "./_content/Samovar.Grid/samovar.grid.js").AsTask());
+                   "import", "./_content/SamovarGrid/samovar.grid.js").AsTask());
 
                 JsService.InitJsModule(moduleTask);
             }

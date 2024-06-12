@@ -1,6 +1,16 @@
 ﻿## Basic sample
 
-```csharp Index.razor
+### Add the following code to your _Layout.cshtml file
+```csharp 
+<head>
+...
+<link href="_content/SamovarGrid/samovar.grid.css" rel="stylesheet" />
+...
+</head>
+```
+
+### Index.razor
+```csharp 
 @page "/"
 
 @using Samovar.Grid.Server.Test.Data
@@ -145,7 +155,8 @@
 </div>
 ```
 
-```csharp Index.razor.cs
+### Index.razor.cs
+```csharp
 using Microsoft.AspNetCore.Components;
 using Samovar.Grid.Server.Test.Data;
 using System.ComponentModel.DataAnnotations;
