@@ -32,7 +32,7 @@ namespace Samovar.Grid.Server.Test.Pages
 
         Task changeStyle()
         {
-            cssClass = "blueTable";
+            cssClass = "minimalistBlack";
             return Task.CompletedTask;
         }
 

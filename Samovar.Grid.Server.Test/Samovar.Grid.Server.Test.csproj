@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Pages\CustomScrollbarThumb.razor.css" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Samovar.Grid\Samovar.Grid.csproj" />
   </ItemGroup>
 
