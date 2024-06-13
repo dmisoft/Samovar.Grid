@@ -6,6 +6,7 @@ public class WeatherForecast
 {
     public int Position { get; set; }
     public DateTime Date { get; set; }
+    public DateOnly Date2 { get; set; }
 
     public int? TemperatureC { get; set; }
     public int? NullableInterger { get; set; } = null;

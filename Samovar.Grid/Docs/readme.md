@@ -9,9 +9,16 @@
 </head>
 ```
 
+### _Imports.razor
+```csharp 
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+```
+
 ### Index.razor
+#### add @rendermode InteractiveServer to your page
 ```csharp 
 @page "/"
+@rendermode InteractiveServer
 
 @using Samovar.Grid.Server.Test.Data
 @using System.ComponentModel.DataAnnotations
