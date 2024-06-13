@@ -31,6 +31,9 @@ namespace Samovar.Grid
                     typeof(double),
                     typeof(decimal),
                     typeof(DateTime),
+                    typeof(DateTime?),
+                    typeof(DateOnly),
+                    typeof(DateOnly?),
                     typeof(byte?),
                     typeof(sbyte?),
                     typeof(int?),
@@ -41,8 +44,7 @@ namespace Samovar.Grid
                     typeof(ulong?),
                     typeof(float?),
                     typeof(double?),
-                    typeof(decimal?),
-                    typeof(DateTime?)
+                    typeof(decimal?)
             };
 
         public DataSourceService(

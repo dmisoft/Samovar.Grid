@@ -12,6 +12,7 @@ public class WeatherForecast
     public int? NullableInterger { get; set; } = null;
 
     public int TemperatureF => 32 + (int)(TemperatureC??0/ 0.5556);
+    public double TemperatureFD => 12.555;// TemperatureC??0d/ 0.5556d;
 
     public string? Summary { get; set; }
 }

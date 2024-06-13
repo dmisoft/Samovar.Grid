@@ -21,6 +21,9 @@
                                 case var t when t == typeof(DateTime) || t == typeof(DateTime?):
                                     <GridFilterCellDate ColMetadata="(IDataColumnModel)colMeta" />
                                     break;
+                                case var t when t == typeof(DateOnly) || t == typeof(DateOnly?):
+                                    <GridFilterCellDateOnly ColMetadata="(IDataColumnModel)colMeta" />
+                                    break;
                                 case var t when t == typeof(string):
                                     <GridFilterCellString ColMetadata="(IDataColumnModel)colMeta" />
                                     break;

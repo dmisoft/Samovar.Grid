@@ -35,6 +35,9 @@
                             case var t when t == typeof(DateTime) || t == typeof(DateTime?):
                                 <GridEditCellDate PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
                                 break;
+                            case var t when t == typeof(DateOnly) || t == typeof(DateOnly?):
+                                <GridEditCellDateOnly PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
+                                break;
                             case var t when t == typeof(byte) || t == typeof(byte?):
                                 <GridEditCellNumeric TValue="byte?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
                                 break;
