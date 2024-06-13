@@ -33,6 +33,7 @@
                 RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
                 RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))">
             <Columns>
+                <Column Title="Date2" Field="@nameof(WeatherForecast.Date2)" Width="100px"/>
                 <Column Title="Date1" Field="@nameof(WeatherForecast.Date)" Width="100px">
                     <CellShowTemplate>
                         @{
