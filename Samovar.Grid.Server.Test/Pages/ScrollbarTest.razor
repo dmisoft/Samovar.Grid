@@ -2,6 +2,11 @@
 @using System.Globalization
 <!-- YourPage.razor -->
 
+<select class="form-select" @bind:event="onchange" @bind=@myValue>
+    <option value="true">True</option>
+    <option value="false">False</option>
+</select>
+
 <div class="scroll-container">
     <div class="scroll-content" style=@($"transform:translateY({offsetY.ToString(CultureInfo.InvariantCulture)}px)")>
         <!-- Your content goes here -->
@@ -29,5 +34,6 @@
 </style>
 
 @code {
+    private string myValue { get; set; } = "false";
     private double offsetY { get; set; }
 }

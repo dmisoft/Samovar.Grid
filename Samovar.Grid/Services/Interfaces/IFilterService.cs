@@ -9,7 +9,7 @@ namespace Samovar.Grid
     {
         BehaviorSubject<IEnumerable<GridFilterCellInfo>> FilterInfo { get; }
         ObservableCollection<GridFilterCellInfo> ColumnFilters { get; }
-        void Filter(GridFilterCellInfo filterCellInfo);
+        void AddOrRemoveFilter(GridFilterCellInfo filterCellInfo);
         T? TryGetFilterCellValue<T>(IDataColumnModel columnModel);
         Task ClearFilter();
         event Func<Task> FilterCleared;

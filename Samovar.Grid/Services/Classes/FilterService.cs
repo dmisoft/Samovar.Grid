@@ -16,18 +16,23 @@ namespace Samovar.Grid
             ColumnFilters.CollectionChanged += ColumnFilters_CollectionChanged;
         }
 
-        public void Filter(GridFilterCellInfo filterCellInfo)
+        public void AddOrRemoveFilter(GridFilterCellInfo filterCellInfo)
         {
+            if (filterCellInfo.FilterCellValue is null )
+            {
+                if (ColumnFilters.Contains(filterCellInfo))
+                    ColumnFilters.RemoveAt(ColumnFilters.IndexOf(filterCellInfo));
+                
+                return;
+            }
+
             if (!ColumnFilters.Contains(filterCellInfo))
             {
                 ColumnFilters.Add(filterCellInfo);
             }
             else
             {
-                if (filterCellInfo.FilterCellValue is null)
-                    ColumnFilters.RemoveAt(ColumnFilters.IndexOf(filterCellInfo));
-                else
-                    ColumnFilters[ColumnFilters.IndexOf(filterCellInfo)] = filterCellInfo;
+                ColumnFilters[ColumnFilters.IndexOf(filterCellInfo)] = filterCellInfo;
             }
         }
 

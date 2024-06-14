@@ -40,7 +40,7 @@ public abstract partial class GridFilterCellBase<TFilterCell>
         {
             _innerValue = value;
             FilterCellInfo = new GridFilterCellInfo { ColumnModel = ColMetadata, FilterCellValue = _innerValue, FilterCellMode = _menuMode };
-            FilterService.Filter(FilterCellInfo);
+            FilterService.AddOrRemoveFilter(FilterCellInfo);
         }
         get
         {
@@ -61,7 +61,7 @@ public abstract partial class GridFilterCellBase<TFilterCell>
         return base.OnInitializedAsync();
     }
 
-    private Task FilterService_FilterCleared()
+    protected virtual Task FilterService_FilterCleared()
     {
         _innerValue = default;
         return Task.CompletedTask;
