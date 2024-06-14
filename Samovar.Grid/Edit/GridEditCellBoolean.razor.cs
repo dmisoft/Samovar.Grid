@@ -1,39 +1,73 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Reflection;
 
-namespace Samovar.Grid.Edit
+namespace Samovar.Grid.Edit;
+
+public partial class GridEditCellBoolean
 {
-    public partial class GridEditCellBoolean
+    [Parameter]
+    public required object Data { get; set; }
+
+    [Parameter]
+    public required PropertyInfo PropInfo { get; set; }
+
+    protected string NotDefinedValue = "null";
+    protected string TrueValue = true.ToString();
+    protected string FalseValue = false.ToString();
+
+    private string internalValue = "null";
+
+    protected string InternalValue
     {
-        [Parameter]
-        public required object Data { get; set; }
-
-        [Parameter]
-        public required PropertyInfo PropInfo { get; set; }
-
-        private bool innerValue;
-        protected bool InnerValue
+        get { return internalValue; }
+        set
         {
-            set
+            internalValue = value;
+            if (value == TrueValue)
             {
-                innerValue = value;
-                PropInfo.SetValue(Data, innerValue);
+                InnerValue = true;
             }
-            get
+            else if (value == FalseValue)
             {
-                return innerValue;
+                InnerValue = false;
+            }
+            else
+            {
+                //InnerValue = null;
             }
         }
+    }
 
-        protected override void OnInitialized()
+    private bool innerValue;
+    protected bool InnerValue
+    {
+        set
         {
-            base.OnInitialized();
-            InnerValue = (bool?)PropInfo.GetValue(Data) ?? false;
-        }
-
-        public void InnerValueOnChange(ChangeEventArgs args)
-        {
+            innerValue = value;
             PropInfo.SetValue(Data, innerValue);
         }
+        get
+        {
+            return innerValue;
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        InnerValue = (bool?)PropInfo.GetValue(Data) ?? false;
+        if (InnerValue)
+        {
+            internalValue = TrueValue;
+        }
+        else
+        {
+            internalValue = FalseValue;
+        }
+    }
+
+    public void InnerValueOnChange(ChangeEventArgs args)
+    {
+        PropInfo.SetValue(Data, innerValue);
     }
 }

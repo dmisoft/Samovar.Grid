@@ -1,1 +1,8 @@
-﻿<input class="form-control" style="width:100%;" type="checkbox" @bind="@InnerValue" @bind:event="onchange" />
+﻿@* <input class="form-control" style="width:100%;"  type="checkbox" @bind="@InnerValue" @bind:event="onchange" /> *@
+<div class="s-flex s-flex-row">
+    <select class="form-select" @bind-value=InternalValue @bind-value:event="onchange">
+        <option value=@NotDefinedValue>...</option>
+        <option value=@TrueValue>True</option>
+        <option value=@FalseValue>False</option>
+    </select>
+</div>
