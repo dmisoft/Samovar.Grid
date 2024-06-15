@@ -16,4 +16,10 @@ public class WeatherForecast
     public bool Boolean { get; set; }
 
     public string? Summary { get; set; }
+
+    public WeatherForecastDetail Detail { get; set; } = new WeatherForecastDetail { SomeDetails = "Hello from details" };
+}
+
+public class WeatherForecastDetail {
+    public string SomeDetails { get; set; } = string.Empty;
 }
