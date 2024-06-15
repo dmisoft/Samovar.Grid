@@ -1,0 +1,17 @@
+﻿@typeparam T
+@inherits DesignComponentBase
+
+<tr>
+    @if (LayoutService.ShowDetailRow.Value)
+    {
+        <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;">
+            <div class="s-flex s-flex-row s-align-content-center s-justify-content-center"></div>
+        </td>
+    }
+    @if (TemplateService.InsertFormTemplate.Value is not null)
+    {
+        <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;" colspan="@(ColumnService.AllColumnModels.Where(c => c.ColumnType == ColumnType.Data || c.ColumnType == ColumnType.Command).Count())">
+            @TemplateService.InsertFormTemplate.Value(RowModel.DataItem)
+        </td>
+    }
+</tr>

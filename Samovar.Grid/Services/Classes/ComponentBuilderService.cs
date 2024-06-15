@@ -72,12 +72,27 @@ public class ComponentBuilderService<T1>
     }
     public RenderFragment GetInsertingForm<U>(GridRowModel<U> model)
     {
-        RenderFragment rf = (builder) =>
+        RenderFragment? rf;
+
+        if (_templateService.EditFormTemplate.Value != null)
         {
-            builder.OpenComponent(0, typeof(GridRowInserting_Form<U>));
-            builder.AddAttribute(1, "RowModel", model);
-            builder.CloseComponent();
-        };
+            rf = (builder) =>
+            {
+                builder.OpenComponent(0, typeof(GridRowInserting_FormTemplate<U>));
+                builder.AddAttribute(1, "RowModel", model);
+                builder.AddAttribute(2, "Template", _templateService.InsertFormTemplate.Value);
+                builder.CloseComponent();
+            };
+        }
+        else
+        {
+            rf = (builder) =>
+            {
+                builder.OpenComponent(0, typeof(GridRowInserting_Form<U>));
+                builder.AddAttribute(1, "RowModel", model);
+                builder.CloseComponent();
+            };
+        }
 
         return rf;
     }
