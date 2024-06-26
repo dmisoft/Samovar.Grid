@@ -9,7 +9,7 @@
         </td>
     }
     <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;" colspan="@(ColumnService.AllColumnModels.Where(c => c.ColumnType == ColumnType.Data || c.ColumnType == ColumnType.Command).Count())">
-        <div class="row">
+        <div>
             <GridRowEditing_Body RowModel=RowModel />
         </div>
         <div class="row">

@@ -1,4 +1,4 @@
-﻿@page "/edit-template"
+﻿@page "/cell-template"
 
 @using Samovar.Grid.Server.Test.Data
 @using System.ComponentModel.DataAnnotations
@@ -6,7 +6,7 @@
 
 @inject WeatherForecastService ForecastService
 
-<h1>Insert / Edit Templates</h1>
+<h1>Cell Templates</h1>
 
 <div class="form-group row align-items-center mb-3">
     <label for="gridEditMode" class="form-label col-1">Grid edit mode</label>
@@ -17,7 +17,6 @@
             <option value=@GridEditMode.Popup>Popup</option>
         </select>
     </div>
-
 </div>
 
 <SmGrid @ref=grid
@@ -44,64 +43,12 @@
                     <div style="white-space:break-spaces">@($"Summary: {data!.Summary}")</div>
                 }
             </CellEditTemplate>
+
         </Column>
         <Column Title="Date" Field="@nameof(WeatherForecast.Date)" />
         <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" />
         <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" />
     </Columns>
-    <EditFormTemplate>
-        <EditForm Model="@EditContext" Context="EditFormContext" OnValidSubmit=HandleValidCustomEditSubmit>
-            <DataAnnotationsValidator />
-            <div class="form-group row mb-2">
-                <label class="col-2 col-form-label" for="temperatureC">Temp.C</label>
-                <div class="col-10">
-                    <InputNumber class="form-control" id="temperatureC" TValue="int?" @bind-Value="EditContext.TemperatureC" />
-                </div>
-            </div>
-            <div class="form-group row mb-2">
-                <label class="col-2 col-form-label" for="summary">Summary</label>
-                <div class="col-10">
-                    <InputText class="form-control" id="summary" @bind-Value="EditContext.Summary" />
-                </div>
-            </div>
-            <div class="row mb-2">
-                <ValidationSummary />
-            </div>
-            <div class="row">
-                <div class="col s-flex justify-content-end">
-                    <button type="submit" class="btn btn-outline-primary mx-1">update</button>
-                    <button type="button" class="btn btn-outline-secondary mx-1" @onclick="HandleCancelCustomEdit">cancel</button>
-                </div>
-            </div>
-        </EditForm>
-    </EditFormTemplate>
-    <InsertFormTemplate>
-        <EditForm Model="@InsertContext" Context="EditFormContext" OnValidSubmit=HandleValidInsertingSubmit>
-
-            <DataAnnotationsValidator />
-            <div class="form-group row mb-2">
-                <label class="col-2 col-form-label" for="temperatureC">Temp.C</label>
-                <div class="col-10">
-                    <InputNumber class="form-control" id="temperatureC" TValue="int?" @bind-Value="InsertContext.TemperatureC" />
-                </div>
-            </div>
-            <div class="form-group row mb-2">
-                <label class="col-2 col-form-label" for="summary">Summary</label>
-                <div class="col-10">
-                    <InputText class="form-control" id="summary" @bind-Value="InsertContext.Summary" />
-                </div>
-            </div>
-            <div class="form-row">
-                <ValidationSummary />
-            </div>
-            <div class="row">
-                <div class="col s-flex justify-content-end">
-                    <button type="submit" class="btn btn-outline-primary mx-1">add</button>
-                    <button type="button" class="btn btn-outline-secondary mx-1" @onclick="OnCancelInsertingButtonClick">cancel</button>
-                </div>
-            </div>
-        </EditForm>
-    </InsertFormTemplate>
 </SmGrid>
 
 
