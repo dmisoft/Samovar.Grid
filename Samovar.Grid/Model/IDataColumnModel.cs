@@ -11,8 +11,6 @@ public interface IDataColumnModel
 
 	public BehaviorSubject<RenderFragment<object>?> CellShowTemplate { get; }
 
-	public BehaviorSubject<RenderFragment<object>?> CellEditTemplate { get; }
-
 	public BehaviorSubject<string> Field { get; }
 
 	public bool? SortingAscending { get; set; }

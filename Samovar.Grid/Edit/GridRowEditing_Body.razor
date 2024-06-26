@@ -6,86 +6,77 @@
     {
         <div class="col-6 mb-2">
             <label class="form-label">@cellModel.ColumnMetadata.Title.Value</label>
-            @if (cellModel.ColumnMetadata.CellEditTemplate.Value != null && RowModel.EditingDataItem is not null)
+            @if (cellModel.Pi != null && cellModel.Pi.CanWrite)
             {
-                <div style="overflow:hidden !important;width:100%;">
-                    @cellModel.ColumnMetadata.CellEditTemplate.Value(RowModel.EditingDataItem)
-                </div>
-            }
-            else
-            {
-                @if (cellModel.Pi != null && cellModel.Pi.CanWrite)
+                @if (cellModel.Pi.PropertyType == typeof(string))
                 {
-                    @if (cellModel.Pi.PropertyType == typeof(string))
-                    {
-                        <GridEditCellString PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
-                    }
-                    else if (cellModel.Pi.PropertyType == typeof(char))
-                    {
-                        <GridEditCellChar PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
-                    }
-                    else if (cellModel.Pi.PropertyType == typeof(bool))
-                    {
-                        <GridEditCellBoolean PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
-                    }
-                    else
-                    {
-                        @switch (cellModel.Pi.PropertyType)
-                        {
-                            case var t when t == typeof(DateTime) || t == typeof(DateTime?):
-                                <GridEditCellDate PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
-                                break;
-                            case var t when t == typeof(DateOnly) || t == typeof(DateOnly?):
-                                <GridEditCellDateOnly PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
-                                break;
-                            case var t when t == typeof(byte) || t == typeof(byte?):
-                                <GridEditCellNumeric TValue="byte?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
-                                break;
-                            case var t when t == typeof(sbyte) || t == typeof(sbyte?):
-                                <GridEditCellNumeric TValue="sbyte?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
-                                break;
-                            case var t when t == typeof(short) || t == typeof(short?):
-                                <GridEditCellNumeric TValue="short?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
-                                break;
-                            case var t when t == typeof(ushort) || t == typeof(ushort?):
-                                <GridEditCellNumeric TValue="ushort?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
-                                break;
-                            case var t when t == typeof(int) || t == typeof(int?):
-                                <GridEditCellNumeric TValue="int?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
-                                break;
-                            case var t when t == typeof(uint) || t == typeof(uint?):
-                                <GridEditCellNumeric TValue="uint?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
-                                break;
-                            case var t when t == typeof(long) || t == typeof(long?):
-                                <GridEditCellNumeric TValue="long?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
-                                break;
-                            case var t when t == typeof(ulong) || t == typeof(ulong?):
-                                <GridEditCellNumeric TValue="ulong?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
-                                break;
-                            case var t when t == typeof(float) || t == typeof(float?):
-                                <GridEditCellNumeric TValue="float?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
-                                break;
-                            case var t when t == typeof(double) || t == typeof(double?):
-                                <GridEditCellNumeric TValue="double?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
-                                break;
-                            case var t when t == typeof(decimal) || t == typeof(decimal?):
-                                <GridEditCellNumeric TValue="decimal?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
-                                break;
-                            default:
-                                break;
-                        }
-                    }
+                    <GridEditCellString PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
+                }
+                else if (cellModel.Pi.PropertyType == typeof(char))
+                {
+                    <GridEditCellChar PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
+                }
+                else if (cellModel.Pi.PropertyType == typeof(bool))
+                {
+                    <GridEditCellBoolean PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
                 }
                 else
                 {
-                    @if (cellModel.ColumnMetadata.CellShowTemplate.Value != null && RowModel.DataItem is not null)
+                    @switch (cellModel.Pi.PropertyType)
                     {
-                        @cellModel.ColumnMetadata.CellShowTemplate.Value(RowModel.DataItem)
+                        case var t when t == typeof(DateTime) || t == typeof(DateTime?):
+                            <GridEditCellDate PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
+                            break;
+                        case var t when t == typeof(DateOnly) || t == typeof(DateOnly?):
+                            <GridEditCellDateOnly PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
+                            break;
+                        case var t when t == typeof(byte) || t == typeof(byte?):
+                            <GridEditCellNumeric TValue="byte?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
+                            break;
+                        case var t when t == typeof(sbyte) || t == typeof(sbyte?):
+                            <GridEditCellNumeric TValue="sbyte?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
+                            break;
+                        case var t when t == typeof(short) || t == typeof(short?):
+                            <GridEditCellNumeric TValue="short?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
+                            break;
+                        case var t when t == typeof(ushort) || t == typeof(ushort?):
+                            <GridEditCellNumeric TValue="ushort?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
+                            break;
+                        case var t when t == typeof(int) || t == typeof(int?):
+                            <GridEditCellNumeric TValue="int?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
+                            break;
+                        case var t when t == typeof(uint) || t == typeof(uint?):
+                            <GridEditCellNumeric TValue="uint?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
+                            break;
+                        case var t when t == typeof(long) || t == typeof(long?):
+                            <GridEditCellNumeric TValue="long?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
+                            break;
+                        case var t when t == typeof(ulong) || t == typeof(ulong?):
+                            <GridEditCellNumeric TValue="ulong?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
+                            break;
+                        case var t when t == typeof(float) || t == typeof(float?):
+                            <GridEditCellNumeric TValue="float?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
+                            break;
+                        case var t when t == typeof(double) || t == typeof(double?):
+                            <GridEditCellNumeric TValue="double?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
+                            break;
+                        case var t when t == typeof(decimal) || t == typeof(decimal?):
+                            <GridEditCellNumeric TValue="decimal?" TEntity=TItem PropInfo="cellModel.Pi" Data="RowModel.EditingDataItem" />
+                            break;
+                        default:
+                            break;
                     }
-                    else
-                    {
-                        <input class="form-control" style="width:100%;" type="text" value=@cellModel.CellValue disabled readonly />
-                    }
+                }
+            }
+            else
+            {
+                @if (cellModel.ColumnMetadata.CellShowTemplate.Value != null && RowModel.DataItem is not null)
+                {
+                    @cellModel.ColumnMetadata.CellShowTemplate.Value(RowModel.DataItem)
+                }
+                else
+                {
+                    <input class="form-control" style="width:100%;" type="text" value=@cellModel.CellValue disabled readonly />
                 }
             }
         </div>

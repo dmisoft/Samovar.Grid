@@ -16,9 +16,6 @@ public class Column
     [Parameter]
     public RenderFragment<object>? CellShowTemplate { get; set; }
 
-    [Parameter]
-    public RenderFragment<object>? CellEditTemplate { get; set; }
-
     public override void DependenciesInitialized()
     {
         ColumnService.RegisterColumn(Model);
@@ -42,12 +39,8 @@ public class Column
         if (width is not null)
             Model.DeclaratedWidthParameter.OnNext(width);
 
-        var cellShowTemplate = parameters.GetValueOrDefault<RenderFragment<object>>("CellShowTemplate");
+        var cellShowTemplate = parameters.GetValueOrDefault<RenderFragment<object>>(nameof(CellShowTemplate));
         if (cellShowTemplate is not null)
             Model.CellShowTemplate.OnNext(cellShowTemplate);
-
-        var cellEditTemplate = parameters.GetValueOrDefault<RenderFragment<object>>("CellEditTemplate");
-        if (cellEditTemplate is not null)
-            Model.CellEditTemplate.OnNext(cellEditTemplate);
     }
 }

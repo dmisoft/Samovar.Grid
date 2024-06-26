@@ -38,12 +38,6 @@
                     <div style="white-space:break-spaces">@($"Summary: {data!.Summary}")</div>
                 }
             </CellShowTemplate>
-            <CellEditTemplate>
-                @{
-                    WeatherForecast data = context as WeatherForecast;
-                    <div style="white-space:break-spaces">@($"Summary: {data!.Summary}")</div>
-                }
-            </CellEditTemplate>
         </Column>
         <Column Title="Date" Field="@nameof(WeatherForecast.Date)" />
         <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" />

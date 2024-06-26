@@ -8,135 +8,65 @@
 
 <h1>Cell Templates</h1>
 
-<div class="form-group row align-items-center mb-3">
-    <label for="gridEditMode" class="form-label col-1">Grid edit mode</label>
-    <div class="col-1">
-        <select id="gridEditMode" class="col-10 form-select form-select-lg" @bind=gridEditMode>
-            <option value=@GridEditMode.None>None</option>
-            <option value=@GridEditMode.Form>Form</option>
-            <option value=@GridEditMode.Popup>Popup</option>
-        </select>
-    </div>
-</div>
+<style>
+    .above-degree-style {
+        color: red;
+        font-weight: bold;
+    }
+
+    .below-degree-style {
+        color: blue;
+        font-weight: bold;
+    }
+</style>
 
 <SmGrid @ref=grid
         Data="forecasts"
         FilterMode=GridFilterMode.FilterRow
         Height="600px"
-        RowEditBegin="@((WeatherForecast data) => RowEditBeginHandler(data))"
-        RowInsertBegin=@RowInsertBeginHandler
-        EditMode=@gridEditMode
         DataNavigationMode=NavigationMode.Paging
         SelectionMode=RowSelectionMode.Multiple>
     <Columns>
-        <CommandColumn EditButtonVisible=true NewButtonVisible=true DeleteButtonVisible=false Width="150px" />
-        <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)">
+        <Column Field="@nameof(WeatherForecast.Summary)">
             <CellShowTemplate>
                 @{
-                    WeatherForecast data = context as WeatherForecast;
-                    <div style="white-space:break-spaces">@($"Summary: {data!.Summary}")</div>
+                    <div>@($"Summary: {(context as WeatherForecast)!.Summary}")</div>
                 }
             </CellShowTemplate>
-            <CellEditTemplate>
-                @{
-                    WeatherForecast data = context as WeatherForecast;
-                    <div style="white-space:break-spaces">@($"Summary: {data!.Summary}")</div>
-                }
-            </CellEditTemplate>
-
         </Column>
-        <Column Title="Date" Field="@nameof(WeatherForecast.Date)" />
-        <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" />
-        <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" />
+        <Column Field="@nameof(WeatherForecast.Date)">
+            <CellShowTemplate>
+                @{
+                    <div>@($"{(context as WeatherForecast)!.Date:yyyy-MM-dd}")</div>
+                }
+            </CellShowTemplate>
+        </Column>
+        <Column Field="@nameof(WeatherForecast.TemperatureC)">
+            <CellShowTemplate>
+                @{
+                    var temperature = (context as WeatherForecast)!.TemperatureC;
+                    if (temperature > 0)
+                    {
+                        <div class="above-degree-style">@($"{temperature} C")</div>
+                    }
+                    else
+                    {
+                        <div class="below-degree-style">@($"{temperature} C")</div>
+                    }
+                }
+            </CellShowTemplate>
+        </Column>
     </Columns>
 </SmGrid>
 
 
 @code {
     private List<WeatherForecast> forecasts;
-    FormEditContext EditContext = null;
-    FormInsertContext InsertContext = null;
     SmGrid<WeatherForecast> grid;
     GridEditMode gridEditMode = GridEditMode.Form;
 
     protected override async Task OnInitializedAsync()
     {
         forecasts = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
-    }
-
-    void RowEditBeginHandler(WeatherForecast item)
-    {
-        EditContext = new FormEditContext(item);
-    }
-
-    void RowInsertBeginHandler()
-    {
-        InsertContext = new FormInsertContext();
-    }
-
-    async Task HandleValidCustomEditSubmit()
-    {
-        EditContext.DataItem.TemperatureC = EditContext.TemperatureC;
-        EditContext.DataItem.Summary = EditContext.Summary;
-        await grid.CommitCustomRowEdit(EditContext.DataItem);
-    }
-
-    async Task HandleValidInsertingSubmit()
-    {
-        var newItem = new WeatherForecast
-            {
-                Summary = InsertContext.Summary,
-                Date = DateTime.Now,
-                TemperatureC = InsertContext.TemperatureC
-            };
-
-        forecasts = ((new WeatherForecast[] { newItem }).Concat(forecasts)).ToList();
-        await grid.CancelRowInsert();
-        StateHasChanged();
-    }
-
-    async Task HandleCancelCustomEdit()
-    {
-        await grid.CancelCustomRowEdit(EditContext.DataItem);
-        EditContext = null;
-    }
-
-    async Task OnCancelInsertingButtonClick()
-    {
-        await grid.CancelRowInsert();
-        EditContext = null;
-    }
-
-    class FormEditContext
-    {
-        public FormEditContext(WeatherForecast dataItem)
-        {
-            DataItem = dataItem;
-            TemperatureC = dataItem.TemperatureC;
-            Summary = dataItem.Summary;
-        }
-
-        public WeatherForecast DataItem { get; set; }
-
-        [Required]
-        [StringLength(maximumLength: 32, MinimumLength = 4, ErrorMessage = "The description should be 4 to 32 characters.")]
-        public string Summary { get; set; }
-
-        public int? TemperatureC { get; set; }
-    }
-
-    internal class FormInsertContext
-    {
-        internal FormInsertContext()
-        {
-            Summary = "[init summary value}";
-        }
-
-        [Required]
-        public int? TemperatureC { get; set; }
-
-        [Required]
-        [StringLength(maximumLength: 32, MinimumLength = 4, ErrorMessage = "The description should be 4 to 32 characters.")]
-        public string Summary { get; set; }
     }
 }
