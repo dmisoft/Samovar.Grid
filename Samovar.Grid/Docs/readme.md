@@ -43,7 +43,6 @@
                 ShowDetailRow=@showDetailRow
                 PageSize=@pageSize
                 EditMode=@gridEditMode
-                EditingFormTitleDelegate="@((WeatherForecast data) => Task.FromResult(data.TemperatureC.ToString()))"
                 SelectionMode=@selectionMode
                 ColumnResizeMode=@columnResizeMode
                 CssClass=@cssClass

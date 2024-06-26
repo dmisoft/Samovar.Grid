@@ -42,6 +42,7 @@ public class EditingService<T>(
     {
         if (!_editingRowModels.Contains(rowModel))
             _editingRowModels.Add(rowModel);
+        
         await OnRowEditBegin.InvokeAsync(rowModel.DataItem);
 
         rowModel.RowState.OnNext(GridRowState.Editing);
