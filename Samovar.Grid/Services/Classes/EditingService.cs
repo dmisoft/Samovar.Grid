@@ -37,8 +37,6 @@ public class EditingService<T>(
 
     public Func<GridRowModel<T>, Task>? ShowInsertingFormDelegate { get; set; }
     public Func<Task>? CloseInsertingFormDelegate { get; set; }
-    public Func<T, Task<string>>? EditingFormTitleDelegate { get; set; }
-
 
     public async Task EditBegin(GridRowModel<T> rowModel)
     {

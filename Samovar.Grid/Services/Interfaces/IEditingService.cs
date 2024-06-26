@@ -39,8 +39,6 @@ namespace Samovar.Grid
 
         Func<Task>? CloseInsertingFormDelegate { get; set; }
 
-        Func<T, Task<string>>? EditingFormTitleDelegate { get; set; }
-
         event Func<Task> RowEditingEnded;
     }
 }

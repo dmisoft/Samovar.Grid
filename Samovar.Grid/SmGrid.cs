@@ -89,8 +89,10 @@ public class SmGrid<T>
     public RenderFragment<T>? EditFormTemplate { get; set; }
 
     [Parameter]
+    public RenderFragment<T>? EditTitleTemplate { get; set; }
+    
+    [Parameter]
     public RenderFragment<T>? InsertFormTemplate { get; set; }
-
 
     [Parameter]
     public EventCallback<T> RowEditBegin { get; set; }
@@ -122,9 +124,6 @@ public class SmGrid<T>
 
     [Parameter]
     public EventCallback<IEnumerable<T>?> MultipleSelectedDataRowsChanged { get; set; }
-
-    [Parameter]
-    public Func<T, Task<string>>? EditingFormTitleDelegate { get; set; }
 
     public override async Task SetParametersAsync(ParameterView parameters)
     {
@@ -185,10 +184,6 @@ public class SmGrid<T>
         columnResizeMode ??= GridColumnResizeMode.None;
         LayoutService.ColumnResizeMode.OnNext(columnResizeMode.Value);
 
-        Func<T, Task<string>>? editingFormTitleDelegate = parameters.GetValueOrDefault<Func<T, Task<string>>?>(nameof(EditingFormTitleDelegate));
-        if (editingFormTitleDelegate is not null)
-            EditingService.EditingFormTitleDelegate = editingFormTitleDelegate;
-
         RenderFragment<T>? detailRowTemplate = parameters.GetValueOrDefault<RenderFragment<T>>(nameof(DetailRowTemplate));
         if (detailRowTemplate != null)
             TemplateService.DetailRowTemplate.OnNext(detailRowTemplate);
@@ -196,6 +191,11 @@ public class SmGrid<T>
         RenderFragment<T>? editFormTemplate = parameters.GetValueOrDefault<RenderFragment<T>>(nameof(EditFormTemplate));
         if (editFormTemplate != null)
             TemplateService.EditFormTemplate.OnNext(editFormTemplate);
+
+        RenderFragment<T>? editTitleTemplate = parameters.GetValueOrDefault<RenderFragment<T>>(nameof(EditTitleTemplate));
+        if (editTitleTemplate != null)
+            TemplateService.EditTitleTemplate.OnNext(editTitleTemplate);
+
 
         RenderFragment<T>? insertFormTemplate = parameters.GetValueOrDefault<RenderFragment<T>>(nameof(InsertFormTemplate));
         if (insertFormTemplate != null)

@@ -23,7 +23,7 @@
                 ShowDetailRow=@showDetailRow
                 PageSize=@pageSize
                 EditMode=@gridEditMode
-                EditingFormTitleDelegate="@((WeatherForecast data) => Task.FromResult(data.TemperatureC.ToString()))"
+                
                 SelectionMode=@selectionMode
                 ColumnResizeMode=@columnResizeMode
                 CssClass=@cssClass
@@ -33,15 +33,19 @@
                 RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
                 RowRemoving="@((WeatherForecast data) => RowRemovingHandler(data))">
             <Columns>
-                <Column Title="Date2" Field="@nameof(WeatherForecast.Date2)" Width="100px" />
-                <Column Title="Date1" Field="@nameof(WeatherForecast.Date)" Width="100px" />
+                <Column Title="Date" Field="@nameof(WeatherForecast.Date)" Width="100px" />
                 <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="1*" />
                 <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width=@columnWidth />
                 <Column Field="@nameof(WeatherForecast.TemperatureFD)" Width="1*" />
                 <Column Field="@nameof(WeatherForecast.Summary)" Width="1*" />
-                <Column Field="@nameof(WeatherForecast.Boolean)" Width="1*" />
                 <CommandColumn EditButtonVisible=true NewButtonVisible=true Width="150px" />
             </Columns>
+            <EditTitleTemplate Context="context">
+                @{
+                    WeatherForecast data = context as WeatherForecast;
+                    <div>@($"Temperature on {data!.Date:yyyy-MM-dd}")</div>
+                }
+            </EditTitleTemplate>
             <DetailRowTemplate Context="mydata">
                 @{
                     WeatherForecast data = mydata as WeatherForecast;
