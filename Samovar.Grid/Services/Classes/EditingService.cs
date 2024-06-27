@@ -10,7 +10,7 @@ public class EditingService<T>(
         , INavigationService _navigationService)
     : IEditingService<T>, IAsyncDisposable
 {
-    readonly List<GridRowModel<T>> _editingRowModels = [];
+    private GridRowModel<T>? _editingRowModel;
 
     public event Func<Task>? RowEditingEnded;
 
@@ -40,9 +40,11 @@ public class EditingService<T>(
 
     public async Task EditBegin(GridRowModel<T> rowModel)
     {
-        if (!_editingRowModels.Contains(rowModel))
-            _editingRowModels.Add(rowModel);
+        if(_editingRowModel is not null)
+            await CancelRowEdit(_editingRowModel);
         
+        _editingRowModel = rowModel;
+
         await OnRowEditBegin.InvokeAsync(rowModel.DataItem);
 
         rowModel.RowState.OnNext(GridRowState.Editing);
@@ -64,8 +66,7 @@ public class EditingService<T>(
     public Task CancelRowEdit(GridRowModel<T> rowModel)
     {
         rowModel.RowState.OnNext(GridRowState.Idle);
-        if (_editingRowModels.Contains(rowModel))
-            _editingRowModels.Remove(rowModel);
+        _editingRowModel = null;
 
         if (EditMode.Value == GridEditMode.Popup || _navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
             CloseEditingPopupDelegate?.Invoke();
@@ -78,8 +79,8 @@ public class EditingService<T>(
     {
         rowModel.RowState.OnNext(GridRowState.Idle);
         rowModel.EditCommit();
-        if (_editingRowModels.Contains(rowModel))
-            _editingRowModels.Remove(rowModel);
+        _editingRowModel = null;
+
 
         if (EditMode.Value == GridEditMode.Popup || _navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
             CloseEditingPopupDelegate?.Invoke();
@@ -89,13 +90,12 @@ public class EditingService<T>(
 
     public async Task CommitCustomRowEdit(T item)
     {
-        GridRowModel<T>? rowModel = _editingRowModels.Find(r => r.DataItem is not null && r.DataItem.Equals(item));
-        if (rowModel is not null)
+        if (_editingRowModel is not null)
         {
-            rowModel.RowState.OnNext(GridRowState.Idle);
-            rowModel.CommitCustomEdit();
-            if (_editingRowModels.Contains(rowModel))
-                _editingRowModels.Remove(rowModel);
+            _editingRowModel.RowState.OnNext(GridRowState.Idle);
+            _editingRowModel.CommitCustomEdit();
+            _editingRowModel = null;
+
 
             if (EditMode.Value == GridEditMode.Popup || _navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
                 CloseEditingPopupDelegate?.Invoke();
@@ -106,12 +106,10 @@ public class EditingService<T>(
 
     public Task CancelCustomRowEdit(T item)
     {
-        GridRowModel<T>? rowModel = _editingRowModels.Find(r => r.DataItem is not null && r.DataItem.Equals(item));
-        if (rowModel is not null)
+        if (_editingRowModel is not null)
         {
-            rowModel.RowState.OnNext(GridRowState.Idle);
-            if (_editingRowModels.Contains(rowModel))
-                _editingRowModels.Remove(rowModel);
+            _editingRowModel.RowState.OnNext(GridRowState.Idle);
+            _editingRowModel = null;
 
             if (EditMode.Value == GridEditMode.Popup || _navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
                 CloseEditingPopupDelegate?.Invoke();
