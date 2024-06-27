@@ -8,6 +8,6 @@ public class TemplateService<T>
 {
     public BehaviorSubject<RenderFragment<T>?> DetailRowTemplate { get; } = new BehaviorSubject<RenderFragment<T>?>(null);
     public BehaviorSubject<RenderFragment<T>?> EditFormTemplate { get; } = new BehaviorSubject<RenderFragment<T>?>(null);
-		public BehaviorSubject<RenderFragment<T>?> EditTitleTemplate { get; } = new BehaviorSubject<RenderFragment<T>?>(null);
+		public BehaviorSubject<RenderFragment<T>?> EditPopupTitleTemplate { get; } = new BehaviorSubject<RenderFragment<T>?>(null);
 		public BehaviorSubject<RenderFragment<T>?> InsertFormTemplate { get; } = new BehaviorSubject<RenderFragment<T>?>(null);
 	}

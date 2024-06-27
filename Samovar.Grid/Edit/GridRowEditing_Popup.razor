@@ -6,8 +6,8 @@
 	<div class="modal-dialog">
 		<div class="modal-content" style="resize:both;overflow: auto;">
 			<div class="modal-header" id=@($"{Id}header") style="cursor: move;">
-				@if (TemplateService.EditTitleTemplate.Value is not null) {
-					@TemplateService.EditTitleTemplate.Value(RowModel.DataItem)
+				@if (TemplateService.EditPopupTitleTemplate.Value is not null) {
+					@TemplateService.EditPopupTitleTemplate.Value(RowModel.DataItem)
 				}
 				else
 				{

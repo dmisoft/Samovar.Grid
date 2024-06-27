@@ -89,7 +89,7 @@ public class SmGrid<T>
     public RenderFragment<T>? EditFormTemplate { get; set; }
 
     [Parameter]
-    public RenderFragment<T>? EditTitleTemplate { get; set; }
+    public RenderFragment<T>? EditPopupTitleTemplate { get; set; }
     
     [Parameter]
     public RenderFragment<T>? InsertFormTemplate { get; set; }
@@ -192,10 +192,9 @@ public class SmGrid<T>
         if (editFormTemplate != null)
             TemplateService.EditFormTemplate.OnNext(editFormTemplate);
 
-        RenderFragment<T>? editTitleTemplate = parameters.GetValueOrDefault<RenderFragment<T>>(nameof(EditTitleTemplate));
-        if (editTitleTemplate != null)
-            TemplateService.EditTitleTemplate.OnNext(editTitleTemplate);
-
+        RenderFragment<T>? editPopupTitleTemplate = parameters.GetValueOrDefault<RenderFragment<T>>(nameof(EditPopupTitleTemplate));
+        if (editPopupTitleTemplate != null)
+            TemplateService.EditPopupTitleTemplate.OnNext(editPopupTitleTemplate);
 
         RenderFragment<T>? insertFormTemplate = parameters.GetValueOrDefault<RenderFragment<T>>(nameof(InsertFormTemplate));
         if (insertFormTemplate != null)
@@ -207,16 +206,15 @@ public class SmGrid<T>
 
         EventCallback rowInsertBegin = parameters.GetValueOrDefault<EventCallback>(nameof(RowInsertBegin));
         if (rowInsertBegin.HasDelegate)
-            EditingService.OnRowInsertBegin.OnNext(rowInsertBegin);
+            EditingService.OnRowInsertBegin = rowInsertBegin;
 
         EventCallback<T> rowInserting = parameters.GetValueOrDefault<EventCallback<T>>(nameof(RowInserting));
         if (rowInserting.HasDelegate)
-            EditingService.OnRowInserting.OnNext(rowInserting);
+            EditingService.OnRowInserting = rowInserting;
 
         EventCallback<T> rowRemoving = parameters.GetValueOrDefault<EventCallback<T>>(nameof(RowRemoving));
         if (rowRemoving.HasDelegate)
-            EditingService.OnRowRemoving.OnNext(rowRemoving);
-
+            EditingService.OnRowRemoving = rowRemoving;
 
         NavigationMode? dataNavigationMode = parameters.GetValueOrDefault<NavigationMode?>(nameof(DataNavigationMode));
         dataNavigationMode ??= NavigationMode.Paging;

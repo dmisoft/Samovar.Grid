@@ -23,12 +23,10 @@ public class EditingService<T>(
     }
 
     public BehaviorSubject<GridEditMode> EditMode { get; } = new BehaviorSubject<GridEditMode>(GridEditMode.Form);
-
     public EventCallback<T> OnRowEditBegin { get; set; }
-    public BehaviorSubject<EventCallback<Dictionary<string, object>>> OnInitializeNewRow { get; } = new BehaviorSubject<EventCallback<Dictionary<string, object>>>(default(EventCallback<Dictionary<string, object>>));
-    public BehaviorSubject<EventCallback> OnRowInsertBegin { get; } = new BehaviorSubject<EventCallback>(default(EventCallback));
-    public BehaviorSubject<EventCallback<T>> OnRowInserting { get; } = new BehaviorSubject<EventCallback<T>>(default(EventCallback<T>));
-    public BehaviorSubject<EventCallback<T>> OnRowRemoving { get; } = new BehaviorSubject<EventCallback<T>>(default(EventCallback<T>));
+    public EventCallback OnRowInsertBegin { get; set; }
+    public EventCallback<T> OnRowInserting { get; set; }
+    public EventCallback<T> OnRowRemoving { get; set; }
 
     public Func<GridRowModel<T>, Task>? ShowInsertingPopupDelegate { get; set; }
     public Func<Task>? CloseInsertingPopupDelegate { get; set; }
@@ -119,7 +117,7 @@ public class EditingService<T>(
 
     public async Task RowDeleteBegin(GridRowModel<T> rowModel)
     {
-        await OnRowRemoving.Value.InvokeAsync(rowModel.DataItem);
+        await OnRowRemoving.InvokeAsync(rowModel.DataItem);
     }
 
     public async Task RowInsertBegin()
@@ -131,7 +129,7 @@ public class EditingService<T>(
         var rowModel = new GridRowModel<T>(insertModel, _columnService.DataColumnModels, 0, _repositoryService.PropInfo, false);
         rowModel.CreateEditingModel();
 
-        await OnRowInsertBegin.Value.InvokeAsync();
+        await OnRowInsertBegin.InvokeAsync();
 
         if (EditMode.Value == GridEditMode.Popup)
             ShowInsertingPopupDelegate?.Invoke(rowModel);
@@ -143,7 +141,7 @@ public class EditingService<T>(
 
     public async Task RowInsertCommit(T dataItem)
     {
-        await OnRowInserting.Value.InvokeAsync(dataItem);
+        await OnRowInserting.InvokeAsync(dataItem);
 
         if (EditMode.Value == GridEditMode.Popup)
             CloseInsertingPopupDelegate?.Invoke();
