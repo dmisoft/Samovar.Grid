@@ -64,14 +64,10 @@ public class SmGrid<T>
     public string? Width { get; set; }
 
     [Parameter]
-    public string? FilterToggleButtonClass { get; set; }
-
-    [Parameter]
     public string? CssClass { get; set; }
 
     [Parameter]
     public bool? ShowColumnHeader { get; set; }
-
 
     [Parameter]
     public bool? ShowDetailRow { get; set; }
@@ -150,10 +146,6 @@ public class SmGrid<T>
         string? width = parameters.GetValueOrDefault<string>(nameof(Width));
         if (width != null)
             LayoutService.Width.OnNext(width);
-
-        string? filterToggleButtonClass = parameters.GetValueOrDefault<string>(nameof(FilterToggleButtonClass));
-        if (filterToggleButtonClass != null)
-            LayoutService.FilterToggleButtonClass.OnNext(filterToggleButtonClass);
 
         string? cssClass = parameters.GetValueOrDefault<string>(nameof(CssClass));
         if (cssClass != null)

@@ -11,9 +11,6 @@ public interface ILayoutService
     BehaviorSubject<string> SelectedRowClass { get; }
     BehaviorSubject<string> CssClass { get; }
     BehaviorSubject<string> PaginationClass { get; }
-
-    BehaviorSubject<string> FilterToggleButtonClass { get; }
-
     BehaviorSubject<double> MinGridWidth { get; }
     BehaviorSubject<bool> ShowDetailRow { get; }
     BehaviorSubject<GridFilterMode> FilterMode { get; }

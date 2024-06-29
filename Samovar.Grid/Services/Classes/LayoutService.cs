@@ -9,22 +9,13 @@ public class LayoutService
     : ILayoutService, IAsyncDisposable
 {
     public BehaviorSubject<GridColumnResizeMode> ColumnResizeMode { get; } = new BehaviorSubject<GridColumnResizeMode>(GridColumnResizeMode.None);
-
     public BehaviorSubject<string> SelectedRowClass { get; } = new BehaviorSubject<string>("bg-warning");
-
     public BehaviorSubject<string> CssClass { get; } = new BehaviorSubject<string>("table table-bordered");
-
     public BehaviorSubject<double> MinGridWidth { get; } = new BehaviorSubject<double>(0d);
-
     public BehaviorSubject<bool> ShowDetailRow { get; } = new BehaviorSubject<bool>(false);
-
     public BehaviorSubject<string> PaginationClass { get; } = new BehaviorSubject<string>("pagination");
-    public BehaviorSubject<string> FilterToggleButtonClass { get; } = new BehaviorSubject<string>("btn btn-secondary");
-
     public BehaviorSubject<bool> ShowFilterRow { get; } = new BehaviorSubject<bool>(false);
-
     public BehaviorSubject<GridFilterMode> FilterMode { get; } = new BehaviorSubject<GridFilterMode>(GridFilterMode.None);
-
     public ElementReference GridFilterRef { get; set; }
     public ElementReference GridOuterRef { get; set; }
     public ElementReference GridInnerRef { get; set; }
