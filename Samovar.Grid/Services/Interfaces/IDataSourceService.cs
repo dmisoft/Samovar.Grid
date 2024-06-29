@@ -1,10 +1,10 @@
 ﻿using System.Reactive.Subjects;
 
-namespace Samovar.Grid
+namespace Samovar.Grid;
+
+public interface IDataSourceService<T>
 {
-    public interface IDataSourceService<T>
-    {
-        BehaviorSubject<IEnumerable<T>> Data { get; }
-        BehaviorSubject<IQueryable<T>?> DataQuery { get; }
-    }
+    BehaviorSubject<IEnumerable<T>> Data { get; }
+    BehaviorSubject<IQueryable<T>?> DataQuery { get; }
+    BehaviorSubject<Func<T, bool>?> CustomFilter { get; }
 }

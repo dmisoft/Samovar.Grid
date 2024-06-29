@@ -305,4 +305,10 @@ public class SmGrid<T>
     {
         return DetailRowService.CollapseAllDetailRows();
     }
+
+    public Task ApplyCustomFilter(Func<T, bool> customFilter)
+    {
+        DataSourceService.CustomFilter.OnNext(customFilter);
+        return Task.CompletedTask;
+    }
 }

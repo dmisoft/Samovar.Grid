@@ -1,0 +1,43 @@
+﻿@page "/filter"
+
+@using Samovar.Grid.Server.Test.Data
+@using System.ComponentModel.DataAnnotations
+@using System
+
+@inject WeatherForecastService ForecastService
+
+<h1>Filter</h1>
+
+<div class="mb-3">
+    <button class="btn btn-primary" @onclick="ApplyCustomFilter">apply custom filter</button>
+</div>
+
+<SmGrid @ref=grid
+        Data="forecasts"
+        FilterMode=GridFilterMode.Custom
+        Height="600px"
+        DataNavigationMode=NavigationMode.Paging
+        SelectionMode=RowSelectionMode.Multiple>
+    <Columns>
+        <Column Field="@nameof(WeatherForecast.Summary)" />
+        <Column Field="@nameof(WeatherForecast.Date)" />
+        <Column Field="@nameof(WeatherForecast.TemperatureC)" />
+    </Columns>
+</SmGrid>
+
+
+@code {
+    private List<WeatherForecast> forecasts;
+    SmGrid<WeatherForecast> grid;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
+    }
+
+    async Task ApplyCustomFilter()
+    {
+        Func<WeatherForecast, bool> filter = w => w.Summary == "Cool";
+        await grid.ApplyCustomFilter(filter);
+    }
+}
