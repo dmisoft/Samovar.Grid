@@ -108,7 +108,6 @@ public class SmGrid<T>
     [Parameter]
     public GridColumnResizeMode ColumnResizeMode { get; set; }
 
-
     [Parameter]
     public T? SingleSelectedDataRow { get; set; }
 
@@ -309,6 +308,12 @@ public class SmGrid<T>
     public Task ApplyCustomFilter(Func<T, bool> customFilter)
     {
         DataSourceService.CustomFilter.OnNext(customFilter);
+        return Task.CompletedTask;
+    }
+
+    public Task ResetCustomFilter()
+    {
+        DataSourceService.CustomFilter.OnNext(null);
         return Task.CompletedTask;
     }
 }

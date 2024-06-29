@@ -11,7 +11,9 @@
 <div class="mb-3">
     <button class="btn btn-primary" @onclick="ApplyCustomFilter">apply custom filter</button>
 </div>
-
+<div class="mb-3">
+    <button class="btn btn-primary" @onclick="ResetCustomFilter">reset custom filter</button>
+</div>
 <SmGrid @ref=grid
         Data="forecasts"
         FilterMode=GridFilterMode.Custom
@@ -37,7 +39,12 @@
 
     async Task ApplyCustomFilter()
     {
-        Func<WeatherForecast, bool> filter = w => w.Summary == "Cool";
+        Func<WeatherForecast, bool> filter = w => w.Summary.ToLower() == "cool";
         await grid.ApplyCustomFilter(filter);
+    }
+
+    async Task ResetCustomFilter()
+    {
+        await grid.ResetCustomFilter();
     }
 }
