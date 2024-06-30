@@ -65,7 +65,6 @@ public class DataSourceService<T>
 
     private void DataGridInitializerCallback(bool obj)
     {
-        //combine
         Observable.CombineLatest(
             _filterService.FilterInfo,
             _orderService.ColumnOrderInfo,
@@ -81,8 +80,6 @@ public class DataSourceService<T>
             (filterInfo, columnOrderInfo, data) => Tuple.Create(filterInfo, columnOrderInfo, data))
             .DistinctUntilChanged()
             .Subscribe(myfunc44);
-
-
     }
 
     private void myfunc33(Tuple<IEnumerable<GridFilterCellInfo>, ColumnOrderInfo, IEnumerable<T>> tuple)
@@ -115,9 +112,7 @@ public class DataSourceService<T>
 
         if (tuple.Item1 is not null) {
             var parameter = Expression.Parameter(typeof(T), "x");
-            // Invoking the Func<T, bool> delegate with the parameter expression
             var body = Expression.Invoke(Expression.Constant(tuple.Item1), parameter);
-            // Creating and returning the lambda expression
             var lambda = Expression.Lambda<Func<T, bool>>(body, parameter);
             query = query.Where(lambda);
         }
