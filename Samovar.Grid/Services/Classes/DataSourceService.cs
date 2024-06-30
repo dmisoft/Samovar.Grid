@@ -1,21 +1,19 @@
 ﻿using Samovar.Grid.Filter;
-using System;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
-using System.Reflection.Metadata;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Samovar.Grid;
 
 public class DataSourceService<T>
     : IDataSourceService<T>
+    , IObserver<GridFilterMode>
 {
     private readonly IFilterService _filterService;
     private readonly ISortingService _orderService;
-
+    private readonly ILayoutService _layoutService;
     public BehaviorSubject<IEnumerable<T>> Data { get; private set; } = new BehaviorSubject<IEnumerable<T>>(new List<T>());
 
     public BehaviorSubject<IQueryable<T>?> DataQuery { get; private set; } = new BehaviorSubject<IQueryable<T>?>(null);
@@ -56,15 +54,20 @@ public class DataSourceService<T>
           IFilterService filterService
         , ISortingService orderService
         , IInitService initService
+        , ILayoutService layoutService
+
         )
     {
         _filterService = filterService;
         _orderService = orderService;
         initService.IsInitialized.Subscribe(DataGridInitializerCallback);
+        _layoutService = layoutService;
     }
 
     private void DataGridInitializerCallback(bool obj)
     {
+        _layoutService.FilterMode.DistinctUntilChanged().Subscribe(this);
+
         Observable.CombineLatest(
             _filterService.FilterInfo,
             _orderService.ColumnOrderInfo,
@@ -254,5 +257,21 @@ public class DataSourceService<T>
             return data.Where((Expression<Func<T, bool>>)retLambda);
         else
             return data;
+    }
+
+    public void OnCompleted()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnError(Exception error)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnNext(GridFilterMode value)
+    {
+        CustomFilter.OnNext(null);
+        _filterService.ClearFilter();
     }
 }

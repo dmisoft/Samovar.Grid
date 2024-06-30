@@ -307,7 +307,8 @@ public class SmGrid<T>
 
     public Task ApplyCustomFilter(Func<T, bool> customFilter)
     {
-        DataSourceService.CustomFilter.OnNext(customFilter);
+        if(LayoutService.FilterMode.Value == GridFilterMode.Custom)
+            DataSourceService.CustomFilter.OnNext(customFilter);
         return Task.CompletedTask;
     }
 
