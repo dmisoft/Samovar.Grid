@@ -247,7 +247,7 @@ public class SmGrid<T>
                     builder2.CloseComponent();
                 };
                 break;
-            case NavigationMode.VirtualScrolling:
+            case NavigationMode.Virtual:
                 del = delegate (RenderTreeBuilder builder2)
                 {
                     Columns?.Invoke(builder2);

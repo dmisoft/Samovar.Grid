@@ -31,7 +31,7 @@ namespace Samovar.Grid
             NavigationStrategy = strategy switch
             {
                 Grid.NavigationMode.Paging => _pagingStrategy,
-                Grid.NavigationMode.VirtualScrolling => _virtualScrollingStrategy,
+                Grid.NavigationMode.Virtual => _virtualScrollingStrategy,
                 _ => throw new NotImplementedException()
             };
         }

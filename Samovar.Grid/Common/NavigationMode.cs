@@ -3,5 +3,5 @@
 public enum NavigationMode
 {
     Paging,
-    VirtualScrolling
+    Virtual
 }

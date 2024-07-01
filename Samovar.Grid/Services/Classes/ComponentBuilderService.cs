@@ -102,7 +102,7 @@ public class ComponentBuilderService<T1>
         switch (model.RowState.Value)
         {
             case GridRowState.Editing:
-                if (_navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
+                if (_navigationService.NavigationMode.Value == NavigationMode.Virtual)
                 {
                     return GetDefaultRow(model);
                 }

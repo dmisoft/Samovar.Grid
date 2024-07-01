@@ -48,7 +48,7 @@ public class EditingService<T>(
         rowModel.RowState.OnNext(GridRowState.Editing);
         rowModel.CreateEditingModel();
 
-        if (_navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
+        if (_navigationService.NavigationMode.Value == NavigationMode.Virtual)
         {
             ShowEditingPopupDelegate?.Invoke(rowModel);
         }
@@ -66,7 +66,7 @@ public class EditingService<T>(
         rowModel.RowState.OnNext(GridRowState.Idle);
         _editingRowModel = null;
 
-        if (EditMode.Value == GridEditMode.Popup || _navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
+        if (EditMode.Value == GridEditMode.Popup || _navigationService.NavigationMode.Value == NavigationMode.Virtual)
             CloseEditingPopupDelegate?.Invoke();
 
         return Task.CompletedTask;
@@ -80,7 +80,7 @@ public class EditingService<T>(
         _editingRowModel = null;
 
 
-        if (EditMode.Value == GridEditMode.Popup || _navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
+        if (EditMode.Value == GridEditMode.Popup || _navigationService.NavigationMode.Value == NavigationMode.Virtual)
             CloseEditingPopupDelegate?.Invoke();
 
         await OnRowEditingEnded();
@@ -95,7 +95,7 @@ public class EditingService<T>(
             _editingRowModel = null;
 
 
-            if (EditMode.Value == GridEditMode.Popup || _navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
+            if (EditMode.Value == GridEditMode.Popup || _navigationService.NavigationMode.Value == NavigationMode.Virtual)
                 CloseEditingPopupDelegate?.Invoke();
         }
 
@@ -109,7 +109,7 @@ public class EditingService<T>(
             _editingRowModel.RowState.OnNext(GridRowState.Idle);
             _editingRowModel = null;
 
-            if (EditMode.Value == GridEditMode.Popup || _navigationService.NavigationMode.Value == NavigationMode.VirtualScrolling)
+            if (EditMode.Value == GridEditMode.Popup || _navigationService.NavigationMode.Value == NavigationMode.Virtual)
                 CloseEditingPopupDelegate?.Invoke();
         }
         return Task.CompletedTask;
