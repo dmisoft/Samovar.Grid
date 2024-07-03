@@ -101,7 +101,6 @@ public class DataSourceService<T>
             if (pr is not null)
                 query = tuple.Item2.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
         }
-        Debug.WriteLine("myfunc33");
         DataQuery.OnNext(query);
     }
 
@@ -126,7 +125,6 @@ public class DataSourceService<T>
             if (pr is not null)
                 query = tuple.Item2.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
         }
-        Debug.WriteLine("myfunc33");
         DataQuery.OnNext(query);
     }
 

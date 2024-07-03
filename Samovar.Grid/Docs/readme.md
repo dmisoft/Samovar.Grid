@@ -1,6 +1,6 @@
 ﻿## Basic sample
 
-### Add the following code to your _Layout.cshtml file
+### Add the following code to your _Layout.cshtml or App.razor file
 ```csharp 
 <head>
 ...

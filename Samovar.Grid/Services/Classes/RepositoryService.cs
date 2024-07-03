@@ -70,7 +70,6 @@ public class RepositoryService<T>
 
     private Task<IEnumerable<GridRowModel<T>>> ViewCollectionObservableMap(IQueryable<T>? query, NavigationStrategyDataLoadingSettings navigationStrategyDataLoadingSettings)
     {
-        Debug.WriteLine("ViewCollectionObservableMap");
         _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.Loading));
 
         if (query is null)

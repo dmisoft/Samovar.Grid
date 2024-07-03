@@ -1,0 +1,73 @@
+﻿@page "/cell-template"
+
+@rendermode InteractiveServer
+
+@using System.ComponentModel.DataAnnotations
+@using System
+@using Samovar.Grid
+
+@inject WeatherForecastService ForecastService
+
+<h1>Cell Templates</h1>
+
+<style>
+    .above-degree-style {
+        color: red;
+        font-weight: bold;
+    }
+
+    .below-degree-style {
+        color: blue;
+        font-weight: bold;
+    }
+</style>
+
+<SmGrid @ref=grid
+        Data="forecasts"
+        FilterMode=GridFilterMode.FilterRow
+        Height="600px"
+        DataNavigationMode=NavigationMode.Paging
+        SelectionMode=RowSelectionMode.Multiple>
+    <Columns>
+        <Column Field="@nameof(WeatherForecast.Summary)">
+            <CellShowTemplate>
+                @{
+                    <div>@($"Summary: {(context as WeatherForecast)!.Summary}")</div>
+                }
+            </CellShowTemplate>
+        </Column>
+        <Column Field="@nameof(WeatherForecast.Date)">
+            <CellShowTemplate>
+                @{
+                    <div>@($"{(context as WeatherForecast)!.Date:yyyy-MM-dd}")</div>
+                }
+            </CellShowTemplate>
+        </Column>
+        <Column Field="@nameof(WeatherForecast.TemperatureC)">
+            <CellShowTemplate>
+                @{
+                    var temperature = (context as WeatherForecast)!.TemperatureC;
+                    if (temperature > 0)
+                    {
+                        <div class="above-degree-style">@($"{temperature} C")</div>
+                    }
+                    else
+                    {
+                        <div class="below-degree-style">@($"{temperature} C")</div>
+                    }
+                }
+            </CellShowTemplate>
+        </Column>
+    </Columns>
+</SmGrid>
+
+
+@code {
+    private List<WeatherForecast>? forecasts;
+    SmGrid<WeatherForecast>? grid;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
+    }
+}
