@@ -9,12 +9,13 @@
 		<PackageIcon>SamovarGrid_Logo.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>8.0.0-beta.1</Version>
+		<Version>8.0.0-beta.2</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Product>SamovarGrid</Product>
 		<Description>Data grid component for Blazor. Sorting, paging, editing, deleting. Filter. Row single and multiple selection. Cell show/edit templating. Row edit templating.</Description>
 		<PackageTags>DataGrid, Blazor, BlazorGrid, BlazorDataGrid, Blazor-Component, Virtual scrolling, Filter, Cell template, Edit form template</PackageTags>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<RepositoryUrl>https://github.com/dmisoft/Samovar.Grid</RepositoryUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -23,6 +24,7 @@
 
 	<ItemGroup>
 		<None Remove="compilerconfig.json.defaults" />
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 	<ItemGroup>
