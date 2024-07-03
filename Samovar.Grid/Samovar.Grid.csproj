@@ -23,7 +23,6 @@
 
 	<ItemGroup>
 		<None Remove="compilerconfig.json.defaults" />
-		<None Include="docs\README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 	<ItemGroup>
