@@ -1,8 +1,4 @@
-﻿/*
-    This file is to show how CSS and other static resources (such as images) can be
-    used from a library project/package.
-*/
-*,
+﻿*,
 *::before,
 *::after {
     box-sizing: border-box;
@@ -200,4 +196,22 @@
 
 .s-hidden {
     display: none;
+}
+
+.s-chevron-down {
+    display: inline-block;
+    width: 16px; 
+    height: 16px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.s-chevron-right {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
 }
