@@ -5,12 +5,12 @@
 
 <tr id="@RowModel.HtmlElementId" style="cursor:pointer;"
     @onmousedown="@(()=>RowSelectedIntern(new GridRowEventArgs(RowModel.DataItem, RowModel.DataItemPosition), RowModel))"
-    class="@(RowModel.IsRowSelected?$"{LayoutService.SelectedRowClass.Value}":"")">
+    class="@(RowModel.IsRowSelected?$"s-data-row-selected":"")">
     @if (LayoutService.ShowDetailRow.Value)
     {
         <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;" @onmousedown="()=> { }" @onmousedown:stopPropagation @onclick="GridRow.DetailExpanderClick">
             <div class="s-flex s-flex-row s-align-content-center s-justify-content-center">
-                <span class="@(RowModel.RowDetailExpanded ? "s-chevron-down" : "s-chevron-right")"></span>
+                <span class="@(RowModel.RowDetailExpanded ? "s-detail-row-open" : "s-detail-row-collapsed")"></span>
             </div>
         </td>
     }

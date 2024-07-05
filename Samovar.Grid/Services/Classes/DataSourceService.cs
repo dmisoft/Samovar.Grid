@@ -63,26 +63,14 @@ public class DataSourceService<T>
         initService.IsInitialized.Subscribe(DataGridInitializerCallback);
         _layoutService = layoutService;
     }
+    IDisposable? observableStandardFilter = null;
+    IDisposable? observableCustomFilter = null;
 
     private void DataGridInitializerCallback(bool obj)
     {
         _layoutService.FilterMode.DistinctUntilChanged().Subscribe(this);
 
-        Observable.CombineLatest(
-            _filterService.FilterInfo,
-            _orderService.ColumnOrderInfo,
-            Data,
-            (filterInfo, columnOrderInfo, data) => Tuple.Create(filterInfo, columnOrderInfo, data))
-            .DistinctUntilChanged()
-            .Subscribe(myfunc33);
 
-        Observable.CombineLatest(
-            CustomFilter,
-            _orderService.ColumnOrderInfo,
-            Data,
-            (filterInfo, columnOrderInfo, data) => Tuple.Create(filterInfo, columnOrderInfo, data))
-            .DistinctUntilChanged()
-            .Subscribe(myfunc44);
     }
 
     private void myfunc33(Tuple<IEnumerable<GridFilterCellInfo>, ColumnOrderInfo, IEnumerable<T>> tuple)
@@ -110,9 +98,10 @@ public class DataSourceService<T>
             return;
 
         IQueryable<T> query = tuple.Item3.AsQueryable();
-        
 
-        if (tuple.Item1 is not null) {
+
+        if (tuple.Item1 is not null)
+        {
             var parameter = Expression.Parameter(typeof(T), "x");
             var body = Expression.Invoke(Expression.Constant(tuple.Item1), parameter);
             var lambda = Expression.Lambda<Func<T, bool>>(body, parameter);
@@ -271,5 +260,29 @@ public class DataSourceService<T>
     {
         CustomFilter.OnNext(null);
         _filterService.ClearFilter();
+
+        observableStandardFilter?.Dispose();
+        observableCustomFilter?.Dispose();
+
+        if (value == GridFilterMode.Custom)
+        {
+            observableCustomFilter = Observable.CombineLatest(
+                CustomFilter,
+                 _orderService.ColumnOrderInfo,
+                 Data,
+                 (filterInfo, columnOrderInfo, data) => Tuple.Create(filterInfo, columnOrderInfo, data))
+                 .DistinctUntilChanged()
+                 .Subscribe(myfunc44);
+        }
+        else
+        {
+            observableStandardFilter = Observable.CombineLatest(
+                _filterService.FilterInfo,
+                _orderService.ColumnOrderInfo,
+                Data,
+                (filterInfo, columnOrderInfo, data) => Tuple.Create(filterInfo, columnOrderInfo, data))
+                .DistinctUntilChanged()
+                .Subscribe(myfunc33);
+        }
     }
 }

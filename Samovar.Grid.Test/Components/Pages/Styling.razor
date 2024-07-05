@@ -1,0 +1,76 @@
+﻿@page "/styling"
+
+@rendermode InteractiveServer
+
+@using System.ComponentModel.DataAnnotations
+@using System
+@using Samovar.Grid
+
+@inject WeatherForecastService ForecastService
+
+<h1>Styling</h1>
+
+<style>
+    :root {
+        --detail-row-open-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 3.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5M8 6a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7.5 12.293V6.5A.5.5 0 0 1 8 6"/></svg>');
+        --detail-row-collapsed-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8m-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5"/></svg>');
+        --data-row-selected: rgb(255, 255, 0, 0.5);
+    }
+</style>
+
+<SmGrid @ref=grid
+        Data="forecasts"
+        FilterMode=GridFilterMode.FilterRow
+        Height="600px"
+        DataNavigationMode=NavigationMode.Paging
+        SelectionMode=RowSelectionMode.Multiple
+        ShowDetailRow="true">
+    <Columns>
+        <Column Field="@nameof(WeatherForecast.Summary)"/>
+        <Column Field="@nameof(WeatherForecast.Date)"/>
+        <Column Field="@nameof(WeatherForecast.TemperatureC)"/>
+    </Columns>
+    <DetailRowTemplate Context="mydata">
+        @{
+            if (mydata is not null)
+            {
+                WeatherForecast data = mydata as WeatherForecast;
+                <div class="form-group row mb-2">
+                    <label class="col-2 col-form-label">Date</label>
+                    <div class="col-10">
+                        @($"{data.Date:yyyy-MM-dd}")
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-2 col-form-label">Temp.C</label>
+                    <div class="col-10">
+                        @data.TemperatureC
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-2 col-form-label">Temp.F</label>
+                    <div class="col-10">
+                        @data.TemperatureF
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    <label class="col-2 col-form-label">Summary</label>
+                    <div class="col-10">
+                        @data.Summary
+                    </div>
+                </div>
+            }
+        }
+    </DetailRowTemplate>
+</SmGrid>
+
+
+@code {
+    private List<WeatherForecast>? forecasts;
+    SmGrid<WeatherForecast>? grid;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
+    }
+}

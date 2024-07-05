@@ -9,7 +9,6 @@ public class LayoutService
     : ILayoutService, IAsyncDisposable
 {
     public BehaviorSubject<GridColumnResizeMode> ColumnResizeMode { get; } = new BehaviorSubject<GridColumnResizeMode>(GridColumnResizeMode.None);
-    public BehaviorSubject<string> SelectedRowClass { get; } = new BehaviorSubject<string>("bg-warning");
     public BehaviorSubject<string> CssClass { get; } = new BehaviorSubject<string>("table table-bordered");
     public BehaviorSubject<double> MinGridWidth { get; } = new BehaviorSubject<double>(0d);
     public BehaviorSubject<bool> ShowDetailRow { get; } = new BehaviorSubject<bool>(false);
