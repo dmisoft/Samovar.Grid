@@ -12,7 +12,7 @@ public class LayoutService
     public BehaviorSubject<string> CssClass { get; } = new BehaviorSubject<string>("table table-bordered");
     public BehaviorSubject<double> MinGridWidth { get; } = new BehaviorSubject<double>(0d);
     public BehaviorSubject<bool> ShowDetailRow { get; } = new BehaviorSubject<bool>(false);
-    public BehaviorSubject<string> PaginationClass { get; } = new BehaviorSubject<string>("pagination");
+    public BehaviorSubject<string> PaginationClass { get; } = new BehaviorSubject<string>("s-pagination");
     public BehaviorSubject<bool> ShowFilterRow { get; } = new BehaviorSubject<bool>(false);
     public BehaviorSubject<GridFilterMode> FilterMode { get; } = new BehaviorSubject<GridFilterMode>(GridFilterMode.None);
     public ElementReference GridFilterRef { get; set; }
