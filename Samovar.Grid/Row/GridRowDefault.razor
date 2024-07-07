@@ -5,7 +5,7 @@
 
 <tr id="@RowModel.HtmlElementId" style="cursor:pointer;"
     @onmousedown="@(()=>RowSelectedIntern(new GridRowEventArgs(RowModel.DataItem, RowModel.DataItemPosition), RowModel))"
-    class="@(RowModel.IsRowSelected?$"s-data-row-selected":"")">
+    class="@(RowModel.IsRowSelected?$"s-data-row-selected-background":"")">
     @if (LayoutService.ShowDetailRow.Value)
     {
         <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;" @onmousedown="()=> { }" @onmousedown:stopPropagation @onclick="GridRow.DetailExpanderClick">

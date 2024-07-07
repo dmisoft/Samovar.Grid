@@ -61,40 +61,15 @@ export function getElementWidth(elementId) {
 }
 
 export function synchronizeGridHeaderScroll(elementRef, gridHeaderContainerId) {
+    if (elementRef === null)
+        return;
+
     elementRef.addEventListener('scroll', function () {
         let elmnt = document.getElementById(gridHeaderContainerId);
         if (elmnt !== null) {
             elmnt.scrollLeft = elementRef.scrollLeft;
         }
     });
-}
-
-export function isPartialInView(elementId, innerGridId) {
-    //var elementTopValue = $("#" + elementId).offset().top;
-    let elmnt = document.getElementById(elementId);
-    let innerGrid = document.getElementById(innerGridId);
-    if (elmnt !== null && innerGrid !== null) {
-        let elementTopValue = elmnt.offsetTop;
-        let viewportTopValue = innerGrid.offsetTop;
-
-        let elementBottomValue = elementTopValue + elmnt.clientHeight;
-        let viewportBottomValue = viewportTopValue + innerGrid.clientHeight;
-        let probablyNotInView = Boolean(elementBottomValue > viewportBottomValue || elementTopValue < viewportTopValue);
-
-        return JSON.stringify({ ProbablyNotInView: probablyNotInView, elementTop: elementTopValue, elementBottom: elementBottomValue, viewportTop: viewportTopValue, viewportBottom: viewportBottomValue });
-    }
-}
-
-export function isScrollbarVisible(innerGridId) {
-    let innerGrid = document.getElementById(innerGridId);
-
-    if (innerGrid !== null) {
-        return Boolean(innerGrid.scrollHeight > innerGrid.clientHeight);
-    }
-}
-
-export function getElementScrollTopByRef(element) {
-    return element.scrollTop;
 }
 
 export function startColumnWidthChangeMode(_gridDotNetRef, _gridColWidthSum, _colMetaId, _innerGridId, _innerGridBodyTableId, _visibleGridColumnCellId, _hiddenGridColumnCellId, _filterGridColumnCellId, _visibleEmptyColumnId, _hiddenEmptyColumnId, _filterEmptyColumnId, _emptyColumnDictId, _startMouseMoveX, _oldAbsoluteVisibleWidthValue, _fitColumnsToTableWidth, _oldAbsoluteEmptyColVisibleWidthValue, _rightSideColumnId, _rightSideCellId, _rightSideColumnWidth, _rightSideFilterCellId, _rightSideHiddenCellId, _outerGridId) {
@@ -133,20 +108,6 @@ export function startColumnWidthChangeMode(_gridDotNetRef, _gridColWidthSum, _co
     gridStateVars.newRightSideColumnWidth = gridStateVars.oldRightSideColumnWidth;
     gridStateVars.rightSideFilterCellId = _rightSideFilterCellId;
     gridStateVars.rightSideHiddenCellId = _rightSideHiddenCellId;
-}
-
-export function toggleFilterPopupMenu(toggleFilterMenuButtonId, filterMenuContainerId, _filterMenuId, toogleToShow) {
-    gridStateVars.filterMenuId = _filterMenuId;
-    var filterMenu = document.getElementById(_filterMenuId);
-    if (toogleToShow == true) {
-        var filterMenuContainer = document.getElementById(filterMenuContainerId);
-        var t = $('#' + toggleFilterMenuButtonId).offset().top + 33;
-        var l = $('#' + toggleFilterMenuButtonId).offset().left;
-
-        filterMenuContainer.style.top = t + 'px';
-        filterMenuContainer.style.left = l + 'px';
-    }
-    filterMenu.classList.toggle('s-show');
 }
 
 export function stopColumnWidthChangeMode(dotNetRef) {
@@ -346,11 +307,11 @@ export function showPrompt(message) {
 }
 
 //Inner grid scroll handling
-export function raise_Js_InnerGrid_AfterScroll_OnDotNetRef(event) {
-    for (var dataGridId in dataGridInstances) {
-        dataGridInstances[dataGridId].invokeMethodAsync('JS_AfterWindowResize');
-    }
-}
+//export function raise_Js_InnerGrid_AfterScroll_OnDotNetRef(event) {
+//    for (var dataGridId in dataGridInstances) {
+//        dataGridInstances[dataGridId].invokeMethodAsync('JS_AfterWindowResize');
+//    }
+//}
 export function add_GridInner_OnScroll_EventListener(innerGridId, dotNetRef) {
     document.getElementById(innerGridId).addEventListener('scroll', function (event) {
         var innerGridScrollTop = document.getElementById(innerGridId).scrollTop;
@@ -432,69 +393,15 @@ window.GridFunctions = {
     raise_Js_GridBody_KeyDown_OnDotNetRef: function (event) {
         event.data.ref.invokeMethodAsync(event.data.callbackName, event.originalEvent.key, event.data.elementId);
     },
-    add_GridBody_KeyDown_EventListener: function (gridBodyId, dotNetRef, callbackFunction) {
-        $('#' + gridBodyId).off('keydown');
-        $('#' + gridBodyId).on('keydown', {
-            elementId: gridBodyId,
-            ref: dotNetRef,
-            callbackName: callbackFunction
-        }, GridFunctions.raise_Js_GridBody_KeyDown_OnDotNetRef);
-    },
-    remove_GridBody_KeyDown_EventListener: function (gridBodyId) {
-        $('#' + gridBodyId).off('keydown', GridFunctions.raise_Js_GridBody_KeyDown_OnDotNetRef);
-    },
-
-
     consoleOutput: function (msg) {
         console.log(msg);
         return true;
     },
-
     isElementVisible: function (el) {
         var rect = el.getBoundingClientRect(),
             vWidth = window.innerWidth || doc.documentElement.clientWidth,
             vHeight = window.innerHeight || doc.documentElement.clientHeight,
             efp = function (x, y) { return document.elementFromPoint(x, y) };
         return el.contains(efp(rect.left, rect.top)) || el.contains(efp(rect.right, rect.top)) || el.contains(efp(rect.right, rect.bottom)) || el.contains(efp(rect.left, rect.bottom));
-    },
-
-    isInView: function (elementId, innerGridId) {
-        var elementTopValue = $('#' + elementId).offset().top;
-        var elementBottomValue = elementTopValue + $('#' + elementId).outerHeight();
-        var viewportTopValue = $('#' + innerGridId).offset().top;
-        var viewportBottomValue = viewportTopValue + $('#' + innerGridId).height();
-        var inView = Boolean(elementBottomValue > viewportTopValue && elementTopValue < viewportBottomValue);
-
-        return JSON.stringify({ IsInView: inView, elementTop: elementTopValue, elementBottom: elementBottomValue, viewportTop: viewportTopValue, viewportBottom: viewportBottomValue });
-    },
-
-    scrollElementInView: function (elementId, innerGridId) {
-        var elementTopValue = $('#' + elementId).offset().top;
-        var elementBottomValue = elementTopValue + $('#' + elementId).outerHeight();
-        var viewportTopValue = $('#' + innerGridId).offset().top;
-        var viewportBottomValue = viewportTopValue + $('#' + innerGridId).height();
-        var partialOnTopNotInView = Boolean(elementTopValue < viewportTopValue);
-        var partialOnBottomNotInView = Boolean(elementBottomValue > viewportBottomValue);
-
-        if (partialOnTopNotInView) {
-            var actualScrollVal = $('#' + innerGridId).scrollTop();
-            var newScrollVal = actualScrollVal - (viewportTopValue - elementTopValue);
-            $('#' + innerGridId).scrollTop(newScrollVal);
-        }
-        else if (partialOnBottomNotInView) {
-            var actualScrollVal = $('#' + innerGridId).scrollTop();
-            var newScrollVal = actualScrollVal + (elementBottomValue - viewportBottomValue);
-            $('#' + innerGridId).scrollTop(newScrollVal);
-        }
-    },
-
-    getElementScrollTop: function (elementId) {
-        return $('#' + elementId).scrollTop();
-    },
-    getElementScrollLeft: function (elementId) {
-        return $('#' + elementId).scrollLeft();
-    },
-    getElementScrollLeftByRef: function (element) {
-        return element.scrollLeft;
     }
 };

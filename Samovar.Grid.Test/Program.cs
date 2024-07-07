@@ -11,11 +11,12 @@ namespace Samovar.Grid.Test
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddRazorComponents()
+            builder.Services.AddRazorComponents(options =>
+                 options.DetailedErrors = builder.Environment.IsDevelopment())
                 .AddInteractiveServerComponents();
-            
-            builder.Services.AddSingleton<WeatherForecastService>();
 
+            builder.Services.AddSingleton<WeatherForecastService>();
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

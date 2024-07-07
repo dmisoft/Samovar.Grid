@@ -222,6 +222,6 @@
     background-repeat: no-repeat;
 }
 
-.s-data-row-selected {
+.s-data-row-selected-background {
     background: var(--data-row-selected-background)
 }

@@ -31,10 +31,6 @@ public partial class GridEditCellBoolean
             {
                 InnerValue = false;
             }
-            else
-            {
-                //InnerValue = null;
-            }
         }
     }
 

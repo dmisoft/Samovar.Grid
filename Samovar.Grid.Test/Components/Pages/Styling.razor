@@ -23,8 +23,9 @@
         FilterMode=GridFilterMode.FilterRow
         Height="600px"
         DataNavigationMode=NavigationMode.Paging
-        SelectionMode=RowSelectionMode.Multiple
-        ShowDetailRow="true">
+        SelectionMode=RowSelectionMode.Single
+        ShowDetailRow="true"
+        @bind-SingleSelectedDataRow=@selectedRow>
     <Columns>
         <Column Field="@nameof(WeatherForecast.Summary)"/>
         <Column Field="@nameof(WeatherForecast.Date)"/>
@@ -67,7 +68,8 @@
 
 @code {
     private List<WeatherForecast>? forecasts;
-    SmGrid<WeatherForecast>? grid;
+    SmGrid<WeatherForecast?>? grid;
+    WeatherForecast? selectedRow;
 
     protected override async Task OnInitializedAsync()
     {

@@ -111,9 +111,7 @@ public class LayoutService
 
         await GridInnerRef.SynchronizeGridHeaderScroll(await _jsService.JsModule(), _constantService.GridHeaderContainerId);
         if (FilterMode.Value == GridFilterMode.FilterRow)
-        {
             await GridInnerRef.SynchronizeGridHeaderScroll(await _jsService.JsModule(), _constantService.GridFilterContainerId);
-        }
 
         await CaculateHeader();
     }
