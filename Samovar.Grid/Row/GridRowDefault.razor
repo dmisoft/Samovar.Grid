@@ -10,7 +10,7 @@
     {
         <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;" @onmousedown="()=> { }" @onmousedown:stopPropagation @onclick="GridRow.DetailExpanderClick">
             <div class="s-flex s-flex-row s-align-content-center s-justify-content-center">
-                <span class="@(RowModel.RowDetailExpanded ? "s-detail-row-open" : "s-detail-row-collapsed")"></span>
+                <span class="@(RowModel.RowDetailExpanded ? "s-detail-row-expanded" : "s-detail-row-collapsed")"></span>
             </div>
         </td>
     }

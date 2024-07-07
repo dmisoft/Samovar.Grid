@@ -264,7 +264,6 @@ export function onWindowMouseMove(event) {
             gridStateVars.emptyHeaderColWidth = 0;
 
         }
-        console.log('emptyHeaderColWidth: ' + gridStateVars.emptyHeaderColWidth);
 
         document.getElementById(gridStateVars.visibleGridColumnCellId).style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
         document.getElementById(gridStateVars.hiddenGridColumnCellId).style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
