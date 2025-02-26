@@ -23,7 +23,7 @@ namespace Samovar.Grid
             ServiceProvider = new SmComponentServiceProvider();
             ServiceProvider.InitServices<T>();
         }
-
+        
         public override async Task SetParametersAsync(ParameterView parameters)
         {
             await InitializeDependencies();
@@ -65,19 +65,6 @@ namespace Samovar.Grid
             }
 
             return Task.CompletedTask;
-        }
-
-        protected override Task OnAfterRenderAsync(bool firstRender)
-        {
-            if (firstRender)
-            {
-                Lazy<Task<IJSObjectReference>> moduleTask = new(() => JsRuntime.InvokeAsync<IJSObjectReference>(
-                   "import", "./_content/SamovarGrid/samovar.grid.js").AsTask());
-
-                JsService.InitJsModule(moduleTask);
-            }
-
-            return base.OnAfterRenderAsync(firstRender);
         }
     }
 }

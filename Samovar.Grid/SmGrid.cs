@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.JSInterop;
 
 namespace Samovar.Grid;
 
@@ -86,7 +87,7 @@ public class SmGrid<T>
 
     [Parameter]
     public RenderFragment<T>? EditPopupTitleTemplate { get; set; }
-    
+
     [Parameter]
     public RenderFragment<T>? InsertFormTemplate { get; set; }
 
@@ -269,11 +270,13 @@ public class SmGrid<T>
 
     protected override Task OnInitializedAsync()
     {
+        JsService.InitJsModule(JsRuntime, ConstantService.DataGridId, LayoutService.DataGridDotNetRef, LayoutService);
+
         GridSelectionService.SingleSelectedRowCallback = async () => { await SingleSelectedDataRowChanged.InvokeAsync(GridSelectionService.SingleSelectedDataRow.Value); };
         GridSelectionService.MultipleSelectedRowsCallback = async () => { await MultipleSelectedDataRowsChanged.InvokeAsync(GridSelectionService.MultipleSelectedDataRows.Value); };
+
         return base.OnInitializedAsync();
     }
-
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -283,7 +286,6 @@ public class SmGrid<T>
             await JsService.AttachWindowResizeEvent(ConstantService.DataGridId, LayoutService.DataGridDotNetRef);
             await LayoutService.InitHeader();
             InitService.IsInitialized.OnNext(true);
-            StateHasChanged();
         }
     }
 
@@ -291,10 +293,12 @@ public class SmGrid<T>
     {
         return EditingService.CommitCustomRowEdit(item);
     }
+
     public Task CancelCustomRowEdit(T item)
     {
         return EditingService.CancelCustomRowEdit(item);
     }
+
     public Task CancelRowInsert()
     {
         return EditingService.RowInsertCancel();
@@ -307,7 +311,7 @@ public class SmGrid<T>
 
     public Task ApplyCustomFilter(Func<T, bool> customFilter)
     {
-        if(LayoutService.FilterMode.Value == GridFilterMode.Custom)
+        if (LayoutService.FilterMode.Value == GridFilterMode.Custom)
             DataSourceService.CustomFilter.OnNext(customFilter);
         return Task.CompletedTask;
     }

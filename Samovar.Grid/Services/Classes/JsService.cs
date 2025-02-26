@@ -5,6 +5,8 @@ namespace Samovar.Grid
     public class JsService(IConstantService _constantService)
                 : IJsService, IAsyncDisposable
     {
+        private Lazy<Task<IJSObjectReference>>? _module;
+
         public async Task<IJSObjectReference> JsModule()
         {
             if (_module is null)
@@ -12,11 +14,9 @@ namespace Samovar.Grid
             return await _module.Value;
         }
 
-        private Lazy<Task<IJSObjectReference>>? _module;
-
-        public Task InitJsModule(Lazy<Task<IJSObjectReference>> module)
+        public Task InitJsModule(IJSRuntime jsRuntime, string dataGridId, DotNetObjectReference<ILayoutService> dataGridDotNetRef, ILayoutService layoutService)
         {
-            _module = module;
+            _module = new(() => jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/SamovarGrid/samovar.grid.js").AsTask());
             return Task.CompletedTask;
         }
 

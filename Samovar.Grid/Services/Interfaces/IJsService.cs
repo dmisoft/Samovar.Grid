@@ -6,7 +6,7 @@ namespace Samovar.Grid
     {
         Task<IJSObjectReference> JsModule();
 
-        Task InitJsModule(Lazy<Task<IJSObjectReference>> module);
+        Task InitJsModule(IJSRuntime jsRuntime, string dataGridId, DotNetObjectReference<ILayoutService> dataGridDotNetRef, ILayoutService layoutService);
 
         Task AttachWindowResizeEvent(string DataGridId, DotNetObjectReference<ILayoutService> DataGridDotNetRef);
 
