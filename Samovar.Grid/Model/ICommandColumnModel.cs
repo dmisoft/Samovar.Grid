@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Subjects;
 
 namespace Samovar.Grid;
+
 public interface ICommandColumnModel
     : IDeclarativeColumnModel
 {

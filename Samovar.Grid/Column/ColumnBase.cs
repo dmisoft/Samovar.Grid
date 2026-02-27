@@ -1,4 +1,5 @@
 ﻿namespace Samovar.Grid;
+
 public class ColumnBase<T>
     : DesignComponentBase
 {

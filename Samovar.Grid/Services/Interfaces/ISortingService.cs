@@ -1,10 +1,9 @@
 ﻿using System.Reactive.Subjects;
 
-namespace Samovar.Grid
+namespace Samovar.Grid;
+
+public interface ISortingService
 {
-    public interface ISortingService
-    {
-        BehaviorSubject<ColumnOrderInfo> ColumnOrderInfo { get; }
-        Task OnColumnClick(IDataColumnModel columnModel);
-    }
+    BehaviorSubject<ColumnOrderInfo> ColumnOrderInfo { get; }
+    Task OnColumnClick(IDataColumnModel columnModel);
 }

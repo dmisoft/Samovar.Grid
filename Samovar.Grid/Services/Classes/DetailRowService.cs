@@ -7,7 +7,7 @@ public class DetailRowService<T>
     {
         layoutService.ShowDetailRow.Subscribe(async showDetailRow =>
         {
-            if(!showDetailRow)
+            if (!showDetailRow)
                 await CollapseAllDetailRows();
         });
     }
@@ -33,7 +33,7 @@ public class DetailRowService<T>
 
     public Task CollapseDetailRow(GridRowModel<T> dataItem)
     {
-        if (!ExpandedGridRows.Contains(dataItem))
+        if (ExpandedGridRows.Contains(dataItem))
             ExpandedGridRows.Remove(dataItem);
 
         return Task.CompletedTask;

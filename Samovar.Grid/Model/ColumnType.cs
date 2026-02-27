@@ -1,11 +1,10 @@
-﻿namespace Samovar.Grid
+﻿namespace Samovar.Grid;
+
+public enum ColumnType
 {
-    public enum ColumnType
-    {
-        None,
-        Data,
-        Command,
-        DetailExpanderColumn,
-        EmptyColumn
-    }
+    None,
+    Data,
+    Command,
+    DetailExpanderColumn,
+    EmptyColumn
 }

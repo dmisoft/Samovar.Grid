@@ -1,55 +1,54 @@
 ﻿using Microsoft.JSInterop;
 
-namespace Samovar.Grid
+namespace Samovar.Grid;
+
+public interface IJsService
 {
-    public interface IJsService
-    {
-        Task<IJSObjectReference> JsModule();
+    Task<IJSObjectReference> JsModule();
 
-        Task InitJsModule(IJSRuntime jsRuntime, string dataGridId, DotNetObjectReference<ILayoutService> dataGridDotNetRef, ILayoutService layoutService);
+    Task InitJsModule(IJSRuntime jsRuntime, string dataGridId, DotNetObjectReference<ILayoutService> dataGridDotNetRef, ILayoutService layoutService);
 
-        Task AttachWindowResizeEvent(string DataGridId, DotNetObjectReference<ILayoutService> DataGridDotNetRef);
+    Task AttachWindowResizeEvent(string DataGridId, DotNetObjectReference<ILayoutService> DataGridDotNetRef);
 
-        Task AttachWindowMouseMoveEvent(DotNetObjectReference<ILayoutService> DataGridDotNetRef);
+    Task AttachWindowMouseMoveEvent(DotNetObjectReference<ILayoutService> DataGridDotNetRef);
 
-        Task AttachWindowMouseUpEvent(DotNetObjectReference<ILayoutService> DataGridDotNetRef);
+    Task AttachWindowMouseUpEvent(DotNetObjectReference<ILayoutService> DataGridDotNetRef);
 
-        Task DetachWindowMouseMoveEvent();
+    Task DetachWindowMouseMoveEvent();
 
-        Task DetachWindowMouseUpEvent();
+    Task DetachWindowMouseUpEvent();
 
-        ValueTask<bool> IsWindowCtrlKeyDown();
+    ValueTask<bool> IsWindowCtrlKeyDown();
 
-        ValueTask<bool> IsWindowShiftKeyDown();
+    ValueTask<bool> IsWindowShiftKeyDown();
 
-        Task StartDataGridColumnWidthChangeMode(
-            DotNetObjectReference<IColumnResizingService> colResizingService,
-            double GridColWidthSum,
-            string ColMetaId,
-            string InnerGridId,
-            string InnerGridBodyTableId,
-            string VisibleGridColumnCellId,
-            string HiddenGridColumnCellId,
-            string FilterGridColumnCellId,
-            string VisibleEmptyColumnId,
-            string HiddenEmptyColumnId,
-            string FilterEmptyColumnId,
-            string EmptyColumnDictId,
-            double StartMouseMoveX,
-            double OldAbsoluteVisibleWidthValue,
-            string FitColumnsToTableWidth,
-            double OldAbsoluteEmptyColVisibleWidthValue,
-            string? RightSideColMetaId,
-            string? RightSideCellMetaId,
-            double? RightSideColumnWidth,
-            string? RightSideFilterCellId,
-            string? RightSideHiddenCellId,
-            string OuterGridId);
+    Task StartDataGridColumnWidthChangeMode(
+        DotNetObjectReference<IColumnResizingService> colResizingService,
+        double GridColWidthSum,
+        string ColMetaId,
+        string InnerGridId,
+        string InnerGridBodyTableId,
+        string VisibleGridColumnCellId,
+        string HiddenGridColumnCellId,
+        string FilterGridColumnCellId,
+        string VisibleEmptyColumnId,
+        string HiddenEmptyColumnId,
+        string FilterEmptyColumnId,
+        string EmptyColumnDictId,
+        double StartMouseMoveX,
+        double OldAbsoluteVisibleWidthValue,
+        string FitColumnsToTableWidth,
+        double OldAbsoluteEmptyColVisibleWidthValue,
+        string? RightSideColMetaId,
+        string? RightSideCellMetaId,
+        double? RightSideColumnWidth,
+        string? RightSideFilterCellId,
+        string? RightSideHiddenCellId,
+        string OuterGridId);
 
-        ValueTask<double> GetInnerGridHeight();
+    ValueTask<double> GetInnerGridHeight();
 
-        ValueTask<double> GetElementHeightById(string elementId);
+    ValueTask<double> GetElementHeightById(string elementId);
 
-        ValueTask ScrollInnerGridToTop();
-    }
+    ValueTask ScrollInnerGridToTop();
 }

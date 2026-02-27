@@ -1,49 +1,23 @@
-﻿namespace Samovar.Grid
-{
-    public class GridRowEventArgs
-        : EventArgs
-    {
-        public object RowData { get; private set; }
-        public int RowPosition { get; private set; }
+﻿namespace Samovar.Grid;
 
-        public GridRowEventArgs(object? rowData, int rowPosition)
-            : base()
-        {
-            if(rowData is null)
-            {
-                throw new ArgumentNullException(nameof(rowData));
-            }
-            RowData = rowData;
-            RowPosition = rowPosition;
-        }
-    }
-
-    public class GridRowNewEventArgs<T>
+public class GridRowEventArgs(object? rowData, int rowPosition)
     : EventArgs
-    {
-        public T RowData { get; private set; }
-        public int RowPosition { get; private set; }
+{
+    public object RowData { get; private set; } = rowData ?? throw new ArgumentNullException(nameof(rowData));
+    public int RowPosition { get; private set; } = rowPosition;
+}
 
-        public GridRowNewEventArgs(T rowData, int rowPosition)
-            : base()
-        {
-            RowData = rowData;
-            RowPosition = rowPosition;
-        }
-    }
+public class GridRowNewEventArgs<T>(T rowData, int rowPosition)
+: EventArgs
+{
+    public T RowData { get; private set; } = rowData;
+    public int RowPosition { get; private set; } = rowPosition;
+}
 
-    public class GridRowEditEventArgs<T>
-        : EventArgs
-    {
-        public T OldData { get; private set; }
-        public T NewData { get; private set; }
-        public int RowPosition { get; }
-
-        public GridRowEditEventArgs(T oldData, T newData)
-            : base()
-        {
-            OldData = oldData;
-            NewData = newData;
-        }
-    }
+public class GridRowEditEventArgs<T>(T oldData, T newData)
+    : EventArgs
+{
+    public T OldData { get; private set; } = oldData;
+    public T NewData { get; private set; } = newData;
+    public int RowPosition { get; }
 }

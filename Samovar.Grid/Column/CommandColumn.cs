@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 
 namespace Samovar.Grid;
+
 public class CommandColumn
     : ColumnBase<ICommandColumnModel>
 {

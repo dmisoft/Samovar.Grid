@@ -38,9 +38,9 @@ public class EditingService<T>(
 
     public async Task EditBegin(GridRowModel<T> rowModel)
     {
-        if(_editingRowModel is not null)
+        if (_editingRowModel is not null)
             await CancelRowEdit(_editingRowModel);
-        
+
         _editingRowModel = rowModel;
 
         await OnRowEditBegin.InvokeAsync(rowModel.DataItem);

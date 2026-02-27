@@ -1,9 +1,8 @@
 ﻿using System.Reactive.Subjects;
 
-namespace Samovar.Grid
+namespace Samovar.Grid;
+
+public interface IInitService
 {
-    public interface IInitService
-    {
-        Subject<bool> IsInitialized { get; set; }
-    }
+    Subject<bool> IsInitialized { get; set; }
 }

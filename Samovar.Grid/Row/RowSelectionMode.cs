@@ -4,5 +4,5 @@ public enum RowSelectionMode
 {
     None,
     Single,
-    Multiple    
+    Multiple
 }

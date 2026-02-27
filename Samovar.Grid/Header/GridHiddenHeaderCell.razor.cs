@@ -1,46 +1,45 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Reactive.Linq;
 
-namespace Samovar.Grid.Header
+namespace Samovar.Grid.Header;
+
+public partial class GridHiddenHeaderCell
+    : DesignComponentBase, IAsyncDisposable
 {
-    public partial class GridHiddenHeaderCell
-        : DesignComponentBase, IAsyncDisposable
+    [Parameter]
+    public required IColumnModel ColumnModel { get; set; }
+
+    [SmInject]
+    public required ILayoutService LayoutService { get; set; }
+
+    [SmInject]
+    public required IColumnResizingService ColumnResizingService { get; set; }
+
+    [SmInject]
+    public required IJsService JsService { get; set; }
+
+    [SmInject]
+    public required IColumnService ColumnService { get; set; }
+
+    [SmInject]
+    public required IConstantService ConstantService { get; set; }
+
+    protected string WidthStyle = "";
+
+    protected override Task OnInitializedAsync()
     {
-        [Parameter]
-        public required IColumnModel ColumnModel { get; set; }
-
-        [SmInject]
-        public required ILayoutService LayoutService { get; set; }
-
-        [SmInject]
-        public required IColumnResizingService ColumnResizingService { get; set; }
-
-        [SmInject]
-        public required IJsService JsService { get; set; }
-
-        [SmInject]
-        public required IColumnService ColumnService { get; set; }
-
-        [SmInject]
-        public required IConstantService ConstantService { get; set; }
-
-        protected string WidthStyle = "";
-
-        protected override Task OnInitializedAsync()
+        ColumnModel.WidthStyle.Subscribe(w =>
         {
-            ColumnModel.WidthStyle.Subscribe(w =>
-            {
-                WidthStyle = w;
-                StateHasChanged();
-            });
-            return base.OnInitializedAsync();
-        }
-       
-        protected string ColumnCellDraggable = "false";
+            WidthStyle = w;
+            StateHasChanged();
+        });
+        return base.OnInitializedAsync();
+    }
 
-        public ValueTask DisposeAsync()
-        {
-            return ValueTask.CompletedTask;
-        }
+    protected string ColumnCellDraggable = "false";
+
+    public ValueTask DisposeAsync()
+    {
+        return ValueTask.CompletedTask;
     }
 }

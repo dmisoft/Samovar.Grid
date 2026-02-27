@@ -1,9 +1,8 @@
 ﻿using System.Reactive.Subjects;
 
-namespace Samovar.Grid
+namespace Samovar.Grid;
+
+public interface IVirtualScrollingNavigationStrategy
+    : INavigationStrategy
 {
-    public interface IVirtualScrollingNavigationStrategy
-        : INavigationStrategy
-    {
-    }
 }

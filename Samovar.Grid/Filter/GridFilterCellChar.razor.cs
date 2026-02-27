@@ -1,8 +1,7 @@
-﻿namespace Samovar.Grid.Filter
-{
-    public partial class GridFilterCellChar
-        : GridFilterCellBase<char?>
-    {
+﻿namespace Samovar.Grid.Filter;
 
-    }
+public partial class GridFilterCellChar
+    : GridFilterCellBase<char?>
+{
+
 }

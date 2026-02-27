@@ -1,7 +1,6 @@
-﻿namespace Samovar.Grid.Filter
+﻿namespace Samovar.Grid.Filter;
+
+public partial class GridFilterCellDateOnly
+    : GridFilterCellBase<DateOnly?>
 {
-    public partial class GridFilterCellDateOnly
-        : GridFilterCellBase<DateOnly?>
-    {
-    }
 }

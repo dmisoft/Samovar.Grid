@@ -264,7 +264,8 @@ public class SmGrid<T>
         builder.OpenComponent<CascadingValue<IComponentServiceProvider>>(1);
         builder.AddAttribute(2, "Value", this);
         builder.AddAttribute(3, "Name", "ServiceProvider");
-        builder.AddAttribute(4, "ChildContent", del);
+        builder.AddAttribute(4, "IsFixed", true);
+        builder.AddAttribute(5, "ChildContent", del);
         builder.CloseComponent();
     }
 

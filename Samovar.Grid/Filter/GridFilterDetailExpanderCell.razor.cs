@@ -29,14 +29,15 @@ public partial class GridFilterDetailExpanderCell
     protected override Task OnInitializedAsync()
     {
         ColumnModel = ColumnService.DetailExpanderColumnModel;
-        ColumnModel.WidthStyle.Subscribe(w => {
+        ColumnModel.WidthStyle.Subscribe(w =>
+        {
             WidthStyle = w;
             StateHasChanged();
 
         });
         return base.OnInitializedAsync();
     }
-   
+
     protected string ColumnCellDraggable = "false";
 
     public ValueTask DisposeAsync()

@@ -3,23 +3,12 @@ using Samovar.Grid.Edit;
 
 namespace Samovar.Grid;
 
-public class ComponentBuilderService<T1>
+public class ComponentBuilderService<T1>(
+        ITemplateService<T1> _templateService
+        , IEditingService<T1> _editingService
+        , INavigationService _navigationService)
     : IComponentBuilderService, IAsyncDisposable
 {
-    private readonly ITemplateService<T1> _templateService;
-    private readonly IEditingService<T1> _editingService;
-    private readonly INavigationService _navigationService;
-
-    public ComponentBuilderService(
-        ITemplateService<T1> templateService
-        , IEditingService<T1> editingService
-        , INavigationService navigationService
-        )
-    {
-        _templateService = templateService;
-        _editingService = editingService;
-        _navigationService = navigationService;
-    }
 
     public RenderFragment GetInsertingPopup<U>(GridRowModel<U> model)
     {

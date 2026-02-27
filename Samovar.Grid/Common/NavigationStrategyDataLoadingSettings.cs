@@ -1,28 +1,21 @@
 ﻿namespace Samovar.Grid;
 
-public readonly struct NavigationStrategyDataLoadingSettings
+public readonly struct NavigationStrategyDataLoadingSettings(uint skip, uint take, bool showAll = false)
     : IEquatable<NavigationStrategyDataLoadingSettings>
 {
     public static readonly NavigationStrategyDataLoadingSettings Empty = new NavigationStrategyDataLoadingSettings(0, 0);
 
     public static readonly NavigationStrategyDataLoadingSettings FetchAll = new NavigationStrategyDataLoadingSettings(0, 0, showAll: true);
 
-    public readonly uint Skip;
+    public readonly uint Skip = skip;
 
-    public readonly uint Take;
+    public readonly uint Take = take;
 
-    public readonly bool ShowAll;
-
-    public NavigationStrategyDataLoadingSettings(uint skip, uint take, bool showAll = false)
-    {
-        Skip = skip;
-        Take = take;
-        ShowAll = showAll;
-    }
+    public readonly bool ShowAll = showAll;
 
     public bool Equals(NavigationStrategyDataLoadingSettings other)
     {
-        return Skip == other.Skip && Take == other.Take;
+        return Skip == other.Skip && Take == other.Take && ShowAll == other.ShowAll;
     }
 
     public override string ToString()
