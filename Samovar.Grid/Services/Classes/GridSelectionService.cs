@@ -13,9 +13,9 @@ public class GridSelectionService<T>
 
     public BehaviorSubject<RowSelectionMode> SelectionMode { get; } = new BehaviorSubject<RowSelectionMode>(RowSelectionMode.None);
 
-    public BehaviorSubject<T?> SingleSelectedDataRow { get; private set; } = new BehaviorSubject<T?>(default);
+    public BehaviorSubject<T?> SingleSelectedDataRow { get; } = new BehaviorSubject<T?>(default);
 
-    public BehaviorSubject<IEnumerable<T>?> MultipleSelectedDataRows { get; private set; } = new BehaviorSubject<IEnumerable<T>?>(default);
+    public BehaviorSubject<IEnumerable<T>?> MultipleSelectedDataRows { get; } = new BehaviorSubject<IEnumerable<T>?>(default);
 
     public Func<Task>? SingleSelectedRowCallback { get; set; }
 
@@ -170,15 +170,9 @@ public class GridSelectionService<T>
         return ValueTask.CompletedTask;
     }
 
-    public void OnCompleted()
-    {
-        throw new NotImplementedException();
-    }
+    public void OnCompleted() { }
 
-    public void OnError(Exception error)
-    {
-        throw new NotImplementedException();
-    }
+    public void OnError(Exception error) { }
 
     public async void OnNext(Task<IEnumerable<GridRowModel<T>>> value)
     {
@@ -215,11 +209,9 @@ public class GridSelectionService<T>
 
     private void Reset()
     {
-        SingleSelectedDataRow.OnCompleted();
-        SingleSelectedDataRow = new BehaviorSubject<T?>(default);
-
-        MultipleSelectedDataRows.OnCompleted();
-        MultipleSelectedDataRows = new BehaviorSubject<IEnumerable<T>?>(default);
+        _singleSelectedDataItem = default;
+        SingleSelectedDataRow.OnNext(default);
+        MultipleSelectedDataRows.OnNext(default);
 
         SingleSelectedRowCallback?.Invoke();
         MultipleSelectedRowsCallback?.Invoke();
