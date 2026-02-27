@@ -182,7 +182,14 @@ public class GridSelectionService<T>
 
     public async void OnNext(Task<IEnumerable<GridRowModel<T>>> value)
     {
-        ViewCollection = await value;
+        try
+        {
+            ViewCollection = await value;
+        }
+        catch
+        {
+            // Prevent unobserved exception from crashing the process
+        }
     }
 
     public void OnNext(RowSelectionMode value)

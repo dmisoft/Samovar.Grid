@@ -33,7 +33,7 @@ public class DetailRowService<T>
 
     public Task CollapseDetailRow(GridRowModel<T> dataItem)
     {
-        if (!ExpandedGridRows.Contains(dataItem))
+        if (ExpandedGridRows.Contains(dataItem))
             ExpandedGridRows.Remove(dataItem);
 
         return Task.CompletedTask;
