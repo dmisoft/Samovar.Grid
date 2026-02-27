@@ -29,9 +29,9 @@ public class Program
 
         app.UseHttpsRedirection();
 
-        app.UseStaticFiles();
         app.UseAntiforgery();
 
+        app.MapStaticAssets();
         app.MapRazorComponents<App>()
             .AddInteractiveWebAssemblyRenderMode()
             .AddAdditionalAssemblies(typeof(Client._Imports).Assembly);
