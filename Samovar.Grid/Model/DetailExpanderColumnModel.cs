@@ -1,13 +1,13 @@
 ﻿namespace Samovar.Grid;
 
 public partial class DetailExpanderColumnModel
-	: DeclarativeColumnModel
+    : DeclarativeColumnModel
 {
-	public override ColumnType ColumnType { get; } = ColumnType.DetailExpanderColumn;
-	
-	public DetailExpanderColumnModel()
-		: base()
-	{
-		DeclaratedWidthParameter.OnNext("30px");
+    public override ColumnType ColumnType { get; } = ColumnType.DetailExpanderColumn;
+
+    public DetailExpanderColumnModel()
+        : base()
+    {
+        DeclaratedWidthParameter.OnNext("30px");
     }
 }

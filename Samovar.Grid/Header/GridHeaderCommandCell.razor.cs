@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 namespace Samovar.Grid.Header;
 
 public partial class GridHeaderCommandCell<T>
-		: DesignComponentBase, IAsyncDisposable
+        : DesignComponentBase, IAsyncDisposable
 {
     [Parameter]
     public required IColumnModel ColumnModel { get; set; }
@@ -33,19 +33,20 @@ public partial class GridHeaderCommandCell<T>
 
     protected string WidthStyle = "";
 
-	protected override Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
-		ColumnModel.WidthStyle.Subscribe(w => {
-			WidthStyle = w;
+        ColumnModel.WidthStyle.Subscribe(w =>
+        {
+            WidthStyle = w;
             StateHasChanged();
         });
-		return base.OnInitializedAsync();
+        return base.OnInitializedAsync();
     }
-   
+
     protected string ColumnCellDraggable = "false";
     protected Task RowInsering()
     {
-       return EditingService.RowInsertBegin();
+        return EditingService.RowInsertBegin();
     }
 
     public ValueTask DisposeAsync()

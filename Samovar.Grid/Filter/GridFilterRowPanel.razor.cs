@@ -13,7 +13,8 @@ public partial class GridFilterRowPanel<T>
 
     protected override void OnInitialized()
     {
-        GridLayoutService.DataGridInnerStyle.Subscribe(async style => {
+        GridLayoutService.DataGridInnerStyle.Subscribe(async style =>
+        {
             Style = await style;
             StateHasChanged();
         });

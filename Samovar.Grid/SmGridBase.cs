@@ -1,70 +1,57 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Reflection;
 
-namespace Samovar.Grid
+namespace Samovar.Grid;
+
+public class SmGridBase<T>
+    : ComponentBase, IComponentServiceProvider
 {
-    public class SmGridBase<T>
-        : ComponentBase, IComponentServiceProvider
+    [Inject]
+    public required IJSRuntime JsRuntime { get; set; } = default!;
+
+    [SmInject]
+    public required IJsService JsService { get; set; } = default!;
+
+    public SmComponentServiceProvider ServiceProvider { get; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    public SmGridBase()
     {
-        [Inject]
-        public required IJSRuntime JsRuntime { get; set; } = default!;
+        ServiceProvider = new SmComponentServiceProvider();
+        ServiceProvider.InitServices<T>();
+    }
 
-        [SmInject]
-        public required IJsService JsService { get; set; } = default!;
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await InitializeDependencies();
+        await base.SetParametersAsync(parameters);
+    }
 
-        public SmComponentServiceProvider ServiceProvider { get; }
+    private bool _dependenciesInitialized;
 
-        [Parameter]
-        public RenderFragment? ChildContent { get; set; }
-
-        public SmGridBase()
+    private Task InitializeDependencies()
+    {
+        if (!_dependenciesInitialized)
         {
-            ServiceProvider = new SmComponentServiceProvider();
-            ServiceProvider.InitServices<T>();
-        }
-        
-        public override async Task SetParametersAsync(ParameterView parameters)
-        {
-            await InitializeDependencies();
-            await base.SetParametersAsync(parameters);
-        }
-        private bool _dependenciesInitialized;
-
-        private Task InitializeDependencies()
-        {
-            if (!_dependenciesInitialized)
-            {
-                _dependenciesInitialized = true;
-
-                Dictionary<string, Type> _dict = new Dictionary<string, Type>();
+            _dependenciesInitialized = true;
 
 #pragma warning disable S3011 // Reflection should not be used to increase accessibility of classes, methods, or fields
-                PropertyInfo[] props = this.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-#pragma warning restore S3011 // Reflection should not be used to increase accessibility of classes, methods, or fields
+            var propertyInfos = GetType()
+                .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            var propertiesWithSmInjectAttribute = propertyInfos.Where(prop =>
+                Attribute.IsDefined(prop, typeof(SmInjectAttribute)));
+#pragma warning restore S3011
 
-                foreach (PropertyInfo prop in props)
-                {
-                    IEnumerable<SmInjectAttribute> attrs = prop.GetCustomAttributes<SmInjectAttribute>(true);
-                    foreach (SmInjectAttribute attr in attrs)
-                    {
-                        if (attr != null)
-                        {
-                            string propName = prop.Name;
-                            _dict.Add(propName, prop.PropertyType);
-                        }
-                    }
-                }
-
-                foreach (var pair in _dict)
-                {
-                    object service = ServiceProvider.GetService(pair.Value);
-                    PropertyInfo? piShared = this.GetType().GetProperty(pair.Key, BindingFlags.Public | BindingFlags.Instance);
-                    piShared?.SetValue(this, service);
-                }
-            }
-
-            return Task.CompletedTask;
+            propertiesWithSmInjectAttribute.ToList().ForEach(property =>
+            {
+                object service = ServiceProvider.GetService(property.PropertyType);
+                property.SetValue(this, service);
+            });
         }
+
+        return Task.CompletedTask;
     }
 }

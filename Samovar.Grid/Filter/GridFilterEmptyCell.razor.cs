@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 namespace Samovar.Grid.Filter;
 
 public partial class GridFilterEmptyCell
-		: DesignComponentBase, IAsyncDisposable
+        : DesignComponentBase, IAsyncDisposable
 {
     [Parameter]
     public required IColumnModel ColumnModel { get; set; }
@@ -28,13 +28,14 @@ public partial class GridFilterEmptyCell
 
     protected override Task OnInitializedAsync()
     {
-        ColumnModel.WidthStyle.Subscribe(w => {
+        ColumnModel.WidthStyle.Subscribe(w =>
+        {
             WidthStyle = w;
             StateHasChanged();
         });
         return base.OnInitializedAsync();
     }
-   
+
     protected string ColumnCellDraggable = "false";
 
     public ValueTask DisposeAsync()

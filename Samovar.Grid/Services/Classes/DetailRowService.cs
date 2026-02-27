@@ -7,7 +7,7 @@ public class DetailRowService<T>
     {
         layoutService.ShowDetailRow.Subscribe(async showDetailRow =>
         {
-            if(!showDetailRow)
+            if (!showDetailRow)
                 await CollapseAllDetailRows();
         });
     }

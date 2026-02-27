@@ -78,7 +78,7 @@ public class LayoutService
 
     public BehaviorSubject<bool> ShowColumnHeader { get; } = new BehaviorSubject<bool>(true);
 
-    public BehaviorSubject<bool> ShowDetailHeader => throw new NotImplementedException();
+    public BehaviorSubject<bool> ShowDetailHeader { get; } = new BehaviorSubject<bool>(false);
 
     public IObservable<Task<GridStyleInfo>> DataGridInnerStyle { get; }
     public bool OriginalColumnsWidthChanged { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Subjects;
 
 namespace Samovar.Grid;
+
 public interface IColumnModel
 {
     public string Id { get; }
@@ -12,5 +13,5 @@ public interface IColumnModel
     public string FilterCellId { get; }
     public string HiddenHeaderCellId { get; }
     public IObservable<string> WidthStyle { get; }
-    
+
 }

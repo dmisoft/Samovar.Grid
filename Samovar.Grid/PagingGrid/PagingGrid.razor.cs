@@ -58,7 +58,7 @@ public partial class PagingGrid<T>
     protected override Task OnInitializedAsync()
     {
         SubscribeViewCollectionChange();
-        
+
         LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
 
         StateService.DataSourceState.Subscribe(async (stateTask) =>

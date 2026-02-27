@@ -1,8 +1,7 @@
-﻿namespace Samovar.Grid
+﻿namespace Samovar.Grid;
+
+public class EmptyColumnModel
+    : ColumnModel
 {
-    public class EmptyColumnModel
-        : ColumnModel
-    {
-        public override ColumnType ColumnType { get; } = ColumnType.EmptyColumn;
-    }
+    public override ColumnType ColumnType { get; } = ColumnType.EmptyColumn;
 }

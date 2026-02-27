@@ -1,4 +1,5 @@
 namespace Samovar.Grid.Test.Data;
+
 public class WeatherForecast
 {
     public int Position { get; set; }
@@ -8,7 +9,7 @@ public class WeatherForecast
     public int? TemperatureC { get; set; }
     public int? NullableInterger { get; set; } = null;
 
-    public int TemperatureF => 32 + (int)(TemperatureC??0/ 0.5556);
+    public int TemperatureF => 32 + (int)(TemperatureC ?? 0 / 0.5556);
     public double TemperatureFD => 12.555;// TemperatureC??0d/ 0.5556d;
     public bool Boolean { get; set; }
 
@@ -17,6 +18,7 @@ public class WeatherForecast
     public WeatherForecastDetail Detail { get; set; } = new WeatherForecastDetail { SomeDetails = "Hello from details" };
 }
 
-public class WeatherForecastDetail {
+public class WeatherForecastDetail
+{
     public string SomeDetails { get; set; } = string.Empty;
 }

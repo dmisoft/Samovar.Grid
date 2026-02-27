@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+    <WasmApplicationEnvironmentName Condition="'$(Configuration)'=='Debug'">Development</WasmApplicationEnvironmentName>
+    <WasmEnableHotReload Condition="'$(Configuration)'=='Debug'">true</WasmEnableHotReload>
   </PropertyGroup>
 
   <ItemGroup>

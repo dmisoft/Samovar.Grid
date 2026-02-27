@@ -27,17 +27,18 @@ public partial class GridFilterCommandCell
     [SmInject]
     public required IFilterService FilterService { get; set; }
 
-	protected string WidthStyle = "";
+    protected string WidthStyle = "";
 
-	protected override Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
-		ColumnModel.WidthStyle.Subscribe(w => {
-			WidthStyle = w;
+        ColumnModel.WidthStyle.Subscribe(w =>
+        {
+            WidthStyle = w;
             StateHasChanged();
         });
-		return base.OnInitializedAsync();
+        return base.OnInitializedAsync();
     }
-   
+
     protected string ColumnCellDraggable = "false";
 
     public ValueTask DisposeAsync()

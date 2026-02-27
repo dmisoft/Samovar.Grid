@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace Samovar.Grid
+namespace Samovar.Grid;
+
+public interface IModelFactoryService
 {
-    public interface IModelFactoryService
-    {
-        IColumnModel CreateModel<T>(ParameterView parameters);
-    }
+    IColumnModel CreateModel<T>(ParameterView parameters);
 }

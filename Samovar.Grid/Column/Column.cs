@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 
 namespace Samovar.Grid;
+
 public class Column
     : ColumnBase<IDataColumnModel>
 {
@@ -26,13 +27,13 @@ public class Column
         await base.SetParametersAsync(parameters);
 
         var field = parameters.GetValueOrDefault<string>(nameof(Field));
-        
+
         if (field is null)
             throw new InvalidOperationException("");
         Model.Field.OnNext(field);
 
         var title = parameters.GetValueOrDefault<string>(nameof(Title));
-        title??=field;
+        title ??= field;
         Model.Title.OnNext(title);
 
         var width = parameters.GetValueOrDefault<string>(nameof(Width));

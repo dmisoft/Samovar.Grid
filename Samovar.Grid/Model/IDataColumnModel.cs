@@ -5,13 +5,13 @@ using System.Reflection;
 namespace Samovar.Grid;
 
 public interface IDataColumnModel
-	: IDeclarativeColumnModel
+    : IDeclarativeColumnModel
 {
-	PropertyInfo ColumnDataItemPropertyInfo { get; }
+    PropertyInfo ColumnDataItemPropertyInfo { get; }
 
-	public BehaviorSubject<RenderFragment<object>?> CellShowTemplate { get; }
+    public BehaviorSubject<RenderFragment<object>?> CellShowTemplate { get; }
 
-	public BehaviorSubject<string> Field { get; }
+    public BehaviorSubject<string> Field { get; }
 
-	public bool? SortingAscending { get; set; }
+    public bool? SortingAscending { get; set; }
 }

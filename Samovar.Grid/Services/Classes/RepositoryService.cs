@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Concurrent;
 using System.Reactive.Linq;
 using System.Reflection;
 
@@ -14,9 +14,9 @@ public class RepositoryService<T>
     private readonly IGridStateService _stateService;
 
     public Dictionary<string, PropertyInfo> PropInfo { get; } = new Dictionary<string, PropertyInfo>();
-    public static Dictionary<string, Func<T, int>> PropInfoDelegateInt { get; } = new Dictionary<string, Func<T, int>>();
-    public static Dictionary<string, Func<T, string>> PropInfoDelegateString { get; } = new Dictionary<string, Func<T, string>>();
-    public static Dictionary<string, Func<T, DateTime>> PropInfoDelegateDate { get; } = new Dictionary<string, Func<T, DateTime>>();
+    public static ConcurrentDictionary<string, Func<T, int>> PropInfoDelegateInt { get; } = new ConcurrentDictionary<string, Func<T, int>>();
+    public static ConcurrentDictionary<string, Func<T, string>> PropInfoDelegateString { get; } = new ConcurrentDictionary<string, Func<T, string>>();
+    public static ConcurrentDictionary<string, Func<T, DateTime>> PropInfoDelegateDate { get; } = new ConcurrentDictionary<string, Func<T, DateTime>>();
     public IObservable<Task<IEnumerable<GridRowModel<T>>>> ViewCollectionObservableTask { get; set; }
 
     public RepositoryService(
@@ -39,16 +39,13 @@ public class RepositoryService<T>
             switch (pi.PropertyType)
             {
                 case var ts when ts == typeof(string):
-                    if (!PropInfoDelegateString.ContainsKey(pi.Name))
-                        PropInfoDelegateString.Add(pi.Name, (Func<T, string>)Delegate.CreateDelegate(typeof(Func<T, string>), pi.GetGetMethod(true)!));
+                    PropInfoDelegateString.GetOrAdd(pi.Name, _ => (Func<T, string>)Delegate.CreateDelegate(typeof(Func<T, string>), pi.GetGetMethod(true)!));
                     break;
                 case var ts when ts == typeof(DateTime) || ts == typeof(DateTime?):
-                    if (!PropInfoDelegateDate.ContainsKey(pi.Name))
-                        PropInfoDelegateDate.Add(pi.Name, (Func<T, DateTime>)Delegate.CreateDelegate(typeof(Func<T, DateTime>), pi.GetGetMethod(true)!));
+                    PropInfoDelegateDate.GetOrAdd(pi.Name, _ => (Func<T, DateTime>)Delegate.CreateDelegate(typeof(Func<T, DateTime>), pi.GetGetMethod(true)!));
                     break;
                 case var ts when ts == typeof(int):
-                    if (!PropInfoDelegateInt.ContainsKey(pi.Name))
-                        PropInfoDelegateInt.Add(pi.Name, (Func<T, int>)Delegate.CreateDelegate(typeof(Func<T, int>), pi.GetGetMethod(true)!));
+                    PropInfoDelegateInt.GetOrAdd(pi.Name, _ => (Func<T, int>)Delegate.CreateDelegate(typeof(Func<T, int>), pi.GetGetMethod(true)!));
                     break;
                 default:
                     break;
@@ -59,8 +56,9 @@ public class RepositoryService<T>
             _dataSourceService.DataQuery,
             _navigationService.NavigationStrategy.DataLoadingSettings,
             ViewCollectionObservableMap);
-        
-        _navigationService.NavigationMode.Subscribe(s => {
+
+        _navigationService.NavigationMode.Subscribe(s =>
+        {
             ViewCollectionObservableTask = Observable.CombineLatest(
             _dataSourceService.DataQuery,
             _navigationService.NavigationStrategy.DataLoadingSettings,
@@ -85,11 +83,11 @@ public class RepositoryService<T>
 
         rowModelCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
 
-        if(rowModelCollection.Any())
+        if (rowModelCollection.Any())
             _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.Idle));
         else
             _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.NoData));
-        
+
         return Task.FromResult(rowModelCollection);
     }
 
@@ -98,7 +96,7 @@ public class RepositoryService<T>
         var retVal = new List<GridRowModel<T>>();
         int rowPosition = 0;
 
-        foreach (var keyDataPair in gridData.ToHashSet())
+        foreach (var keyDataPair in gridData.ToList())
         {
             rowPosition++;
             retVal.Add(new GridRowModel<T>(keyDataPair, ColumnMetadataList, rowPosition, PropInfo, _rowDetailService.ExpandedGridRows.Exists(r => r!.Equals(keyDataPair))));

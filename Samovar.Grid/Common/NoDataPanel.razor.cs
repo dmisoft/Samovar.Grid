@@ -1,21 +1,20 @@
-﻿namespace Samovar.Grid
+﻿namespace Samovar.Grid;
+
+public partial class NoDataPanel
+    : DesignComponentBase, IAsyncDisposable
 {
-    public partial class NoDataPanel
-        : DesignComponentBase, IAsyncDisposable
+    protected double ContainerHeight = 0;
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
     {
-        protected double ContainerHeight = 0;
+        if (firstRender)
+            ContainerHeight = 330;
 
-        protected override Task OnAfterRenderAsync(bool firstRender)
-        {
-            if (firstRender)
-                ContainerHeight = 330;
+        return base.OnAfterRenderAsync(firstRender);
+    }
 
-            return base.OnAfterRenderAsync(firstRender);
-        }
-
-        public ValueTask DisposeAsync()
-        {
-            return ValueTask.CompletedTask;
-        }
+    public ValueTask DisposeAsync()
+    {
+        return ValueTask.CompletedTask;
     }
 }

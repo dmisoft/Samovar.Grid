@@ -1,5 +1,4 @@
 ﻿using Samovar.Grid.Filter;
-using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -73,7 +72,7 @@ public class DataSourceService<T>
 
     }
 
-    private void myfunc33(Tuple<IEnumerable<GridFilterCellInfo>, ColumnOrderInfo, IEnumerable<T>> tuple)
+    private void ApplyStandardFilterAndSort(Tuple<IEnumerable<GridFilterCellInfo>, ColumnOrderInfo, IEnumerable<T>> tuple)
     {
         if (tuple.Item3 == null)
             return;
@@ -92,7 +91,7 @@ public class DataSourceService<T>
         DataQuery.OnNext(query);
     }
 
-    private void myfunc44(Tuple<Func<T, bool>?, ColumnOrderInfo, IEnumerable<T>> tuple)
+    private void ApplyCustomFilterAndSort(Tuple<Func<T, bool>?, ColumnOrderInfo, IEnumerable<T>> tuple)
     {
         if (tuple.Item3 == null)
             return;
@@ -248,12 +247,13 @@ public class DataSourceService<T>
 
     public void OnCompleted()
     {
-        throw new NotImplementedException();
+        observableStandardFilter?.Dispose();
+        observableCustomFilter?.Dispose();
     }
 
     public void OnError(Exception error)
     {
-        throw new NotImplementedException();
+        // BehaviorSubject<GridFilterMode> does not emit errors in normal operation
     }
 
     public void OnNext(GridFilterMode value)
@@ -272,7 +272,7 @@ public class DataSourceService<T>
                  Data,
                  (filterInfo, columnOrderInfo, data) => Tuple.Create(filterInfo, columnOrderInfo, data))
                  .DistinctUntilChanged()
-                 .Subscribe(myfunc44);
+                 .Subscribe(ApplyCustomFilterAndSort);
         }
         else
         {
@@ -282,7 +282,7 @@ public class DataSourceService<T>
                 Data,
                 (filterInfo, columnOrderInfo, data) => Tuple.Create(filterInfo, columnOrderInfo, data))
                 .DistinctUntilChanged()
-                .Subscribe(myfunc33);
+                .Subscribe(ApplyStandardFilterAndSort);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Reactive.Subjects;
 
 namespace Samovar.Grid;
+
 public interface IColumnResizingService
 {
     DotNetObjectReference<IColumnResizingService> ColumnResizingDotNetRef { get; }

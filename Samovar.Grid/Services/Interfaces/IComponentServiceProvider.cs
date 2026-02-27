@@ -1,7 +1,6 @@
-﻿namespace Samovar.Grid
+﻿namespace Samovar.Grid;
+
+internal interface IComponentServiceProvider
 {
-    internal interface IComponentServiceProvider
-    {
-        SmComponentServiceProvider ServiceProvider { get; }
-    }
+    SmComponentServiceProvider ServiceProvider { get; }
 }

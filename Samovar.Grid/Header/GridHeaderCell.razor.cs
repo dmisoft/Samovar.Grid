@@ -29,17 +29,17 @@ public partial class GridHeaderCell
     public required IConstantService ConstantService { get; set; }
 
     IDisposable? _columnOrderInfoUnsubscriber = null;
-	protected string WidthStyle = "";
+    protected string WidthStyle = "";
 
-	protected override Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
         _columnOrderInfoUnsubscriber = SortingService.ColumnOrderInfo.Subscribe(OnOrderInfoChanged);
-		ColumnModel.WidthStyle.Subscribe(w =>
-		{
-			WidthStyle = w;
+        ColumnModel.WidthStyle.Subscribe(w =>
+        {
+            WidthStyle = w;
             StateHasChanged();
-		});
-		return base.OnInitializedAsync();
+        });
+        return base.OnInitializedAsync();
     }
 
     public string SortSymbol { get; private set; } = string.Empty;
@@ -63,7 +63,7 @@ public partial class GridHeaderCell
     }
 
     protected string ColumnCellDraggable = "false";
-		internal Task ColumnCellClick() => SortingService.OnColumnClick(ColumnModel);
+    internal Task ColumnCellClick() => SortingService.OnColumnClick(ColumnModel);
 
     protected async Task OnMouseDown(MouseEventArgs args, IDataColumnModel triggerColumnModel)
     {
@@ -104,11 +104,11 @@ public partial class GridHeaderCell
             rightSideColumn?.FilterCellId,
             rightSideColumn?.HiddenHeaderCellId,
             ConstantService.OuterGridId
-				);
+                );
     }
 
     private void ColumnCellMouseDown(MouseEventArgs e) => ColumnCellDraggable = "true";
-    
+
     private void ColumnCellMouseUp(MouseEventArgs e) => ColumnCellDraggable = "false";
 
     public ValueTask DisposeAsync()
