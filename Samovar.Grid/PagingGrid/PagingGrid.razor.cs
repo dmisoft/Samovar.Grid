@@ -74,6 +74,7 @@ public partial class PagingGrid<T>
         LayoutService.DataGridInnerStyle.Subscribe(async style =>
         {
             Style = await style;
+            StateHasChanged();
         });
 
         //Popup editing
