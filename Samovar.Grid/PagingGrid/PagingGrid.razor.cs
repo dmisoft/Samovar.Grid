@@ -47,6 +47,9 @@ public partial class PagingGrid<T>
 
     public required GridStyleInfo Style { get; set; }
 
+    [Parameter]
+    public bool ShowCommandBar { get; set; } = true;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);

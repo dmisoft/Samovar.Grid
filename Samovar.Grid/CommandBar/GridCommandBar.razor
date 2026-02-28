@@ -1,0 +1,17 @@
+@typeparam T
+@inherits DesignComponentBase
+
+<table style="width:100%; margin:0; border-spacing:0;" class=@CssClass>
+	<tbody>
+		<tr>
+			<td>
+				<div class="s-flex s-flex-row s-align-items-center" style="gap:4px; padding:4px 4px 0 4px;">
+					<button class="btn btn-outline-secondary btn-sm" @onclick="ExportAllExcel">&#8659; Excel</button>
+					<button class="btn btn-outline-secondary btn-sm" @onclick="ExportSelExcel">&#8659; Excel (Sel)</button>
+					<button class="btn btn-outline-secondary btn-sm" @onclick="ExportAllCsv">&#8659; CSV</button>
+					<button class="btn btn-outline-secondary btn-sm" @onclick="ExportSelCsv">&#8659; CSV (Sel)</button>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>

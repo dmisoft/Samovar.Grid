@@ -75,6 +75,11 @@ public class JsService(IConstantService _constantService)
         await ScrollElementVerticalByValue(_constantService.InnerGridId, 0);
     }
 
+    public async Task DownloadFileAsync(string fileName, string contentType, byte[] data)
+    {
+        await (await JsModule()).InvokeVoidAsync("downloadFile", fileName, contentType, data);
+    }
+
     private async ValueTask ScrollElementVerticalByValue(string elementId, double scrollValue)
     {
         await (await JsModule()).InvokeVoidAsync("scrollElementVerticalByValue", elementId, scrollValue);

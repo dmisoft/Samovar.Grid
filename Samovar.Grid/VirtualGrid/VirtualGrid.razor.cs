@@ -40,6 +40,9 @@ public partial class VirtualGrid<T>
 
     public required GridStyleInfo Style { get; set; }
 
+    [Parameter]
+    public bool ShowCommandBar { get; set; } = true;
+
     public DataSourceState DataSourceState { get; set; } = DataSourceState.NoData;
     public ElementReference GridBodyRef { get; set; }
     protected IEnumerable<GridRowModel<T>> View { get; set; } = [];

@@ -51,4 +51,6 @@ public interface IJsService
     ValueTask<double> GetElementHeightById(string elementId);
 
     ValueTask ScrollInnerGridToTop();
+
+    Task DownloadFileAsync(string fileName, string contentType, byte[] data);
 }

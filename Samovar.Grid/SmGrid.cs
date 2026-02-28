@@ -121,6 +121,9 @@ public class SmGrid<T>
     [Parameter]
     public EventCallback<IEnumerable<T>?> MultipleSelectedDataRowsChanged { get; set; }
 
+    [Parameter]
+    public bool ShowCommandBar { get; set; } = true;
+
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         await base.SetParametersAsync(parameters);
@@ -245,6 +248,7 @@ public class SmGrid<T>
                     Columns?.Invoke(builder2);
 
                     builder2.OpenComponent<PagingGrid<T>>(5);
+                    builder2.AddAttribute(6, nameof(ShowCommandBar), ShowCommandBar);
                     builder2.CloseComponent();
                 };
                 break;
@@ -254,6 +258,7 @@ public class SmGrid<T>
                     Columns?.Invoke(builder2);
 
                     builder2.OpenComponent<VirtualGrid<T>>(5);
+                    builder2.AddAttribute(6, nameof(ShowCommandBar), ShowCommandBar);
                     builder2.CloseComponent();
                 };
                 break;

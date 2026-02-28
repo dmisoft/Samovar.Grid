@@ -388,6 +388,18 @@ window.addEventListener('keyup', function (event) {
     windowStateVars.isShiftKeyDown = event.shiftKey;
 }, true);
 
+export function downloadFile(fileName, contentType, data) {
+    const blob = new Blob([new Uint8Array(data)], { type: contentType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
 window.GridFunctions = {
     //Grid body keydown handling
     raise_Js_GridBody_KeyDown_OnDotNetRef: function (event) {
