@@ -84,11 +84,7 @@ public partial class GridCommandBar<T> : DesignComponentBase
     {
         var selected = GridSelectionService.MultipleSelectedDataRows.Value?.ToList() ?? [];
         if (selected.Count == 0) return;
-        if (!await JsService.ConfirmAsync($"Delete {selected.Count} row(s)?")) return;
         if (EditingService.OnRowsRemoving.HasDelegate)
             await EditingService.OnRowsRemoving.InvokeAsync(selected);
-        var remaining = DataSourceService.Data.Value.Except(selected).ToList();
-        DataSourceService.Data.OnNext(remaining);
-        GridSelectionService.MultipleSelectedDataRows.OnNext(null);
     }
 }

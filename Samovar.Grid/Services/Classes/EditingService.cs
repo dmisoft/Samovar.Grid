@@ -17,9 +17,7 @@ public class EditingService<T>(
     public async Task OnRowEditingEnded()
     {
         if (RowEditingEnded != null)
-        {
             await RowEditingEnded.Invoke();
-        }
     }
 
     public BehaviorSubject<GridEditMode> EditMode { get; } = new BehaviorSubject<GridEditMode>(GridEditMode.Form);

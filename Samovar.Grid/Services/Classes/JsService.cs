@@ -6,7 +6,6 @@ public class JsService(IConstantService _constantService)
             : IJsService, IAsyncDisposable
 {
     private Lazy<Task<IJSObjectReference>>? _module;
-    private IJSRuntime? _jsRuntime;
 
     public async Task<IJSObjectReference> JsModule()
     {
@@ -17,7 +16,6 @@ public class JsService(IConstantService _constantService)
 
     public Task InitJsModule(IJSRuntime jsRuntime, string dataGridId, DotNetObjectReference<ILayoutService> dataGridDotNetRef, ILayoutService layoutService)
     {
-        _jsRuntime = jsRuntime;
         _module = new(() => jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/SamovarGrid/samovar.grid.js").AsTask());
         return Task.CompletedTask;
     }
@@ -81,9 +79,6 @@ public class JsService(IConstantService _constantService)
     {
         await (await JsModule()).InvokeVoidAsync("downloadFile", fileName, contentType, data);
     }
-
-    public async Task<bool> ConfirmAsync(string message)
-        => await _jsRuntime!.InvokeAsync<bool>("confirm", message);
 
     private async ValueTask ScrollElementVerticalByValue(string elementId, double scrollValue)
     {
