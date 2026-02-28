@@ -16,6 +16,7 @@
                 Height=@gridHeight
                 Width=@gridWidth
                 ShowDetailRow=@showDetailRow
+                ShowCommandBar=@showCommandBar
                 PageSize=@pageSize
                 EditMode=@gridEditMode
                 SelectionMode=@selectionMode
@@ -117,6 +118,14 @@
                 </label>
             </div>
         </div>
+        <div class="mb-3">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" @bind=showCommandBar id="showCommandBar">
+                <label class="form-check-label" for="showCommandBar">
+                    Show command bar
+                </label>
+            </div>
+        </div>
 
         <div class="mb-3">
             <button class="btn btn-primary" @onclick="collapseAllDetailRows">Collapse all detail rows</button>
@@ -176,7 +185,8 @@
     GridColumnResizeMode columnResizeMode = GridColumnResizeMode.Sliding;
     IEnumerable<WeatherForecast> selectedRows = [];
     bool showDetailRow = true;
-
+    bool showCommandBar = true;
+    
     Task changeStyle()
     {
         cssClass = "blueTable";

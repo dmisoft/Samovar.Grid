@@ -9,6 +9,10 @@
      class="s-grid-container"
      style="@Style.CssStyle" @onkeydown:stopPropagation="true">
 
+    @if (ShowCommandBar)
+    {
+        <GridCommandBar T=T />
+    }
     <div style="display:flex;flex-direction:column;">
         <GridHeader T=T />
         @if (LayoutService.FilterMode.Value == GridFilterMode.FilterRow)

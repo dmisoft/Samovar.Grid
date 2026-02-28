@@ -11,6 +11,7 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Version>10.0.0-beta.2</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageOutputPath>$(MSBuildThisFileDirectory)..\artifacts</PackageOutputPath>
 		<Product>SamovarGrid</Product>
 		<Description>Data grid component for Blazor. Sorting, paging, editing, deleting. Filter. Row single and multiple selection. Cell show/edit templating. Row edit templating.</Description>
 		<PackageTags>DataGrid, Blazor, BlazorGrid, BlazorDataGrid, Blazor-Component, Virtual scrolling, Filter, Cell template, Edit form template</PackageTags>
@@ -43,6 +44,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="ClosedXML" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" />
 		<PackageReference Include="System.Reactive" />
 	</ItemGroup>

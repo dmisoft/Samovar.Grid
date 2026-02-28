@@ -1,0 +1,44 @@
+@typeparam T
+@inherits DesignComponentBase
+
+<table style="width:100%; margin:0; border-spacing:0;" class=@CssClass>
+	<tbody>
+		<tr>
+			<td>
+				<div class="s-flex s-flex-row s-align-items-center" style="gap:4px; padding:4px 4px 0 4px;">
+					@if (_open)
+					{
+						<div style="position:fixed;inset:0;z-index:999;" @onclick="() => _open = false" />
+					}
+					<div class="dropdown @(_open ? "show" : "")">
+						<button class="btn btn-outline-secondary btn-sm" type="button" @onclick="() => _open = !_open">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+								<path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+								<path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+							</svg>
+							<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" viewBox="0 0 16 16">
+								<path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+							</svg>
+						</button>
+						<ul class="dropdown-menu @(_open ? "show" : "")">
+							<li><button class="dropdown-item" type="button" @onclick="OnExportAllExcel">Excel (All)</button></li>
+							<li><button class="dropdown-item" type="button" @onclick="OnExportSelExcel">Excel (Selected)</button></li>
+							<li><hr class="dropdown-divider" /></li>
+							<li><button class="dropdown-item" type="button" @onclick="OnExportAllCsv">CSV (All)</button></li>
+							<li><button class="dropdown-item" type="button" @onclick="OnExportSelCsv">CSV (Selected)</button></li>
+						</ul>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+@code {
+	bool _open;
+
+	async Task OnExportAllExcel() { _open = false; await ExportAllExcel(); }
+	async Task OnExportSelExcel() { _open = false; await ExportSelExcel(); }
+	async Task OnExportAllCsv() { _open = false; await ExportAllCsv(); }
+	async Task OnExportSelCsv() { _open = false; await ExportSelCsv(); }
+}

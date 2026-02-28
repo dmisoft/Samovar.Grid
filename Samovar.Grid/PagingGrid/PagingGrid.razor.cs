@@ -47,6 +47,9 @@ public partial class PagingGrid<T>
 
     public required GridStyleInfo Style { get; set; }
 
+    [Parameter]
+    public bool ShowCommandBar { get; set; } = true;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -71,6 +74,7 @@ public partial class PagingGrid<T>
         LayoutService.DataGridInnerStyle.Subscribe(async style =>
         {
             Style = await style;
+            StateHasChanged();
         });
 
         //Popup editing
