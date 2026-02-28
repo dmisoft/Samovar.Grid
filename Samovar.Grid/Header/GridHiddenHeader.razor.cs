@@ -9,6 +9,12 @@ public partial class GridHiddenHeader
     [SmInject]
     public required ILayoutService GridLayoutService { get; set; }
 
+    protected override Task OnInitializedAsync()
+    {
+        GridLayoutService.ShowCheckboxColumn.Subscribe(_ => StateHasChanged());
+        return base.OnInitializedAsync();
+    }
+
     public ValueTask DisposeAsync()
     {
         return ValueTask.CompletedTask;

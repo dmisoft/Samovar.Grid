@@ -53,4 +53,6 @@ public interface IJsService
     ValueTask ScrollInnerGridToTop();
 
     Task DownloadFileAsync(string fileName, string contentType, byte[] data);
+
+    Task<bool> ConfirmAsync(string message);
 }

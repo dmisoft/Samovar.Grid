@@ -5,6 +5,10 @@
 <thead style="visibility:hidden;">
 	<tr style="height:0px !important;">
 		@{
+			@if (GridLayoutService.ShowCheckboxColumn.Value)
+			{
+				<GridHiddenHeaderCheckboxCell />
+			}
 			@if (GridLayoutService.ShowDetailRow.Value)
 			{
 				<GridHiddenHeaderDetailExpanderCell />

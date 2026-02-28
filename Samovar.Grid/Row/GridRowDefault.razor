@@ -6,6 +6,15 @@
 <tr id="@RowModel.HtmlElementId" style="cursor:pointer;"
     @onmousedown="@(()=>RowSelectedIntern(new GridRowEventArgs(RowModel.DataItem, RowModel.DataItemPosition), RowModel))"
     class="@(RowModel.IsRowSelected?$"s-data-row-selected-background":"")">
+    @if (GridSelectionService.SelectionMode.Value == RowSelectionMode.Multiple)
+    {
+        <td style="@(_checkboxWidthStyle + "text-align:center;")"
+            @onmousedown="() => { }" @onmousedown:stopPropagation>
+            <input type="checkbox" checked="@RowModel.IsRowSelected"
+                   @onchange="() => GridSelectionService.OnRowChecked(RowModel.DataItem!)"
+                   @onclick:stopPropagation />
+        </td>
+    }
     @if (LayoutService.ShowDetailRow.Value)
     {
         <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;" @onmousedown="()=> { }" @onmousedown:stopPropagation @onclick="GridRow.DetailExpanderClick">

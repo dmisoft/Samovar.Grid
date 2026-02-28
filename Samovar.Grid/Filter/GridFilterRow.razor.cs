@@ -21,6 +21,7 @@ public partial class GridFilterRow<TItem>
     {
         await base.OnInitializedAsync();
         LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
+        LayoutService.ShowCheckboxColumn.Subscribe(_ => StateHasChanged());
     }
 
     protected readonly List<Type> Numeric_Types_For_Constant_Expression = new List<Type>

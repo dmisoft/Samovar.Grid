@@ -26,7 +26,7 @@ public class EditingService<T>(
     public EventCallback<T> OnRowEditBegin { get; set; }
     public EventCallback OnRowInsertBegin { get; set; }
     public EventCallback<T> OnRowInserting { get; set; }
-    public EventCallback<T> OnRowRemoving { get; set; }
+    public EventCallback<IEnumerable<T>> OnRowsRemoving { get; set; }
 
     public Func<GridRowModel<T>, Task>? ShowInsertingPopupDelegate { get; set; }
     public Func<Task>? CloseInsertingPopupDelegate { get; set; }
@@ -117,7 +117,7 @@ public class EditingService<T>(
 
     public async Task RowDeleteBegin(GridRowModel<T> rowModel)
     {
-        await OnRowRemoving.InvokeAsync(rowModel.DataItem);
+        await OnRowsRemoving.InvokeAsync([rowModel.DataItem!]);
     }
 
     public async Task RowInsertBegin()

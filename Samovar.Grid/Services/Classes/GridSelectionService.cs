@@ -162,6 +162,18 @@ public class GridSelectionService<T>
         }
     }
 
+    public Task OnRowChecked(T dataItem)
+    {
+        var list = MultipleSelectedDataRows.Value?.ToList() ?? [];
+        if (list.Any(x => x!.Equals(dataItem)))
+            list.RemoveAll(x => x!.Equals(dataItem));
+        else
+            list.Add(dataItem);
+        MultipleSelectedDataRows.OnNext(list);
+        MultipleSelectedRowsCallback?.Invoke();
+        return Task.CompletedTask;
+    }
+
     public ValueTask DisposeAsync()
     {
         SingleSelectedRowCallback = null;

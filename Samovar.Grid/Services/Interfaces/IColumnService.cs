@@ -9,6 +9,7 @@ public interface IColumnService
     public IEnumerable<IDataColumnModel> DataColumnModels { get; }
     public IColumnModel EmptyColumnModel { get; }
     public IDeclarativeColumnModel DetailExpanderColumnModel { get; }
+    public IDeclarativeColumnModel CheckboxColumnModel { get; }
     public void RegisterColumn(IColumnModel columntModel);
     Subject<IColumnModel> ColumnResizingEndedObservable { get; }
 }
