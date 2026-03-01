@@ -174,6 +174,13 @@ public class GridSelectionService<T>
         return Task.CompletedTask;
     }
 
+    public Task ClearMultipleSelection()
+    {
+        MultipleSelectedDataRows.OnNext(null);
+        MultipleSelectedRowsCallback?.Invoke();
+        return Task.CompletedTask;
+    }
+
     public ValueTask DisposeAsync()
     {
         SingleSelectedRowCallback = null;

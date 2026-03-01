@@ -9,11 +9,12 @@ public interface IEditingService<T>
     EventCallback<T> OnRowEditBegin { get; set; }
     EventCallback OnRowInsertBegin { get; set; }
     EventCallback<T> OnRowInserting { get; set; }
-    EventCallback<IEnumerable<T>> OnRowsRemoving { get; set; }
+    EventCallback<RowsRemovingEventArgs<T>> OnRowsRemoving { get; set; }
     Task CancelRowEdit(GridRowModel<T> rowModel);
     Task CommitCustomRowEdit(T item);
     Task EditBegin(GridRowModel<T> rowModel);
     Task RowDeleteBegin(GridRowModel<T> rowModel);
+    Task DeleteRows(IEnumerable<T> items);
     Task EditCommit(GridRowModel<T> rowModel);
     Task RowInsertBegin();
     Task RowInsertCommit(T dataItem);

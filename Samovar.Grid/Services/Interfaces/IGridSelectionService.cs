@@ -14,6 +14,8 @@ public interface IGridSelectionService<T>
 
     Task OnRowChecked(T dataItem);
 
+    Task ClearMultipleSelection();
+
     Func<Task>? SingleSelectedRowCallback { get; set; }
 
     Func<Task>? MultipleSelectedRowsCallback { get; set; }

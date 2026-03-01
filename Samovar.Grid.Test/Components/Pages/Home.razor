@@ -26,7 +26,7 @@
                 @bind-MultipleSelectedDataRows=@selectedRows
                 RowEditBegin="@((WeatherForecast data) => RowEditBeginHandler(data))"
                 RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
-                RowsRemoving="@((IEnumerable<WeatherForecast> items) => RowsRemovingHandler(items))">
+                RowsRemoving="@((RowsRemovingEventArgs<WeatherForecast> args) => RowsRemovingHandler(args))">
             <Columns>
                 <Column Title="Date" Field="@nameof(WeatherForecast.Date)" Width="100px" />
                 <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="1*" />
@@ -205,10 +205,11 @@
         return Task.CompletedTask;
     }
 
-    Task RowsRemovingHandler(IEnumerable<WeatherForecast> items)
+    Task RowsRemovingHandler(RowsRemovingEventArgs<WeatherForecast> args)
     {
+        //args.Cancel = true; // Cancel the default removing behavior to demonstrate manual removal   
         if (forecasts is not null)
-            forecasts = forecasts.Except(items).ToList();
+            forecasts = forecasts.Except(args.Items).ToList();
 
         return Task.CompletedTask;
     }
@@ -221,7 +222,7 @@
 
     async Task collapseAllDetailRows() => await grid!.CollapseAllDetailRows();
 
-    private List<WeatherForecast> forecasts = [];
+    private List<WeatherForecast> forecasts =[];
 
     protected override async Task OnInitializedAsync()
     {

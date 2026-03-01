@@ -7,7 +7,8 @@ public class EditingService<T>(
           IGridStateService _stateService
         , IRepositoryService<T> _repositoryService
         , IColumnService _columnService
-        , INavigationService _navigationService)
+        , INavigationService _navigationService
+        , IGridSelectionService<T> _selectionService)
     : IEditingService<T>, IAsyncDisposable
 {
     private GridRowModel<T>? _editingRowModel;
@@ -24,7 +25,7 @@ public class EditingService<T>(
     public EventCallback<T> OnRowEditBegin { get; set; }
     public EventCallback OnRowInsertBegin { get; set; }
     public EventCallback<T> OnRowInserting { get; set; }
-    public EventCallback<IEnumerable<T>> OnRowsRemoving { get; set; }
+    public EventCallback<RowsRemovingEventArgs<T>> OnRowsRemoving { get; set; }
 
     public Func<GridRowModel<T>, Task>? ShowInsertingPopupDelegate { get; set; }
     public Func<Task>? CloseInsertingPopupDelegate { get; set; }
@@ -113,9 +114,16 @@ public class EditingService<T>(
         return Task.CompletedTask;
     }
 
-    public async Task RowDeleteBegin(GridRowModel<T> rowModel)
+    public Task RowDeleteBegin(GridRowModel<T> rowModel)
+        => DeleteRows([rowModel.DataItem]);
+
+    public async Task DeleteRows(IEnumerable<T> items)
     {
-        await OnRowsRemoving.InvokeAsync([rowModel.DataItem!]);
+        var args = new RowsRemovingEventArgs<T>(items);
+        if (OnRowsRemoving.HasDelegate)
+            await OnRowsRemoving.InvokeAsync(args);
+        if (!args.Cancel)
+            await _selectionService.ClearMultipleSelection();
     }
 
     public async Task RowInsertBegin()
