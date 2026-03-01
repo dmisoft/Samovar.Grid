@@ -2,7 +2,7 @@
 
 @inherits DesignComponentBase
 
-<th style="@WidthStyle" id="@(((ICommandColumnModel)ColumnModel).FilterCellId)" data-toggle="tooltip" data-placement="top" title="clear filter">
+<th style="@WidthStyle" id="@(((ICommandColumnModel)ColumnModel).FilterCellId)" title="clear filter">
     <div class="s-flex s-flex-row s-align-content-center s-justify-content-center">
         <button class="btn btn-sm btn-outline-secondary" @onclick="@(async ()=>{ await FilterService.ClearFilter(); })">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
