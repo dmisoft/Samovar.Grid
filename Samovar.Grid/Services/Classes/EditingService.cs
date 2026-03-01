@@ -123,7 +123,7 @@ public class EditingService<T>(
         if (OnRowsRemoving.HasDelegate)
             await OnRowsRemoving.InvokeAsync(args);
         if (!args.Cancel)
-            await _selectionService.ClearMultipleSelection();
+            await _selectionService.Reset();
     }
 
     public async Task RowInsertBegin()

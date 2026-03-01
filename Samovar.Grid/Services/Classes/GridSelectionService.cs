@@ -174,13 +174,6 @@ public class GridSelectionService<T>
         return Task.CompletedTask;
     }
 
-    public Task ClearMultipleSelection()
-    {
-        MultipleSelectedDataRows.OnNext(null);
-        MultipleSelectedRowsCallback?.Invoke();
-        return Task.CompletedTask;
-    }
-
     public ValueTask DisposeAsync()
     {
         SingleSelectedRowCallback = null;
@@ -226,7 +219,7 @@ public class GridSelectionService<T>
         }
     }
 
-    private void Reset()
+    public Task Reset()
     {
         _singleSelectedDataItem = default;
         SingleSelectedDataRow.OnNext(default);
@@ -234,5 +227,7 @@ public class GridSelectionService<T>
 
         SingleSelectedRowCallback?.Invoke();
         MultipleSelectedRowsCallback?.Invoke();
+
+        return Task.CompletedTask;
     }
 }
