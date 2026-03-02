@@ -19,7 +19,9 @@
 </style>
 
 <SmGrid @ref=grid Data="forecasts" 
-CssClass="table-bordered table-sm pagination-sm" FilterMode=GridFilterMode.FilterRow Height="600px"
+        CssClass="table-bordered table-sm pagination-sm" 
+        PaginationCssClass="pagination-sm"
+        FilterMode=GridFilterMode.FilterRow Height="600px"
         DataNavigationMode=NavigationMode.Paging SelectionMode=RowSelectionMode.Single ShowDetailRow="true"
         @bind-SingleSelectedDataRow=@selectedRow>
     <Columns>
