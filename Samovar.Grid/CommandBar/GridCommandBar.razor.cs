@@ -80,6 +80,15 @@ public partial class GridCommandBar<T> : DesignComponentBase
         await JsService.DownloadFileAsync(fileName, contentType, bytes);
     }
 
+    private Task OnSelectCurrentPage()
+        => GridSelectionService.SelectCurrentPage();
+
+    private Task OnSelectAll()
+        => GridSelectionService.SelectAll(GetAllRowsInGridOrder());
+
+    private Task OnDeselectAll()
+        => GridSelectionService.Reset();
+
     private async Task OnDeleteSelected()
     {
         var selected = GridSelectionService.MultipleSelectedDataRows.Value?.ToList() ?? [];

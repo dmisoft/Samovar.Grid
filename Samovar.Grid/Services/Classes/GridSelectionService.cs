@@ -219,6 +219,21 @@ public class GridSelectionService<T>
         }
     }
 
+    public Task SelectCurrentPage()
+    {
+        var items = ViewCollection.Select(rm => rm.DataItem).OfType<T>().ToList();
+        MultipleSelectedDataRows.OnNext(items);
+        MultipleSelectedRowsCallback?.Invoke();
+        return Task.CompletedTask;
+    }
+
+    public Task SelectAll(IEnumerable<T> allItems)
+    {
+        MultipleSelectedDataRows.OnNext(allItems.ToList());
+        MultipleSelectedRowsCallback?.Invoke();
+        return Task.CompletedTask;
+    }
+
     public Task Reset()
     {
         _singleSelectedDataItem = default;
