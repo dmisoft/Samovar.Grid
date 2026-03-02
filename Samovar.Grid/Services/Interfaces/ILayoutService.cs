@@ -12,6 +12,7 @@ public interface ILayoutService
     BehaviorSubject<string> PaginationClass { get; }
     BehaviorSubject<double> MinGridWidth { get; }
     BehaviorSubject<bool> ShowDetailRow { get; }
+    BehaviorSubject<bool> ShowCheckboxColumn { get; }
     BehaviorSubject<GridFilterMode> FilterMode { get; }
     BehaviorSubject<bool> ShowFilterRow { get; }
     BehaviorSubject<string> Height { get; }

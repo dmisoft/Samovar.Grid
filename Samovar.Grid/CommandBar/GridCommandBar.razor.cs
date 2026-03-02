@@ -14,6 +14,12 @@ public partial class GridCommandBar<T> : DesignComponentBase
     {
         await base.OnInitializedAsync();
         LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
+        GridSelectionService.MultipleSelectedDataRows.Subscribe(rows =>
+        {
+            _hasSelection = rows?.Any() == true;
+            StateHasChanged();
+        });
+        GridSelectionService.SelectionMode.Subscribe(_ => StateHasChanged());
     }
 
     [SmInject]
@@ -24,6 +30,11 @@ public partial class GridCommandBar<T> : DesignComponentBase
 
     [SmInject]
     public required IJsService JsService { get; set; }
+
+    [SmInject]
+    public required IEditingService<T> EditingService { get; set; }
+
+    private bool _hasSelection;
 
     private IEnumerable<T> GetAllRowsInGridOrder()
         => DataSourceService.DataQuery.Value?.AsEnumerable() ?? [];
@@ -67,5 +78,21 @@ public partial class GridCommandBar<T> : DesignComponentBase
     {
         var bytes = await exportFunc(data);
         await JsService.DownloadFileAsync(fileName, contentType, bytes);
+    }
+
+    private Task OnSelectCurrentPage()
+        => GridSelectionService.SelectCurrentPage();
+
+    private Task OnSelectAll()
+        => GridSelectionService.SelectAll(GetAllRowsInGridOrder());
+
+    private Task OnDeselectAll()
+        => GridSelectionService.Reset();
+
+    private async Task OnDeleteSelected()
+    {
+        var selected = GridSelectionService.MultipleSelectedDataRows.Value?.ToList() ?? [];
+        if (selected.Count == 0) return;
+        await EditingService.DeleteRows(selected);
     }
 }

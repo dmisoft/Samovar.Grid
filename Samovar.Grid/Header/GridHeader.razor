@@ -9,6 +9,10 @@
                 <thead>
                     <tr>
                         @{
+                            @if (LayoutService.ShowCheckboxColumn.Value)
+                            {
+                                <GridHeaderCheckboxCell />
+                            }
                             @if (LayoutService.ShowDetailRow.Value)
                             {
                                 <GridHeaderDetailExpanderCell />

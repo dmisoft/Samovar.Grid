@@ -36,6 +36,8 @@ public partial class GridRowDefault<T>
 
     IDisposable? MultipleSelectedDataRowsSubscription = null;
 
+    protected string _checkboxWidthStyle = "";
+
     protected override Task OnParametersSetAsync()
     {
         base.OnParametersSetAsync();
@@ -87,6 +89,7 @@ public partial class GridRowDefault<T>
         SingleSelectedDataRowsSubscription = GridSelectionService.SingleSelectedDataRow.Subscribe(SingleSelectedDataRowsChanged);
         MultipleSelectedDataRowsSubscription = GridSelectionService.MultipleSelectedDataRows.Subscribe(MultipleSelectedDataRowsChanged);
         EditingService.RowEditingEnded += EditingService_RowEditingEnded;
+        ColumnService.CheckboxColumnModel.WidthStyle.Subscribe(w => { _checkboxWidthStyle = w; StateHasChanged(); });
 
         return base.OnInitializedAsync();
     }

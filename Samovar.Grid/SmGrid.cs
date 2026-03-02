@@ -101,9 +101,6 @@ public class SmGrid<T>
     public EventCallback<T> RowInserting { get; set; }
 
     [Parameter]
-    public EventCallback<T> RowRemoving { get; set; }
-
-    [Parameter]
     public RowSelectionMode SelectionMode { get; set; }
 
     [Parameter]
@@ -123,6 +120,9 @@ public class SmGrid<T>
 
     [Parameter]
     public bool ShowCommandBar { get; set; } = true;
+
+    [Parameter]
+    public EventCallback<RowsRemovingEventArgs<T>> RowsRemoving { get; set; }
 
     public override async Task SetParametersAsync(ParameterView parameters)
     {
@@ -174,7 +174,8 @@ public class SmGrid<T>
         RowSelectionMode? dataGridSelectionMode = parameters.GetValueOrDefault<RowSelectionMode?>(nameof(SelectionMode));
         dataGridSelectionMode ??= RowSelectionMode.None;
         GridSelectionService.SelectionMode.OnNext(dataGridSelectionMode.Value);
-
+        LayoutService.ShowCheckboxColumn.OnNext(dataGridSelectionMode == RowSelectionMode.Multiple);
+        
         GridColumnResizeMode? columnResizeMode = parameters.GetValueOrDefault<GridColumnResizeMode?>(nameof(ColumnResizeMode));
         columnResizeMode ??= GridColumnResizeMode.None;
         LayoutService.ColumnResizeMode.OnNext(columnResizeMode.Value);
@@ -207,9 +208,9 @@ public class SmGrid<T>
         if (rowInserting.HasDelegate)
             EditingService.OnRowInserting = rowInserting;
 
-        EventCallback<T> rowRemoving = parameters.GetValueOrDefault<EventCallback<T>>(nameof(RowRemoving));
-        if (rowRemoving.HasDelegate)
-            EditingService.OnRowRemoving = rowRemoving;
+        EventCallback<RowsRemovingEventArgs<T>> rowsRemoving = parameters.GetValueOrDefault<EventCallback<RowsRemovingEventArgs<T>>>(nameof(RowsRemoving));
+        if (rowsRemoving.HasDelegate)
+            EditingService.OnRowsRemoving = rowsRemoving;
 
         NavigationMode? dataNavigationMode = parameters.GetValueOrDefault<NavigationMode?>(nameof(DataNavigationMode));
         dataNavigationMode ??= NavigationMode.Paging;

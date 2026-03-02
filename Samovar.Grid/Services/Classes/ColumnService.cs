@@ -7,6 +7,7 @@ public class ColumnService
 {
     public IColumnModel EmptyColumnModel { get; } = new EmptyColumnModel();
     public IDeclarativeColumnModel DetailExpanderColumnModel { get; } = new DetailExpanderColumnModel();
+    public IDeclarativeColumnModel CheckboxColumnModel { get; } = new CheckboxColumnModel();
     public List<IColumnModel> AllColumnModels { get; } = new List<IColumnModel>();
     public IEnumerable<IDataColumnModel> DataColumnModels => AllColumnModels.OfType<IDataColumnModel>();
     public Subject<IColumnModel> ColumnResizingEndedObservable { get; } = new();

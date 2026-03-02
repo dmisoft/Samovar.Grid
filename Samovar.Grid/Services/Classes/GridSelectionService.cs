@@ -162,6 +162,18 @@ public class GridSelectionService<T>
         }
     }
 
+    public Task OnRowChecked(T dataItem)
+    {
+        var list = MultipleSelectedDataRows.Value?.ToList() ?? [];
+        if (list.Any(x => x!.Equals(dataItem)))
+            list.RemoveAll(x => x!.Equals(dataItem));
+        else
+            list.Add(dataItem);
+        MultipleSelectedDataRows.OnNext(list);
+        MultipleSelectedRowsCallback?.Invoke();
+        return Task.CompletedTask;
+    }
+
     public ValueTask DisposeAsync()
     {
         SingleSelectedRowCallback = null;
@@ -207,7 +219,22 @@ public class GridSelectionService<T>
         }
     }
 
-    private void Reset()
+    public Task SelectCurrentPage()
+    {
+        var items = ViewCollection.Select(rm => rm.DataItem).OfType<T>().ToList();
+        MultipleSelectedDataRows.OnNext(items);
+        MultipleSelectedRowsCallback?.Invoke();
+        return Task.CompletedTask;
+    }
+
+    public Task SelectAll(IEnumerable<T> allItems)
+    {
+        MultipleSelectedDataRows.OnNext(allItems.ToList());
+        MultipleSelectedRowsCallback?.Invoke();
+        return Task.CompletedTask;
+    }
+
+    public Task Reset()
     {
         _singleSelectedDataItem = default;
         SingleSelectedDataRow.OnNext(default);
@@ -215,5 +242,7 @@ public class GridSelectionService<T>
 
         SingleSelectedRowCallback?.Invoke();
         MultipleSelectedRowsCallback?.Invoke();
+
+        return Task.CompletedTask;
     }
 }

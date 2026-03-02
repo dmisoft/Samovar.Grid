@@ -12,6 +12,14 @@ public interface IGridSelectionService<T>
 
     Task OnRowSelected(T dataItem);
 
+    Task OnRowChecked(T dataItem);
+
+    Task Reset();
+
+    Task SelectCurrentPage();
+
+    Task SelectAll(IEnumerable<T> allItems);
+
     Func<Task>? SingleSelectedRowCallback { get; set; }
 
     Func<Task>? MultipleSelectedRowsCallback { get; set; }
