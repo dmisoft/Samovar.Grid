@@ -8,12 +8,14 @@ namespace Samovar.Grid;
 public class LayoutService
     : ILayoutService, IAsyncDisposable
 {
+    private const string BaseTableCssClass = "table";
+
     public BehaviorSubject<GridColumnResizeMode> ColumnResizeMode { get; } = new BehaviorSubject<GridColumnResizeMode>(GridColumnResizeMode.None);
-    public BehaviorSubject<string> CssClass { get; } = new BehaviorSubject<string>("table sm-grid-table");
+    public BehaviorSubject<string> CssClass { get; } = new BehaviorSubject<string>(BaseTableCssClass);
+    public BehaviorSubject<string> AdditionalCssClass { get; } = new BehaviorSubject<string>("");
     public BehaviorSubject<double> MinGridWidth { get; } = new BehaviorSubject<double>(0d);
     public BehaviorSubject<bool> ShowDetailRow { get; } = new BehaviorSubject<bool>(false);
     public BehaviorSubject<bool> ShowCheckboxColumn { get; } = new BehaviorSubject<bool>(false);
-    public BehaviorSubject<string> PaginationClass { get; } = new BehaviorSubject<string>("sm-pagination");
     public BehaviorSubject<bool> ShowFilterRow { get; } = new BehaviorSubject<bool>(false);
     public BehaviorSubject<GridFilterMode> FilterMode { get; } = new BehaviorSubject<GridFilterMode>(GridFilterMode.None);
     public ElementReference GridFilterRef { get; set; }
@@ -171,6 +173,17 @@ public class LayoutService
             };
             await DataGridInnerCssStyleChanged.Invoke(info);
         }
+    }
+
+    public void SetAdditionalTableCssClass(string? additionalCssClass)
+    {
+        var trimmed = additionalCssClass?.Trim() ?? "";
+        AdditionalCssClass.OnNext(trimmed);
+
+        var cssClass = string.IsNullOrWhiteSpace(trimmed)
+            ? BaseTableCssClass
+            : $"{BaseTableCssClass} {trimmed}";
+        CssClass.OnNext(cssClass);
     }
 
     public ValueTask DisposeAsync()

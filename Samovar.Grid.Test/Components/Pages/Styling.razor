@@ -16,25 +16,10 @@
         --sm-detail-row-collapsed-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8m-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5"/></svg>');
         --sm-row-selected-bg: rgba(69, 46, 222, 0.5);
     }
-
-    /* Grid table theming — target .sm-grid-table to theme the grid without touching the library */
-    .sm-grid-table {
-        --bs-table-striped-bg: rgba(0, 0, 0, 0.03);
-        --bs-table-hover-bg: rgba(0, 107, 183, 0.07);
-        --bs-table-border-color: #c8d0d8;
-    }
-
-    /* table-bordered equivalent — activates cell borders using the color above */
-    .sm-grid-table> :not(caption)>* {
-        border-width: 1px 0;
-    }
-
-    .sm-grid-table> :not(caption)>*>* {
-        border-width: 0 1px;
-    }
 </style>
 
-<SmGrid @ref=grid Data="forecasts" FilterMode=GridFilterMode.FilterRow Height="600px"
+<SmGrid @ref=grid Data="forecasts" 
+CssClass="table-bordered table-sm pagination-sm" FilterMode=GridFilterMode.FilterRow Height="600px"
         DataNavigationMode=NavigationMode.Paging SelectionMode=RowSelectionMode.Single ShowDetailRow="true"
         @bind-SingleSelectedDataRow=@selectedRow>
     <Columns>

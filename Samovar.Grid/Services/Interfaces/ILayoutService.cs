@@ -9,7 +9,6 @@ public interface ILayoutService
     bool OriginalColumnsWidthChanged { get; set; }
     DotNetObjectReference<ILayoutService> DataGridDotNetRef { get; }
     BehaviorSubject<string> CssClass { get; }
-    BehaviorSubject<string> PaginationClass { get; }
     BehaviorSubject<double> MinGridWidth { get; }
     BehaviorSubject<bool> ShowDetailRow { get; }
     BehaviorSubject<bool> ShowCheckboxColumn { get; }
@@ -35,4 +34,8 @@ public interface ILayoutService
 
     BehaviorSubject<GridColumnResizeMode> ColumnResizeMode { get; }
     double ActualColumnsWidthSum { get; }
+
+    BehaviorSubject<string> AdditionalCssClass { get; }
+
+    void SetAdditionalTableCssClass(string? additionalCssClass);
 }

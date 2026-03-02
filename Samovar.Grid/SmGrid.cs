@@ -65,6 +65,9 @@ public class SmGrid<T>
     public string? Width { get; set; }
 
     [Parameter]
+    public string? CssClass { get; set; }
+
+    [Parameter]
     public bool? ShowColumnHeader { get; set; }
 
     [Parameter]
@@ -146,6 +149,9 @@ public class SmGrid<T>
         string? width = parameters.GetValueOrDefault<string>(nameof(Width));
         if (width != null)
             LayoutService.Width.OnNext(width);
+
+        string? tableCssClass = parameters.GetValueOrDefault<string>(nameof(CssClass));
+        LayoutService.SetAdditionalTableCssClass(tableCssClass);
 
         bool? showColumnHeader = parameters.GetValueOrDefault<bool?>(nameof(ShowColumnHeader));
         showColumnHeader ??= true;

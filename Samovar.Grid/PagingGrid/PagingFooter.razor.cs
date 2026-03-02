@@ -14,12 +14,17 @@ public partial class PagingFooter
     internal ElementReference GridFooterRef { get; set; }
 
     protected string CssClass = "";
+    protected string PaginationCssClass = "pagination";
 
     protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         PagingNavigationStrategy.PagerInfo.Subscribe(this);
         LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
+        LayoutService.AdditionalCssClass.Subscribe(_ =>
+        {
+            PaginationCssClass = string.IsNullOrWhiteSpace(_) ? "pagination" : $"pagination {_}";
+        });
     }
 
     public void OnCompleted()
