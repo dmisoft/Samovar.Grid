@@ -9,7 +9,7 @@ public class LayoutService
     : ILayoutService, IAsyncDisposable
 {
     public BehaviorSubject<GridColumnResizeMode> ColumnResizeMode { get; } = new BehaviorSubject<GridColumnResizeMode>(GridColumnResizeMode.None);
-    public BehaviorSubject<string> CssClass { get; } = new BehaviorSubject<string>("table table-bordered");
+    public BehaviorSubject<string> CssClass { get; } = new BehaviorSubject<string>("table sm-grid-table");
     public BehaviorSubject<double> MinGridWidth { get; } = new BehaviorSubject<double>(0d);
     public BehaviorSubject<bool> ShowDetailRow { get; } = new BehaviorSubject<bool>(false);
     public BehaviorSubject<bool> ShowCheckboxColumn { get; } = new BehaviorSubject<bool>(false);

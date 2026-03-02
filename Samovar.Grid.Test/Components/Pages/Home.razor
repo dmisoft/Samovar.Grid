@@ -21,7 +21,6 @@
                 EditMode=@gridEditMode
                 SelectionMode=@selectionMode
                 ColumnResizeMode=@columnResizeMode
-                CssClass=@cssClass
                 @bind-SingleSelectedDataRow=@selectedRow
                 @bind-MultipleSelectedDataRows=@selectedRows
                 RowEditBegin="@((WeatherForecast data) => RowEditBeginHandler(data))"
@@ -132,10 +131,6 @@
         </div>
 
         <div class="mb-3">
-            <button class="btn btn-primary" @onclick="changeStyle">Change table style</button>
-        </div>
-
-        <div class="mb-3">
             <label for="rowSelectionMode" class="form-label">Row selection mode</label>
             <select id="rowSelectionMode" class="form-select form-select-lg" @bind=selectionMode>
                 <option value=@RowSelectionMode.None>None</option>
@@ -178,8 +173,6 @@
     string gridWidth = "1200px";
     string gridHeight = "600px";
     string columnWidth = "150px";
-    string? cssClass;
-
     RowSelectionMode selectionMode = RowSelectionMode.Single;
     GridEditMode gridEditMode = GridEditMode.Form;
     GridColumnResizeMode columnResizeMode = GridColumnResizeMode.Sliding;
@@ -187,12 +180,6 @@
     bool showDetailRow = true;
     bool showCommandBar = true;
     
-    Task changeStyle()
-    {
-        cssClass = "blueTable";
-        return Task.CompletedTask;
-    }
-
     Task RowEditBeginHandler(WeatherForecast item)
     {
         return Task.CompletedTask;

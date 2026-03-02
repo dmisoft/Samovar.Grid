@@ -6,6 +6,14 @@
     -moz-box-sizing: border-box;
 }
 
+/* Consumer theming hook — target this class in app.css to theme the grid table.
+   Bootstrap CSS vars (--bs-table-*) set here cascade into all td/th cells.
+   Note: border appearance requires .table-bordered (included in default class list).
+   To remove borders: .sm-grid-table > :not(caption) > * > * { border-width: 0; } */
+.sm-grid-table {
+    /* intentionally empty — override in consumer app.css */
+}
+
 /* Hidden header cell — forces 0 height/padding for layout synchronization */
 .sm-th-hidden {
     padding: 0px !important;
