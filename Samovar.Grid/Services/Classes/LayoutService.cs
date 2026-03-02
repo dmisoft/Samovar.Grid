@@ -13,7 +13,7 @@ public class LayoutService
     public BehaviorSubject<double> MinGridWidth { get; } = new BehaviorSubject<double>(0d);
     public BehaviorSubject<bool> ShowDetailRow { get; } = new BehaviorSubject<bool>(false);
     public BehaviorSubject<bool> ShowCheckboxColumn { get; } = new BehaviorSubject<bool>(false);
-    public BehaviorSubject<string> PaginationClass { get; } = new BehaviorSubject<string>("s-pagination");
+    public BehaviorSubject<string> PaginationClass { get; } = new BehaviorSubject<string>("sm-pagination");
     public BehaviorSubject<bool> ShowFilterRow { get; } = new BehaviorSubject<bool>(false);
     public BehaviorSubject<GridFilterMode> FilterMode { get; } = new BehaviorSubject<GridFilterMode>(GridFilterMode.None);
     public ElementReference GridFilterRef { get; set; }

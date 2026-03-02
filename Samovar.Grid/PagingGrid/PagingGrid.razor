@@ -5,7 +5,7 @@
 
 <div id="@ConstantService.OuterGridId"
      @ref="@LayoutService.GridOuterRef"
-     class="s-grid-container"
+     class="d-flex flex-column"
      style="@Style.CssStyle" @onkeydown:stopPropagation="true">
 
     @if (ShowCommandBar)
@@ -19,7 +19,7 @@
             <GridFilterRowPanel T=T />
         }
     </div>
-    <div id="@ConstantService.InnerGridId" class="s-grid-content" @ref="@LayoutService.GridInnerRef">
+    <div id="@ConstantService.InnerGridId" class="sm-grid-content" @ref="@LayoutService.GridInnerRef">
 
         @switch (DataSourceState)
         {

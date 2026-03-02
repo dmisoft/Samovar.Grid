@@ -1,4 +1,4 @@
-﻿*,
+*,
 *::before,
 *::after {
     box-sizing: border-box;
@@ -6,57 +6,14 @@
     -moz-box-sizing: border-box;
 }
 
-.s-th-hidden {
+/* Hidden header cell — forces 0 height/padding for layout synchronization */
+.sm-th-hidden {
     padding: 0px !important;
     height: 0px;
 }
 
-.s-grid-container {
-    display: flex; /* or inline-flex */
-    flex-direction: column;
-}
-
-.s-grid {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
-
-    .s-grid .s-grid-head-container {
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex: 0 0 auto;
-        flex: 0 0 auto;
-        overflow: hidden;
-        position: relative;
-    }
-
-        .s-grid .s-grid-head-container > table {
-            padding: 0px;
-            margin: 0px;
-        }
-
-    .s-grid .s-grid-body-container {
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex: 1 1 auto;
-        flex: 1 1 auto;
-        overflow: hidden;
-        position: relative;
-    }
-
-        .s-grid .s-grid-body-container .s-grid-content > table {
-            padding: 0px;
-            margin: 0px;
-        }
-
-        .s-grid .s-grid-body-container .s-grid-head-content > table {
-            padding: 0px;
-            margin: 0px;
-        }
-
-
-.s-grid-content {
+/* Scrollable grid body — complex flex+overflow combination not in Bootstrap */
+.sm-grid-content {
     width: 100%;
     min-height: 0;
     overflow: auto;
@@ -67,161 +24,50 @@
     flex: 1;
 }
 
-.s-grid-head-content {
-    width: 100%;
-    min-height: 0;
-    overflow: hidden;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    position: relative;
-    -ms-flex: 1;
-    flex: 1;
-}
-
-.s-grid-content::after {
+.sm-grid-content::after {
     content: "";
     display: block;
     clear: both
 }
 
-.s-scrollbar-measure {
-    width: 100px;
-    height: 100px;
-    overflow: scroll;
-    position: absolute;
-    top: -9999px;
+/* Row selection highlight.
+   Bootstrap's .table applies a full-cell inset box-shadow via --bs-table-bg-state on each td/th,
+   which covers any background set on the <tr> itself. Setting --bs-table-bg-state on the <tr>
+   lets Bootstrap's own layering mechanism propagate the selection color through to the cells. */
+.sm-data-row-selected-background {
+    --bs-table-bg-state: var(--sm-row-selected-bg);
 }
 
-.s-noselect {
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Old versions of Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Opera and Firefox */
-}
-
-.s-popup {
-    position: relative;
+/* Detail row expand/collapse icons via SVG CSS variables */
+.sm-detail-row-expanded {
     display: inline-block;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    width: var(--sm-detail-icon-size);
+    height: var(--sm-detail-icon-size);
+    background-image: var(--sm-detail-row-expanded-icon);
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
-    /* The actual popup */
-    .s-popup .s-popuptext {
-        visibility: hidden;
-        width: 60px;
-        background-color: #555;
-        /*color:white;*/
-        border-radius: 2px;
-        position: absolute;
-        z-index: 1;
-    }
-
-    .s-popup .s-show {
-        visibility: visible;
-    }
-
-.s-flex {
-    display: flex !important;
-    display: -ms-flexbox !important;
+.sm-detail-row-collapsed {
+    display: inline-block;
+    width: var(--sm-detail-icon-size);
+    height: var(--sm-detail-icon-size);
+    background-image: var(--sm-detail-row-collapsed-icon);
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
-.s-flex-row {
-    -ms-flex-direction: row !important;
-    flex-direction: row !important;
+/* No-data panel text color */
+.sm-no-data-text {
+    fill: var(--sm-no-data-color);
+    color: var(--sm-no-data-color);
 }
 
-.s-flex-column {
-    -ms-flex-direction: column !important;
-    flex-direction: column !important;
-}
-
-.s-align-content-center {
-    -ms-flex-line-pack: center !important;
-    align-content: center !important;
-}
-
-.s-justify-content-center {
-    -ms-flex-pack: center !important;
-    justify-content: center !important;
-}
-
-.s-align-self-center {
-    -ms-flex-item-align: center !important;
-    align-self: center !important;
-}
-
-.s-justify-content-between {
-    -ms-flex-pack: justify !important;
-    justify-content: space-between !important;
-}
-
-.s-align-items-center {
-    -ms-flex-align: center !important;
-    align-items: center !important;
-}
-
-.s-page-link {
-    position: relative;
-    display: block;
-    padding: 0.5rem 0.75rem;
-    margin-left: -1px;
-    line-height: 1.25;
-    color: #007bff;
-    background-color: #fff;
-    border: 1px solid #dee2e6;
-}
-
-.s-pagination {
-    display: -ms-flexbox;
-    display: flex;
-    padding-left: 0;
-    list-style: none;
-    border-radius: 0.25rem;
-}
-
-.s-no-data {
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='red' font-size='20'>no data</text></svg>");
-}
-
-.s-visible {
-    display: block;
-}
-
-.s-hidden {
-    display: none;
-}
-
+/* CSS custom properties — consumer overrides these in their app.css */
 :root {
-    --detail-row-expanded-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg>');
-    --detail-row-collapsed-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg>');
-    --data-row-selected-background: rgb(255, 106, 0, 0.5);
-}
-
-.s-detail-row-expanded {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    background-image: var(--detail-row-expanded-icon);
-    background-size: contain;
-    background-repeat: no-repeat;
-}
-
-.s-detail-row-collapsed {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    background-image: var(--detail-row-collapsed-icon);
-    background-size: contain;
-    background-repeat: no-repeat;
-}
-
-.s-data-row-selected-background {
-    background: var(--data-row-selected-background)
+    --sm-detail-row-expanded-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg>');
+    --sm-detail-row-collapsed-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg>');
+    --sm-row-selected-bg: rgb(255, 106, 0, 0.5);
+    --sm-detail-icon-size: 16px;
+    --sm-no-data-color: red;
 }

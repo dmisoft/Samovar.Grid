@@ -1,11 +1,11 @@
-@typeparam T
+﻿@typeparam T
 @inherits DesignComponentBase
 
 <table style="width:100%; margin:0; border-spacing:0;" class=@CssClass>
 	<tbody>
 		<tr>
 			<td>
-				<div class="s-flex s-flex-row s-align-items-center" style="gap:4px; padding:4px 4px 0 4px;">
+				<div class="d-flex flex-row align-items-center" style="gap:4px; padding:4px 4px 0 4px;">
 					<div class="btn-toolbar" role="toolbar" aria-label="Rows selection command bar" style="gap:4px;">
 						@if (GridSelectionService.SelectionMode.Value == RowSelectionMode.Multiple)
 						{
