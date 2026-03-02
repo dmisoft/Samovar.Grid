@@ -68,6 +68,9 @@ public class SmGrid<T>
     public string? CssClass { get; set; }
 
     [Parameter]
+    public string? PaginationCssClass { get; set; }
+
+    [Parameter]
     public bool? ShowColumnHeader { get; set; }
 
     [Parameter]
@@ -150,8 +153,11 @@ public class SmGrid<T>
         if (width != null)
             LayoutService.Width.OnNext(width);
 
-        string? tableCssClass = parameters.GetValueOrDefault<string>(nameof(CssClass));
-        LayoutService.SetAdditionalTableCssClass(tableCssClass);
+        string? cssClass = parameters.GetValueOrDefault<string>(nameof(CssClass));
+        LayoutService.SetCssClass(cssClass);
+
+        string? paginationCssClass = parameters.GetValueOrDefault<string>(nameof(PaginationCssClass));
+        LayoutService.SetPaginationCssClass(paginationCssClass);
 
         bool? showColumnHeader = parameters.GetValueOrDefault<bool?>(nameof(ShowColumnHeader));
         showColumnHeader ??= true;

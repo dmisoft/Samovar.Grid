@@ -21,7 +21,7 @@ public partial class PagingFooter
         await base.OnInitializedAsync();
         PagingNavigationStrategy.PagerInfo.Subscribe(this);
         LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
-        LayoutService.AdditionalCssClass.Subscribe(_ =>
+        LayoutService.PaginationCssClass.Subscribe(_ =>
         {
             PaginationCssClass = string.IsNullOrWhiteSpace(_) ? "pagination" : $"pagination {_}";
         });

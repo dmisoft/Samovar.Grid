@@ -9,10 +9,11 @@ public class LayoutService
     : ILayoutService, IAsyncDisposable
 {
     private const string BaseTableCssClass = "table";
+    private const string BasePaginationCssClass = "pagination";
 
     public BehaviorSubject<GridColumnResizeMode> ColumnResizeMode { get; } = new BehaviorSubject<GridColumnResizeMode>(GridColumnResizeMode.None);
     public BehaviorSubject<string> CssClass { get; } = new BehaviorSubject<string>(BaseTableCssClass);
-    public BehaviorSubject<string> AdditionalCssClass { get; } = new BehaviorSubject<string>("");
+    public BehaviorSubject<string> PaginationCssClass { get; } = new BehaviorSubject<string>(BasePaginationCssClass);
     public BehaviorSubject<double> MinGridWidth { get; } = new BehaviorSubject<double>(0d);
     public BehaviorSubject<bool> ShowDetailRow { get; } = new BehaviorSubject<bool>(false);
     public BehaviorSubject<bool> ShowCheckboxColumn { get; } = new BehaviorSubject<bool>(false);
@@ -175,15 +176,22 @@ public class LayoutService
         }
     }
 
-    public void SetAdditionalTableCssClass(string? additionalCssClass)
+    public void SetCssClass(string? cssClass)
     {
-        var trimmed = additionalCssClass?.Trim() ?? "";
-        AdditionalCssClass.OnNext(trimmed);
-
-        var cssClass = string.IsNullOrWhiteSpace(trimmed)
+        cssClass = cssClass?.Trim() ?? "";
+        var result = string.IsNullOrWhiteSpace(cssClass)
             ? BaseTableCssClass
-            : $"{BaseTableCssClass} {trimmed}";
-        CssClass.OnNext(cssClass);
+            : $"{BaseTableCssClass} {cssClass}";
+        CssClass.OnNext(result);
+    }
+
+    public void SetPaginationCssClass(string? paginationCssClass)
+    {
+        paginationCssClass = paginationCssClass?.Trim() ?? "";
+        var result = string.IsNullOrWhiteSpace(paginationCssClass)
+            ? BasePaginationCssClass
+            : $"{BasePaginationCssClass} {paginationCssClass}";
+        PaginationCssClass.OnNext(result);
     }
 
     public ValueTask DisposeAsync()
