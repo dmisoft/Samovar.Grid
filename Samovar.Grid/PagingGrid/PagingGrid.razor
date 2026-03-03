@@ -25,7 +25,10 @@
         @switch (DataSourceState)
         {
             case DataSourceState.NoData:
-                <NoDataPanel />
+                @if (InsertingForm == null)
+                {
+                    <NoDataPanel />
+                }
                 break;
             case DataSourceState.Loading:
                 <LoadingSpinner />

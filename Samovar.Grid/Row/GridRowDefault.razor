@@ -10,7 +10,7 @@
     {
         <td style="@(_checkboxWidthStyle + "text-align:center;vertical-align:middle;")"
             @onmousedown="() => { }" @onmousedown:stopPropagation>
-            <input type="checkbox" checked="@RowModel.IsRowSelected"
+            <input class="form-check-input" type="checkbox" checked="@RowModel.IsRowSelected"
                    @onchange="() => GridSelectionService.OnRowChecked(RowModel.DataItem!)"
                    @onclick:stopPropagation />
         </td>
