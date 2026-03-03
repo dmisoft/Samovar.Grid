@@ -6,7 +6,6 @@ namespace Samovar.Grid;
 public interface IGridStateService
 {
     BehaviorSubject<Task<DataSourceState>> DataSourceState { get; }
-    List<EventCallback<DataSourceState>> DataSourceStateEvList { get; set; }
     BehaviorSubject<DataEditState> DataEditState { get; }
 
     Func<Task>? ShowDataPanelDelegate { get; set; }

@@ -19,7 +19,6 @@ public class GridRowModel<T>
     internal BehaviorSubject<GridRowState> RowState { get; set; } = new BehaviorSubject<GridRowState>(GridRowState.Idle);
 
     public int DataItemPosition { get; set; }
-    public int DataItemIndex { get => DataItemPosition - 1; }
     public bool IsRowSelected { get; set; }
     public T DataItem { get; set; }
     public T? EditingDataItem { get; set; }

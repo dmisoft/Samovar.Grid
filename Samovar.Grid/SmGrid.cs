@@ -11,9 +11,6 @@ public class SmGrid<T>
     public required IInitService InitService { get; set; }
 
     [SmInject]
-    public required IRepositoryService<T> RepositoryService { get; set; }
-
-    [SmInject]
     public required IEditingService<T> EditingService { get; set; }
 
     [SmInject]
@@ -33,9 +30,6 @@ public class SmGrid<T>
 
     [SmInject]
     public required IGridSelectionService<T> GridSelectionService { get; set; }
-
-    [SmInject]
-    public required IComponentBuilderService ComponentBuilderService { get; set; }
 
     [SmInject]
     public required IDataSourceService<T> DataSourceService { get; set; }

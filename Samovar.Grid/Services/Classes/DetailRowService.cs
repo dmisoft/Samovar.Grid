@@ -23,22 +23,6 @@ public class DetailRowService<T>
         return Task.CompletedTask;
     }
 
-    public Task ExpandDetailRow(GridRowModel<T> dataItem)
-    {
-        if (!ExpandedGridRows.Contains(dataItem))
-            ExpandedGridRows.Add(dataItem);
-
-        return Task.CompletedTask;
-    }
-
-    public Task CollapseDetailRow(GridRowModel<T> dataItem)
-    {
-        if (ExpandedGridRows.Contains(dataItem))
-            ExpandedGridRows.Remove(dataItem);
-
-        return Task.CompletedTask;
-    }
-
     public Task CollapseAllDetailRows()
     {
         ExpandedGridRows.ForEach(row => row.RowDetailExpanded = false);

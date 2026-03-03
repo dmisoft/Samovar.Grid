@@ -2,7 +2,7 @@
 
 namespace Samovar.Grid;
 
-public class JsService(IConstantService _constantService)
+public class JsService
             : IJsService, IAsyncDisposable
 {
     private Lazy<Task<IJSObjectReference>>? _module;
@@ -60,29 +60,9 @@ public class JsService(IConstantService _constantService)
         return await (await JsModule()).InvokeAsync<bool>("getWindowIsShiftKeyDown");
     }
 
-    public async ValueTask<double> GetInnerGridHeight()
-    {
-        return await (await JsModule()).InvokeAsync<double>("getElementHeight", new[] { _constantService.InnerGridId });
-    }
-
-    public async ValueTask<double> GetElementHeightById(string elementId)
-    {
-        return await (await JsModule()).InvokeAsync<double>("getElementHeight", new[] { elementId });
-    }
-
-    public async ValueTask ScrollInnerGridToTop()
-    {
-        await ScrollElementVerticalByValue(_constantService.InnerGridId, 0);
-    }
-
     public async Task DownloadFileAsync(string fileName, string contentType, byte[] data)
     {
         await (await JsModule()).InvokeVoidAsync("downloadFile", fileName, contentType, data);
-    }
-
-    private async ValueTask ScrollElementVerticalByValue(string elementId, double scrollValue)
-    {
-        await (await JsModule()).InvokeVoidAsync("scrollElementVerticalByValue", elementId, scrollValue);
     }
 
     public async ValueTask DisposeAsync()
