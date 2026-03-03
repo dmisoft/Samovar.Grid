@@ -18,7 +18,10 @@
         }
     </div>
     <div id="@ConstantService.InnerGridId" class="sm-grid-content" @ref="@LayoutService.GridInnerRef">
-
+        @if (InsertingForm != null)
+        {
+            @InsertingForm
+        }
         @switch (DataSourceState)
         {
             case DataSourceState.NoData:
@@ -33,10 +36,6 @@
                     <table id="@ConstantService.InnerGridBodyTableId" class="@CssClass @_tableSizeClass"
                            style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
                         <GridHiddenHeader />
-                        @if (InsertingForm != null)
-                        {
-                            @InsertingForm
-                        }
                         <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
                             @if (View != null)
                             {
