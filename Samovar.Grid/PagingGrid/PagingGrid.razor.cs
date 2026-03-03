@@ -64,8 +64,9 @@ public partial class PagingGrid<T>
         SubscribeViewCollectionChange();
 
         LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
-        LayoutService.SizeMode.Subscribe(mode => {
-            _tableSizeClass = mode == GridSizeMode.Small ? "table-sm" : "";
+        LayoutService.SizeMode.Subscribe(mode =>
+        {
+            _tableSizeClass = mode switch { GridSizeMode.Small => "table-sm small", GridSizeMode.Large => "table-lg", _ => "" };
             StateHasChanged();
         });
 

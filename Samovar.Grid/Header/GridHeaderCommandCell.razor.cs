@@ -43,7 +43,7 @@ public partial class GridHeaderCommandCell<T>
         });
         LayoutService.SizeMode.Subscribe(mode =>
         {
-            _btnSizeClass = mode switch { GridSizeMode.Small => "btn-sm", GridSizeMode.Large => "btn-lg", _ => "" };
+            _btnSizeClass = mode switch { GridSizeMode.Small => "btn-sm small", GridSizeMode.Large => "btn-lg", _ => "" };
             StateHasChanged();
         });
         return base.OnInitializedAsync();

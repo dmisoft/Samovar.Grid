@@ -15,8 +15,9 @@ public partial class GridCommandBar<T> : DesignComponentBase
     {
         await base.OnInitializedAsync();
         LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
-        LayoutService.SizeMode.Subscribe(mode => {
-            _btnSizeClass = mode switch { GridSizeMode.Small => "btn-sm", GridSizeMode.Large => "btn-lg", _ => "" };
+        LayoutService.SizeMode.Subscribe(mode =>
+        {
+            _btnSizeClass = mode switch { GridSizeMode.Small => "btn-sm small", GridSizeMode.Large => "btn-lg", _ => "" };
             StateHasChanged();
         });
         GridSelectionService.MultipleSelectedDataRows.Subscribe(rows =>

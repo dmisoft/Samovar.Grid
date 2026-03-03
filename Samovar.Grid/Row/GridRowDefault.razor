@@ -8,7 +8,7 @@
     class="@(RowModel.IsRowSelected?$"sm-data-row-selected-background":"")">
     @if (GridSelectionService.SelectionMode.Value == RowSelectionMode.Multiple)
     {
-        <td style="@(_checkboxWidthStyle + "text-align:center;")"
+        <td style="@(_checkboxWidthStyle + "text-align:center;vertical-align:middle;")"
             @onmousedown="() => { }" @onmousedown:stopPropagation>
             <input type="checkbox" checked="@RowModel.IsRowSelected"
                    @onchange="() => GridSelectionService.OnRowChecked(RowModel.DataItem!)"
@@ -17,8 +17,8 @@
     }
     @if (LayoutService.ShowDetailRow.Value)
     {
-        <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;" @onmousedown="()=> { }" @onmousedown:stopPropagation @onclick="GridRow.DetailExpanderClick">
-            <div class="d-flex flex-row align-content-center justify-content-center">
+        <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;vertical-align:middle;" @onmousedown="()=> { }" @onmousedown:stopPropagation @onclick="GridRow.DetailExpanderClick">
+            <div class="d-flex flex-row justify-content-center">
                 <span class="@(RowModel.RowDetailExpanded ? "sm-detail-row-expanded" : "sm-detail-row-collapsed")"></span>
             </div>
         </td>
@@ -31,7 +31,7 @@
                 var cellModel = RowModel.GridCellModels.SingleOrDefault(x => x.ColumnMetadata.Equals(colModel));
                 if (cellModel != null)
                 {
-                    <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;padding-right:0;">
+                    <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;padding-right:0;vertical-align:middle;">
                         @{
                             var cellShowTemplate = ((IDataColumnModel)colModel).CellShowTemplate.Value;
                         }
@@ -57,7 +57,7 @@
                 break;
             case ColumnType.Command:
                 <td>
-                    <div class="d-flex flex-row align-content-center justify-content-center">
+                    <div class="d-flex flex-row justify-content-center">
                         @if (((ICommandColumnModel)colModel).EditButtonVisible.Value)
                         {
                             <button style="margin-right:8px;" class="btn btn-outline-secondary @_btnSizeClass"  @onclick="@(()=>RowEditBegin(RowModel))" @onmousedown="()=> { }" @onmousedown:stopPropagation>
