@@ -22,12 +22,6 @@ public abstract partial class GridFilterCellBase<TFilterCell>
     [Parameter]
     public required IDataColumnModel ColMetadata { get; set; }
 
-    protected string DropdownMenuButtonId { get; } = $"dropdownmenubtn{Guid.NewGuid().ToString().Replace("-", "")}";
-
-    //0 =
-    //1 *A*
-    //2 A*
-    //3 *A
     protected byte _menuMode { get; set; }
 
     protected GridFilterCellInfo? FilterCellInfo;
