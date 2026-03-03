@@ -8,20 +8,11 @@
     class="@(RowModel.IsRowSelected?$"sm-data-row-selected-background":"")">
     @if (GridSelectionService.SelectionMode.Value == RowSelectionMode.Multiple)
     {
-        <td style="@(_checkboxWidthStyle + "text-align:center;vertical-align:middle;")"
-            @onmousedown="() => { }" @onmousedown:stopPropagation>
-            <input class="form-check-input" type="checkbox" checked="@RowModel.IsRowSelected"
-                   @onchange="() => GridSelectionService.OnRowChecked(RowModel.DataItem!)"
-                   @onclick:stopPropagation />
-        </td>
+        <GridRowSelectionCell T="T" RowModel="RowModel" />
     }
     @if (LayoutService.ShowDetailRow.Value)
     {
-        <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;vertical-align:middle;" @onmousedown="()=> { }" @onmousedown:stopPropagation @onclick="GridRow.DetailExpanderClick">
-            <div class="d-flex flex-row justify-content-center">
-                <span class="@(RowModel.RowDetailExpanded ? "sm-detail-row-expanded" : "sm-detail-row-collapsed")"></span>
-            </div>
-        </td>
+        <GridRowDetailCell T="T" RowModel="RowModel" />
     }
     @foreach (IColumnModel colModel in ColumnService.AllColumnModels)
     {
