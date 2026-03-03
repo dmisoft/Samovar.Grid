@@ -34,6 +34,7 @@ public interface ILayoutService
     IObservable<Task<GridStyleInfo>> DataGridInnerStyle { get; }
 
     BehaviorSubject<GridColumnResizeMode> ColumnResizeMode { get; }
+    BehaviorSubject<GridSizeMode> SizeMode { get; }
     double ActualColumnsWidthSum { get; }
 
     void SetCssClass(string? cssClass);

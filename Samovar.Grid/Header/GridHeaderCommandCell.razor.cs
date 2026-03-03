@@ -32,12 +32,18 @@ public partial class GridHeaderCommandCell<T>
 
 
     protected string WidthStyle = "";
+    protected string _btnSizeClass = "";
 
     protected override Task OnInitializedAsync()
     {
         ColumnModel.WidthStyle.Subscribe(w =>
         {
             WidthStyle = w;
+            StateHasChanged();
+        });
+        LayoutService.SizeMode.Subscribe(mode =>
+        {
+            _btnSizeClass = mode switch { GridSizeMode.Small => "btn-sm", GridSizeMode.Large => "btn-lg", _ => "" };
             StateHasChanged();
         });
         return base.OnInitializedAsync();

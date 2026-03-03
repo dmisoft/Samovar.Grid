@@ -12,6 +12,7 @@ public class LayoutService
     private const string BasePaginationCssClass = "pagination";
 
     public BehaviorSubject<GridColumnResizeMode> ColumnResizeMode { get; } = new BehaviorSubject<GridColumnResizeMode>(GridColumnResizeMode.None);
+    public BehaviorSubject<GridSizeMode> SizeMode { get; } = new BehaviorSubject<GridSizeMode>(GridSizeMode.Default);
     public BehaviorSubject<string> CssClass { get; } = new BehaviorSubject<string>(BaseTableCssClass);
     public BehaviorSubject<string> PaginationCssClass { get; } = new BehaviorSubject<string>(BasePaginationCssClass);
     public BehaviorSubject<double> MinGridWidth { get; } = new BehaviorSubject<double>(0d);

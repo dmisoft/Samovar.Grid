@@ -48,12 +48,17 @@ public partial class VirtualGrid<T>
     protected IEnumerable<GridRowModel<T>> View { get; set; } = [];
     private Virtualize<GridRowModel<T>>? virtualizeComponent;
     protected string CssClass = "";
+    protected string _tableSizeClass = "";
 
     protected override Task OnInitializedAsync()
     {
         SubscribeViewCollectionChange();
 
         LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
+        LayoutService.SizeMode.Subscribe(mode => {
+            _tableSizeClass = mode == GridSizeMode.Small ? "table-sm" : "";
+            StateHasChanged();
+        });
 
         StateService.DataSourceState.Subscribe(async (stateTask) =>
         {

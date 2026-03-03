@@ -110,6 +110,9 @@ public class SmGrid<T>
     public GridColumnResizeMode ColumnResizeMode { get; set; }
 
     [Parameter]
+    public GridSizeMode SizeMode { get; set; } = GridSizeMode.Default;
+
+    [Parameter]
     public T? SingleSelectedDataRow { get; set; }
 
     [Parameter]
@@ -184,6 +187,9 @@ public class SmGrid<T>
         GridColumnResizeMode? columnResizeMode = parameters.GetValueOrDefault<GridColumnResizeMode?>(nameof(ColumnResizeMode));
         columnResizeMode ??= GridColumnResizeMode.None;
         LayoutService.ColumnResizeMode.OnNext(columnResizeMode.Value);
+
+        GridSizeMode sizeMode = parameters.GetValueOrDefault<GridSizeMode>(nameof(SizeMode));
+        LayoutService.SizeMode.OnNext(sizeMode);
 
         RenderFragment<T>? detailRowTemplate = parameters.GetValueOrDefault<RenderFragment<T>>(nameof(DetailRowTemplate));
         if (detailRowTemplate != null)

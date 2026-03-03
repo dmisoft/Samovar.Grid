@@ -42,6 +42,9 @@ public abstract partial class GridFilterCellBase<TFilterCell>
         }
     }
     protected string WidthStyle = "";
+    protected string _inputSizeClass = "";
+    protected string _selectSizeClass = "";
+
     protected override Task OnInitializedAsync()
     {
         _innerValue = FilterService.TryGetFilterCellValue<TFilterCell>(ColMetadata);
@@ -50,6 +53,11 @@ public abstract partial class GridFilterCellBase<TFilterCell>
         ColMetadata.WidthStyle.Subscribe(w =>
         {
             WidthStyle = w;
+            StateHasChanged();
+        });
+        LayoutService.SizeMode.Subscribe(mode => {
+            _inputSizeClass = mode switch { GridSizeMode.Small => "form-control-sm", GridSizeMode.Large => "form-control-lg", _ => "" };
+            _selectSizeClass = mode switch { GridSizeMode.Small => "form-select-sm", GridSizeMode.Large => "form-select-lg", _ => "" };
             StateHasChanged();
         });
         return base.OnInitializedAsync();

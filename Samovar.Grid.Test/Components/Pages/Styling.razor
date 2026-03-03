@@ -18,12 +18,9 @@
     }
 </style>
 
-<SmGrid @ref=grid Data="forecasts" 
-        CssClass="table-bordered table-sm pagination-sm" 
-        PaginationCssClass="pagination-sm"
-        FilterMode=GridFilterMode.FilterRow Height="600px"
-        DataNavigationMode=NavigationMode.Paging SelectionMode=RowSelectionMode.Single ShowDetailRow="true"
-        @bind-SingleSelectedDataRow=@selectedRow>
+<SmGrid @ref=grid Data="forecasts" CssClass="table-bordered table-sm table-striped" PaginationCssClass="pagination-sm"
+        FilterMode=GridFilterMode.FilterRow Height="600px" DataNavigationMode=NavigationMode.Paging
+        SelectionMode=RowSelectionMode.Single ShowDetailRow="true" @bind-SingleSelectedDataRow=@selectedRow>
     <Columns>
         <Column Field="@nameof(WeatherForecast.Summary)" />
         <Column Field="@nameof(WeatherForecast.Date)" />

@@ -14,6 +14,7 @@
     <div class="col-10">
         <SmGrid @ref=@grid
                 Data=@forecasts
+                SizeMode=@gridSizeMode
                 Height=@gridHeight
                 Width=@gridWidth
                 ShowDetailRow=@showDetailRow
@@ -103,6 +104,14 @@
             </select>
         </div>
         <div class="mb-3">
+            <label for="gridSizeMode" class="form-label">Grid size mode</label>
+            <select id="gridSizeMode" class="form-select form-select-lg" @bind=gridSizeMode>
+                <option value=@GridSizeMode.Default>Default</option>
+                <option value=@GridSizeMode.Small>Small</option>
+                <option value=@GridSizeMode.Large>Large</option>
+            </select>
+        </div>
+        <div class="mb-3">
             <label for="columnResizeMode" class="form-label">Column resize mode</label>
             <select id="columnResizeMode" class="form-select form-select-lg" @bind=columnResizeMode>
                 <option value=@GridColumnResizeMode.None>None</option>
@@ -176,6 +185,7 @@
     string columnWidth = "150px";
     RowSelectionMode selectionMode = RowSelectionMode.Single;
     GridEditMode gridEditMode = GridEditMode.Form;
+    GridSizeMode gridSizeMode = GridSizeMode.Small;
     GridColumnResizeMode columnResizeMode = GridColumnResizeMode.Sliding;
     IEnumerable<WeatherForecast> selectedRows = [];
     bool showDetailRow = true;

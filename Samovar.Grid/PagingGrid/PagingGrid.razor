@@ -3,9 +3,7 @@
 @typeparam T
 @inherits DesignComponentBase
 
-<div id="@ConstantService.OuterGridId"
-     @ref="@LayoutService.GridOuterRef"
-     class="d-flex flex-column"
+<div id="@ConstantService.OuterGridId" @ref="@LayoutService.GridOuterRef" class="d-flex flex-column"
      style="@Style.CssStyle" @onkeydown:stopPropagation="true">
 
     @if (ShowCommandBar)
@@ -32,8 +30,7 @@
             case DataSourceState.Idle:
             default:
                 <div>
-                    <table id="@ConstantService.InnerGridBodyTableId"
-                           class=@CssClass
+                    <table id="@ConstantService.InnerGridBodyTableId" class="@CssClass @_tableSizeClass"
                            style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
                         <GridHiddenHeader />
                         @if (InsertingForm != null)

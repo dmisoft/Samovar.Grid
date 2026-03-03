@@ -57,12 +57,17 @@ public partial class PagingGrid<T>
     }
 
     protected string CssClass = "";
+    protected string _tableSizeClass = "";
 
     protected override Task OnInitializedAsync()
     {
         SubscribeViewCollectionChange();
 
         LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
+        LayoutService.SizeMode.Subscribe(mode => {
+            _tableSizeClass = mode == GridSizeMode.Small ? "table-sm" : "";
+            StateHasChanged();
+        });
 
         StateService.DataSourceState.Subscribe(async (stateTask) =>
         {

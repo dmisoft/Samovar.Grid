@@ -9,11 +9,16 @@ public partial class GridCommandBar<T> : DesignComponentBase
     public required IExportService<T> ExportService { get; set; }
 
     protected string CssClass = "";
+    protected string _btnSizeClass = "";
 
     protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
+        LayoutService.SizeMode.Subscribe(mode => {
+            _btnSizeClass = mode switch { GridSizeMode.Small => "btn-sm", GridSizeMode.Large => "btn-lg", _ => "" };
+            StateHasChanged();
+        });
         GridSelectionService.MultipleSelectedDataRows.Subscribe(rows =>
         {
             _hasSelection = rows?.Any() == true;

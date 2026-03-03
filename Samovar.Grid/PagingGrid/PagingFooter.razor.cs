@@ -15,6 +15,7 @@ public partial class PagingFooter
 
     protected string CssClass = "";
     protected string PaginationCssClass = "pagination";
+    protected string _paginationSizeClass = "";
 
     protected async override Task OnInitializedAsync()
     {
@@ -24,6 +25,10 @@ public partial class PagingFooter
         LayoutService.PaginationCssClass.Subscribe(_ =>
         {
             PaginationCssClass = string.IsNullOrWhiteSpace(_) ? "pagination" : $"pagination {_}";
+        });
+        LayoutService.SizeMode.Subscribe(mode => {
+            _paginationSizeClass = mode switch { GridSizeMode.Small => "pagination-sm", GridSizeMode.Large => "pagination-lg", _ => "" };
+            StateHasChanged();
         });
     }
 
