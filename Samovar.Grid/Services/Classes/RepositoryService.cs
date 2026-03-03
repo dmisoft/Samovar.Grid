@@ -66,14 +66,17 @@ public class RepositoryService<T>
         });
     }
 
-    private Task<IEnumerable<GridRowModel<T>>> ViewCollectionObservableMap(IQueryable<T>? query, NavigationStrategyDataLoadingSettings navigationStrategyDataLoadingSettings)
+    private async Task<IEnumerable<GridRowModel<T>>> ViewCollectionObservableMap(IQueryable<T>? query, NavigationStrategyDataLoadingSettings navigationStrategyDataLoadingSettings)
     {
         _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.Loading));
+
+        await Task.Yield();
 
         if (query is null)
         {
             _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.NoData));
-            return Task.FromResult(new List<GridRowModel<T>>().AsEnumerable());
+            await Task.Yield();
+            return new List<GridRowModel<T>>();
         }
 
         IEnumerable<GridRowModel<T>> rowModelCollection;
@@ -84,11 +87,17 @@ public class RepositoryService<T>
         rowModelCollection = CreateRowModelList(query, _columnService.DataColumnModels, PropInfo);
 
         if (rowModelCollection.Any())
+        {
             _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.Idle));
+            await Task.Yield();
+        }
         else
+        {
             _stateService.DataSourceState.OnNext(Task.FromResult(DataSourceState.NoData));
+            await Task.Yield();
+        }
 
-        return Task.FromResult(rowModelCollection);
+        return rowModelCollection;
     }
 
     private List<GridRowModel<T>> CreateRowModelList(IQueryable<T> gridData, IEnumerable<IDataColumnModel> ColumnMetadataList, Dictionary<string, PropertyInfo> PropInfo)

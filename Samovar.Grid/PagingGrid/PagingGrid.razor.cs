@@ -75,6 +75,7 @@ public partial class PagingGrid<T>
             await InvokeAsync(async () =>
             {
                 DataSourceState = await stateTask;
+                StateHasChanged();
             });
         });
         LayoutService.DataGridInnerStyle.Subscribe(async style =>
