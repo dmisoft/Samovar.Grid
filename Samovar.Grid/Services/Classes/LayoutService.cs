@@ -17,7 +17,7 @@ public class LayoutService
     public BehaviorSubject<string> PaginationCssClass { get; } = new BehaviorSubject<string>(BasePaginationCssClass);
     public BehaviorSubject<double> MinGridWidth { get; } = new BehaviorSubject<double>(0d);
     public BehaviorSubject<bool> ShowDetailRow { get; } = new BehaviorSubject<bool>(false);
-    public BehaviorSubject<bool> ShowCheckboxColumn { get; } = new BehaviorSubject<bool>(false);
+    public BehaviorSubject<bool> ShowRowSelectionColumn { get; } = new BehaviorSubject<bool>(false);
     public BehaviorSubject<bool> ShowFilterRow { get; } = new BehaviorSubject<bool>(false);
     public BehaviorSubject<GridFilterMode> FilterMode { get; } = new BehaviorSubject<GridFilterMode>(GridFilterMode.None);
     public ElementReference GridFilterRef { get; set; }
@@ -30,7 +30,8 @@ public class LayoutService
         get
         {
             return _columnService.AllColumnModels.Sum(c => c.Width.Value) +
-                    (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.Width.Value : 0d);
+                    (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.Width.Value : 0d) +
+                    (ShowRowSelectionColumn.Value ? _columnService.RowSelectionColumnModel.Width.Value : 0d);
         }
     }
 
@@ -128,7 +129,9 @@ public class LayoutService
 
         var declaratedAbsoluteColumnsWidthSum = _columnService.DeclarativeColumnModels.
             Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Absolute)
-            .Sum(cmt => cmt.DeclaratedWidth) + (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.DeclaratedWidth : 0d);
+            .Sum(cmt => cmt.DeclaratedWidth)
+            + (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.DeclaratedWidth : 0d)
+            + (ShowRowSelectionColumn.Value ? _columnService.RowSelectionColumnModel.DeclaratedWidth : 0d);
 
         var relativePortionSum = _columnService.DeclarativeColumnModels
             .Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Relative)
@@ -162,6 +165,11 @@ public class LayoutService
         if (ShowDetailRow.Value)
         {
             _columnService.DetailExpanderColumnModel.Width.OnNext(_columnService.DetailExpanderColumnModel.DeclaratedWidth);
+        }
+
+        if (ShowRowSelectionColumn.Value)
+        {
+            _columnService.RowSelectionColumnModel.Width.OnNext(_columnService.RowSelectionColumnModel.DeclaratedWidth);
         }
     }
 

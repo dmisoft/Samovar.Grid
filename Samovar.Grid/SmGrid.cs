@@ -182,7 +182,7 @@ public class SmGrid<T>
         RowSelectionMode? dataGridSelectionMode = parameters.GetValueOrDefault<RowSelectionMode?>(nameof(SelectionMode));
         dataGridSelectionMode ??= RowSelectionMode.None;
         GridSelectionService.SelectionMode.OnNext(dataGridSelectionMode.Value);
-        LayoutService.ShowCheckboxColumn.OnNext(dataGridSelectionMode == RowSelectionMode.Multiple);
+        LayoutService.ShowRowSelectionColumn.OnNext(dataGridSelectionMode == RowSelectionMode.Multiple);
         
         GridColumnResizeMode? columnResizeMode = parameters.GetValueOrDefault<GridColumnResizeMode?>(nameof(ColumnResizeMode));
         columnResizeMode ??= GridColumnResizeMode.None;

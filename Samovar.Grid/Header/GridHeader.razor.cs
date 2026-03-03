@@ -30,7 +30,7 @@ public partial class GridHeader<T>
     {
         await base.OnInitializedAsync();
         LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
-        LayoutService.ShowCheckboxColumn.Subscribe(_ => StateHasChanged());
+        LayoutService.ShowRowSelectionColumn.Subscribe(_ => StateHasChanged());
     }
 
     internal Task ColumnCellClick(IDataColumnModel columnModel)

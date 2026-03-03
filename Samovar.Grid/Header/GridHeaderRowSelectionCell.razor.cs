@@ -1,6 +1,6 @@
 namespace Samovar.Grid.Header;
 
-public partial class GridHeaderCheckboxCell : DesignComponentBase, IAsyncDisposable
+public partial class GridHeaderRowSelectionCell : DesignComponentBase, IAsyncDisposable
 {
     [SmInject]
     public required ILayoutService LayoutService { get; set; }
@@ -12,7 +12,7 @@ public partial class GridHeaderCheckboxCell : DesignComponentBase, IAsyncDisposa
 
     protected override Task OnInitializedAsync()
     {
-        ColumnService.CheckboxColumnModel.WidthStyle.Subscribe(w =>
+        ColumnService.RowSelectionColumnModel.WidthStyle.Subscribe(w =>
         {
             WidthStyle = w;
             StateHasChanged();

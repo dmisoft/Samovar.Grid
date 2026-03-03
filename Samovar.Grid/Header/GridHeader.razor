@@ -9,9 +9,9 @@
                 <thead>
                     <tr>
                         @{
-                            @if (LayoutService.ShowCheckboxColumn.Value)
+                            @if (LayoutService.ShowRowSelectionColumn.Value)
                             {
-                                <GridHeaderCheckboxCell />
+                                <GridHeaderRowSelectionCell />
                             }
                             @if (LayoutService.ShowDetailRow.Value)
                             {
