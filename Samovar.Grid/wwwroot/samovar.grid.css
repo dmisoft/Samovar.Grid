@@ -69,6 +69,34 @@
     color: var(--sm-no-data-color);
 }
 
+/* Column separator grip — always visible between header cells when resizing is enabled */
+.sm-column-grip {
+    width: 7px;
+    flex-shrink: 0;
+    position: relative;
+    user-select: none;
+}
+
+.sm-column-grip::after {
+    content: "";
+    position: absolute;
+    top: 5%;
+    bottom: 5%;
+    right: 3px;
+    border-right: 2px solid var(--bs-border-color);
+}
+
+/* Interactive resize variant — adds drag cursor and hover highlight */
+.sm-column-grip-resizable {
+    cursor: ew-resize;
+}
+
+.sm-column-grip-resizable:hover::after {
+    top: 0;
+    bottom: 0;
+    border-right-color: var(--bs-emphasis-color);
+}
+
 /* CSS custom properties — consumer overrides these in their app.css */
 :root {
     --sm-detail-row-expanded-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg>');

@@ -42,22 +42,20 @@ public partial class GridHeaderCell
         return base.OnInitializedAsync();
     }
 
-    public string SortSymbol { get; private set; } = string.Empty;
+    internal enum SortDir { None, Asc, Desc }
+
+    internal SortDir SortDirection { get; private set; } = SortDir.None;
 
     private void OnOrderInfoChanged(ColumnOrderInfo args)
     {
-        string sortSymbol = string.Empty;
-
-        if (args.Field == ColumnModel.Field.Value && args.Asc)
+        if (args.Field == ColumnModel.Field.Value)
         {
-            sortSymbol = "&#x2BC5;";
+            SortDirection = args.Asc ? SortDir.Asc : SortDir.Desc;
         }
-        else if (args.Field == ColumnModel.Field.Value && !args.Asc)
+        else
         {
-            sortSymbol = "&#x2BC6;";
+            SortDirection = SortDir.None;
         }
-
-        SortSymbol = sortSymbol;
 
         StateHasChanged();
     }
