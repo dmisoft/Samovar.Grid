@@ -6,6 +6,12 @@
     -moz-box-sizing: border-box;
 }
 
+/* Outer grid container — constrains to parent width for responsive layouts */
+.sm-grid-outer {
+    max-width: 100%;
+    overflow: hidden;
+}
+
 /* Hidden header cell — forces 0 height/padding for layout synchronization */
 .sm-th-hidden {
     padding: 0px !important;
