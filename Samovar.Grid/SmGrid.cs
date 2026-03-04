@@ -179,7 +179,7 @@ public class SmGrid<T>
         LayoutService.ShowRowSelectionColumn.OnNext(dataGridSelectionMode == RowSelectionMode.Multiple);
         
         GridColumnResizeMode? columnResizeMode = parameters.GetValueOrDefault<GridColumnResizeMode?>(nameof(ColumnResizeMode));
-        columnResizeMode ??= GridColumnResizeMode.None;
+        columnResizeMode ??= GridColumnResizeMode.Block;
         LayoutService.ColumnResizeMode.OnNext(columnResizeMode.Value);
 
         GridSizeMode sizeMode = parameters.GetValueOrDefault<GridSizeMode>(nameof(SizeMode));

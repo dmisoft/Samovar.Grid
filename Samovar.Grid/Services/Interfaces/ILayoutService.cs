@@ -6,7 +6,6 @@ namespace Samovar.Grid;
 
 public interface ILayoutService
 {
-    bool OriginalColumnsWidthChanged { get; set; }
     DotNetObjectReference<ILayoutService> DataGridDotNetRef { get; }
     BehaviorSubject<string> CssClass { get; }
     BehaviorSubject<string> PaginationCssClass { get; }

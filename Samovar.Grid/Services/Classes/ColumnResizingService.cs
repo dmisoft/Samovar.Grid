@@ -47,13 +47,21 @@ public class ColumnResizingService
         await _jsService.DetachWindowMouseUpEvent();
 
         var col = _columnService.AllColumnModels.Find(c => c.Id == colMetaId);
-        if (col != default(IColumnModel))
+        if (col is not null)
         {
+            if (col is IDeclarativeColumnModel declarativeCol)
+            {
+                declarativeCol.SwitchToAbsoluteWidth(newVisibleAbsoluteWidthValue);
+            }
             col.Width.OnNext(newVisibleAbsoluteWidthValue);
         }
         var rightSideColumn = _columnService.AllColumnModels.Find(c => c.Id == rightSideColumnId);
         if (rightSideColumn is not null)
         {
+            if (rightSideColumn is IDeclarativeColumnModel rightDeclarativeCol)
+            {
+                rightDeclarativeCol.SwitchToAbsoluteWidth(newRightSideColumnWidth);
+            }
             rightSideColumn.Width.OnNext(newRightSideColumnWidth);
         }
 
@@ -71,7 +79,6 @@ public class ColumnResizingService
             _columnService.ColumnResizingEndedObservable.OnNext(rightSideColumn);
         }
 
-        _layoutService.OriginalColumnsWidthChanged = true;
     }
 
     public ValueTask DisposeAsync()

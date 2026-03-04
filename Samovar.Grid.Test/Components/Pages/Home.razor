@@ -8,8 +8,6 @@
 @using System.Diagnostics;
 
 <h1>Common tests</h1>
-
-
     <div class="row">
         <div class="col-9">
             <SmGrid @ref=@grid
@@ -30,7 +28,7 @@
                     RowsRemoving="@((RowsRemovingEventArgs<WeatherForecast> args) => RowsRemovingHandler(args))">
                 <Columns>
                     <Column Title="Date" Field="@nameof(WeatherForecast.Date)" Width="100px" />
-                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="1*" />
+                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="1*" Resizable=false />
                     <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width=@columnWidth />
                     <Column Field="@nameof(WeatherForecast.Summary)" Width="1*" />
                     <CommandColumn EditButtonVisible=true DeleteButtonVisible=true NewButtonVisible=true Width="150px" />
@@ -114,7 +112,7 @@
             <div class="mb-3">
                 <label for="columnResizeMode" class="form-label">Column resize mode</label>
                 <select id="columnResizeMode" class="form-select form-select-lg" @bind=columnResizeMode>
-                    <option value=@GridColumnResizeMode.None>None</option>
+                    <option value=@GridColumnResizeMode.Disabled>None</option>
                     <option value=@GridColumnResizeMode.Sliding>Sliding</option>
                     <option value=@GridColumnResizeMode.Block>Block</option>
                 </select>

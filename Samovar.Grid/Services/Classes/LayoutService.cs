@@ -11,7 +11,7 @@ public class LayoutService
     private const string BaseTableCssClass = "table";
     private const string BasePaginationCssClass = "pagination";
 
-    public BehaviorSubject<GridColumnResizeMode> ColumnResizeMode { get; } = new BehaviorSubject<GridColumnResizeMode>(GridColumnResizeMode.None);
+    public BehaviorSubject<GridColumnResizeMode> ColumnResizeMode { get; } = new BehaviorSubject<GridColumnResizeMode>(GridColumnResizeMode.Disabled);
     public BehaviorSubject<GridSizeMode> SizeMode { get; } = new BehaviorSubject<GridSizeMode>(GridSizeMode.Default);
     public BehaviorSubject<string> CssClass { get; } = new BehaviorSubject<string>(BaseTableCssClass);
     public BehaviorSubject<string> PaginationCssClass { get; } = new BehaviorSubject<string>(BasePaginationCssClass);
@@ -87,7 +87,6 @@ public class LayoutService
     public BehaviorSubject<bool> ShowDetailHeader { get; } = new BehaviorSubject<bool>(false);
 
     public IObservable<Task<GridStyleInfo>> DataGridInnerStyle { get; }
-    public bool OriginalColumnsWidthChanged { get; set; }
 
     private async Task HeightWidthChanged(string height, string width)
     {
@@ -112,9 +111,6 @@ public class LayoutService
 
     public async Task InitHeader()
     {
-        if (OriginalColumnsWidthChanged)
-            return;
-
         await GridInnerRef.SynchronizeGridHeaderScroll(await _jsService.JsModule(), _constantService.GridHeaderContainerId);
         if (FilterMode.Value == GridFilterMode.FilterRow)
             await GridInnerRef.SynchronizeGridHeaderScroll(await _jsService.JsModule(), _constantService.GridFilterContainerId);
@@ -140,7 +136,9 @@ public class LayoutService
         var absoluteColumnsWidthSumForRelative = gridInnerWidth - declaratedAbsoluteColumnsWidthSum;
 
         var emptyColWidth = Math.Max(tBodyWidth - declaratedAbsoluteColumnsWidthSum - absoluteColumnsWidthSumForRelative, 0);
-        var portionValue = (gridInnerWidth - declaratedAbsoluteColumnsWidthSum) / relativePortionSum;
+        var portionValue = relativePortionSum > 0
+            ? (gridInnerWidth - declaratedAbsoluteColumnsWidthSum) / relativePortionSum
+            : 0;
 
         _columnService.EmptyColumnModel.Width.OnNext(emptyColWidth);
 
@@ -148,13 +146,13 @@ public class LayoutService
 
         foreach (var m in _columnService.DeclarativeColumnModels.Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Relative))
         {
-            double nw = portionValue * m.DeclaratedWidth;
+            double nw = Math.Max(portionValue * m.DeclaratedWidth, 50);
             widthList.Add(m, nw);
         }
 
         foreach (var m in _columnService.DeclarativeColumnModels.Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Absolute))
         {
-            widthList.Add(m, m.DeclaratedWidth);
+            widthList.Add(m, Math.Max(m.DeclaratedWidth, 50));
         }
 
         foreach (var m in _columnService.AllColumnModels)

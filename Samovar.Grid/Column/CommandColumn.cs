@@ -9,6 +9,9 @@ public class CommandColumn
     public string Width { get; set; } = string.Empty;
 
     [Parameter]
+    public bool Resizable { get; set; } = true;
+
+    [Parameter]
     public bool? NewButtonVisible { get; set; }
 
     [Parameter]
@@ -29,6 +32,8 @@ public class CommandColumn
         string? width = parameters.GetValueOrDefault<string>(nameof(Width));
         if (width != null)
             Model.DeclaratedWidthParameter.OnNext(width);
+
+        Model.Resizable = Resizable;
 
         bool? newButtonVisible = parameters.GetValueOrDefault<bool?>(nameof(NewButtonVisible));
         newButtonVisible ??= true;
