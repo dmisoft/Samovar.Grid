@@ -29,7 +29,7 @@
 			</svg>
 			</div>
 		}
-		@if (LayoutService.ColumnResizeMode.Value != GridColumnResizeMode.Disabled)
+		@if (LayoutService.ColumnResizeMode.Value != GridColumnResizeMode.Disabled && !IsLastColumn)
 		{
 			if (ColumnModel.Resizable)
 			{

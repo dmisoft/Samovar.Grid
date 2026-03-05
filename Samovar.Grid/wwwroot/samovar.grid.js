@@ -56,6 +56,11 @@ export function getElementWidthByRef(element) {
     return element.clientWidth;
 }
 
+export function getScrollbarWidth(element) {
+    if (element === null) return 0;
+    return element.offsetWidth - element.clientWidth;
+}
+
 export function getElementWidth(elementId) {
     return document.getElementById(elementId).clientWidth;
 }

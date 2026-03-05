@@ -60,6 +60,8 @@ public partial class GridHeaderCell
         StateHasChanged();
     }
 
+    private bool IsLastColumn => ColumnService.AllColumnModels[^1].Id == ColumnModel.Id;
+
     protected string ColumnCellDraggable = "false";
     internal Task ColumnCellClick() => SortingService.OnColumnClick(ColumnModel);
 
