@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Samovar.Grid\Samovar.Grid.csproj" />
+    <ProjectReference Include="..\Samovar.Grid\Samovar.Grid.csproj" />
   </ItemGroup>
 
 </Project>

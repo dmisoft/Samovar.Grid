@@ -217,7 +217,8 @@ export function onWindowMouseMove(event) {
 
             gridStateVars.newRightSideColumnWidth = newRightSideColumnWidth;
             document.getElementById(gridStateVars.rightSideCellId).style.width = gridStateVars.newRightSideColumnWidth + 'px';
-            document.getElementById(gridStateVars.rightSideFilterCellId).style.width = gridStateVars.newRightSideColumnWidth + 'px';
+            var rightSideFilterCell = document.getElementById(gridStateVars.rightSideFilterCellId);
+            if (rightSideFilterCell) rightSideFilterCell.style.width = gridStateVars.newRightSideColumnWidth + 'px';
             document.getElementById(gridStateVars.rightSideHiddenCellId).style.width = gridStateVars.newRightSideColumnWidth + 'px';
         }
 
@@ -233,19 +234,19 @@ export function onWindowMouseMove(event) {
 
         document.getElementById(gridStateVars.visibleGridColumnCellId).style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
         document.getElementById(gridStateVars.hiddenGridColumnCellId).style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
-        document.getElementById(gridStateVars.filterGridColumnCellId).style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
+        var triggerFilterCell = document.getElementById(gridStateVars.filterGridColumnCellId);
+        if (triggerFilterCell) triggerFilterCell.style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
 
         var visibleHeaderEmptyColumn = document.getElementById(gridStateVars.visibleHeaderEmptyColumnId);
         var filterHeaderEmptyColumn = document.getElementById(gridStateVars.filterHeaderEmptyColumnId);
 
         if (gridStateVars.emptyHeaderColWidth !== 0) {
-            // set new style instance to visibleHeaderEmptyColumn
             visibleHeaderEmptyColumn.style.width = gridStateVars.emptyHeaderColWidth + 'px';
-            filterHeaderEmptyColumn.style.width = gridStateVars.emptyHeaderColWidth + 'px';
+            if (filterHeaderEmptyColumn) filterHeaderEmptyColumn.style.width = gridStateVars.emptyHeaderColWidth + 'px';
         }
         else {
             visibleHeaderEmptyColumn.style.width = undefined;
-            filterHeaderEmptyColumn.style.width = undefined;
+            if (filterHeaderEmptyColumn) filterHeaderEmptyColumn.style.width = undefined;
         }
     }
 }

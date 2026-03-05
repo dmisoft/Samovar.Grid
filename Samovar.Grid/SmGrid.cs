@@ -119,7 +119,7 @@ public class SmGrid<T>
     public EventCallback<IEnumerable<T>?> MultipleSelectedDataRowsChanged { get; set; }
 
     [Parameter]
-    public bool ShowCommandBar { get; set; } = true;
+    public bool ShowCommandBar { get; set; } 
 
     [Parameter]
     public EventCallback<RowsRemovingEventArgs<T>> RowsRemoving { get; set; }
