@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samovar.Grid.WebAppAutoTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samovar.Grid.WebAppAutoTest.Client", "Samovar.Grid.WebAppAutoTest\Samovar.Grid.WebAppAutoTest.Client\Samovar.Grid.WebAppAutoTest.Client.csproj", "{8DC4D6FD-4575-4267-99A1-296FAED20E3C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samovar.Grid.WasmTest", "Samovar.Grid.WasmTest\Samovar.Grid.WasmTest.csproj", "{0947F262-D281-4EEA-B72E-91B4028FB969}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -132,9 +134,24 @@ Global
 		{8DC4D6FD-4575-4267-99A1-296FAED20E3C}.Release|x64.Build.0 = Release|Any CPU
 		{8DC4D6FD-4575-4267-99A1-296FAED20E3C}.Release|x86.ActiveCfg = Release|Any CPU
 		{8DC4D6FD-4575-4267-99A1-296FAED20E3C}.Release|x86.Build.0 = Release|Any CPU
+		{0947F262-D281-4EEA-B72E-91B4028FB969}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0947F262-D281-4EEA-B72E-91B4028FB969}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0947F262-D281-4EEA-B72E-91B4028FB969}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0947F262-D281-4EEA-B72E-91B4028FB969}.Debug|x64.Build.0 = Debug|Any CPU
+		{0947F262-D281-4EEA-B72E-91B4028FB969}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0947F262-D281-4EEA-B72E-91B4028FB969}.Debug|x86.Build.0 = Debug|Any CPU
+		{0947F262-D281-4EEA-B72E-91B4028FB969}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0947F262-D281-4EEA-B72E-91B4028FB969}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0947F262-D281-4EEA-B72E-91B4028FB969}.Release|x64.ActiveCfg = Release|Any CPU
+		{0947F262-D281-4EEA-B72E-91B4028FB969}.Release|x64.Build.0 = Release|Any CPU
+		{0947F262-D281-4EEA-B72E-91B4028FB969}.Release|x86.ActiveCfg = Release|Any CPU
+		{0947F262-D281-4EEA-B72E-91B4028FB969}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0947F262-D281-4EEA-B72E-91B4028FB969} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2236738A-63D9-4F2F-920B-0E297D878411}
