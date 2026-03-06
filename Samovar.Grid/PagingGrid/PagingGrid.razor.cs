@@ -53,7 +53,6 @@ public partial class PagingGrid<T>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
-        await LayoutService.InitHeader();
     }
 
     protected string CssClass = "";
