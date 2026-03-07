@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using DocumentFormat.OpenXml.Presentation;
+using Microsoft.JSInterop;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
@@ -55,30 +56,29 @@ public class ColumnResizingService
             }
             col.Width.OnNext(newVisibleAbsoluteWidthValue);
         }
-        var rightSideColumn = _columnService.AllColumnModels.Find(c => c.Id == rightSideColumnId);
-        if (rightSideColumn is not null)
+
+        //set just in sliding mode
+        //if (this._layoutService.ColumnResizeMode.Value == GridColumnResizeMode.Block)
         {
-            if (rightSideColumn is IDeclarativeColumnModel rightDeclarativeCol)
+            var rightSideColumn = _columnService.AllColumnModels.Find(c => c.Id == rightSideColumnId);
+            if (rightSideColumn is not null)
             {
-                rightDeclarativeCol.SwitchToAbsoluteWidth(newRightSideColumnWidth);
+                if (rightSideColumn is IDeclarativeColumnModel rightDeclarativeCol)
+                {
+                    rightDeclarativeCol.SwitchToAbsoluteWidth(newRightSideColumnWidth);
+                }
+                rightSideColumn.Width.OnNext(newRightSideColumnWidth);
+                _columnService.ColumnResizingEndedObservable.OnNext(rightSideColumn);
             }
-            rightSideColumn.Width.OnNext(newRightSideColumnWidth);
         }
 
         _columnService.EmptyColumnModel.Width.OnNext(emptyHeaderColWidth);
-
         _columnService.ColumnResizingEndedObservable.OnNext(_columnService.EmptyColumnModel);
 
         if (col is not null)
         {
             _columnService.ColumnResizingEndedObservable.OnNext(col);
         }
-
-        if (rightSideColumn is not null)
-        {
-            _columnService.ColumnResizingEndedObservable.OnNext(rightSideColumn);
-        }
-
     }
 
     public ValueTask DisposeAsync()
