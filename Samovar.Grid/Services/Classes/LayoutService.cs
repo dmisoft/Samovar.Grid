@@ -135,9 +135,13 @@ public class LayoutService
 
         var absoluteColumnsWidthSumForRelative = gridInnerWidth - declaratedAbsoluteColumnsWidthSum;
 
-        /* var scrollbarWidth = await GridInnerRef.GetScrollbarWidth(await _jsService.JsModule());
-        var emptyColWidth = Math.Max(scrollbarWidth, 0); */
-        var emptyColWidth = Math.Max(tBodyWidth - declaratedAbsoluteColumnsWidthSum - absoluteColumnsWidthSumForRelative, 0);
+        //var scrollbarWidth = await GridInnerRef.GetScrollbarWidth(await _jsService.JsModule());
+        //var emptyColWidth = Math.Max(scrollbarWidth, 0);
+        //var emptyColWidth = Math.Max(tBodyWidth - declaratedAbsoluteColumnsWidthSum - absoluteColumnsWidthSumForRelative, 0);
+        
+        var emptyColWidth = relativePortionSum > 0
+            ? Math.Max(tBodyWidth - declaratedAbsoluteColumnsWidthSum - absoluteColumnsWidthSumForRelative, 0)
+            : Math.Max(tBodyWidth - declaratedAbsoluteColumnsWidthSum , 0);
         var portionValue = relativePortionSum > 0
             ? (gridInnerWidth - declaratedAbsoluteColumnsWidthSum) / relativePortionSum
             : 0;

@@ -28,6 +28,7 @@
                 SelectionMode=RowSelectionMode.Single 
                 ShowDetailRow="true"
                 ShowCommandBar="true"
+                ColumnResizeMode=GridColumnResizeMode.Sliding
                 @bind-SingleSelectedDataRow=@selectedRow>
             <Columns>
                 <Column Field="@nameof(WeatherForecast.Summary)" />
