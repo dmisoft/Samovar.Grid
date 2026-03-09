@@ -31,6 +31,9 @@ public partial class PagingGrid<T>
     [SmInject]
     public required IEditingService<T> EditingService { get; set; }
 
+    [SmInject]
+    public required IJsService JsService { get; set; }
+
     public RenderFragment? EditingPopup { get; set; }
 
     public RenderFragment? InsertingPopup { get; set; }
@@ -50,12 +53,22 @@ public partial class PagingGrid<T>
     [Parameter]
     public bool ShowCommandBar { get; set; } = true;
 
-    //protected override async Task OnAfterRenderAsync(bool firstRender)
-    //{
-    //    await base.OnAfterRenderAsync(firstRender);
-    //    if (firstRender)
-    //        await LayoutService.InitHeader();
-    //}
+    private bool _firstRenderComplete;
+    private double _savedScrollLeft;
+    private bool _restoreScrollLeft;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            _firstRenderComplete = true;
+
+        if (_restoreScrollLeft)
+        {
+            _restoreScrollLeft = false;
+            await LayoutService.GridInnerRef
+                .SetElementScrollLeft(await JsService.JsModule(), _savedScrollLeft);
+        }
+    }
 
     protected string CssClass = "";
     protected string _tableSizeClass = "";
@@ -130,8 +143,14 @@ public partial class PagingGrid<T>
             .DistinctUntilChanged()
             .Subscribe(async (GetViewCollectionTask) =>
         {
+            if (_firstRenderComplete)
+            {
+                _savedScrollLeft = await LayoutService.GridInnerRef
+                    .GetElementScrollLeft(await JsService.JsModule());
+                _restoreScrollLeft = _savedScrollLeft > 0;
+            }
             View = await GetViewCollectionTask;
-            StateHasChanged();
+            await InvokeAsync(() => StateHasChanged());
         });
     }
 
