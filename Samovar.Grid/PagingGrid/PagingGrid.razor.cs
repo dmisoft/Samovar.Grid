@@ -50,11 +50,12 @@ public partial class PagingGrid<T>
     [Parameter]
     public bool ShowCommandBar { get; set; } = true;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-        //await LayoutService.InitHeader();
-    }
+    //protected override async Task OnAfterRenderAsync(bool firstRender)
+    //{
+    //    await base.OnAfterRenderAsync(firstRender);
+    //    if (firstRender)
+    //        await LayoutService.InitHeader();
+    //}
 
     protected string CssClass = "";
     protected string _tableSizeClass = "";

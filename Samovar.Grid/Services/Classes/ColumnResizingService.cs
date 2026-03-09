@@ -79,6 +79,8 @@ public class ColumnResizingService
         {
             _columnService.ColumnResizingEndedObservable.OnNext(col);
         }
+
+        _layoutService.ColumnsWidthTouchedByUser = true;
     }
 
     public ValueTask DisposeAsync()

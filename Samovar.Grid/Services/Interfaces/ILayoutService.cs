@@ -35,6 +35,8 @@ public interface ILayoutService
     BehaviorSubject<GridColumnResizeMode> ColumnResizeMode { get; }
     BehaviorSubject<GridSizeMode> SizeMode { get; }
     double ActualColumnsWidthSum { get; }
+    
+    bool ColumnsWidthTouchedByUser { get; set; }
 
     void SetCssClass(string? cssClass);
     void SetPaginationCssClass(string? paginationCssClass);

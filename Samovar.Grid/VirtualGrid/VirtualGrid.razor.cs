@@ -50,6 +50,13 @@ public partial class VirtualGrid<T>
     protected string CssClass = "";
     protected string _tableSizeClass = "";
 
+    //protected override async Task OnAfterRenderAsync(bool firstRender)
+    //{
+    //    await base.OnAfterRenderAsync(firstRender);
+    //    if (firstRender)
+    //        await LayoutService.InitHeader();
+    //}
+
     protected override Task OnInitializedAsync()
     {
         SubscribeViewCollectionChange();

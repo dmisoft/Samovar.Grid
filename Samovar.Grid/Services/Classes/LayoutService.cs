@@ -87,6 +87,7 @@ public class LayoutService
     public BehaviorSubject<bool> ShowDetailHeader { get; } = new BehaviorSubject<bool>(false);
 
     public IObservable<Task<GridStyleInfo>> DataGridInnerStyle { get; }
+    public bool ColumnsWidthTouchedByUser { get; set; } = false;
 
     private async Task HeightWidthChanged(string height, string width)
     {
@@ -106,7 +107,8 @@ public class LayoutService
     [JSInvokable]
     public async Task JS_AfterWindowResize()
     {
-        await InitHeader();
+        if(!ColumnsWidthTouchedByUser)
+            await CaculateHeader();
     }
 
     public async Task InitHeader()
