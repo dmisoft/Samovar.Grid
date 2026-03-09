@@ -9,5 +9,6 @@ public partial class DetailExpanderColumnModel
         : base()
     {
         DeclaratedWidthParameter.OnNext("30px");
+        MinWidth = 30;
     }
 }

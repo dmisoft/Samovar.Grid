@@ -2,7 +2,7 @@
 
 public enum GridColumnResizeMode
 {
-    Disabled,
+    None,
     Block,
     Sliding
 }

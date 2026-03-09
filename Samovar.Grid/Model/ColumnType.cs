@@ -5,6 +5,6 @@ public enum ColumnType
     Data,
     Command,
     DetailExpanderColumn,
-    CheckboxColumn,
+    SelectionColumn,
     EmptyColumn
 }

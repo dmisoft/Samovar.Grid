@@ -18,6 +18,9 @@ public class Column
     public bool Resizable { get; set; } = true;
 
     [Parameter]
+    public double MinWidth { get; set; } = 50d;
+
+    [Parameter]
     public RenderFragment<object>? CellShowTemplate { get; set; }
 
     public override void DependenciesInitialized()
@@ -44,6 +47,7 @@ public class Column
             Model.DeclaratedWidthParameter.OnNext(width);
 
         Model.Resizable = Resizable;
+        Model.MinWidth = MinWidth;
 
         var cellShowTemplate = parameters.GetValueOrDefault<RenderFragment<object>>(nameof(CellShowTemplate));
         if (cellShowTemplate is not null)

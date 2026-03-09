@@ -2,7 +2,8 @@
 
 export const gridStateVars =
 {
-    minColumnWidth: 50,
+    triggerColumnMinWidth: 50,
+    rightSideColumnMinWidth: 50,
     gridDotNetRef: undefined,
     isMouseDown: false,
     colMetaId: '',
@@ -77,7 +78,7 @@ export function synchronizeGridHeaderScroll(elementRef, gridHeaderContainerId) {
     });
 }
 
-export function startColumnWidthChangeMode(_gridDotNetRef, _gridColWidthSum, _colMetaId, _innerGridId, _innerGridBodyTableId, _visibleGridColumnCellId, _hiddenGridColumnCellId, _filterGridColumnCellId, _visibleEmptyColumnId, _hiddenEmptyColumnId, _filterEmptyColumnId, _emptyColumnDictId, _startMouseMoveX, _oldAbsoluteVisibleWidthValue, _fitColumnsToTableWidth, _oldAbsoluteEmptyColVisibleWidthValue, _rightSideColumnId, _rightSideCellId, _rightSideColumnWidth, _rightSideFilterCellId, _rightSideHiddenCellId, _outerGridId) {
+export function startColumnWidthChangeMode(_gridDotNetRef, _gridColWidthSum, _colMetaId, _innerGridId, _innerGridBodyTableId, _visibleGridColumnCellId, _hiddenGridColumnCellId, _filterGridColumnCellId, _visibleEmptyColumnId, _hiddenEmptyColumnId, _filterEmptyColumnId, _emptyColumnDictId, _startMouseMoveX, _oldAbsoluteVisibleWidthValue, _fitColumnsToTableWidth, _oldAbsoluteEmptyColVisibleWidthValue, _rightSideColumnId, _rightSideCellId, _rightSideColumnWidth, _rightSideFilterCellId, _rightSideHiddenCellId, _outerGridId, _triggerColumnMinWidth, _rightSideColumnMinWidth) {
     gridStateVars.gridDotNetRef = _gridDotNetRef;
     gridStateVars.isMouseDown = true;
     gridStateVars.gridColWidthSum = _gridColWidthSum;
@@ -113,6 +114,9 @@ export function startColumnWidthChangeMode(_gridDotNetRef, _gridColWidthSum, _co
     gridStateVars.newRightSideColumnWidth = gridStateVars.oldRightSideColumnWidth;
     gridStateVars.rightSideFilterCellId = _rightSideFilterCellId;
     gridStateVars.rightSideHiddenCellId = _rightSideHiddenCellId;
+
+    gridStateVars.triggerColumnMinWidth = _triggerColumnMinWidth;
+    gridStateVars.rightSideColumnMinWidth = _rightSideColumnMinWidth;
 }
 
 export function stopColumnWidthChangeMode(dotNetRef) {
@@ -150,6 +154,9 @@ export function stopColumnWidthChangeMode(dotNetRef) {
     gridStateVars.newRightSideColumnWidth = 0;
     gridStateVars.rightSideFilterCellId = '';
     gridStateVars.rightSideHiddenCellId = '';
+
+    gridStateVars.triggerColumnMinWidth = 50;
+    gridStateVars.rightSideColumnMinWidth = 50;
 }
 
 //Mouse up
@@ -199,8 +206,8 @@ export function onWindowMouseMove(event) {
         var newTriggerColumnWidth = 0;
         var newRightSideColumnWidth = 0;
 
-        if (gridStateVars.oldAbsoluteVisibleWidthValue + delta < gridStateVars.minColumnWidth) {
-            newTriggerColumnWidth = gridStateVars.minColumnWidth;
+        if (gridStateVars.oldAbsoluteVisibleWidthValue + delta < gridStateVars.triggerColumnMinWidth) {
+            newTriggerColumnWidth = gridStateVars.triggerColumnMinWidth;
             delta = gridStateVars.newVisibleAbsoluteWidthValue - gridStateVars.oldAbsoluteVisibleWidthValue;
         }
         else {
@@ -209,9 +216,9 @@ export function onWindowMouseMove(event) {
 
         if (gridStateVars.rightSideCellId !== null && gridStateVars.fitColumnsToTableWidth === 'Block') {
             newRightSideColumnWidth = gridStateVars.oldRightSideColumnWidth - delta;
-            if (newRightSideColumnWidth < gridStateVars.minColumnWidth) {
-                newRightSideColumnWidth = gridStateVars.minColumnWidth;
-                newTriggerColumnWidth = gridStateVars.oldAbsoluteVisibleWidthValue + gridStateVars.oldRightSideColumnWidth - gridStateVars.minColumnWidth;
+            if (newRightSideColumnWidth < gridStateVars.rightSideColumnMinWidth) {
+                newRightSideColumnWidth = gridStateVars.rightSideColumnMinWidth;
+                newTriggerColumnWidth = gridStateVars.oldAbsoluteVisibleWidthValue + gridStateVars.oldRightSideColumnWidth - gridStateVars.rightSideColumnMinWidth;
                 delta = newTriggerColumnWidth - gridStateVars.oldVisibleAbsoluteWidthValue;
             }
 

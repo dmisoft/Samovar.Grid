@@ -57,8 +57,7 @@ public class ColumnResizingService
             col.Width.OnNext(newVisibleAbsoluteWidthValue);
         }
 
-        //set just in sliding mode
-        //if (this._layoutService.ColumnResizeMode.Value == GridColumnResizeMode.Block)
+        if (_layoutService.ColumnResizeMode.Value == GridColumnResizeMode.Block)
         {
             var rightSideColumn = _columnService.AllColumnModels.Find(c => c.Id == rightSideColumnId);
             if (rightSideColumn is not null)

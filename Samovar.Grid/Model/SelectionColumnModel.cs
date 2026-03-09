@@ -1,13 +1,14 @@
 namespace Samovar.Grid;
 
-public partial class CheckboxColumnModel
+public partial class SelectionColumnModel
     : DeclarativeColumnModel
 {
-    public override ColumnType ColumnType { get; } = ColumnType.CheckboxColumn;
+    public override ColumnType ColumnType { get; } = ColumnType.SelectionColumn;
 
-    public CheckboxColumnModel()
+    public SelectionColumnModel()
         : base()
     {
         DeclaratedWidthParameter.OnNext("30px");
+        MinWidth = 30;
     }
 }

@@ -103,7 +103,9 @@ public partial class GridHeaderCell
             rightSideColumn?.Width.Value,
             rightSideColumn?.FilterCellId,
             rightSideColumn?.HiddenHeaderCellId,
-            ConstantService.OuterGridId
+            ConstantService.OuterGridId,
+            triggerColumnModel.MinWidth,
+            (rightSideColumn as IDeclarativeColumnModel)?.MinWidth ?? 50d
                 );
     }
 

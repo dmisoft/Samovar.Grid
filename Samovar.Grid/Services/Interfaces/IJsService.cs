@@ -44,7 +44,9 @@ public interface IJsService
         double? RightSideColumnWidth,
         string? RightSideFilterCellId,
         string? RightSideHiddenCellId,
-        string OuterGridId);
+        string OuterGridId,
+        double triggerColumnMinWidth,
+        double rightSideColumnMinWidth);
 
     Task DownloadFileAsync(string fileName, string contentType, byte[] data);
 }

@@ -11,7 +11,7 @@ public class LayoutService
     private const string BaseTableCssClass = "table";
     private const string BasePaginationCssClass = "pagination";
 
-    public BehaviorSubject<GridColumnResizeMode> ColumnResizeMode { get; } = new BehaviorSubject<GridColumnResizeMode>(GridColumnResizeMode.Disabled);
+    public BehaviorSubject<GridColumnResizeMode> ColumnResizeMode { get; } = new BehaviorSubject<GridColumnResizeMode>(GridColumnResizeMode.None);
     public BehaviorSubject<GridSizeMode> SizeMode { get; } = new BehaviorSubject<GridSizeMode>(GridSizeMode.Default);
     public BehaviorSubject<string> CssClass { get; } = new BehaviorSubject<string>(BaseTableCssClass);
     public BehaviorSubject<string> PaginationCssClass { get; } = new BehaviorSubject<string>(BasePaginationCssClass);
@@ -125,44 +125,76 @@ public class LayoutService
         double gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule()) - 1;
         var tBodyWidth = await GridOuterRef.GetElementWidthByRef(await _jsService.JsModule());
 
-        var declaratedAbsoluteColumnsWidthSum = _columnService.DeclarativeColumnModels.
-            Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Absolute)
-            .Sum(cmt => cmt.DeclaratedWidth)
+        // Sum absolute columns (clamped to MinWidth)
+        var absoluteColumns = _columnService.DeclarativeColumnModels
+            .Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Absolute)
+            .ToList();
+        var relativeColumns = _columnService.DeclarativeColumnModels
+            .Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Relative)
+            .ToList();
+
+        var absoluteSum = absoluteColumns.Sum(cmt => Math.Max(cmt.DeclaratedWidth, cmt.MinWidth))
             + (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.DeclaratedWidth : 0d)
             + (ShowRowSelectionColumn.Value ? _columnService.RowSelectionColumnModel.DeclaratedWidth : 0d);
 
-        var relativePortionSum = _columnService.DeclarativeColumnModels
-            .Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Relative)
-            .Sum(cmt => cmt.DeclaratedWidth);
+        var relativePortionSum = relativeColumns.Sum(cmt => cmt.DeclaratedWidth);
 
-        var absoluteColumnsWidthSumForRelative = gridInnerWidth - declaratedAbsoluteColumnsWidthSum;
+        var widthList = new Dictionary<IColumnModel, double>();
 
-        //var scrollbarWidth = await GridInnerRef.GetScrollbarWidth(await _jsService.JsModule());
-        //var emptyColWidth = Math.Max(scrollbarWidth, 0);
-        //var emptyColWidth = Math.Max(tBodyWidth - declaratedAbsoluteColumnsWidthSum - absoluteColumnsWidthSumForRelative, 0);
-        
-        var emptyColWidth = relativePortionSum > 0
-            ? Math.Max(tBodyWidth - declaratedAbsoluteColumnsWidthSum - absoluteColumnsWidthSumForRelative, 0)
-            : Math.Max(tBodyWidth - declaratedAbsoluteColumnsWidthSum , 0);
-        var portionValue = relativePortionSum > 0
-            ? (gridInnerWidth - declaratedAbsoluteColumnsWidthSum) / relativePortionSum
-            : 0;
+        if (relativePortionSum > 0)
+        {
+            // Edge Case A: sum of all min-widths exceeds container
+            var totalMinWidthSum = _columnService.DeclarativeColumnModels.Sum(cmt => cmt.MinWidth)
+                + (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.MinWidth : 0d)
+                + (ShowRowSelectionColumn.Value ? _columnService.RowSelectionColumnModel.MinWidth : 0d);
+
+            if (totalMinWidthSum > gridInnerWidth)
+            {
+                // All relative columns get their MinWidth
+                foreach (var m in relativeColumns)
+                    widthList.Add(m, m.MinWidth);
+
+                foreach (var m in absoluteColumns)
+                    widthList.Add(m, Math.Max(m.DeclaratedWidth, m.MinWidth));
+
+                MinGridWidth.OnNext(totalMinWidthSum);
+            }
+            else
+            {
+                // Distribute available space to relative columns
+                var availableForRelative = gridInnerWidth - absoluteSum;
+                var portionValue = availableForRelative / relativePortionSum;
+
+                foreach (var m in relativeColumns)
+                    widthList.Add(m, Math.Max(portionValue * m.DeclaratedWidth, m.MinWidth));
+
+                foreach (var m in absoluteColumns)
+                    widthList.Add(m, Math.Max(m.DeclaratedWidth, m.MinWidth));
+
+                MinGridWidth.OnNext(0);
+            }
+        }
+        else
+        {
+            // All columns are absolute
+            foreach (var m in absoluteColumns)
+                widthList.Add(m, Math.Max(m.DeclaratedWidth, m.MinWidth));
+
+            if (absoluteSum > gridInnerWidth)
+                MinGridWidth.OnNext(absoluteSum);
+            else
+                MinGridWidth.OnNext(0);
+        }
+
+        // Calculate empty column width
+        var actualSum = widthList.Values.Sum()
+            + (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.DeclaratedWidth : 0d)
+            + (ShowRowSelectionColumn.Value ? _columnService.RowSelectionColumnModel.DeclaratedWidth : 0d);
+        var emptyColWidth = Math.Max(tBodyWidth - actualSum, 0);
 
         _columnService.EmptyColumnModel.Width.OnNext(emptyColWidth);
 
-        Dictionary<IColumnModel, double> widthList = new Dictionary<IColumnModel, double>();
-
-        foreach (var m in _columnService.DeclarativeColumnModels.Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Relative))
-        {
-            double nw = Math.Max(portionValue * m.DeclaratedWidth, 50);
-            widthList.Add(m, nw);
-        }
-
-        foreach (var m in _columnService.DeclarativeColumnModels.Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Absolute))
-        {
-            widthList.Add(m, Math.Max(m.DeclaratedWidth, 50));
-        }
-
+        // Push widths
         foreach (var m in _columnService.AllColumnModels)
         {
             m.Width.OnNext(widthList[m]);

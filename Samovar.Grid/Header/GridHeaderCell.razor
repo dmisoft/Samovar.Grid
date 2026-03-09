@@ -2,7 +2,7 @@
 
 @inherits DesignComponentBase
 
-<th style="@(WidthStyle + "padding-right:0;min-width:50px;vertical-align:middle;")" id="@(ColumnModel.HeaderCellId)"
+<th style="@(WidthStyle + "padding-right:0;min-width:" + ColumnModel.MinWidth.ToString(CultureInfo.InvariantCulture) + "px;vertical-align:middle;")" id="@(ColumnModel.HeaderCellId)"
 	data-toggle="tooltip" data-placement="top" title="@(ColumnModel.Title.Value)">
 	<div class="d-flex" style="margin:0 0 0 4px;padding:0px;">
 		<div @onmouseup=ColumnCellMouseUp @onmousedown=ColumnCellMouseDown @onclick=ColumnCellClick
@@ -29,7 +29,7 @@
 			</svg>
 			</div>
 		}
-		@if (LayoutService.ColumnResizeMode.Value != GridColumnResizeMode.Disabled && !IsLastColumn)
+		@if (LayoutService.ColumnResizeMode.Value != GridColumnResizeMode.None && !IsLastColumn)
 		{
 			if (ColumnModel.Resizable)
 			{
