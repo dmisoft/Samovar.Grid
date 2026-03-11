@@ -2,7 +2,7 @@
 
 namespace Samovar.Grid;
 
-public class JsService(IConstantService _constantService)
+public class JsService
             : IJsService, IAsyncDisposable
 {
     private Lazy<Task<IJSObjectReference>>? _module;
@@ -45,9 +45,9 @@ public class JsService(IConstantService _constantService)
         await (await JsModule()).InvokeVoidAsync("remove_Window_MouseUp_EventListener");
     }
 
-    public async Task StartDataGridColumnWidthChangeMode(DotNetObjectReference<IColumnResizingService> colResizingService, double GridColWidthSum, string ColMetaId, string InnerGridId, string InnerGridBodyTableId, string VisibleGridColumnCellId, string HiddenGridColumnCellId, string FilterGridColumnCellId, string VisibleEmptyColumnId, string HiddenEmptyColumnId, string FilterEmptyColumnId, string EmptyColumnDictId, double StartMouseMoveX, double OldAbsoluteVisibleWidthValue, string FitColumnsToTableWidth, double OldAbsoluteEmptyColVisibleWidthValue, string? RightSideColMetaId, string? RightSideCellMetaId, double? RightSideColumnWidth, string? RightSideFilterCellId, string? RightSideHiddenCellId, string OuterGridId)
+    public async Task StartDataGridColumnWidthChangeMode(DotNetObjectReference<IColumnResizingService> colResizingService, double GridColWidthSum, string ColMetaId, string InnerGridId, string InnerGridBodyTableId, string VisibleGridColumnCellId, string HiddenGridColumnCellId, string FilterGridColumnCellId, string VisibleEmptyColumnId, string HiddenEmptyColumnId, string FilterEmptyColumnId, string EmptyColumnDictId, double StartMouseMoveX, double OldAbsoluteVisibleWidthValue, string FitColumnsToTableWidth, double OldAbsoluteEmptyColVisibleWidthValue, string? RightSideColMetaId, string? RightSideCellMetaId, double? RightSideColumnWidth, string? RightSideFilterCellId, string? RightSideHiddenCellId, string OuterGridId, double triggerColumnMinWidth, double rightSideColumnMinWidth)
     {
-        await (await JsModule()).InvokeVoidAsync("startColumnWidthChangeMode", colResizingService, GridColWidthSum, ColMetaId, InnerGridId, InnerGridBodyTableId, VisibleGridColumnCellId, HiddenGridColumnCellId, FilterGridColumnCellId, VisibleEmptyColumnId, HiddenEmptyColumnId, FilterEmptyColumnId, EmptyColumnDictId, StartMouseMoveX, OldAbsoluteVisibleWidthValue, FitColumnsToTableWidth, OldAbsoluteEmptyColVisibleWidthValue, RightSideColMetaId, RightSideCellMetaId, RightSideColumnWidth, RightSideFilterCellId, RightSideHiddenCellId, OuterGridId);
+        await (await JsModule()).InvokeVoidAsync("startColumnWidthChangeMode", colResizingService, GridColWidthSum, ColMetaId, InnerGridId, InnerGridBodyTableId, VisibleGridColumnCellId, HiddenGridColumnCellId, FilterGridColumnCellId, VisibleEmptyColumnId, HiddenEmptyColumnId, FilterEmptyColumnId, EmptyColumnDictId, StartMouseMoveX, OldAbsoluteVisibleWidthValue, FitColumnsToTableWidth, OldAbsoluteEmptyColVisibleWidthValue, RightSideColMetaId, RightSideCellMetaId, RightSideColumnWidth, RightSideFilterCellId, RightSideHiddenCellId, OuterGridId, triggerColumnMinWidth, rightSideColumnMinWidth);
     }
 
     public async ValueTask<bool> IsWindowCtrlKeyDown()
@@ -60,29 +60,9 @@ public class JsService(IConstantService _constantService)
         return await (await JsModule()).InvokeAsync<bool>("getWindowIsShiftKeyDown");
     }
 
-    public async ValueTask<double> GetInnerGridHeight()
-    {
-        return await (await JsModule()).InvokeAsync<double>("getElementHeight", new[] { _constantService.InnerGridId });
-    }
-
-    public async ValueTask<double> GetElementHeightById(string elementId)
-    {
-        return await (await JsModule()).InvokeAsync<double>("getElementHeight", new[] { elementId });
-    }
-
-    public async ValueTask ScrollInnerGridToTop()
-    {
-        await ScrollElementVerticalByValue(_constantService.InnerGridId, 0);
-    }
-
     public async Task DownloadFileAsync(string fileName, string contentType, byte[] data)
     {
         await (await JsModule()).InvokeVoidAsync("downloadFile", fileName, contentType, data);
-    }
-
-    private async ValueTask ScrollElementVerticalByValue(string elementId, double scrollValue)
-    {
-        await (await JsModule()).InvokeVoidAsync("scrollElementVerticalByValue", elementId, scrollValue);
     }
 
     public async ValueTask DisposeAsync()

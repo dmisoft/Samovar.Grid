@@ -6,15 +6,13 @@ namespace Samovar.Grid;
 
 public interface ILayoutService
 {
-    bool OriginalColumnsWidthChanged { get; set; }
     DotNetObjectReference<ILayoutService> DataGridDotNetRef { get; }
     BehaviorSubject<string> CssClass { get; }
-    BehaviorSubject<string> PaginationClass { get; }
+    BehaviorSubject<string> PaginationCssClass { get; }
     BehaviorSubject<double> MinGridWidth { get; }
     BehaviorSubject<bool> ShowDetailRow { get; }
-    BehaviorSubject<bool> ShowCheckboxColumn { get; }
+    BehaviorSubject<bool> ShowRowSelectionColumn { get; }
     BehaviorSubject<GridFilterMode> FilterMode { get; }
-    BehaviorSubject<bool> ShowFilterRow { get; }
     BehaviorSubject<string> Height { get; }
     BehaviorSubject<string> Width { get; }
 
@@ -27,12 +25,17 @@ public interface ILayoutService
     ElementReference TableBodyInnerRef { get; set; }
 
     BehaviorSubject<bool> ShowColumnHeader { get; }
-    BehaviorSubject<bool> ShowDetailHeader { get; }
-
+    
     Task InitHeader();
 
     IObservable<Task<GridStyleInfo>> DataGridInnerStyle { get; }
 
     BehaviorSubject<GridColumnResizeMode> ColumnResizeMode { get; }
+    BehaviorSubject<GridSizeMode> SizeMode { get; }
     double ActualColumnsWidthSum { get; }
+    
+    bool ColumnsWidthTouchedByUser { get; set; }
+
+    void SetCssClass(string? cssClass);
+    void SetPaginationCssClass(string? paginationCssClass);
 }

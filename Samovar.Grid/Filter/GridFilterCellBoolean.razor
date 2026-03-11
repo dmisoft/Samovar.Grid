@@ -1,7 +1,7 @@
 ﻿@inherits GridFilterCellBase<bool?>
 <th style="@WidthStyle" class="px-1" id="@(((IDataColumnModel)ColMetadata).FilterCellId)" data-toggle="tooltip" data-placement="top" title="@(((IDataColumnModel)ColMetadata).Title.Value)">
-    <div class="s-flex s-flex-row">
-        <select class="form-select" @bind-value=InternalValue @bind-value:event="onchange">
+    <div class="d-flex flex-row">
+        <select class="form-select @_selectSizeClass" @bind-value=InternalValue @bind-value:event="onchange">
             <option value=@NotDefinedValue>...</option>
             <option value=@TrueValue>True</option>
             <option value=@FalseValue>False</option>

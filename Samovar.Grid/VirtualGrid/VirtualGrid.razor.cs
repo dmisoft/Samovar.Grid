@@ -24,6 +24,9 @@ public partial class VirtualGrid<T>
     [SmInject]
     public required IEditingService<T> EditingService { get; set; }
 
+    [SmInject]
+    public required IJsService JsService { get; set; }
+
     public RenderFragment? EditingPopup { get; set; }
 
     public RenderFragment? InsertingPopup { get; set; }
@@ -48,12 +51,35 @@ public partial class VirtualGrid<T>
     protected IEnumerable<GridRowModel<T>> View { get; set; } = [];
     private Virtualize<GridRowModel<T>>? virtualizeComponent;
     protected string CssClass = "";
+    protected string _tableSizeClass = "";
+
+    private bool _firstRenderComplete;
+    private double _savedScrollLeft;
+    private bool _restoreScrollLeft;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            _firstRenderComplete = true;
+
+        if (_restoreScrollLeft)
+        {
+            _restoreScrollLeft = false;
+            await LayoutService.GridInnerRef
+                .SetElementScrollLeft(await JsService.JsModule(), _savedScrollLeft);
+        }
+    }
 
     protected override Task OnInitializedAsync()
     {
         SubscribeViewCollectionChange();
 
         LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
+        LayoutService.SizeMode.Subscribe(mode =>
+        {
+            _tableSizeClass = mode switch { GridSizeMode.Small => "table-sm small", GridSizeMode.Large => "table-lg", _ => "" };
+            StateHasChanged();
+        });
 
         StateService.DataSourceState.Subscribe(async (stateTask) =>
         {
@@ -113,6 +139,12 @@ public partial class VirtualGrid<T>
     {
         RepositoryService.ViewCollectionObservableTask.Subscribe(async (GetViewCollectionTask) =>
         {
+            if (_firstRenderComplete)
+            {
+                _savedScrollLeft = await LayoutService.GridInnerRef
+                    .GetElementScrollLeft(await JsService.JsModule());
+                _restoreScrollLeft = _savedScrollLeft > 0;
+            }
             View = await GetViewCollectionTask;
             await InvokeAsync(async () =>
             {

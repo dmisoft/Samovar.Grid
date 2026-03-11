@@ -3,7 +3,7 @@
 @inherits GridFilterCellBase<string>
 <th style="@WidthStyle" class="px-1" id="@(((IDataColumnModel)ColMetadata).FilterCellId)" data-toggle="tooltip" data-placement="top" title="@(((IDataColumnModel)ColMetadata).Title.Value)">
 
-<div class="s-flex s-flex-row">
-    <input type="text" style="min-width:10px;" class="flex-grow-1 form-control" @bind="InnerValue" @bind:event="onchange" />
+<div class="d-flex flex-row">
+    <input type="text" style="min-width:10px;" class="flex-grow-1 form-control @_inputSizeClass" @bind="InnerValue" @bind:event="onchange" />
 </div>
 </th>

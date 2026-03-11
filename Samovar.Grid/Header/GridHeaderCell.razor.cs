@@ -42,25 +42,25 @@ public partial class GridHeaderCell
         return base.OnInitializedAsync();
     }
 
-    public string SortSymbol { get; private set; } = string.Empty;
+    internal enum SortDir { None, Asc, Desc }
+
+    internal SortDir SortDirection { get; private set; } = SortDir.None;
 
     private void OnOrderInfoChanged(ColumnOrderInfo args)
     {
-        string sortSymbol = string.Empty;
-
-        if (args.Field == ColumnModel.Field.Value && args.Asc)
+        if (args.Field == ColumnModel.Field.Value)
         {
-            sortSymbol = "&#x2BC5;";
+            SortDirection = args.Asc ? SortDir.Asc : SortDir.Desc;
         }
-        else if (args.Field == ColumnModel.Field.Value && !args.Asc)
+        else
         {
-            sortSymbol = "&#x2BC6;";
+            SortDirection = SortDir.None;
         }
-
-        SortSymbol = sortSymbol;
 
         StateHasChanged();
     }
+
+    private bool IsLastColumn => ColumnService.AllColumnModels[^1].Id == ColumnModel.Id;
 
     protected string ColumnCellDraggable = "false";
     internal Task ColumnCellClick() => SortingService.OnColumnClick(ColumnModel);
@@ -103,7 +103,9 @@ public partial class GridHeaderCell
             rightSideColumn?.Width.Value,
             rightSideColumn?.FilterCellId,
             rightSideColumn?.HiddenHeaderCellId,
-            ConstantService.OuterGridId
+            ConstantService.OuterGridId,
+            triggerColumnModel.MinWidth,
+            (rightSideColumn as IDeclarativeColumnModel)?.MinWidth ?? 50d
                 );
     }
 

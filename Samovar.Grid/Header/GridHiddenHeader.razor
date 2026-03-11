@@ -1,11 +1,10 @@
-﻿@using  System.Globalization
+﻿@using System.Globalization
 @inherits DesignComponentBase
-
 
 <thead style="visibility:hidden;">
 	<tr style="height:0px !important;">
 		@{
-			@if (GridLayoutService.ShowCheckboxColumn.Value)
+			@if (GridLayoutService.ShowRowSelectionColumn.Value)
 			{
 				<GridHiddenHeaderCheckboxCell />
 			}
@@ -19,7 +18,8 @@
 				<GridHiddenHeaderCell ColumnModel=@colMeta />
 			}
 
-			 <th style="padding-right:0;border-bottom-width:0px;border-top-width:0px;" id="@(GridColumnService.EmptyColumnModel.HiddenHeaderCellId)" class="s-th-hidden p-0"></th>
+			<th style="padding-right:0;border-bottom-width:0px;border-top-width:0px;"
+				id="@(GridColumnService.EmptyColumnModel.HiddenHeaderCellId)" class="sm-th-hidden p-0"></th>
 		}
 	</tr>
 </thead>

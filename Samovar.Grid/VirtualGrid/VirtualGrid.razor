@@ -6,7 +6,7 @@
 
 <div id="@ConstantService.OuterGridId"
      @ref="@LayoutService.GridOuterRef"
-     class="s-grid-container"
+     class="sm-grid-outer d-flex flex-column"
      style="@Style.CssStyle" @onkeydown:stopPropagation="true">
 
     @if (ShowCommandBar)
@@ -20,7 +20,7 @@
             <GridFilterRowPanel T=T />
         }
     </div>
-    <div id="@ConstantService.InnerGridId" class="s-grid-content" @ref="@LayoutService.GridInnerRef">
+    <div id="@ConstantService.InnerGridId" class="sm-grid-content" @ref="@LayoutService.GridInnerRef">
         @if (InsertingForm != null)
         {
             @InsertingForm
@@ -37,7 +37,7 @@
             default:
                 <div>
                     <table id="@ConstantService.InnerGridBodyTableId"
-                           class=@CssClass
+                           class="@CssClass @_tableSizeClass"
                            style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
                         <GridHiddenHeader />
                         <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">

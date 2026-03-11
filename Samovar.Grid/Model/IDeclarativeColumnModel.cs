@@ -9,4 +9,7 @@ public interface IDeclarativeColumnModel
     public double DeclaratedWidth { get; }
     public BehaviorSubject<string> DeclaratedWidthParameter { get; set; }
     public BehaviorSubject<string> Title { get; }
+    public bool Resizable { get; set; }
+    public double MinWidth { get; set; }
+    void SwitchToAbsoluteWidth(double pixelWidth);
 }

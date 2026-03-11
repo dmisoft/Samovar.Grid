@@ -12,7 +12,7 @@ public partial class GridFilterCheckboxCell : DesignComponentBase, IAsyncDisposa
 
     protected override Task OnInitializedAsync()
     {
-        ColumnService.CheckboxColumnModel.WidthStyle.Subscribe(w =>
+        ColumnService.RowSelectionColumnModel.WidthStyle.Subscribe(w =>
         {
             WidthStyle = w;
             StateHasChanged();

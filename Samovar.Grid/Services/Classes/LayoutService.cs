@@ -8,13 +8,16 @@ namespace Samovar.Grid;
 public class LayoutService
     : ILayoutService, IAsyncDisposable
 {
+    private const string BaseTableCssClass = "table";
+    private const string BasePaginationCssClass = "pagination";
+
     public BehaviorSubject<GridColumnResizeMode> ColumnResizeMode { get; } = new BehaviorSubject<GridColumnResizeMode>(GridColumnResizeMode.None);
-    public BehaviorSubject<string> CssClass { get; } = new BehaviorSubject<string>("table table-bordered");
+    public BehaviorSubject<GridSizeMode> SizeMode { get; } = new BehaviorSubject<GridSizeMode>(GridSizeMode.Default);
+    public BehaviorSubject<string> CssClass { get; } = new BehaviorSubject<string>(BaseTableCssClass);
+    public BehaviorSubject<string> PaginationCssClass { get; } = new BehaviorSubject<string>(BasePaginationCssClass);
     public BehaviorSubject<double> MinGridWidth { get; } = new BehaviorSubject<double>(0d);
     public BehaviorSubject<bool> ShowDetailRow { get; } = new BehaviorSubject<bool>(false);
-    public BehaviorSubject<bool> ShowCheckboxColumn { get; } = new BehaviorSubject<bool>(false);
-    public BehaviorSubject<string> PaginationClass { get; } = new BehaviorSubject<string>("s-pagination");
-    public BehaviorSubject<bool> ShowFilterRow { get; } = new BehaviorSubject<bool>(false);
+    public BehaviorSubject<bool> ShowRowSelectionColumn { get; } = new BehaviorSubject<bool>(false);
     public BehaviorSubject<GridFilterMode> FilterMode { get; } = new BehaviorSubject<GridFilterMode>(GridFilterMode.None);
     public ElementReference GridFilterRef { get; set; }
     public ElementReference GridOuterRef { get; set; }
@@ -26,7 +29,8 @@ public class LayoutService
         get
         {
             return _columnService.AllColumnModels.Sum(c => c.Width.Value) +
-                    (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.Width.Value : 0d);
+                    (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.Width.Value : 0d) +
+                    (ShowRowSelectionColumn.Value ? _columnService.RowSelectionColumnModel.Width.Value : 0d);
         }
     }
 
@@ -75,14 +79,12 @@ public class LayoutService
 
     public BehaviorSubject<string> Height { get; } = new BehaviorSubject<string>("400px");
 
-    public BehaviorSubject<string> Width { get; } = new BehaviorSubject<string>("");
+    public BehaviorSubject<string> Width { get; } = new BehaviorSubject<string>("1200px");
 
     public BehaviorSubject<bool> ShowColumnHeader { get; } = new BehaviorSubject<bool>(true);
 
-    public BehaviorSubject<bool> ShowDetailHeader { get; } = new BehaviorSubject<bool>(false);
-
     public IObservable<Task<GridStyleInfo>> DataGridInnerStyle { get; }
-    public bool OriginalColumnsWidthChanged { get; set; }
+    public bool ColumnsWidthTouchedByUser { get; set; } = false;
 
     private async Task HeightWidthChanged(string height, string width)
     {
@@ -102,14 +104,12 @@ public class LayoutService
     [JSInvokable]
     public async Task JS_AfterWindowResize()
     {
-        await InitHeader();
+        if(!ColumnsWidthTouchedByUser)
+            await CaculateHeader();
     }
 
     public async Task InitHeader()
     {
-        if (OriginalColumnsWidthChanged)
-            return;
-
         await GridInnerRef.SynchronizeGridHeaderScroll(await _jsService.JsModule(), _constantService.GridHeaderContainerId);
         if (FilterMode.Value == GridFilterMode.FilterRow)
             await GridInnerRef.SynchronizeGridHeaderScroll(await _jsService.JsModule(), _constantService.GridFilterContainerId);
@@ -122,34 +122,76 @@ public class LayoutService
         double gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule()) - 1;
         var tBodyWidth = await GridOuterRef.GetElementWidthByRef(await _jsService.JsModule());
 
-        var declaratedAbsoluteColumnsWidthSum = _columnService.DeclarativeColumnModels.
-            Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Absolute)
-            .Sum(cmt => cmt.DeclaratedWidth) + (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.DeclaratedWidth : 0d);
-
-        var relativePortionSum = _columnService.DeclarativeColumnModels
+        // Sum absolute columns (clamped to MinWidth)
+        var absoluteColumns = _columnService.DeclarativeColumnModels
+            .Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Absolute)
+            .ToList();
+        var relativeColumns = _columnService.DeclarativeColumnModels
             .Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Relative)
-            .Sum(cmt => cmt.DeclaratedWidth);
+            .ToList();
 
-        var absoluteColumnsWidthSumForRelative = gridInnerWidth - declaratedAbsoluteColumnsWidthSum;
+        var absoluteSum = absoluteColumns.Sum(cmt => Math.Max(cmt.DeclaratedWidth, cmt.MinWidth))
+            + (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.DeclaratedWidth : 0d)
+            + (ShowRowSelectionColumn.Value ? _columnService.RowSelectionColumnModel.DeclaratedWidth : 0d);
 
-        var emptyColWidth = Math.Max(tBodyWidth - declaratedAbsoluteColumnsWidthSum - absoluteColumnsWidthSumForRelative, 0);
-        var portionValue = (gridInnerWidth - declaratedAbsoluteColumnsWidthSum) / relativePortionSum;
+        var relativePortionSum = relativeColumns.Sum(cmt => cmt.DeclaratedWidth);
+
+        var widthList = new Dictionary<IColumnModel, double>();
+
+        if (relativePortionSum > 0)
+        {
+            // Edge Case A: sum of all min-widths exceeds container
+            var totalMinWidthSum = _columnService.DeclarativeColumnModels.Sum(cmt => cmt.MinWidth)
+                + (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.MinWidth : 0d)
+                + (ShowRowSelectionColumn.Value ? _columnService.RowSelectionColumnModel.MinWidth : 0d);
+
+            if (totalMinWidthSum > gridInnerWidth)
+            {
+                // All relative columns get their MinWidth
+                foreach (var m in relativeColumns)
+                    widthList.Add(m, m.MinWidth);
+
+                foreach (var m in absoluteColumns)
+                    widthList.Add(m, Math.Max(m.DeclaratedWidth, m.MinWidth));
+
+                MinGridWidth.OnNext(totalMinWidthSum);
+            }
+            else
+            {
+                // Distribute available space to relative columns
+                var availableForRelative = gridInnerWidth - absoluteSum;
+                var portionValue = availableForRelative / relativePortionSum;
+
+                foreach (var m in relativeColumns)
+                    widthList.Add(m, Math.Max(portionValue * m.DeclaratedWidth, m.MinWidth));
+
+                foreach (var m in absoluteColumns)
+                    widthList.Add(m, Math.Max(m.DeclaratedWidth, m.MinWidth));
+
+                MinGridWidth.OnNext(0);
+            }
+        }
+        else
+        {
+            // All columns are absolute
+            foreach (var m in absoluteColumns)
+                widthList.Add(m, Math.Max(m.DeclaratedWidth, m.MinWidth));
+
+            if (absoluteSum > gridInnerWidth)
+                MinGridWidth.OnNext(absoluteSum);
+            else
+                MinGridWidth.OnNext(0);
+        }
+
+        // Calculate empty column width
+        var actualSum = widthList.Values.Sum()
+            + (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.DeclaratedWidth : 0d)
+            + (ShowRowSelectionColumn.Value ? _columnService.RowSelectionColumnModel.DeclaratedWidth : 0d);
+        var emptyColWidth = Math.Max(tBodyWidth - actualSum, 0);
 
         _columnService.EmptyColumnModel.Width.OnNext(emptyColWidth);
 
-        Dictionary<IColumnModel, double> widthList = new Dictionary<IColumnModel, double>();
-
-        foreach (var m in _columnService.DeclarativeColumnModels.Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Relative))
-        {
-            double nw = portionValue * m.DeclaratedWidth;
-            widthList.Add(m, nw);
-        }
-
-        foreach (var m in _columnService.DeclarativeColumnModels.Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Absolute))
-        {
-            widthList.Add(m, m.DeclaratedWidth);
-        }
-
+        // Push widths
         foreach (var m in _columnService.AllColumnModels)
         {
             m.Width.OnNext(widthList[m]);
@@ -158,6 +200,11 @@ public class LayoutService
         if (ShowDetailRow.Value)
         {
             _columnService.DetailExpanderColumnModel.Width.OnNext(_columnService.DetailExpanderColumnModel.DeclaratedWidth);
+        }
+
+        if (ShowRowSelectionColumn.Value)
+        {
+            _columnService.RowSelectionColumnModel.Width.OnNext(_columnService.RowSelectionColumnModel.DeclaratedWidth);
         }
     }
 
@@ -171,6 +218,24 @@ public class LayoutService
             };
             await DataGridInnerCssStyleChanged.Invoke(info);
         }
+    }
+
+    public void SetCssClass(string? cssClass)
+    {
+        cssClass = cssClass?.Trim() ?? "";
+        var result = string.IsNullOrWhiteSpace(cssClass)
+            ? BaseTableCssClass
+            : $"{BaseTableCssClass} {cssClass}";
+        CssClass.OnNext(result);
+    }
+
+    public void SetPaginationCssClass(string? paginationCssClass)
+    {
+        paginationCssClass = paginationCssClass?.Trim() ?? "";
+        var result = string.IsNullOrWhiteSpace(paginationCssClass)
+            ? BasePaginationCssClass
+            : $"{BasePaginationCssClass} {paginationCssClass}";
+        PaginationCssClass.OnNext(result);
     }
 
     public ValueTask DisposeAsync()

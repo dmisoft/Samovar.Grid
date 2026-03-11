@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using DocumentFormat.OpenXml.Presentation;
+using Microsoft.JSInterop;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
@@ -47,18 +48,30 @@ public class ColumnResizingService
         await _jsService.DetachWindowMouseUpEvent();
 
         var col = _columnService.AllColumnModels.Find(c => c.Id == colMetaId);
-        if (col != default(IColumnModel))
+        if (col is not null)
         {
+            if (col is IDeclarativeColumnModel declarativeCol)
+            {
+                declarativeCol.SwitchToAbsoluteWidth(newVisibleAbsoluteWidthValue);
+            }
             col.Width.OnNext(newVisibleAbsoluteWidthValue);
         }
-        var rightSideColumn = _columnService.AllColumnModels.Find(c => c.Id == rightSideColumnId);
-        if (rightSideColumn is not null)
+
+        if (_layoutService.ColumnResizeMode.Value == GridColumnResizeMode.Block)
         {
-            rightSideColumn.Width.OnNext(newRightSideColumnWidth);
+            var rightSideColumn = _columnService.AllColumnModels.Find(c => c.Id == rightSideColumnId);
+            if (rightSideColumn is not null)
+            {
+                if (rightSideColumn is IDeclarativeColumnModel rightDeclarativeCol)
+                {
+                    rightDeclarativeCol.SwitchToAbsoluteWidth(newRightSideColumnWidth);
+                }
+                rightSideColumn.Width.OnNext(newRightSideColumnWidth);
+                _columnService.ColumnResizingEndedObservable.OnNext(rightSideColumn);
+            }
         }
 
         _columnService.EmptyColumnModel.Width.OnNext(emptyHeaderColWidth);
-
         _columnService.ColumnResizingEndedObservable.OnNext(_columnService.EmptyColumnModel);
 
         if (col is not null)
@@ -66,12 +79,7 @@ public class ColumnResizingService
             _columnService.ColumnResizingEndedObservable.OnNext(col);
         }
 
-        if (rightSideColumn is not null)
-        {
-            _columnService.ColumnResizingEndedObservable.OnNext(rightSideColumn);
-        }
-
-        _layoutService.OriginalColumnsWidthChanged = true;
+        _layoutService.ColumnsWidthTouchedByUser = true;
     }
 
     public ValueTask DisposeAsync()

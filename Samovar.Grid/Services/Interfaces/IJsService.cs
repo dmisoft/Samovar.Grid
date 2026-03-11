@@ -44,13 +44,9 @@ public interface IJsService
         double? RightSideColumnWidth,
         string? RightSideFilterCellId,
         string? RightSideHiddenCellId,
-        string OuterGridId);
-
-    ValueTask<double> GetInnerGridHeight();
-
-    ValueTask<double> GetElementHeightById(string elementId);
-
-    ValueTask ScrollInnerGridToTop();
+        string OuterGridId,
+        double triggerColumnMinWidth,
+        double rightSideColumnMinWidth);
 
     Task DownloadFileAsync(string fileName, string contentType, byte[] data);
 }

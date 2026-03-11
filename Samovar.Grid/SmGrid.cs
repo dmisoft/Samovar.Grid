@@ -11,9 +11,6 @@ public class SmGrid<T>
     public required IInitService InitService { get; set; }
 
     [SmInject]
-    public required IRepositoryService<T> RepositoryService { get; set; }
-
-    [SmInject]
     public required IEditingService<T> EditingService { get; set; }
 
     [SmInject]
@@ -33,9 +30,6 @@ public class SmGrid<T>
 
     [SmInject]
     public required IGridSelectionService<T> GridSelectionService { get; set; }
-
-    [SmInject]
-    public required IComponentBuilderService ComponentBuilderService { get; set; }
 
     [SmInject]
     public required IDataSourceService<T> DataSourceService { get; set; }
@@ -66,6 +60,9 @@ public class SmGrid<T>
 
     [Parameter]
     public string? CssClass { get; set; }
+
+    [Parameter]
+    public string? PaginationCssClass { get; set; }
 
     [Parameter]
     public bool? ShowColumnHeader { get; set; }
@@ -107,6 +104,9 @@ public class SmGrid<T>
     public GridColumnResizeMode ColumnResizeMode { get; set; }
 
     [Parameter]
+    public GridSizeMode SizeMode { get; set; } = GridSizeMode.Default;
+
+    [Parameter]
     public T? SingleSelectedDataRow { get; set; }
 
     [Parameter]
@@ -119,7 +119,7 @@ public class SmGrid<T>
     public EventCallback<IEnumerable<T>?> MultipleSelectedDataRowsChanged { get; set; }
 
     [Parameter]
-    public bool ShowCommandBar { get; set; } = true;
+    public bool ShowCommandBar { get; set; } 
 
     [Parameter]
     public EventCallback<RowsRemovingEventArgs<T>> RowsRemoving { get; set; }
@@ -151,8 +151,10 @@ public class SmGrid<T>
             LayoutService.Width.OnNext(width);
 
         string? cssClass = parameters.GetValueOrDefault<string>(nameof(CssClass));
-        if (cssClass != null)
-            LayoutService.CssClass.OnNext(cssClass);
+        LayoutService.SetCssClass(cssClass);
+
+        string? paginationCssClass = parameters.GetValueOrDefault<string>(nameof(PaginationCssClass));
+        LayoutService.SetPaginationCssClass(paginationCssClass);
 
         bool? showColumnHeader = parameters.GetValueOrDefault<bool?>(nameof(ShowColumnHeader));
         showColumnHeader ??= true;
@@ -174,11 +176,14 @@ public class SmGrid<T>
         RowSelectionMode? dataGridSelectionMode = parameters.GetValueOrDefault<RowSelectionMode?>(nameof(SelectionMode));
         dataGridSelectionMode ??= RowSelectionMode.None;
         GridSelectionService.SelectionMode.OnNext(dataGridSelectionMode.Value);
-        LayoutService.ShowCheckboxColumn.OnNext(dataGridSelectionMode == RowSelectionMode.Multiple);
+        LayoutService.ShowRowSelectionColumn.OnNext(dataGridSelectionMode == RowSelectionMode.Multiple);
         
         GridColumnResizeMode? columnResizeMode = parameters.GetValueOrDefault<GridColumnResizeMode?>(nameof(ColumnResizeMode));
-        columnResizeMode ??= GridColumnResizeMode.None;
+        columnResizeMode ??= GridColumnResizeMode.Block;
         LayoutService.ColumnResizeMode.OnNext(columnResizeMode.Value);
+
+        GridSizeMode sizeMode = parameters.GetValueOrDefault<GridSizeMode>(nameof(SizeMode));
+        LayoutService.SizeMode.OnNext(sizeMode);
 
         RenderFragment<T>? detailRowTemplate = parameters.GetValueOrDefault<RenderFragment<T>>(nameof(DetailRowTemplate));
         if (detailRowTemplate != null)

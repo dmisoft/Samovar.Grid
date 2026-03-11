@@ -1,0 +1,9 @@
+@namespace Samovar.Grid
+@typeparam T
+@inherits DesignComponentBase
+
+<td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;vertical-align:middle;" @onmousedown="()=> { }" @onmousedown:stopPropagation @onclick="GridRow.DetailExpanderClick">
+    <div class="d-flex flex-row justify-content-center">
+        <span class="@(RowModel.RowDetailExpanded ? "sm-detail-row-expanded" : "sm-detail-row-collapsed")"></span>
+    </div>
+</td>

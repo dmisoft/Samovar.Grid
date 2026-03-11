@@ -22,5 +22,4 @@ public class GridStateService
     public Func<Task>? CloseProcessingDataPanelDelegate { get; set; }
     public Func<Task>? ShowPagingPanelDelegate { get; set; }
     public Func<Task>? HidePagingPanelDelegate { get; set; }
-    public List<EventCallback<DataSourceState>> DataSourceStateEvList { get; set; } = new List<EventCallback<DataSourceState>>();
 }

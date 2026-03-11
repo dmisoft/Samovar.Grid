@@ -14,7 +14,7 @@
 }
 else
 {
-    <SmGrid Data=forecasts DataNavigationMode=NavigationMode.Virtual>
+    <SmGrid Data=forecasts DataNavigationMode=NavigationMode.Paging>
         <Columns>
             <Column Field="@nameof(WeatherForecast.Date)" />
             <Column Field="@nameof(WeatherForecast.Summary)" />

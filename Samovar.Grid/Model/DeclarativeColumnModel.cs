@@ -10,6 +10,14 @@ public abstract partial class DeclarativeColumnModel
     public double DeclaratedWidth { get; set; }
     public DeclarativeColumnWidthMode DeclaratedWidthMode { get; set; }
     public BehaviorSubject<string> Title { get; } = new BehaviorSubject<string>("");
+    public bool Resizable { get; set; } = true;
+    public double MinWidth { get; set; } = 50d;
+
+    public void SwitchToAbsoluteWidth(double pixelWidth)
+    {
+        DeclaratedWidth = pixelWidth;
+        DeclaratedWidthMode = DeclarativeColumnWidthMode.Absolute;
+    }
 
     protected DeclarativeColumnModel()
         : base()
