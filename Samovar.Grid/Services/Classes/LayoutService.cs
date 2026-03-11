@@ -18,7 +18,6 @@ public class LayoutService
     public BehaviorSubject<double> MinGridWidth { get; } = new BehaviorSubject<double>(0d);
     public BehaviorSubject<bool> ShowDetailRow { get; } = new BehaviorSubject<bool>(false);
     public BehaviorSubject<bool> ShowRowSelectionColumn { get; } = new BehaviorSubject<bool>(false);
-    public BehaviorSubject<bool> ShowFilterRow { get; } = new BehaviorSubject<bool>(false);
     public BehaviorSubject<GridFilterMode> FilterMode { get; } = new BehaviorSubject<GridFilterMode>(GridFilterMode.None);
     public ElementReference GridFilterRef { get; set; }
     public ElementReference GridOuterRef { get; set; }
@@ -83,8 +82,6 @@ public class LayoutService
     public BehaviorSubject<string> Width { get; } = new BehaviorSubject<string>("1200px");
 
     public BehaviorSubject<bool> ShowColumnHeader { get; } = new BehaviorSubject<bool>(true);
-
-    public BehaviorSubject<bool> ShowDetailHeader { get; } = new BehaviorSubject<bool>(false);
 
     public IObservable<Task<GridStyleInfo>> DataGridInnerStyle { get; }
     public bool ColumnsWidthTouchedByUser { get; set; } = false;

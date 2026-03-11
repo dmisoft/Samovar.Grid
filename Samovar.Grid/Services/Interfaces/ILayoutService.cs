@@ -13,7 +13,6 @@ public interface ILayoutService
     BehaviorSubject<bool> ShowDetailRow { get; }
     BehaviorSubject<bool> ShowRowSelectionColumn { get; }
     BehaviorSubject<GridFilterMode> FilterMode { get; }
-    BehaviorSubject<bool> ShowFilterRow { get; }
     BehaviorSubject<string> Height { get; }
     BehaviorSubject<string> Width { get; }
 
@@ -26,8 +25,7 @@ public interface ILayoutService
     ElementReference TableBodyInnerRef { get; set; }
 
     BehaviorSubject<bool> ShowColumnHeader { get; }
-    BehaviorSubject<bool> ShowDetailHeader { get; }
-
+    
     Task InitHeader();
 
     IObservable<Task<GridStyleInfo>> DataGridInnerStyle { get; }
