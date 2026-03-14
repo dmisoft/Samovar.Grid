@@ -25,7 +25,7 @@ public class EditingService<T>(
     public EventCallback<T> OnRowEditBegin { get; set; }
     public EventCallback OnRowInsertBegin { get; set; }
     public EventCallback<T> OnRowInserting { get; set; }
-    public EventCallback<RowsRemovingEventArgs<T>> OnRowsRemoving { get; set; }
+    public EventCallback<List<T>> OnRowsRemoving { get; set; }
 
     public Func<GridRowModel<T>, Task>? ShowInsertingPopupDelegate { get; set; }
     public Func<Task>? CloseInsertingPopupDelegate { get; set; }
@@ -119,11 +119,11 @@ public class EditingService<T>(
 
     public async Task DeleteRows(IEnumerable<T> items)
     {
-        var args = new RowsRemovingEventArgs<T>(items);
+        var itemsList = new List<T>(items);
         if (OnRowsRemoving.HasDelegate)
-            await OnRowsRemoving.InvokeAsync(args);
-        if (!args.Cancel)
-            await _selectionService.Reset();
+            await OnRowsRemoving.InvokeAsync(itemsList);
+        
+        await _selectionService.Reset();
     }
 
     public async Task RowInsertBegin()

@@ -122,7 +122,7 @@ public class SmGrid<T>
     public bool ShowCommandBar { get; set; } 
 
     [Parameter]
-    public EventCallback<RowsRemovingEventArgs<T>> RowsRemoving { get; set; }
+    public EventCallback<List<T>> RowsRemoving { get; set; }
 
     public override async Task SetParametersAsync(ParameterView parameters)
     {
@@ -213,7 +213,7 @@ public class SmGrid<T>
         if (rowInserting.HasDelegate)
             EditingService.OnRowInserting = rowInserting;
 
-        EventCallback<RowsRemovingEventArgs<T>> rowsRemoving = parameters.GetValueOrDefault<EventCallback<RowsRemovingEventArgs<T>>>(nameof(RowsRemoving));
+        EventCallback<List<T>> rowsRemoving = parameters.GetValueOrDefault<EventCallback<List<T>>>(nameof(RowsRemoving));
         if (rowsRemoving.HasDelegate)
             EditingService.OnRowsRemoving = rowsRemoving;
 
