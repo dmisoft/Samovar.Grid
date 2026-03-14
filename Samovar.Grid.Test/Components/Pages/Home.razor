@@ -26,7 +26,7 @@
                     @bind-MultipleSelectedDataRows=@selectedRows
                     RowEditBegin="@((WeatherForecast data) => RowEditBeginHandler(data))"
                     RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
-                    RowsRemoving="@((RowsRemovingEventArgs<WeatherForecast> args) => RowsRemovingHandler(args))">
+                    RowsRemoving="@((List<WeatherForecast> args) => RowsRemovingHandler(args))">
                 <Columns>
                     <Column Title="Date" Field="@nameof(WeatherForecast.Date)" Width="100px" />
                     <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="2*" />
@@ -202,11 +202,10 @@
         return Task.CompletedTask;
     }
 
-    Task RowsRemovingHandler(RowsRemovingEventArgs<WeatherForecast> args)
+    Task RowsRemovingHandler(List<WeatherForecast> items)
     {
-        //args.Cancel = true; // Cancel the default removing behavior to demonstrate manual removal   
         if (forecasts is not null)
-            forecasts = forecasts.Except(args.Items).ToList();
+            forecasts = forecasts.Except(items).ToList();
 
         return Task.CompletedTask;
     }
