@@ -16,6 +16,7 @@ public class Program
             .AddInteractiveServerComponents();
 
         builder.Services.AddSingleton<WeatherForecastService>();
+        builder.Services.AddSamovarGrid();
 
         var app = builder.Build();
 
