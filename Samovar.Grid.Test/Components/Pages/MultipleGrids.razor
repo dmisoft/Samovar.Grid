@@ -1,0 +1,76 @@
+﻿@page "/multiple-grids"
+
+@rendermode InteractiveServer
+
+@using System.ComponentModel.DataAnnotations
+@using System
+@using Samovar.Grid
+
+@inject WeatherForecastService ForecastService
+
+<h1>CSS Vars</h1>
+
+<style>
+    :root {
+        --sm-detail-row-expanded-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 3.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5M8 6a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7.5 12.293V6.5A.5.5 0 0 1 8 6"/></svg>');
+        --sm-detail-row-collapsed-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8m-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5"/></svg>');
+        --sm-row-selected-bg: rgba(69, 46, 222, 0.5);
+    }
+</style>
+<div class="row">
+    <div class="col">
+        <SmGrid @ref=grid Data="forecasts1" 
+                CssClass="table-bordered table-sm table-striped"
+                RowsRemoving="@((List<WeatherForecast> args) => RowsRemovingHandler1(args))">
+            <Columns>
+                <Column Field="@nameof(WeatherForecast.Summary)" />
+                <Column Field="@nameof(WeatherForecast.Date)" />
+                <Column Field="@nameof(WeatherForecast.TemperatureC)" />
+                <CommandColumn EditButtonVisible=true DeleteButtonVisible=true NewButtonVisible=true Width="150px" />
+            </Columns>
+        </SmGrid>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <SmGrid @ref=grid Data="forecasts2" 
+                CssClass="table-bordered table-sm table-striped"
+                RowsRemoving="@((List<WeatherForecast> args) => RowsRemovingHandler2(args))">
+            <Columns>
+                <Column Field="@nameof(WeatherForecast.Summary)" />
+                <Column Field="@nameof(WeatherForecast.Date)" />
+                <Column Field="@nameof(WeatherForecast.TemperatureC)" />
+                <CommandColumn EditButtonVisible=true DeleteButtonVisible=true NewButtonVisible=true Width="150px" />
+            </Columns>
+        </SmGrid>
+    </div>
+</div>
+
+@code {
+    private List<WeatherForecast>? forecasts1;
+    private List<WeatherForecast>? forecasts2;
+    SmGrid<WeatherForecast?>? grid;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts1 = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
+        forecasts2 = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
+    }
+
+    Task RowsRemovingHandler1(List<WeatherForecast> items)
+    {
+        if (forecasts1 is not null)
+            forecasts1 = forecasts1.Except(items).ToList();
+
+        return Task.CompletedTask;
+    }
+
+    Task RowsRemovingHandler2(List<WeatherForecast> items)
+    {
+        if (forecasts2 is not null)
+            forecasts2 = forecasts2.Except(items).ToList();
+
+        return Task.CompletedTask;
+    }
+}
