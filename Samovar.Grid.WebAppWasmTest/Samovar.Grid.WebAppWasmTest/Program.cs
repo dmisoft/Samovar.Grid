@@ -13,7 +13,7 @@ public class Program
         builder.Services.AddRazorComponents()
             .AddInteractiveWebAssemblyComponents();
 
-        builder.Services.AddSamovarGrid();
+        builder.Services.AddSamovarGrid(o => o.InjectCss = true);
 
         var app = builder.Build();
 
