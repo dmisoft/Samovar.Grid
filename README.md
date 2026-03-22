@@ -1,16 +1,49 @@
-## Basic sample
+## Getting started
 
-### Add the following code to your _Layout.cshtml or App.razor file
-```csharp 
+### Register SamovarGrid services
+
+Add the following to your `Program.cs`:
+
+```csharp
+builder.Services.AddSamovarGrid();
+```
+
+### Stylesheet
+
+By default the CSS is **not** injected automatically. Choose one of the two approaches below.
+
+#### Option A — Automatic CSS injection (recommended)
+
+Enable CSS injection via options and place the `<SamovarGridStyles />` component inside `<head>` in your `App.razor`:
+
+```csharp
+// Program.cs
+builder.Services.AddSamovarGrid(options => options.InjectCss = true);
+```
+
+```razor
+@* App.razor *@
 <head>
-...
-<link href="_content/SamovarGrid/samovar.grid.css" rel="stylesheet" />
-...
+    ...
+    <SamovarGridStyles />
+    ...
+</head>
+```
+
+#### Option B — Manual link
+
+Add the stylesheet link directly to your `_Layout.cshtml`, `App.razor`, or `index.html`:
+
+```html
+<head>
+    ...
+    <link href="_content/SamovarGrid/samovar.grid.css" rel="stylesheet" />
+    ...
 </head>
 ```
 
 ### _Imports.razor
-```csharp 
+```csharp
 @using static Microsoft.AspNetCore.Components.Web.RenderMode
 ```
 
