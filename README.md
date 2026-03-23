@@ -36,20 +36,23 @@ Add the stylesheet link directly to your `_Layout.cshtml`, `App.razor`, or `inde
 
 ```html
 <head>
-    ...
-    <link href="_content/SamovarGrid/samovar.grid.css" rel="stylesheet" />
-    ...
+  ...
+  <link href="_content/SamovarGrid/samovar.grid.css" rel="stylesheet" />
+  ...
 </head>
 ```
 
-### _Imports.razor
+### \_Imports.razor
+
 ```csharp
 @using static Microsoft.AspNetCore.Components.Web.RenderMode
 ```
 
 ### Index.razor
+
 #### add @rendermode InteractiveServer to your page
-```csharp 
+
+```csharp
 @page "/"
 @rendermode InteractiveServer
 
@@ -274,8 +277,10 @@ Add the stylesheet link directly to your `_Layout.cshtml`, `App.razor`, or `inde
 ```
 
 ### EditTemplate.razor
+
 #### add @rendermode InteractiveServer to your page
-```csharp 
+
+```csharp
 @page "/edit-template"
 @rendermode InteractiveServer
 
@@ -392,8 +397,6 @@ Add the stylesheet link directly to your `_Layout.cshtml`, `App.razor`, or `inde
     void RowEditBeginHandler(WeatherForecast item)
     {
         EditContext = new FormEditContext(item);
-        // var context = new Microsoft.AspNetCore.Components.Forms.EditContext(item);
-        // context.
     }
 
     void RowInsertBeginHandler()
@@ -471,8 +474,10 @@ Add the stylesheet link directly to your `_Layout.cshtml`, `App.razor`, or `inde
 ```
 
 ### CellTemplate.razor
+
 #### add @rendermode InteractiveServer to your page
-```csharp 
+
+```csharp
 @page "/cell-template"
 @rendermode InteractiveServer
 
@@ -550,8 +555,10 @@ Add the stylesheet link directly to your `_Layout.cshtml`, `App.razor`, or `inde
 ```
 
 ### Filter.razor
+
 #### add @rendermode InteractiveServer to your page
-```csharp 
+
+```csharp
 @page "/filter"
 @rendermode InteractiveServer
 
@@ -612,8 +619,10 @@ Add the stylesheet link directly to your `_Layout.cshtml`, `App.razor`, or `inde
 ```
 
 ### Virtual.razor
+
 #### add @rendermode InteractiveServer to your page
-```csharp 
+
+```csharp
 @page "/virtual"
 @rendermode InteractiveServer
 
