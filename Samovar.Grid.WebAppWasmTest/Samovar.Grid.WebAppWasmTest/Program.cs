@@ -13,6 +13,8 @@ public class Program
         builder.Services.AddRazorComponents()
             .AddInteractiveWebAssemblyComponents();
 
+        builder.Services.AddSamovarGrid(o => o.InjectCss = true);
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.

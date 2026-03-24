@@ -15,7 +15,10 @@ else
 {
     <div class="row">
         <div class="col">
-            <SmGrid Data=forecasts DataNavigationMode=NavigationMode.Paging Width="800px">
+            <SmGrid 
+            Data=forecasts DataNavigationMode=NavigationMode.Paging 
+            Width="800px"
+            SelectionMode=RowSelectionMode.Multiple>
                 <Columns>
                     <Column Field="@nameof(WeatherForecast.Date)" />
                     <Column Field="@nameof(WeatherForecast.Summary)" />

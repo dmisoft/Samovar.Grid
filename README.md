@@ -1,22 +1,58 @@
-## Basic sample
+## Getting started
 
-### Add the following code to your _Layout.cshtml or App.razor file
-```csharp 
+### Register SamovarGrid services
+
+Add the following to your `Program.cs`:
+
+```csharp
+builder.Services.AddSamovarGrid();
+```
+
+### Stylesheet
+
+By default the CSS is **not** injected automatically. Choose one of the two approaches below.
+
+#### Option A — Automatic CSS injection (recommended)
+
+Enable CSS injection via options and place the `<SamovarGridStyles />` component inside `<head>` in your `App.razor`:
+
+```csharp
+// Program.cs
+builder.Services.AddSamovarGrid(options => options.InjectCss = true);
+```
+
+```razor
+@* App.razor *@
 <head>
-...
-<link href="_content/SamovarGrid/samovar.grid.css" rel="stylesheet" />
-...
+    ...
+    <SamovarGridStyles />
+    ...
 </head>
 ```
 
-### _Imports.razor
-```csharp 
+#### Option B — Manual link
+
+Add the stylesheet link directly to your `_Layout.cshtml`, `App.razor`, or `index.html`:
+
+```html
+<head>
+  ...
+  <link href="_content/SamovarGrid/samovar.grid.css" rel="stylesheet" />
+  ...
+</head>
+```
+
+### \_Imports.razor
+
+```csharp
 @using static Microsoft.AspNetCore.Components.Web.RenderMode
 ```
 
 ### Index.razor
+
 #### add @rendermode InteractiveServer to your page
-```csharp 
+
+```csharp
 @page "/"
 @rendermode InteractiveServer
 
@@ -241,8 +277,10 @@
 ```
 
 ### EditTemplate.razor
+
 #### add @rendermode InteractiveServer to your page
-```csharp 
+
+```csharp
 @page "/edit-template"
 @rendermode InteractiveServer
 
@@ -359,8 +397,6 @@
     void RowEditBeginHandler(WeatherForecast item)
     {
         EditContext = new FormEditContext(item);
-        // var context = new Microsoft.AspNetCore.Components.Forms.EditContext(item);
-        // context.
     }
 
     void RowInsertBeginHandler()
@@ -438,8 +474,10 @@
 ```
 
 ### CellTemplate.razor
+
 #### add @rendermode InteractiveServer to your page
-```csharp 
+
+```csharp
 @page "/cell-template"
 @rendermode InteractiveServer
 
@@ -517,8 +555,10 @@
 ```
 
 ### Filter.razor
+
 #### add @rendermode InteractiveServer to your page
-```csharp 
+
+```csharp
 @page "/filter"
 @rendermode InteractiveServer
 
@@ -579,8 +619,10 @@
 ```
 
 ### Virtual.razor
+
 #### add @rendermode InteractiveServer to your page
-```csharp 
+
+```csharp
 @page "/virtual"
 @rendermode InteractiveServer
 

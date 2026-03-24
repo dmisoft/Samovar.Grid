@@ -14,6 +14,8 @@ public class Program
             .AddInteractiveServerComponents()
             .AddInteractiveWebAssemblyComponents();
 
+        builder.Services.AddSamovarGrid(options => options.InjectCss = true);
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
