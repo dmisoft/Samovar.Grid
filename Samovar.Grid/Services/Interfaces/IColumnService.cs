@@ -11,5 +11,6 @@ public interface IColumnService
     public IDeclarativeColumnModel DetailExpanderColumnModel { get; }
     public IDeclarativeColumnModel RowSelectionColumnModel { get; }
     public void RegisterColumn(IColumnModel columntModel);
+    public void AutoGenerateColumns<T>();
     Subject<IColumnModel> ColumnResizingEndedObservable { get; }
 }

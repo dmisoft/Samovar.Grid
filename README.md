@@ -618,6 +618,44 @@ Add the stylesheet link directly to your `_Layout.cshtml`, `App.razor`, or `inde
 }
 ```
 
+### AutoGenerateColumns
+
+Instead of declaring columns manually, set `AutoGenerateColumns=true` to let the grid reflect over the data model and generate columns for all public properties with simple types (`string`, `int`, `DateTime`, `bool`, `decimal`, etc.):
+
+```razor
+<SmGrid Data=forecasts AutoGenerateColumns=true />
+```
+
+To exclude a property from auto-generation, decorate it with `[Browsable(false)]`:
+
+```csharp
+using System.ComponentModel;
+
+public class MyModel
+{
+    public string Name { get; set; }          // visible as column
+
+    [Browsable(false)]
+    public string InternalId { get; set; }    // excluded from grid
+}
+```
+
+Column titles default to the property name. Use `[DisplayName]` or `[Display(Name=...)]` to customize:
+
+```csharp
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+public class MyModel
+{
+    [DisplayName("Full Name")]
+    public string Name { get; set; }
+
+    [Display(Name = "Temperature (C)")]
+    public int TemperatureC { get; set; }
+}
+```
+
 ### Virtual.razor
 
 #### add @rendermode InteractiveServer to your page
