@@ -1,16 +1,29 @@
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
 namespace Samovar.Grid.Test.Data;
 
 public class WeatherForecast
 {
+    [DisplayName("Pos.")]
     public int Position { get; set; }
     public DateTime Date { get; set; }
+    
+    [Browsable(false)]
     public DateOnly Date2 { get; set; }
 
+    [Display(Name ="Temp.C")]
     public int? TemperatureC { get; set; }
+    
+    [Browsable(false)]
     public int? NullableInterger { get; set; } = null;
 
+    [Browsable(false)]
     public int TemperatureF => 32 + (int)(TemperatureC ?? 0 / 0.5556);
-    public double TemperatureFD => 12.555;// TemperatureC??0d/ 0.5556d;
+    
+    [Browsable(false)]
+    public double TemperatureFD => 12.5;
+    
     public bool Boolean { get; set; }
 
     public string Summary { get; set; } = string.Empty;

@@ -37,8 +37,14 @@ public class SmGrid<T>
     [SmInject]
     public required IDetailRowService<T> DetailRowService { get; set; }
 
+    [SmInject]
+    public required IColumnService ColumnService { get; set; }
+
     [Parameter]
-    public required RenderFragment Columns { get; set; }
+    public RenderFragment? Columns { get; set; }
+
+    [Parameter]
+    public bool AutoGenerateColumns { get; set; }
 
     [Parameter]
     public IEnumerable<T>? Data { get; set; }
@@ -128,11 +134,22 @@ public class SmGrid<T>
     {
         await base.SetParametersAsync(parameters);
 
+        bool autoGenerateColumns = parameters.GetValueOrDefault<bool>(nameof(AutoGenerateColumns));
         RenderFragment? columns = parameters.GetValueOrDefault<RenderFragment>(nameof(Columns));
-        if (columns is null)
-            throw new ArgumentException("No columns defined");
-        else
+
+        if (autoGenerateColumns && columns is null)
+        {
+            if (ColumnService.AllColumnModels.Count == 0)
+                ColumnService.AutoGenerateColumns<T>();
+        }
+        else if (columns is not null)
+        {
             ChildContent = columns;
+        }
+        else
+        {
+            throw new ArgumentException("No columns defined. Either provide a Columns render fragment or set AutoGenerateColumns to true.");
+        }
 
         uint pageSize = parameters.GetValueOrDefault<uint>(nameof(PageSize));
         pageSize = pageSize == 0 ? 50 : pageSize;
