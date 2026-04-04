@@ -11,6 +11,7 @@
 
 <SmGrid Data=forecasts DataNavigationMode=NavigationMode.Virtual>
     <Columns>
+        <Column Field="@nameof(WeatherForecast.Position)" />
         <Column Field="@nameof(WeatherForecast.Date)" />
         <Column Field="@nameof(WeatherForecast.Summary)" />
         <Column Field="@nameof(WeatherForecast.TemperatureC)" />

@@ -57,11 +57,6 @@ export function getElementWidthByRef(element) {
     return element.clientWidth;
 }
 
-export function getScrollbarWidth(element) {
-    if (element === null) return 0;
-    return element.offsetWidth - element.clientWidth;
-}
-
 export function getElementScrollLeft(element) {
     if (element === null) return 0;
     return element.scrollLeft;
@@ -350,6 +345,262 @@ export function remove_GridInner_OnScroll_EventListener(innerGridId, dotNetRef) 
 
 export function scrollElementVerticalByValue(elementId, scrollValue) {
     document.getElementById(elementId).scrollTop = scrollValue;
+}
+
+// Custom scrollbar state per grid instance
+const scrollbarInstances = new Map();
+
+export function initCustomScrollbars(contentElement, vTrack, hTrack, vThumb, hThumb) {
+    if (!contentElement) return;
+
+    const state = {
+        contentElement,
+        vTrack, hTrack, vThumb, hThumb,
+        isDragging: false,
+        dragAxis: null,
+        dragStartPos: 0,
+        dragStartScroll: 0,
+        hideTimer: null,
+        rafId: null,
+        resizeObserver: null,
+        mutationObserver: null,
+        lastScrollHeight: 0,
+        lastScrollWidth: 0,
+        disposed: false
+    };
+
+    function updateScrollbars() {
+        if (state.disposed) return;
+        const el = state.contentElement;
+
+        // Vertical
+        const needsVertical = el.scrollHeight > el.clientHeight;
+        if (needsVertical) {
+            const thumbHeight = Math.max(20, (el.clientHeight / el.scrollHeight) * el.clientHeight);
+            const maxScroll = el.scrollHeight - el.clientHeight;
+            const scrollRatio = maxScroll > 0 ? el.scrollTop / maxScroll : 0;
+            const maxThumbTop = el.clientHeight - thumbHeight;
+            vThumb.style.height = thumbHeight + 'px';
+            vThumb.style.transform = 'translateY(' + (scrollRatio * maxThumbTop) + 'px)';
+            vTrack.style.display = '';
+        } else {
+            vTrack.style.display = 'none';
+        }
+
+        // Horizontal
+        const needsHorizontal = el.scrollWidth > el.clientWidth;
+        if (needsHorizontal) {
+            const thumbWidth = Math.max(20, (el.clientWidth / el.scrollWidth) * el.clientWidth);
+            const maxScroll = el.scrollWidth - el.clientWidth;
+            const scrollRatio = maxScroll > 0 ? el.scrollLeft / maxScroll : 0;
+            const maxThumbLeft = el.clientWidth - thumbWidth;
+            hThumb.style.width = thumbWidth + 'px';
+            hThumb.style.transform = 'translateX(' + (scrollRatio * maxThumbLeft) + 'px)';
+            hTrack.style.display = '';
+        } else {
+            hTrack.style.display = 'none';
+        }
+    }
+
+    function showScrollbars() {
+        vTrack.classList.add('sm-scrollbar-visible');
+        hTrack.classList.add('sm-scrollbar-visible');
+        clearTimeout(state.hideTimer);
+        state.hideTimer = setTimeout(function () {
+            if (!state.isDragging) {
+                vTrack.classList.remove('sm-scrollbar-visible');
+                hTrack.classList.remove('sm-scrollbar-visible');
+            }
+        }, 1000);
+    }
+
+    function onScroll() {
+        scheduleUpdate();
+        showScrollbars();
+    }
+
+    function onThumbMouseDown(axis, e) {
+        e.preventDefault();
+        e.stopPropagation();
+        state.isDragging = true;
+        state.dragAxis = axis;
+        state.dragStartPos = axis === 'vertical' ? e.clientY : e.clientX;
+        state.dragStartScroll = axis === 'vertical' ? contentElement.scrollTop : contentElement.scrollLeft;
+
+        const thumb = axis === 'vertical' ? vThumb : hThumb;
+        thumb.classList.add('sm-scrollbar-dragging');
+
+        window.addEventListener('mousemove', onDragMove);
+        window.addEventListener('mouseup', onDragEnd);
+    }
+
+    function onDragMove(e) {
+        if (!state.isDragging) return;
+        e.preventDefault();
+
+        const el = state.contentElement;
+        if (state.dragAxis === 'vertical') {
+            const trackHeight = el.clientHeight;
+            const thumbHeight = Math.max(20, (el.clientHeight / el.scrollHeight) * trackHeight);
+            const maxThumbTop = trackHeight - thumbHeight;
+            const maxScroll = el.scrollHeight - el.clientHeight;
+            const delta = e.clientY - state.dragStartPos;
+            const scrollDelta = maxThumbTop > 0 ? (delta / maxThumbTop) * maxScroll : 0;
+            el.scrollTop = state.dragStartScroll + scrollDelta;
+        } else {
+            const trackWidth = el.clientWidth;
+            const thumbWidth = Math.max(20, (el.clientWidth / el.scrollWidth) * trackWidth);
+            const maxThumbLeft = trackWidth - thumbWidth;
+            const maxScroll = el.scrollWidth - el.clientWidth;
+            const delta = e.clientX - state.dragStartPos;
+            const scrollDelta = maxThumbLeft > 0 ? (delta / maxThumbLeft) * maxScroll : 0;
+            el.scrollLeft = state.dragStartScroll + scrollDelta;
+        }
+    }
+
+    function onDragEnd() {
+        state.isDragging = false;
+        vThumb.classList.remove('sm-scrollbar-dragging');
+        hThumb.classList.remove('sm-scrollbar-dragging');
+        window.removeEventListener('mousemove', onDragMove);
+        window.removeEventListener('mouseup', onDragEnd);
+        showScrollbars();
+    }
+
+    function onTrackClick(axis, e) {
+        if (e.target === vThumb || e.target === hThumb) return;
+        e.preventDefault();
+
+        const el = state.contentElement;
+        if (axis === 'vertical') {
+            const trackRect = vTrack.getBoundingClientRect();
+            const clickRatio = (e.clientY - trackRect.top) / trackRect.height;
+            el.scrollTop = clickRatio * el.scrollHeight - el.clientHeight / 2;
+        } else {
+            const trackRect = hTrack.getBoundingClientRect();
+            const clickRatio = (e.clientX - trackRect.left) / trackRect.width;
+            el.scrollLeft = clickRatio * el.scrollWidth - el.clientWidth / 2;
+        }
+    }
+
+    // Touch support for thumb drag
+    function onThumbTouchStart(axis, e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const touch = e.touches[0];
+        state.isDragging = true;
+        state.dragAxis = axis;
+        state.dragStartPos = axis === 'vertical' ? touch.clientY : touch.clientX;
+        state.dragStartScroll = axis === 'vertical' ? contentElement.scrollTop : contentElement.scrollLeft;
+
+        const thumb = axis === 'vertical' ? vThumb : hThumb;
+        thumb.classList.add('sm-scrollbar-dragging');
+
+        window.addEventListener('touchmove', onTouchDragMove, { passive: false });
+        window.addEventListener('touchend', onTouchDragEnd);
+    }
+
+    function onTouchDragMove(e) {
+        if (!state.isDragging) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+
+        const el = state.contentElement;
+        if (state.dragAxis === 'vertical') {
+            const trackHeight = el.clientHeight;
+            const thumbHeight = Math.max(20, (el.clientHeight / el.scrollHeight) * trackHeight);
+            const maxThumbTop = trackHeight - thumbHeight;
+            const maxScroll = el.scrollHeight - el.clientHeight;
+            const delta = touch.clientY - state.dragStartPos;
+            const scrollDelta = maxThumbTop > 0 ? (delta / maxThumbTop) * maxScroll : 0;
+            el.scrollTop = state.dragStartScroll + scrollDelta;
+        } else {
+            const trackWidth = el.clientWidth;
+            const thumbWidth = Math.max(20, (el.clientWidth / el.scrollWidth) * trackWidth);
+            const maxThumbLeft = trackWidth - thumbWidth;
+            const maxScroll = el.scrollWidth - el.clientWidth;
+            const delta = touch.clientX - state.dragStartPos;
+            const scrollDelta = maxThumbLeft > 0 ? (delta / maxThumbLeft) * maxScroll : 0;
+            el.scrollLeft = state.dragStartScroll + scrollDelta;
+        }
+    }
+
+    function onTouchDragEnd() {
+        state.isDragging = false;
+        vThumb.classList.remove('sm-scrollbar-dragging');
+        hThumb.classList.remove('sm-scrollbar-dragging');
+        window.removeEventListener('touchmove', onTouchDragMove);
+        window.removeEventListener('touchend', onTouchDragEnd);
+        showScrollbars();
+    }
+
+    // Bind events
+    contentElement.addEventListener('scroll', onScroll, { passive: true });
+    contentElement.addEventListener('mouseenter', showScrollbars);
+
+    vThumb.addEventListener('mousedown', function (e) { onThumbMouseDown('vertical', e); });
+    hThumb.addEventListener('mousedown', function (e) { onThumbMouseDown('horizontal', e); });
+
+    vTrack.addEventListener('mousedown', function (e) { onTrackClick('vertical', e); });
+    hTrack.addEventListener('mousedown', function (e) { onTrackClick('horizontal', e); });
+
+    vThumb.addEventListener('touchstart', function (e) { onThumbTouchStart('vertical', e); }, { passive: false });
+    hThumb.addEventListener('touchstart', function (e) { onThumbTouchStart('horizontal', e); }, { passive: false });
+
+    // Schedule a non-duplicate update on next animation frame
+    function scheduleUpdate() {
+        if (state.disposed) return;
+        if (!state.rafId) {
+            state.rafId = requestAnimationFrame(function () {
+                state.rafId = null;
+                updateScrollbars();
+            });
+        }
+    }
+
+    // Observe container size changes (grid height/width set, window resize)
+    state.resizeObserver = new ResizeObserver(function () {
+        scheduleUpdate();
+    });
+    state.resizeObserver.observe(contentElement);
+    // Also observe the scroll-container parent for grid height changes
+    if (contentElement.parentElement) {
+        state.resizeObserver.observe(contentElement.parentElement);
+    }
+
+    // Observe DOM mutations: row filtering, page size change, column style changes
+    state.mutationObserver = new MutationObserver(function () {
+        scheduleUpdate();
+    });
+    state.mutationObserver.observe(contentElement, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['style', 'class']
+    });
+
+    // Initial update
+    updateScrollbars();
+
+    // Store for cleanup
+    state.onScroll = onScroll;
+    state.showScrollbars = showScrollbars;
+    scrollbarInstances.set(contentElement, state);
+}
+
+export function disposeCustomScrollbars(contentElement) {
+    if (!contentElement) return;
+    const state = scrollbarInstances.get(contentElement);
+    if (!state) return;
+
+    state.disposed = true;
+    clearTimeout(state.hideTimer);
+    if (state.rafId) cancelAnimationFrame(state.rafId);
+    if (state.resizeObserver) state.resizeObserver.disconnect();
+    if (state.mutationObserver) state.mutationObserver.disconnect();
+    contentElement.removeEventListener('scroll', state.onScroll);
+    contentElement.removeEventListener('mouseenter', state.showScrollbars);
+    scrollbarInstances.delete(contentElement);
 }
 
 

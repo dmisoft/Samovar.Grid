@@ -20,35 +20,39 @@
             <GridFilterRowPanel T=T />
         }
     </div>
-    <div id="@ConstantService.InnerGridId" class="sm-grid-content" @ref="@LayoutService.GridInnerRef">
-        @if (InsertingForm != null)
-        {
-            @InsertingForm
-        }
-        @switch (DataSourceState)
-        {
-            case DataSourceState.NoData:
-                <NoDataPanel />
-                break;
-            case DataSourceState.Loading:
-                <LoadingSpinner />
-                break;
-            case DataSourceState.Idle:
-            default:
-                <div>
-                    <table id="@ConstantService.InnerGridBodyTableId"
-                           class="@CssClass @_tableSizeClass"
-                           style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
-                        <GridHiddenHeader />
-                        <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
-                            <Virtualize Items="@View.ToList()" Context="rowModel" SpacerElement="tr" @ref="virtualizeComponent">
-                                <GridRow RowModel="rowModel" />
-                            </Virtualize>
-                        </tbody>
-                    </table>
-                </div>
-                break;
-        }
+    <div class="sm-grid-scroll-container">
+        <div id="@ConstantService.InnerGridId" class="sm-grid-content" @ref="@LayoutService.GridInnerRef">
+            @if (InsertingForm != null)
+            {
+                @InsertingForm
+            }
+            @switch (DataSourceState)
+            {
+                case DataSourceState.NoData:
+                    <NoDataPanel />
+                    break;
+                case DataSourceState.Loading:
+                    <LoadingSpinner />
+                    break;
+                case DataSourceState.Idle:
+                default:
+                    <div>
+                        <table id="@ConstantService.InnerGridBodyTableId"
+                               class="@CssClass @_tableSizeClass"
+                               style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
+                            <GridHiddenHeader />
+                            <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
+                                <Virtualize Items="@View.ToList()" Context="rowModel" SpacerElement="tr" @ref="virtualizeComponent">
+                                    <GridRow RowModel="rowModel" />
+                                </Virtualize>
+                            </tbody>
+                        </table>
+                    </div>
+                    break;
+            }
+        </div>
+        <SmScrollbar @ref="_verticalScrollbar" Orientation="ScrollbarOrientation.Vertical" />
+        <SmScrollbar @ref="_horizontalScrollbar" Orientation="ScrollbarOrientation.Horizontal" />
     </div>
 </div>
 

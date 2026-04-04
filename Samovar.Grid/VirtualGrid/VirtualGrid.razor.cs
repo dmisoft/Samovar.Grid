@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web.Virtualization;
+using Microsoft.JSInterop;
 
 namespace Samovar.Grid;
 
@@ -53,6 +54,10 @@ public partial class VirtualGrid<T>
     protected string CssClass = "";
     protected string _tableSizeClass = "";
 
+    private SmScrollbar? _verticalScrollbar;
+    private SmScrollbar? _horizontalScrollbar;
+    private bool _scrollbarsInitialized;
+
     private bool _firstRenderComplete;
     private double _savedScrollLeft;
     private bool _restoreScrollLeft;
@@ -61,6 +66,17 @@ public partial class VirtualGrid<T>
     {
         if (firstRender)
             _firstRenderComplete = true;
+
+        if (!_scrollbarsInitialized && _verticalScrollbar is not null && _horizontalScrollbar is not null)
+        {
+            _scrollbarsInitialized = true;
+            await LayoutService.GridInnerRef.InitCustomScrollbars(
+                await JsService.JsModule(),
+                _verticalScrollbar.TrackRef,
+                _horizontalScrollbar.TrackRef,
+                _verticalScrollbar.ThumbRef,
+                _horizontalScrollbar.ThumbRef);
+        }
 
         if (_restoreScrollLeft)
         {
@@ -157,8 +173,15 @@ public partial class VirtualGrid<T>
         });
     }
 
-    public ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
-        return ValueTask.CompletedTask;
+        if (_scrollbarsInitialized)
+        {
+            try
+            {
+                await LayoutService.GridInnerRef.DisposeCustomScrollbars(await JsService.JsModule());
+            }
+            catch (JSDisconnectedException) { }
+        }
     }
 }
