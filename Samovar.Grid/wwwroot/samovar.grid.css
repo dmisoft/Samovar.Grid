@@ -18,16 +18,19 @@
     height: 0px;
 }
 
-/* Scrollable grid body — complex flex+overflow combination not in Bootstrap */
+/* Scrollable grid body — native scroll preserved but scrollbars hidden */
 .sm-grid-content {
     width: 100%;
     min-height: 0;
-    overflow: auto;
-    overflow-x: auto;
-    overflow-y: auto;
+    overflow: scroll;
     position: relative;
     -ms-flex: 1;
     flex: 1;
+    scrollbar-width: none;
+}
+
+.sm-grid-content::-webkit-scrollbar {
+    display: none;
 }
 
 .sm-grid-content::after {
@@ -104,4 +107,82 @@
     --sm-row-selected-bg: rgb(255, 106, 0, 0.5);
     --sm-detail-icon-size: 16px;
     --sm-no-data-color: red;
+
+    --sm-scrollbar-size: 8px;
+    --sm-scrollbar-thumb-color: rgba(0, 0, 0, 0.3);
+    --sm-scrollbar-thumb-hover-color: rgba(0, 0, 0, 0.5);
+    --sm-scrollbar-thumb-active-color: rgba(0, 0, 0, 0.6);
+    --sm-scrollbar-track-color: transparent;
+    --sm-scrollbar-thumb-radius: 4px;
+}
+
+/* Custom scrollbar container — wraps content + scrollbar overlays */
+.sm-grid-scroll-container {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    overflow: hidden;
+}
+
+/* Scrollbar track — positioned absolutely over the content */
+.sm-scrollbar-track {
+    position: absolute;
+    z-index: 10;
+    background: var(--sm-scrollbar-track-color);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sm-scrollbar-track.sm-scrollbar-visible {
+    opacity: 1;
+}
+
+.sm-scrollbar-track:hover {
+    opacity: 1;
+}
+
+/* Vertical scrollbar track */
+.sm-scrollbar-vertical {
+    top: 0;
+    right: 0;
+    bottom: var(--sm-scrollbar-size);
+    width: var(--sm-scrollbar-size);
+}
+
+/* Horizontal scrollbar track */
+.sm-scrollbar-horizontal {
+    bottom: 0;
+    left: 0;
+    right: var(--sm-scrollbar-size);
+    height: var(--sm-scrollbar-size);
+}
+
+/* Scrollbar thumb */
+.sm-scrollbar-thumb {
+    position: absolute;
+    background: var(--sm-scrollbar-thumb-color);
+    border-radius: var(--sm-scrollbar-thumb-radius);
+    transition: background-color 0.15s ease;
+}
+
+.sm-scrollbar-thumb:hover {
+    background: var(--sm-scrollbar-thumb-hover-color);
+}
+
+.sm-scrollbar-thumb:active,
+.sm-scrollbar-thumb.sm-scrollbar-dragging {
+    background: var(--sm-scrollbar-thumb-active-color);
+}
+
+/* Vertical thumb */
+.sm-scrollbar-vertical .sm-scrollbar-thumb {
+    width: 100%;
+    min-height: 20px;
+}
+
+/* Horizontal thumb */
+.sm-scrollbar-horizontal .sm-scrollbar-thumb {
+    height: 100%;
+    min-width: 20px;
 }

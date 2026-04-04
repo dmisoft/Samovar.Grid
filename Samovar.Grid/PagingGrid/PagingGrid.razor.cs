@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System.Reactive.Linq;
 
 namespace Samovar.Grid;
@@ -53,6 +54,10 @@ public partial class PagingGrid<T>
     [Parameter]
     public bool ShowCommandBar { get; set; } = true;
 
+    private SmScrollbar? _verticalScrollbar;
+    private SmScrollbar? _horizontalScrollbar;
+    private bool _scrollbarsInitialized;
+
     private bool _firstRenderComplete;
     private double _savedScrollLeft;
     private bool _restoreScrollLeft;
@@ -61,6 +66,17 @@ public partial class PagingGrid<T>
     {
         if (firstRender)
             _firstRenderComplete = true;
+
+        if (!_scrollbarsInitialized && _verticalScrollbar is not null && _horizontalScrollbar is not null)
+        {
+            _scrollbarsInitialized = true;
+            await LayoutService.GridInnerRef.InitCustomScrollbars(
+                await JsService.JsModule(),
+                _verticalScrollbar.TrackRef,
+                _horizontalScrollbar.TrackRef,
+                _verticalScrollbar.ThumbRef,
+                _horizontalScrollbar.ThumbRef);
+        }
 
         if (_restoreScrollLeft)
         {
@@ -154,8 +170,15 @@ public partial class PagingGrid<T>
         });
     }
 
-    public ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
-        return ValueTask.CompletedTask;
+        if (_scrollbarsInitialized)
+        {
+            try
+            {
+                await LayoutService.GridInnerRef.DisposeCustomScrollbars(await JsService.JsModule());
+            }
+            catch (JSDisconnectedException) { }
+        }
     }
 }
