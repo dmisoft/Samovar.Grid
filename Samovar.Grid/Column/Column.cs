@@ -23,6 +23,9 @@ public class Column
     [Parameter]
     public RenderFragment<object>? CellShowTemplate { get; set; }
 
+    [Parameter]
+    public GridTextAlign TextAlign { get; set; } = GridTextAlign.Left;
+
     public override void DependenciesInitialized()
     {
         ColumnService.RegisterColumn(Model);
@@ -52,5 +55,7 @@ public class Column
         var cellShowTemplate = parameters.GetValueOrDefault<RenderFragment<object>>(nameof(CellShowTemplate));
         if (cellShowTemplate is not null)
             Model.CellShowTemplate.OnNext(cellShowTemplate);
+
+        Model.TextAlign.OnNext(TextAlign);
     }
 }

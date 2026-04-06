@@ -9,4 +9,6 @@ public interface IDataColumnModel
     public BehaviorSubject<RenderFragment<object>?> CellShowTemplate { get; }
 
     public BehaviorSubject<string> Field { get; }
+
+    public BehaviorSubject<GridTextAlign> TextAlign { get; }
 }
