@@ -57,6 +57,13 @@ export function getElementWidthByRef(element) {
     return element.clientWidth;
 }
 
+export function getElementBoundingRect(element) {
+    if (element === null)
+        return { top: 0, left: 0, width: 0, height: 0 };
+    const rect = element.getBoundingClientRect();
+    return { top: rect.top, left: rect.left, width: rect.width, height: rect.height };
+}
+
 export function getElementScrollLeft(element) {
     if (element === null) return 0;
     return element.scrollLeft;
@@ -661,6 +668,42 @@ window.addEventListener('keyup', function (event) {
     windowStateVars.isCtrlKeyDown = event.ctrlKey;
     windowStateVars.isShiftKeyDown = event.shiftKey;
 }, true);
+
+let _filterMenuDismissClickHandler = null;
+let _filterMenuDismissKeyHandler = null;
+
+export function addFilterMenuDismissHandlers(element, dotNetRef) {
+    removeFilterMenuDismissHandlers();
+
+    _filterMenuDismissClickHandler = function (event) {
+        if (element && !element.contains(event.target)) {
+            dotNetRef.invokeMethodAsync('CloseFromJs');
+        }
+    };
+
+    _filterMenuDismissKeyHandler = function (event) {
+        if (event.key === 'Escape') {
+            dotNetRef.invokeMethodAsync('CloseFromJs');
+        }
+    };
+
+    // Defer so the click that opened the menu doesn't immediately close it
+    setTimeout(function () {
+        window.addEventListener('mousedown', _filterMenuDismissClickHandler);
+        window.addEventListener('keydown', _filterMenuDismissKeyHandler, true);
+    }, 0);
+}
+
+export function removeFilterMenuDismissHandlers() {
+    if (_filterMenuDismissClickHandler) {
+        window.removeEventListener('mousedown', _filterMenuDismissClickHandler);
+        _filterMenuDismissClickHandler = null;
+    }
+    if (_filterMenuDismissKeyHandler) {
+        window.removeEventListener('keydown', _filterMenuDismissKeyHandler, true);
+        _filterMenuDismissKeyHandler = null;
+    }
+}
 
 export function downloadFile(fileName, contentType, data) {
     const blob = new Blob([new Uint8Array(data)], { type: contentType });

@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace Samovar.Grid;
 
@@ -63,6 +64,21 @@ public class JsService
     public async Task DownloadFileAsync(string fileName, string contentType, byte[] data)
     {
         await (await JsModule()).InvokeVoidAsync("downloadFile", fileName, contentType, data);
+    }
+
+    public async ValueTask<ElementBoundingRect> GetElementBoundingRect(ElementReference element)
+    {
+        return await (await JsModule()).InvokeAsync<ElementBoundingRect>("getElementBoundingRect", element);
+    }
+
+    public async Task AddFilterMenuDismissHandlers(ElementReference element, object dotNetRef)
+    {
+        await (await JsModule()).InvokeVoidAsync("addFilterMenuDismissHandlers", element, dotNetRef);
+    }
+
+    public async Task RemoveFilterMenuDismissHandlers()
+    {
+        await (await JsModule()).InvokeVoidAsync("removeFilterMenuDismissHandlers");
     }
 
     public async ValueTask DisposeAsync()

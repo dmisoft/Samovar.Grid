@@ -1,0 +1,36 @@
+@typeparam TItem
+@inherits DesignComponentBase
+@namespace Samovar.Grid.Header
+
+<div @ref="_panelRef" class="sm-filter-menu-panel border bg-white shadow p-2 d-flex flex-column" style="position:fixed;z-index:9999;min-width:220px;min-height:200px;height:400px;resize:both;overflow:hidden;top:@(Top.ToString(System.Globalization.CultureInfo.InvariantCulture))px;left:@(Left.ToString(System.Globalization.CultureInfo.InvariantCulture))px;">
+    <div class="mb-2">Filter Values</div>
+    <div class="input-group input-group-sm mb-2">
+        <span class="input-group-text">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+            </svg>
+        </span>
+        <input type="text" class="form-control form-control-sm" placeholder="Enter text to search..."
+               @bind="_searchText" @bind:event="oninput" />
+    </div>
+    <div class="d-flex align-items-center py-1 px-1 border-bottom mb-1">
+        <input type="checkbox"
+               class="form-check-input me-2"
+               checked="@SelectAllChecked"
+               @onchange="OnSelectAllChanged" />
+        <span>Select All</span>
+    </div>
+    <div class="sm-filter-menu-list flex-grow-1" style="overflow-y:auto;margin-bottom:8px;min-height:0;">
+        @foreach (var node in GetVisibleNodes())
+        {
+            <GridColumnFilterMenuNode Node="node"
+                                      Depth="0"
+                                      OnCheckedChanged="OnNodeCheckedChanged"
+                                      OnToggleExpand="ToggleExpand" />
+        }
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-sm btn-outline-secondary flex-grow-1" @onclick="OnCancel">Cancel</button>
+        <button class="btn btn-sm btn-secondary flex-grow-1" @onclick="OnApply">Apply</button>
+    </div>
+</div>

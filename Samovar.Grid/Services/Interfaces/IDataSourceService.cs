@@ -7,4 +7,5 @@ public interface IDataSourceService<T>
     BehaviorSubject<IEnumerable<T>> Data { get; }
     BehaviorSubject<IQueryable<T>?> DataQuery { get; }
     BehaviorSubject<Func<T, bool>?> CustomFilter { get; }
+    IEnumerable<object?> GetDistinctColumnValues(string field);
 }
