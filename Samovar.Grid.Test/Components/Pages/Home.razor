@@ -29,9 +29,9 @@
                     RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
                     RowsRemoving="@((List<WeatherForecast> args) => RowsRemovingHandler(args))">
                 <Columns>
-                    <Column Title="Date" Field="@nameof(WeatherForecast.Date)" Width="100px" />
-                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="2*" />
-                    <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="200px" />
+                    <Column Title="Date" Field="@nameof(WeatherForecast.Date)" Width="100px" TextAlign="@dateAlign" />
+                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="2*" TextAlign="GridTextAlign.Center" />
+                    <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="200px" TextAlign="GridTextAlign.Right" />
                     <Column Field="@nameof(WeatherForecast.Summary)" Width="1*" />
                     <CommandColumn EditButtonVisible=true DeleteButtonVisible=true NewButtonVisible=true Width="150px" />
                 </Columns>
@@ -86,6 +86,14 @@
             <div class="mb-3">
                 <label for="columnWidth">Column width</label>
                 <input type="text" class="form-control" id="columnWidth" @bind=columnWidth />
+            </div>
+            <div class="mb-3">
+                <label for="dateAlign" class="form-label">Date column align</label>
+                <select id="dateAlign" class="form-select form-select-lg" @bind=dateAlign>
+                    <option value=@GridTextAlign.Left>Left</option>
+                    <option value=@GridTextAlign.Center>Center</option>
+                    <option value=@GridTextAlign.Right>Right</option>
+                </select>
             </div>
             <div class="mb-3">
                 <label for="gridHeight">Grid height</label>
@@ -190,7 +198,8 @@
     IEnumerable<WeatherForecast> selectedRows = [];
     bool showDetailRow = true;
     bool showCommandBar = true;
-    
+    GridTextAlign dateAlign = GridTextAlign.Left;
+
     Task RowEditBeginHandler(WeatherForecast item)
     {
         return Task.CompletedTask;

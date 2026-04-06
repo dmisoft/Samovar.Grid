@@ -11,4 +11,6 @@ public partial class DataColumnModel
     public BehaviorSubject<RenderFragment<object>?> CellShowTemplate { get; } = new BehaviorSubject<RenderFragment<object>?>(null);
 
     public BehaviorSubject<string> Field { get; } = new BehaviorSubject<string>("");
+
+    public BehaviorSubject<GridTextAlign> TextAlign { get; } = new BehaviorSubject<GridTextAlign>(GridTextAlign.Left);
 }
