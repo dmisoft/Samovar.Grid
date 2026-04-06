@@ -24,6 +24,7 @@ public class WeatherForecast
     [Browsable(false)]
     public double TemperatureFD => 12.5;
 
+    [Browsable(false)]
     public bool Boolean { get; set; }
 
     public string Summary { get; set; } = string.Empty;
