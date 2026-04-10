@@ -66,6 +66,7 @@ public abstract partial class GridFilterCellBase<TFilterCell>
     protected virtual Task FilterService_FilterCleared()
     {
         _innerValue = default;
+        StateHasChanged();
         return Task.CompletedTask;
     }
 
