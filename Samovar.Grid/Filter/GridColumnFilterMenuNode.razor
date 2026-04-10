@@ -23,11 +23,13 @@
     {
         <span style="display:inline-block;width:16px;margin-right:4px;"></span>
     }
-    <input type="checkbox"
-           class="form-check-input me-2"
-           checked="@Node.IsChecked"
-           @onchange="@((e) => OnCheckedChanged.InvokeAsync((Node, e)))" />
-    <span style="font-weight: normal;">@Node.Label</span>
+    <label class="d-flex align-items-center mb-0" style="cursor:pointer; user-select:none;">
+        <input type="checkbox"
+               class="form-check-input me-2"
+               checked="@Node.IsChecked"
+               @onchange="@((e) => OnCheckedChanged.InvokeAsync((Node, e)))" />
+        @Node.Label
+    </label>
 </div>
 
 @if (!Node.IsLeaf && Node.IsExpanded)

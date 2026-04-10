@@ -28,9 +28,14 @@
         FilterMode=filterMode
         Height="600px">
     <Columns>
+        <Column Field="@nameof(WeatherForecast.Position)" />
         <Column Field="@nameof(WeatherForecast.Summary)" />
         <Column Field="@nameof(WeatherForecast.Date)" />
+        <Column Field="@nameof(WeatherForecast.DateOnly)" />
         <Column Field="@nameof(WeatherForecast.TemperatureC)" />
+        <Column Field="@nameof(WeatherForecast.TemperatureFD)" />
+        <Column Field="@nameof(WeatherForecast.Active)" />
+        <CommandColumn/>
     </Columns>
 </SmGrid>
 

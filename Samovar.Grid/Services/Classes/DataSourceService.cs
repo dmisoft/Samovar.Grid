@@ -223,6 +223,48 @@ public class DataSourceService<T>
                         lambdaList.Add(Expression.Call(numericListConst, numericContainsMethod, memberExp));
                         break;
                     }
+                    // DateTime: compare date part only, time component is ignored
+                    if (tt == typeof(DateTime) || tt == typeof(DateTime?))
+                    {
+                        if (filterCellInfo.FilterCellValue == null) break;
+                        var rawDt = filterCellInfo.FilterCellValue is DateTime d
+                            ? d
+                            : ((DateTime?)filterCellInfo.FilterCellValue)!.Value;
+                        var filterDateConst = Expression.Constant(rawDt.Date, typeof(DateTime));
+                        if (tt == typeof(DateTime?))
+                        {
+                            var hasValue = Expression.Property(memberExp, "HasValue");
+                            var memberValue = Expression.Property(memberExp, "Value");
+                            var memberDate = Expression.Property(memberValue, nameof(DateTime.Date));
+                            Expression? cmp = pair.FilterCellMode switch
+                            {
+                                0 => Expression.Equal(memberDate, filterDateConst),
+                                1 => Expression.GreaterThan(memberDate, filterDateConst),
+                                2 => Expression.GreaterThanOrEqual(memberDate, filterDateConst),
+                                3 => Expression.LessThan(memberDate, filterDateConst),
+                                4 => Expression.LessThanOrEqual(memberDate, filterDateConst),
+                                _ => null
+                            };
+                            if (cmp != null)
+                                lambdaList.Add(Expression.AndAlso(hasValue, cmp));
+                        }
+                        else
+                        {
+                            var memberDate = Expression.Property(memberExp, nameof(DateTime.Date));
+                            Expression? cmp = pair.FilterCellMode switch
+                            {
+                                0 => Expression.Equal(memberDate, filterDateConst),
+                                1 => Expression.GreaterThan(memberDate, filterDateConst),
+                                2 => Expression.GreaterThanOrEqual(memberDate, filterDateConst),
+                                3 => Expression.LessThan(memberDate, filterDateConst),
+                                4 => Expression.LessThanOrEqual(memberDate, filterDateConst),
+                                _ => null
+                            };
+                            if (cmp != null)
+                                lambdaList.Add(cmp);
+                        }
+                        break;
+                    }
                     Expression numericValueExp = Expression.Convert(Expression.Constant(filterCellInfo.FilterCellValue), tt);
                     switch (pair.FilterCellMode)
                     {

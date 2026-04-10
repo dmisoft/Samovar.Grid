@@ -122,6 +122,7 @@ public partial class GridColumnFilterMenuPanel<TItem>
                         .Select(mg => new FilterMenuTreeNode
                         {
                             Label = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(mg.Key),
+                            IsExpanded = false,
                             Children = mg.Select(d => new FilterMenuTreeNode
                             {
                                 Label = d.Day.ToString(),
@@ -141,6 +142,7 @@ public partial class GridColumnFilterMenuPanel<TItem>
                         .Select(mg => new FilterMenuTreeNode
                         {
                             Label = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(mg.Key),
+                            IsExpanded = false,
                             Children = mg.Select(d => new FilterMenuTreeNode
                             {
                                 Label = d.Day.ToString(),
