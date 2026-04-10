@@ -19,6 +19,14 @@
             <option value=@GridFilterMode.FilterMenu>FilterMenu</option>
         </select>
     </div>
+    <label for="gridSizeMode" class="col-1 col-form-label m-2">Size mode:</label>
+    <div class="col-2 m-2">
+        <select id="gridSizeMode" class="form-select form-select-lg" @bind=gridSizeMode>
+            <option value=@GridSizeMode.Default>Default</option>
+            <option value=@GridSizeMode.Small>Small</option>
+            <option value=@GridSizeMode.Large>Large</option>
+        </select>
+    </div>
     @if(filterMode == GridFilterMode.Custom){
         <button class="col-2 btn btn-primary m-3" @onclick="ApplyCustomFilter">Apply custom filter</button>
         <button class="col-2 btn btn-primary m-3" @onclick="ResetCustomFilter">Reset custom filter</button>
@@ -28,6 +36,7 @@
 <SmGrid @ref=grid
         Data=forecasts
         FilterMode=filterMode
+        SizeMode=gridSizeMode
         Height="600px">
     <Columns>
         <Column Field="@nameof(WeatherForecast.Position)" />
@@ -46,6 +55,7 @@
     private List<WeatherForecast>? forecasts;
     SmGrid<WeatherForecast>? grid;
     GridFilterMode filterMode = GridFilterMode.Custom;
+    GridSizeMode gridSizeMode = GridSizeMode.Default;
 
     protected override async Task OnInitializedAsync()
     {

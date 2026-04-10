@@ -4,7 +4,7 @@
 <div class="d-flex align-items-center py-1" style="padding-left: @(Depth * 16 + 4)px;">
     @if (!Node.IsLeaf)
     {
-        <button class="btn btn-link btn-sm p-0 me-1" style="line-height:1;" @onclick="@(() => OnToggleExpand.InvokeAsync(Node))">
+        <button class="btn btn-link @BtnSizeClass p-0 me-1" style="line-height:1;" @onclick="@(() => OnToggleExpand.InvokeAsync(Node))">
             @if (Node.IsExpanded)
             {
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
@@ -23,7 +23,7 @@
     {
         <span style="display:inline-block;width:16px;margin-right:4px;"></span>
     }
-    <label class="d-flex align-items-center mb-0" style="cursor:pointer; user-select:none;">
+    <label class="d-flex align-items-center mb-0 @ListItemSizeClass" style="cursor:pointer; user-select:none;">
         <input type="checkbox"
                class="form-check-input me-2"
                checked="@Node.IsChecked"
@@ -38,6 +38,8 @@
     {
         <GridColumnFilterMenuNode Node="child"
                                   Depth="@(Depth + 1)"
+                                  BtnSizeClass="@BtnSizeClass"
+                                  ListItemSizeClass="@ListItemSizeClass"
                                   OnCheckedChanged="OnCheckedChanged"
                                   OnToggleExpand="OnToggleExpand" />
     }
@@ -55,4 +57,10 @@
 
     [Parameter]
     public EventCallback<FilterMenuTreeNode> OnToggleExpand { get; set; }
+
+    [Parameter]
+    public string BtnSizeClass { get; set; } = "";
+
+    [Parameter]
+    public string ListItemSizeClass { get; set; } = "";
 }

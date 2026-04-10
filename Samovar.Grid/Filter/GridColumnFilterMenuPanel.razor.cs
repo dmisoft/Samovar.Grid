@@ -33,6 +33,14 @@ public partial class GridColumnFilterMenuPanel<TItem>
     [SmInject]
     public required IJsService JsService { get; set; }
 
+    [SmInject]
+    public required ILayoutService LayoutService { get; set; }
+
+    private string _btnSizeClass = "";
+    private string _inputGroupSizeClass = "";
+    private string _formControlSizeClass = "";
+    private string _listItemSizeClass = "";
+
     private ElementReference _panelRef;
     private DotNetObjectReference<GridColumnFilterMenuPanel<TItem>>? _dotNetRef;
     private bool _handlersRegistered = false;
@@ -46,6 +54,35 @@ public partial class GridColumnFilterMenuPanel<TItem>
         typeof(DateOnly), typeof(DateOnly?)
     };
 
+    private const int NumericGroupingThreshold = 20;
+
+    private static readonly HashSet<Type> IntegralTypes = new()
+    {
+        typeof(byte),    typeof(byte?),
+        typeof(sbyte),   typeof(sbyte?),
+        typeof(short),   typeof(short?),
+        typeof(ushort),  typeof(ushort?),
+        typeof(int),     typeof(int?),
+        typeof(uint),    typeof(uint?),
+        typeof(long),    typeof(long?),
+        typeof(ulong),   typeof(ulong?),
+    };
+
+    private static readonly HashSet<Type> NumericGroupableTypes = new()
+    {
+        typeof(byte),    typeof(byte?),
+        typeof(sbyte),   typeof(sbyte?),
+        typeof(short),   typeof(short?),
+        typeof(ushort),  typeof(ushort?),
+        typeof(int),     typeof(int?),
+        typeof(uint),    typeof(uint?),
+        typeof(long),    typeof(long?),
+        typeof(ulong),   typeof(ulong?),
+        typeof(float),   typeof(float?),
+        typeof(double),  typeof(double?),
+        typeof(decimal), typeof(decimal?),
+    };
+
     protected override Task OnInitializedAsync()
     {
         var field = ColMetadata.Field.Value;
@@ -57,6 +94,8 @@ public partial class GridColumnFilterMenuPanel<TItem>
 
         if (DateTypes.Contains(propType))
             _rootNodes = BuildDateHierarchy(rawValues, propType);
+        else if (NumericGroupableTypes.Contains(propType))
+            _rootNodes = BuildNumericHierarchy(rawValues, propType);
         else
             _rootNodes = BuildFlatList(rawValues);
 
@@ -70,6 +109,16 @@ public partial class GridColumnFilterMenuPanel<TItem>
         }
 
         FilterService.FilterCleared += OnFilterCleared;
+
+        LayoutService.SizeMode.Subscribe(mode =>
+        {
+            _btnSizeClass         = mode switch { GridSizeMode.Small => "btn-sm small", GridSizeMode.Large => "btn-lg", _ => "" };
+            _inputGroupSizeClass  = mode switch { GridSizeMode.Small => "input-group-sm", GridSizeMode.Large => "input-group-lg", _ => "" };
+            _formControlSizeClass = mode switch { GridSizeMode.Small => "form-control-sm", GridSizeMode.Large => "form-control-lg", _ => "" };
+            _listItemSizeClass    = mode switch { GridSizeMode.Small => "small", GridSizeMode.Large => "fs-5", _ => "" };
+            StateHasChanged();
+        });
+
         return base.OnInitializedAsync();
     }
 
@@ -153,6 +202,98 @@ public partial class GridColumnFilterMenuPanel<TItem>
         }
     }
 
+    private static decimal ComputeBucketSize(decimal min, decimal max, int targetGroups = 10)
+    {
+        decimal range = max - min;
+        if (range <= 0) return 1m;
+
+        decimal rawSize = range / targetGroups;
+        double log = Math.Floor(Math.Log10((double)rawSize));
+        decimal magnitude = (decimal)Math.Pow(10, log);
+
+        foreach (var m in new[] { 1m, 2m, 5m, 10m })
+        {
+            decimal candidate = magnitude * m;
+            if (Math.Ceiling(range / candidate) <= 15m)
+                return candidate;
+        }
+        return magnitude * 10m;
+    }
+
+    private static string FormatBucketBound(decimal value, Type propType) =>
+        IntegralTypes.Contains(propType) ? ((long)value).ToString() : value.ToString("G");
+
+    private static List<FilterMenuTreeNode> BuildNumericHierarchy(IEnumerable<object?> values, Type propType)
+    {
+        var materialised = values.ToList();
+        var nullNodes = materialised
+            .Where(v => v is null)
+            .Select(_ => new FilterMenuTreeNode { Label = "(blank)", RawValue = null })
+            .ToList();
+
+        List<(object raw, decimal asDecimal)> numericValues;
+        try
+        {
+            numericValues = materialised
+                .Where(v => v is not null)
+                .Select(v => (raw: v!, asDecimal: Convert.ToDecimal(v)))
+                .OrderBy(x => x.asDecimal)
+                .ToList();
+        }
+        catch
+        {
+            return BuildFlatList(materialised);
+        }
+
+        if (numericValues.Count == 0)
+            return nullNodes;
+
+        if (numericValues.Count <= NumericGroupingThreshold)
+        {
+            var flat = numericValues
+                .Select(x => new FilterMenuTreeNode { Label = x.raw.ToString() ?? "", RawValue = x.raw })
+                .ToList();
+            flat.AddRange(nullNodes);
+            return flat;
+        }
+
+        decimal minVal = numericValues[0].asDecimal;
+        decimal maxVal = numericValues[^1].asDecimal;
+        decimal bucketSize = ComputeBucketSize(minVal, maxVal);
+        decimal bucketFloor = Math.Floor(minVal / bucketSize) * bucketSize;
+
+        var buckets = new SortedDictionary<decimal, List<(object raw, decimal asDecimal)>>();
+        foreach (var (raw, asDecimal) in numericValues)
+        {
+            decimal bucketStart = Math.Floor((asDecimal - bucketFloor) / bucketSize) * bucketSize + bucketFloor;
+            if (!buckets.ContainsKey(bucketStart))
+                buckets[bucketStart] = new();
+            buckets[bucketStart].Add((raw, asDecimal));
+        }
+
+        var groupNodes = buckets.Select(kv =>
+        {
+            decimal bucketStart = kv.Key;
+            decimal bucketEnd = IntegralTypes.Contains(propType)
+                ? bucketStart + bucketSize - 1m
+                : bucketStart + bucketSize;
+
+            string groupLabel = $"{FormatBucketBound(bucketStart, propType)} - {FormatBucketBound(bucketEnd, propType)}";
+
+            var children = kv.Value
+                .Select(x => new FilterMenuTreeNode { Label = x.raw.ToString() ?? "", RawValue = x.raw })
+                .ToList();
+
+            if (children.Count == 1)
+                return children[0];
+
+            return new FilterMenuTreeNode { Label = groupLabel, IsExpanded = false, Children = children };
+        }).ToList();
+
+        groupNodes.AddRange(nullNodes);
+        return groupNodes;
+    }
+
     private static void SetCheckedFromExisting(List<FilterMenuTreeNode> nodes, HashSet<string?> selectedLabels)
     {
         foreach (var node in nodes)
@@ -176,9 +317,11 @@ public partial class GridColumnFilterMenuPanel<TItem>
 
     private bool NodeMatchesSearch(FilterMenuTreeNode node)
     {
-        if (node.IsLeaf)
-            return node.Label.Contains(_searchText, StringComparison.OrdinalIgnoreCase);
-        return node.Children.Any(NodeMatchesSearch);
+        if (node.Label.Contains(_searchText, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (!node.IsLeaf)
+            return node.Children.Any(NodeMatchesSearch);
+        return false;
     }
 
     private bool SelectAllChecked =>

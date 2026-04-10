@@ -186,3 +186,33 @@
     height: 100%;
     min-width: 20px;
 }
+
+/* Filter menu panel — fixed-position popup with resize support */
+.sm-filter-menu-panel {
+    position: fixed;
+    z-index: 9999;
+    min-width: 220px;
+    min-height: 200px;
+    height: 400px;
+    resize: both;
+    overflow: hidden;
+}
+
+/* Filter menu list — scrollable values container inside the panel */
+.sm-filter-menu-list {
+    overflow-y: auto;
+    margin-bottom: 8px;
+    min-height: 0;
+}
+
+/* Normal font weight for Select All label and all filter value labels */
+.sm-filter-menu-panel span,
+.sm-filter-menu-list label {
+    font-weight: normal;
+}
+
+/* Large size mode — increases cell padding and font size (Bootstrap has no table-lg) */
+.sm-table-lg > :not(caption) > * > * {
+    padding: 0.5rem 0.5rem;
+    font-size: 1.25rem;
+}

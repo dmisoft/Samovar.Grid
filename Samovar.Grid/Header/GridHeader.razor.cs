@@ -25,12 +25,18 @@ public partial class GridHeader<T>
     public required IGridStateService GridStateService { get; set; }
 
     protected string CssClass = "";
+    protected string _tableSizeClass = "";
 
     protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
         LayoutService.ShowRowSelectionColumn.Subscribe(_ => StateHasChanged());
+        LayoutService.SizeMode.Subscribe(mode =>
+        {
+            _tableSizeClass = mode switch { GridSizeMode.Small => "table-sm small", GridSizeMode.Large => "sm-table-lg", _ => "" };
+            StateHasChanged();
+        });
     }
 
     internal Task ColumnCellClick(IDataColumnModel columnModel)
