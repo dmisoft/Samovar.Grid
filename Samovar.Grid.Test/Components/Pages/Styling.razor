@@ -29,7 +29,8 @@
                 ShowDetailRow="true"
                 ShowCommandBar="true"
                 ColumnResizeMode=GridColumnResizeMode.Sliding
-                @bind-SingleSelectedDataRow=@selectedRow>
+                @bind-SingleSelectedDataRow=@selectedRow
+                Height="500px">
             <Columns>
                 <Column Field="@nameof(WeatherForecast.Summary)" />
                 <Column Field="@nameof(WeatherForecast.Date)" />
