@@ -4,12 +4,18 @@ using System.Reflection;
 namespace Samovar.Grid.Edit;
 
 public partial class GridEditCellBoolean
+    : DesignComponentBase
 {
+    [SmInject]
+    public required ILayoutService LayoutService { get; set; }
+
     [Parameter]
     public required object Data { get; set; }
 
     [Parameter]
     public required PropertyInfo PropInfo { get; set; }
+
+    protected string _formSelectSizeClass = "";
 
     protected string NotDefinedValue = "null";
     protected string TrueValue = true.ToString();
@@ -48,10 +54,14 @@ public partial class GridEditCellBoolean
         }
     }
 
-    protected override void OnInitialized()
+    protected override Task OnInitializedAsync()
     {
-        base.OnInitialized();
         InnerValue = (bool?)PropInfo.GetValue(Data) ?? false;
+        LayoutService.SizeMode.Subscribe(mode =>
+        {
+            _formSelectSizeClass = mode switch { GridSizeMode.Small => "form-select-sm", GridSizeMode.Large => "form-select-lg", _ => "" };
+            StateHasChanged();
+        });
         if (InnerValue)
         {
             internalValue = TrueValue;
@@ -60,6 +70,7 @@ public partial class GridEditCellBoolean
         {
             internalValue = FalseValue;
         }
+        return base.OnInitializedAsync();
     }
 
     public void InnerValueOnChange(ChangeEventArgs args)

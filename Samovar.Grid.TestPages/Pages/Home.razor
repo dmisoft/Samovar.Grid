@@ -29,15 +29,7 @@
                     <Column Field="@nameof(WeatherForecast.Summary)" Width="1*" TextAlign="GridTextAlign.Center"/>
                     <CommandColumn EditButtonVisible=true DeleteButtonVisible=true NewButtonVisible=true Width="150px" />
                 </Columns>
-                <EditPopupTitleTemplate Context="context">
-                    @{
-                        if (context is not null)
-                        {
-                            WeatherForecast data = context as WeatherForecast;
-                            <div>@($"Temperature on {data!.Date:yyyy-MM-dd}")</div>
-                        }
-                    }
-                </EditPopupTitleTemplate>
+                
                 <DetailRowTemplate Context="mydata">
                     @{
                         if (mydata is not null)
