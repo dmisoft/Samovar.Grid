@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Samovar.Grid\Samovar.Grid.csproj" />
+  </ItemGroup>
+
+</Project>

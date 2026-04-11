@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Samovar.Grid\Samovar.Grid.csproj" />
+    <ProjectReference Include="..\..\Samovar.Grid.TestPages\Samovar.Grid.TestPages.csproj" />
   </ItemGroup>
 
 </Project>
