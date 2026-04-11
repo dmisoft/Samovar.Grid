@@ -4,15 +4,18 @@
 
 <div @ref="_panelRef" class="sm-filter-menu-panel border bg-white shadow p-2 d-flex flex-column" style="top:@(Top.ToString(System.Globalization.CultureInfo.InvariantCulture))px;left:@(Left.ToString(System.Globalization.CultureInfo.InvariantCulture))px;">
     <div class="mb-2">Filter Values</div>
-    <div class="input-group @_inputGroupSizeClass mb-2">
-        <span class="input-group-text">
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-            </svg>
-        </span>
-        <input type="text" class="form-control @_formControlSizeClass" placeholder="Enter text to search..."
-               @bind="_searchText" @bind:event="oninput" />
-    </div>
+    @if (!_isDateColumn)
+    {
+        <div class="input-group @_inputGroupSizeClass mb-2">
+            <span class="input-group-text">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                </svg>
+            </span>
+            <input type="text" class="form-control @_formControlSizeClass" placeholder="Enter text to search..."
+                   @bind="_searchText" @bind:event="oninput" />
+        </div>
+    }
     <div class="d-flex align-items-center py-1 px-1 border-bottom mb-1">
         <input type="checkbox"
                class="form-check-input me-2"

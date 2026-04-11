@@ -47,6 +47,7 @@ public partial class GridColumnFilterMenuPanel<TItem>
 
     private List<FilterMenuTreeNode> _rootNodes = new();
     private string _searchText = "";
+    private bool _isDateColumn;
 
     private static readonly HashSet<Type> DateTypes = new()
     {
@@ -92,7 +93,9 @@ public partial class GridColumnFilterMenuPanel<TItem>
         RepositoryService.PropInfo.TryGetValue(field, out propInfo);
         var propType = propInfo?.PropertyType ?? typeof(string);
 
-        if (DateTypes.Contains(propType))
+        _isDateColumn = DateTypes.Contains(propType);
+
+        if (_isDateColumn)
             _rootNodes = BuildDateHierarchy(rawValues, propType);
         else if (NumericGroupableTypes.Contains(propType))
             _rootNodes = BuildNumericHierarchy(rawValues, propType);
