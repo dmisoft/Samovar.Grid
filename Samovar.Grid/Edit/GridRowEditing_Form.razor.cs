@@ -20,6 +20,18 @@ public partial class GridRowEditing_Form<TItem>
     public GridRowModel<TItem> RowModel { get; set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
+    protected string _btnSizeClass = "";
+
+    protected override Task OnInitializedAsync()
+    {
+        LayoutService.SizeMode.Subscribe(mode =>
+        {
+            _btnSizeClass = mode switch { GridSizeMode.Small => "btn-sm small", GridSizeMode.Large => "btn-lg", _ => "" };
+            StateHasChanged();
+        });
+        return base.OnInitializedAsync();
+    }
+
     public ValueTask DisposeAsync()
     {
         return ValueTask.CompletedTask;

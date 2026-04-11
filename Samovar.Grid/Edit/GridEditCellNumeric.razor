@@ -1,3 +1,4 @@
 ﻿@typeparam TValue
 @typeparam TEntity
-<input class="form-control" style="width:100%;" type="number" @bind-value="@InnerValue" @bind-value:event="onchange" />
+@inherits DesignComponentBase
+<input class="form-control @_formControlSizeClass" style="width:100%;" type="number" @bind-value="@InnerValue" @bind-value:event="onchange" />

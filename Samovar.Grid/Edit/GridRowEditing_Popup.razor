@@ -11,7 +11,7 @@
 				}
 				else
 				{
-					<h5 class="modal-title" id="staticBackdropLabel">Edit item</h5>
+					<h5 class="modal-title @_titleSizeClass" id="staticBackdropLabel">Edit item</h5>
 				}
 				
 				<button type="button" class="btn-close" aria-label="Close" @onclick="@(() => EditingService.CancelRowEdit(RowModel))"></button>
@@ -20,8 +20,8 @@
 				<GridRowEditing_Body RowModel=RowModel />
 			</div>
 			<div class="modal-footer">
-				<button class="btn btn-outline-primary mx-1" @onclick=@(() => EditingService.EditCommit(RowModel))>update</button>
-				<button class="btn btn-outline-secondary mx-1" @onclick=@(() => EditingService.CancelRowEdit(RowModel))>cancel</button>
+				<button class="btn btn-outline-primary mx-1 @_btnSizeClass" @onclick=@(() => EditingService.EditCommit(RowModel))>update</button>
+				<button class="btn btn-outline-secondary mx-1 @_btnSizeClass" @onclick=@(() => EditingService.CancelRowEdit(RowModel))>cancel</button>
 			</div>
 		</div>
 	</div>

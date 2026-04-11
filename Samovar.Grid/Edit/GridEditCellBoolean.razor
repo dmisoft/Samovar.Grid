@@ -1,5 +1,6 @@
-﻿<div class="d-flex flex-row">
-    <select class="form-select" @bind-value=InternalValue @bind-value:event="onchange">
+﻿@inherits DesignComponentBase
+<div class="d-flex flex-row">
+    <select class="form-select @_formSelectSizeClass" @bind-value=InternalValue @bind-value:event="onchange">
         <option value=@NotDefinedValue>...</option>
         <option value=@TrueValue>True</option>
         <option value=@FalseValue>False</option>
