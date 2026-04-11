@@ -1,4 +1,5 @@
 ﻿using Samovar.Grid.Filter;
+using System.Collections;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -139,6 +140,23 @@ public class DataSourceService<T>
             switch (prop.PropertyType)
             {
                 case var tt when tt == typeof(string):
+                    MethodInfo? propertyToLowerMethod = typeof(string).GetMethod("ToLower", Type.EmptyTypes);
+                    if (propertyToLowerMethod is null)
+                        break;
+
+                    if (pair.FilterCellMode == FilterCellModeConstants.InList)
+                    {
+                        var selectedStrings = ((IEnumerable<object>)filterCellInfo.FilterCellValue!)
+                            .Select(v => v?.ToString()?.ToLower() ?? "").ToList();
+                        var listConst = Expression.Constant(selectedStrings, typeof(List<string>));
+                        MethodInfo? listContainsMethod = typeof(List<string>).GetMethod("Contains", new[] { typeof(string) });
+                        if (listContainsMethod is null)
+                            break;
+                        var lowerMemberExp = Expression.Call(memberExp, propertyToLowerMethod);
+                        lambdaList.Add(Expression.Call(listConst, listContainsMethod, lowerMemberExp));
+                        break;
+                    }
+
                     var filterCellValue = filterCellInfo.FilterCellValue?.ToString() ?? "";
                     filterCellValue = filterCellValue.ToLower();
                     ConstantExpression valueExp = Expression.Constant(filterCellValue);
@@ -150,9 +168,6 @@ public class DataSourceService<T>
                     var nullValueSubstExpression = Expression.Assign(memberExp, Expression.Constant(""));
                     isNullExpression = Expression.IfThen(Expression.Call(IsNullOrEmptyMethod, memberExp), nullValueSubstExpression);
 
-                    MethodInfo? propertyToLowerMethod = typeof(string).GetMethod("ToLower", Type.EmptyTypes);
-                    if (propertyToLowerMethod is null)
-                        break;
                     var callExp = Expression.Call(memberExp, propertyToLowerMethod);
 
                     switch (pair.FilterCellMode)
@@ -192,6 +207,64 @@ public class DataSourceService<T>
                     lambdaList.Add(Expression.Equal(memberExp, boolValueExp));
                     break;
                 case var tt when numericTypeList.Contains(tt):
+                    if (pair.FilterCellMode == FilterCellModeConstants.InList)
+                    {
+                        var rawValues = ((IEnumerable<object>)filterCellInfo.FilterCellValue!).ToList();
+                        var typedValues = rawValues
+                            .Select(v => v is null ? null : Convert.ChangeType(v, Nullable.GetUnderlyingType(tt) ?? tt))
+                            .ToList();
+                        var typedListType = typeof(List<>).MakeGenericType(tt);
+                        var typedList = Activator.CreateInstance(typedListType)!;
+                        var addMethod = typedListType.GetMethod("Add")!;
+                        foreach (var v in typedValues)
+                            addMethod.Invoke(typedList, new[] { v });
+                        var numericListConst = Expression.Constant(typedList, typedListType);
+                        MethodInfo numericContainsMethod = typedListType.GetMethod("Contains", new[] { tt })!;
+                        lambdaList.Add(Expression.Call(numericListConst, numericContainsMethod, memberExp));
+                        break;
+                    }
+                    // DateTime: compare date part only, time component is ignored
+                    if (tt == typeof(DateTime) || tt == typeof(DateTime?))
+                    {
+                        if (filterCellInfo.FilterCellValue == null) break;
+                        var rawDt = filterCellInfo.FilterCellValue is DateTime d
+                            ? d
+                            : ((DateTime?)filterCellInfo.FilterCellValue)!.Value;
+                        var filterDateConst = Expression.Constant(rawDt.Date, typeof(DateTime));
+                        if (tt == typeof(DateTime?))
+                        {
+                            var hasValue = Expression.Property(memberExp, "HasValue");
+                            var memberValue = Expression.Property(memberExp, "Value");
+                            var memberDate = Expression.Property(memberValue, nameof(DateTime.Date));
+                            Expression? cmp = pair.FilterCellMode switch
+                            {
+                                0 => Expression.Equal(memberDate, filterDateConst),
+                                1 => Expression.GreaterThan(memberDate, filterDateConst),
+                                2 => Expression.GreaterThanOrEqual(memberDate, filterDateConst),
+                                3 => Expression.LessThan(memberDate, filterDateConst),
+                                4 => Expression.LessThanOrEqual(memberDate, filterDateConst),
+                                _ => null
+                            };
+                            if (cmp != null)
+                                lambdaList.Add(Expression.AndAlso(hasValue, cmp));
+                        }
+                        else
+                        {
+                            var memberDate = Expression.Property(memberExp, nameof(DateTime.Date));
+                            Expression? cmp = pair.FilterCellMode switch
+                            {
+                                0 => Expression.Equal(memberDate, filterDateConst),
+                                1 => Expression.GreaterThan(memberDate, filterDateConst),
+                                2 => Expression.GreaterThanOrEqual(memberDate, filterDateConst),
+                                3 => Expression.LessThan(memberDate, filterDateConst),
+                                4 => Expression.LessThanOrEqual(memberDate, filterDateConst),
+                                _ => null
+                            };
+                            if (cmp != null)
+                                lambdaList.Add(cmp);
+                        }
+                        break;
+                    }
                     Expression numericValueExp = Expression.Convert(Expression.Constant(filterCellInfo.FilterCellValue), tt);
                     switch (pair.FilterCellMode)
                     {
@@ -245,6 +318,17 @@ public class DataSourceService<T>
             return data;
     }
 
+    public IEnumerable<object?> GetDistinctColumnValues(string field)
+    {
+        var prop = typeof(T).GetProperty(field);
+        if (prop is null) return Enumerable.Empty<object?>();
+        return Data.Value
+            .Select(item => prop.GetValue(item))
+            .Distinct()
+            .OrderBy(v => v)
+            .ToList();
+    }
+
     public void OnCompleted()
     {
         observableStandardFilter?.Dispose();
@@ -276,6 +360,7 @@ public class DataSourceService<T>
         }
         else
         {
+            // FilterRow and FilterMenu both use the FilterService reactive pipeline
             observableStandardFilter = Observable.CombineLatest(
                 _filterService.FilterInfo,
                 _orderService.ColumnOrderInfo,

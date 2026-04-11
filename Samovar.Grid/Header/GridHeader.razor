@@ -5,7 +5,7 @@
 <div style="position:relative;display:flex;flex-direction:row;">
     <div style="overflow:hidden;position:relative;flex-grow:1;" id="@ConstantService.GridHeaderContainerId">
         <div style="position:relative;" class="user-select-none">
-            <table style="margin:0;padding:0;table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")" class=@CssClass>
+            <table style="margin:0;padding:0;table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")" class="@CssClass @_tableSizeClass">
                 <thead>
                     <tr>
                         @{
@@ -23,7 +23,7 @@
                                 switch (columnModel.ColumnType)
                                 {
                                     case ColumnType.Data:
-                                        <GridHeaderCell ColumnModel=@((IDataColumnModel)columnModel) />
+                                        <GridHeaderCell TItem="T" ColumnModel=@((IDataColumnModel)columnModel) />
                                         break;
                                     case ColumnType.Command:
                                         <GridHeaderCommandCell ColumnModel=@((ICommandColumnModel)columnModel) T="T" />

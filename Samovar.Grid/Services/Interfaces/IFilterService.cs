@@ -7,6 +7,7 @@ namespace Samovar.Grid;
 public interface IFilterService
 {
     BehaviorSubject<IEnumerable<GridFilterCellInfo>> FilterInfo { get; }
+    BehaviorSubject<string?> ActiveFilterMenuColumnId { get; }
     ObservableCollection<GridFilterCellInfo> ColumnFilters { get; }
     void AddOrRemoveFilter(GridFilterCellInfo filterCellInfo);
     T? TryGetFilterCellValue<T>(IDataColumnModel columnModel);

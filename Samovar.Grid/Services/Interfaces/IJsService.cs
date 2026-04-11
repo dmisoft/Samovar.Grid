@@ -1,6 +1,9 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace Samovar.Grid;
+
+public record ElementBoundingRect(double Top, double Left, double Width, double Height);
 
 public interface IJsService
 {
@@ -49,4 +52,10 @@ public interface IJsService
         double rightSideColumnMinWidth);
 
     Task DownloadFileAsync(string fileName, string contentType, byte[] data);
+
+    ValueTask<ElementBoundingRect> GetElementBoundingRect(ElementReference element);
+
+    Task AddFilterMenuDismissHandlers(ElementReference element, object dotNetRef);
+
+    Task RemoveFilterMenuDismissHandlers();
 }

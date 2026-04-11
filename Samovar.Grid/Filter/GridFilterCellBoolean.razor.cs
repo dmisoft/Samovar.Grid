@@ -10,7 +10,6 @@ public partial class GridFilterCellBoolean
     protected override async Task FilterService_FilterCleared()
     {
         await base.FilterService_FilterCleared();
-        InnerValue = null;
         internalValue = NotDefinedValue;
     }
 

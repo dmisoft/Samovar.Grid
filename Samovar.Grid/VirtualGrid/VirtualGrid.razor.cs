@@ -93,7 +93,7 @@ public partial class VirtualGrid<T>
         LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
         LayoutService.SizeMode.Subscribe(mode =>
         {
-            _tableSizeClass = mode switch { GridSizeMode.Small => "table-sm small", GridSizeMode.Large => "table-lg", _ => "" };
+            _tableSizeClass = mode switch { GridSizeMode.Small => "table-sm small", GridSizeMode.Large => "sm-table-lg", _ => "" };
             StateHasChanged();
         });
 

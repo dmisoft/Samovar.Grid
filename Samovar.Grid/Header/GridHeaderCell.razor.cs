@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System.Reactive.Linq;
+using System.Globalization;
 
 namespace Samovar.Grid.Header;
 
-public partial class GridHeaderCell
+public partial class GridHeaderCell<TItem>
     : DesignComponentBase, IAsyncDisposable
 {
     [Parameter]
@@ -28,6 +29,17 @@ public partial class GridHeaderCell
     [SmInject]
     public required IConstantService ConstantService { get; set; }
 
+    [SmInject]
+    public required IFilterService FilterService { get; set; }
+
+    private bool _filterMenuOpen = false;
+    private bool _filterActive = false;
+    private double _filterMenuTop = 0;
+    private double _filterMenuLeft = 0;
+    private ElementReference _filterButtonRef;
+    IDisposable? _filterInfoUnsubscriber = null;
+    IDisposable? _activeFilterMenuUnsubscriber = null;
+
     IDisposable? _columnOrderInfoUnsubscriber = null;
     protected string WidthStyle = "";
 
@@ -38,6 +50,19 @@ public partial class GridHeaderCell
         {
             WidthStyle = w;
             StateHasChanged();
+        });
+        _filterInfoUnsubscriber = FilterService.FilterInfo.Subscribe(filters =>
+        {
+            _filterActive = filters.Any(f => f.ColumnModel is not null && f.ColumnModel.Equals(ColumnModel));
+            StateHasChanged();
+        });
+        _activeFilterMenuUnsubscriber = FilterService.ActiveFilterMenuColumnId.Subscribe(activeId =>
+        {
+            if (_filterMenuOpen && activeId != ColumnModel.Id)
+            {
+                _filterMenuOpen = false;
+                StateHasChanged();
+            }
         });
         return base.OnInitializedAsync();
     }
@@ -113,9 +138,35 @@ public partial class GridHeaderCell
 
     private void ColumnCellMouseUp(MouseEventArgs e) => ColumnCellDraggable = "false";
 
+    private async Task ToggleFilterMenu()
+    {
+        _filterMenuOpen = !_filterMenuOpen;
+        if (_filterMenuOpen)
+        {
+            var rect = await JsService.GetElementBoundingRect(_filterButtonRef);
+            _filterMenuTop = rect.Top + rect.Height;
+            _filterMenuLeft = rect.Left;
+            FilterService.ActiveFilterMenuColumnId.OnNext(ColumnModel.Id);
+        }
+        else
+        {
+            FilterService.ActiveFilterMenuColumnId.OnNext(null);
+        }
+        StateHasChanged();
+    }
+
+    private void CloseFilterMenu()
+    {
+        _filterMenuOpen = false;
+        FilterService.ActiveFilterMenuColumnId.OnNext(null);
+        StateHasChanged();
+    }
+
     public ValueTask DisposeAsync()
     {
         _columnOrderInfoUnsubscriber?.Dispose();
+        _filterInfoUnsubscriber?.Dispose();
+        _activeFilterMenuUnsubscriber?.Dispose();
         return ValueTask.CompletedTask;
     }
 }

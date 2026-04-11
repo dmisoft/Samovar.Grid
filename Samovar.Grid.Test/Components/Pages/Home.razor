@@ -30,7 +30,7 @@
                     RowsRemoving="@((List<WeatherForecast> args) => RowsRemovingHandler(args))">
                 <Columns>
                     <Column Title="Date" Field="@nameof(WeatherForecast.Date)" Width="100px" TextAlign="@dateAlign" />
-                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="2*" TextAlign="GridTextAlign.Center" />
+                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="200px" TextAlign="GridTextAlign.Center" />
                     <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="200px" TextAlign="GridTextAlign.Right" />
                     <Column Field="@nameof(WeatherForecast.Summary)" Width="1*" />
                     <CommandColumn EditButtonVisible=true DeleteButtonVisible=true NewButtonVisible=true Width="150px" />

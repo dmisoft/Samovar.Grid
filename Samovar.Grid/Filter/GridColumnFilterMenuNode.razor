@@ -1,0 +1,66 @@
+@namespace Samovar.Grid.Header
+@using Samovar.Grid.Filter
+
+<div class="d-flex align-items-center py-1" style="padding-left: @(Depth * 16 + 4)px;">
+    @if (!Node.IsLeaf)
+    {
+        <button class="btn btn-link @BtnSizeClass p-0 me-1" style="line-height:1;" @onclick="@(() => OnToggleExpand.InvokeAsync(Node))">
+            @if (Node.IsExpanded)
+            {
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+                </svg>
+            }
+            else
+            {
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
+                </svg>
+            }
+        </button>
+    }
+    else
+    {
+        <span style="display:inline-block;width:16px;margin-right:4px;"></span>
+    }
+    <label class="d-flex align-items-center mb-0 @ListItemSizeClass" style="cursor:pointer; user-select:none;">
+        <input type="checkbox"
+               class="form-check-input me-2"
+               checked="@Node.IsChecked"
+               @onchange="@((e) => OnCheckedChanged.InvokeAsync((Node, e)))" />
+        @Node.Label
+    </label>
+</div>
+
+@if (!Node.IsLeaf && Node.IsExpanded)
+{
+    @foreach (var child in Node.Children)
+    {
+        <GridColumnFilterMenuNode Node="child"
+                                  Depth="@(Depth + 1)"
+                                  BtnSizeClass="@BtnSizeClass"
+                                  ListItemSizeClass="@ListItemSizeClass"
+                                  OnCheckedChanged="OnCheckedChanged"
+                                  OnToggleExpand="OnToggleExpand" />
+    }
+}
+
+@code {
+    [Parameter]
+    public required FilterMenuTreeNode Node { get; set; }
+
+    [Parameter]
+    public int Depth { get; set; }
+
+    [Parameter]
+    public EventCallback<(FilterMenuTreeNode, ChangeEventArgs)> OnCheckedChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<FilterMenuTreeNode> OnToggleExpand { get; set; }
+
+    [Parameter]
+    public string BtnSizeClass { get; set; } = "";
+
+    [Parameter]
+    public string ListItemSizeClass { get; set; } = "";
+}

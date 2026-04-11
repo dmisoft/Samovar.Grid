@@ -9,6 +9,7 @@ public class FilterService
 {
     public ObservableCollection<GridFilterCellInfo> ColumnFilters { get; } = new ObservableCollection<GridFilterCellInfo>();
     public BehaviorSubject<IEnumerable<GridFilterCellInfo>> FilterInfo { get; } = new BehaviorSubject<IEnumerable<GridFilterCellInfo>>(new List<GridFilterCellInfo>());
+    public BehaviorSubject<string?> ActiveFilterMenuColumnId { get; } = new BehaviorSubject<string?>(null);
 
     public FilterService()
     {

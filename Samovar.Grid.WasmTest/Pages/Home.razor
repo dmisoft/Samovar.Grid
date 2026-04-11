@@ -28,10 +28,10 @@
                     RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
                     RowsRemoving="@((List<WeatherForecast> args) => RowsRemovingHandler(args))">
                 <Columns>
-                    <Column Title="Date" Field="@nameof(WeatherForecast.Date)" Width="100px" TextAlign="@dateAlign" />
-                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="2*" TextAlign="GridTextAlign.Center" />
+                    <Column Title="Date" Field="@nameof(WeatherForecast.Date)" Width="100px"  />
+                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="200px" TextAlign="@dateAlign" />
                     <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="200px" TextAlign="GridTextAlign.Right" />
-                    <Column Field="@nameof(WeatherForecast.Summary)" Width="1*" />
+                    <Column Field="@nameof(WeatherForecast.Summary)" Width="1*" TextAlign="GridTextAlign.Center"/>
                     <CommandColumn EditButtonVisible=true DeleteButtonVisible=true NewButtonVisible=true Width="150px" />
                 </Columns>
                 <EditPopupTitleTemplate Context="context">

@@ -10,7 +10,7 @@ public class WeatherForecast
     public DateTime Date { get; set; }
     
     [Browsable(false)]
-    public DateOnly Date2 { get; set; }
+    public DateOnly DateOnly { get; set; }
 
     [Display(Name ="Temp.C")]
     public int? TemperatureC { get; set; }
@@ -24,7 +24,7 @@ public class WeatherForecast
     [Browsable(false)]
     public double TemperatureFD => 12.5;
     
-    public bool Boolean { get; set; }
+    public bool Active { get; set; }
 
     public string Summary { get; set; } = string.Empty;
 

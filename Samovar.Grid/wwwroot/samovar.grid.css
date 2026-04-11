@@ -1,3 +1,19 @@
+/* CSS custom properties — consumer overrides these in their app.css */
+:root {
+    --sm-detail-row-expanded-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg>');
+    --sm-detail-row-collapsed-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg>');
+    --sm-row-selected-bg: rgb(255, 106, 0, 0.5);
+    --sm-detail-icon-size: 16px;
+    --sm-no-data-color: red;
+
+    --sm-scrollbar-size: 8px;
+    --sm-scrollbar-thumb-color: rgba(0, 0, 0, 0.3);
+    --sm-scrollbar-thumb-hover-color: rgba(0, 0, 0, 0.5);
+    --sm-scrollbar-thumb-active-color: rgba(0, 0, 0, 0.6);
+    --sm-scrollbar-track-color: transparent;
+    --sm-scrollbar-thumb-radius: 4px;
+}
+
 *,
 *::before,
 *::after {
@@ -100,22 +116,6 @@
     border-right-color: var(--bs-emphasis-color);
 }
 
-/* CSS custom properties — consumer overrides these in their app.css */
-:root {
-    --sm-detail-row-expanded-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg>');
-    --sm-detail-row-collapsed-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg>');
-    --sm-row-selected-bg: rgb(255, 106, 0, 0.5);
-    --sm-detail-icon-size: 16px;
-    --sm-no-data-color: red;
-
-    --sm-scrollbar-size: 8px;
-    --sm-scrollbar-thumb-color: rgba(0, 0, 0, 0.3);
-    --sm-scrollbar-thumb-hover-color: rgba(0, 0, 0, 0.5);
-    --sm-scrollbar-thumb-active-color: rgba(0, 0, 0, 0.6);
-    --sm-scrollbar-track-color: transparent;
-    --sm-scrollbar-thumb-radius: 4px;
-}
-
 /* Custom scrollbar container — wraps content + scrollbar overlays */
 .sm-grid-scroll-container {
     position: relative;
@@ -185,4 +185,34 @@
 .sm-scrollbar-horizontal .sm-scrollbar-thumb {
     height: 100%;
     min-width: 20px;
+}
+
+/* Filter menu panel — fixed-position popup with resize support */
+.sm-filter-menu-panel {
+    position: fixed;
+    z-index: 9999;
+    min-width: 220px;
+    min-height: 200px;
+    height: 400px;
+    resize: both;
+    overflow: hidden;
+}
+
+/* Filter menu list — scrollable values container inside the panel */
+.sm-filter-menu-list {
+    overflow-y: auto;
+    margin-bottom: 8px;
+    min-height: 0;
+}
+
+/* Normal font weight for Select All label and all filter value labels */
+.sm-filter-menu-panel span,
+.sm-filter-menu-list label {
+    font-weight: normal;
+}
+
+/* Large size mode — increases cell padding and font size (Bootstrap has no table-lg) */
+.sm-table-lg > :not(caption) > * > * {
+    padding: 0.5rem 0.5rem;
+    font-size: 1.25rem;
 }
