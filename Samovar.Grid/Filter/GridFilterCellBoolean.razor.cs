@@ -13,6 +13,12 @@ public partial class GridFilterCellBoolean
         internalValue = NotDefinedValue;
     }
 
+    protected override void ResetValue()
+    {
+        internalValue = NotDefinedValue;
+        base.ResetValue();
+    }
+
     private string internalValue = "null";
 
     protected string InternalValue

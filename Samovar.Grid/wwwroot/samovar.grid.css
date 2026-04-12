@@ -230,3 +230,96 @@
 [data-bs-theme="dark"] .sm-detail-row-collapsed {
     filter: invert(1);
 }
+
+/* =====================================================================
+   Filter cell clear/reset button
+   ===================================================================== */
+
+/* Wrapper — takes flex-grow from the old input, hosts relative positioning */
+.sm-filter-cell-wrapper {
+    position: relative;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+/* Input fills wrapper; extra right padding reserves space for the button */
+.sm-filter-cell-wrapper .sm-filter-cell-input {
+    width: 100%;
+    padding-right: 1.75rem;
+}
+
+.sm-filter-cell-wrapper .sm-filter-cell-input.form-control-sm {
+    padding-right: 1.5rem;
+}
+
+.sm-filter-cell-wrapper .sm-filter-cell-input.form-control-lg {
+    padding-right: 2rem;
+}
+
+/* Clear button — absolutely positioned inside wrapper, hidden by default */
+.sm-filter-cell-clear-btn {
+    position: absolute;
+    top: 50%;
+    right: 0.375rem;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--bs-secondary-color);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, color 0.15s ease;
+    line-height: 1;
+}
+
+/* Default icon size */
+.sm-filter-cell-clear-btn svg {
+    width: 14px;
+    height: 14px;
+    display: block;
+}
+
+/* Small size mode */
+.sm-filter-cell-clear-btn.sm-filter-cell-clear-btn-sm svg {
+    width: 12px;
+    height: 12px;
+}
+
+/* Large size mode */
+.sm-filter-cell-clear-btn.sm-filter-cell-clear-btn-lg svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Reveal on mouse hover over wrapper OR keyboard focus inside wrapper */
+.sm-filter-cell-wrapper:hover .sm-filter-cell-clear-btn,
+.sm-filter-cell-wrapper:focus-within .sm-filter-cell-clear-btn {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Button hover state — slightly more prominent color */
+.sm-filter-cell-clear-btn:hover {
+    color: var(--bs-emphasis-color);
+}
+
+/* Boolean select variant — shift button left of the native dropdown arrow */
+.sm-filter-cell-wrapper--select .sm-filter-cell-clear-btn {
+    right: 2rem;
+}
+
+.sm-filter-cell-wrapper--select .form-select {
+    padding-right: 3.75rem;
+}
+
+.sm-filter-cell-wrapper--select .form-select.form-select-sm {
+    padding-right: 3.5rem;
+}
+
+.sm-filter-cell-wrapper--select .form-select.form-select-lg {
+    padding-right: 4rem;
+}

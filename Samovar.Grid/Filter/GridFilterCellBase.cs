@@ -44,6 +44,7 @@ public abstract partial class GridFilterCellBase<TFilterCell>
     protected string WidthStyle = "";
     protected string _inputSizeClass = "";
     protected string _selectSizeClass = "";
+    protected string _clearBtnSizeClass = "";
 
     protected override Task OnInitializedAsync()
     {
@@ -58,6 +59,7 @@ public abstract partial class GridFilterCellBase<TFilterCell>
         LayoutService.SizeMode.Subscribe(mode => {
             _inputSizeClass = mode switch { GridSizeMode.Small => "form-control-sm", GridSizeMode.Large => "form-control-lg", _ => "" };
             _selectSizeClass = mode switch { GridSizeMode.Small => "form-select-sm", GridSizeMode.Large => "form-select-lg", _ => "" };
+            _clearBtnSizeClass = mode switch { GridSizeMode.Small => "sm-filter-cell-clear-btn-sm", GridSizeMode.Large => "sm-filter-cell-clear-btn-lg", _ => "" };
             StateHasChanged();
         });
         return base.OnInitializedAsync();
@@ -68,6 +70,12 @@ public abstract partial class GridFilterCellBase<TFilterCell>
         _innerValue = default;
         StateHasChanged();
         return Task.CompletedTask;
+    }
+
+    protected virtual void ResetValue()
+    {
+        InnerValue = default;
+        StateHasChanged();
     }
 
     bool filterMenuOpen = false;
