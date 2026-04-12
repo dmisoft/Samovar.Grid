@@ -216,3 +216,17 @@
     padding: 0.5rem 0.5rem;
     font-size: 1.25rem;
 }
+
+/* Dark theme overrides — activated when Bootstrap's data-bs-theme="dark" is set on <html> */
+[data-bs-theme="dark"] {
+    /* Invert opacity-based dark scrollbar tones to white tones for dark backgrounds */
+    --sm-scrollbar-thumb-color: rgba(255, 255, 255, 0.3);
+    --sm-scrollbar-thumb-hover-color: rgba(255, 255, 255, 0.5);
+    --sm-scrollbar-thumb-active-color: rgba(255, 255, 255, 0.65);
+}
+
+/* Detail row chevron icons are black SVGs — invert to white on dark backgrounds */
+[data-bs-theme="dark"] .sm-detail-row-expanded,
+[data-bs-theme="dark"] .sm-detail-row-collapsed {
+    filter: invert(1);
+}

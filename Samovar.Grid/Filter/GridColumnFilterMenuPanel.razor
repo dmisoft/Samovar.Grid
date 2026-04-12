@@ -2,7 +2,7 @@
 @inherits DesignComponentBase
 @namespace Samovar.Grid.Header
 
-<div @ref="_panelRef" class="sm-filter-menu-panel border bg-white shadow p-2 d-flex flex-column" style="top:@(Top.ToString(System.Globalization.CultureInfo.InvariantCulture))px;left:@(Left.ToString(System.Globalization.CultureInfo.InvariantCulture))px;">
+<div @ref="_panelRef" class="sm-filter-menu-panel border bg-body shadow p-2 d-flex flex-column" style="top:@(Top.ToString(System.Globalization.CultureInfo.InvariantCulture))px;left:@(Left.ToString(System.Globalization.CultureInfo.InvariantCulture))px;">
     <div class="mb-2">Filter Values</div>
     @if (!_isDateColumn)
     {
