@@ -10,6 +10,9 @@ public partial class GridRowEditing_PopupTemplate<TItem>
     public required IEditingService<TItem> EditingService { get; set; }
 
     [SmInject]
+    public required ITemplateService<TItem> TemplateService { get; set; }
+
+    [SmInject]
     public required IJsService JsService { get; set; }
 
     [Parameter]
