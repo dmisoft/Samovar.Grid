@@ -1,53 +1,77 @@
 @page "/cell-template"
 
-@inject WeatherForecastService ForecastService
+@inject EmployeeService EmployeeService
 
 <h1>Cell Templates</h1>
 
 <style>
-    .above-degree-style {
-        color: red;
+    .high-salary-style {
+        color: green;
         font-weight: bold;
     }
 
-    .below-degree-style {
-        color: blue;
+    .low-salary-style {
+        color: darkorange;
         font-weight: bold;
+    }
+
+    .active-style {
+        color: green;
+    }
+
+    .inactive-style {
+        color: red;
     }
 </style>
 
 <SmGrid @ref=grid
-        Data="forecasts"
+        Data="employees"
         FilterMode=GridFilterMode.FilterRow
         Height="600px"
         DataNavigationMode=NavigationMode.Paging
         SelectionMode=RowSelectionMode.Multiple>
     <Columns>
-        <Column Field="@nameof(WeatherForecast.Summary)">
+        <Column Field="@nameof(Employee.FirstName)" Title="Full Name">
             <CellShowTemplate>
                 @{
-                    <div>@($"Summary: {(context as WeatherForecast)!.Summary}")</div>
+                    var emp = (context as Employee)!;
+                    <div>@($"{emp.FirstName} {emp.LastName}")</div>
                 }
             </CellShowTemplate>
         </Column>
-        <Column Field="@nameof(WeatherForecast.Date)">
+        <Column Field="@nameof(Employee.HireDate)" Title="Hire Date">
             <CellShowTemplate>
                 @{
-                    <div>@($"{(context as WeatherForecast)!.Date:yyyy-MM-dd}")</div>
+                    <div>@($"{(context as Employee)!.HireDate:yyyy-MM-dd}")</div>
                 }
             </CellShowTemplate>
         </Column>
-        <Column Field="@nameof(WeatherForecast.TemperatureC)">
+        <Column Field="@nameof(Employee.Salary)">
             <CellShowTemplate>
                 @{
-                    var temperature = (context as WeatherForecast)!.TemperatureC;
-                    if (temperature > 0)
+                    var salary = (context as Employee)!.Salary;
+                    if (salary >= 100_000)
                     {
-                        <div class="above-degree-style">@($"{temperature} C")</div>
+                        <div class="high-salary-style">@($"{salary:C0}")</div>
                     }
                     else
                     {
-                        <div class="below-degree-style">@($"{temperature} C")</div>
+                        <div class="low-salary-style">@($"{salary:C0}")</div>
+                    }
+                }
+            </CellShowTemplate>
+        </Column>
+        <Column Field="@nameof(Employee.IsActive)" Title="Is active">
+            <CellShowTemplate>
+                @{
+                    var isActive = (context as Employee)!.IsActive;
+                    if (isActive)
+                    {
+                        <div class="active-style">Active</div>
+                    }
+                    else
+                    {
+                        <div class="inactive-style">Inactive</div>
                     }
                 }
             </CellShowTemplate>
@@ -57,11 +81,11 @@
 
 
 @code {
-    private List<WeatherForecast>? forecasts;
-    SmGrid<WeatherForecast>? grid;
+    private List<Employee>? employees;
+    SmGrid<Employee>? grid;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
+        employees = (await EmployeeService.GetEmployeesAsync()).ToList();
     }
 }

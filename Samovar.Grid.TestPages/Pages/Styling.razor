@@ -1,6 +1,6 @@
 @page "/styling"
 
-@inject WeatherForecastService ForecastService
+@inject EmployeeService EmployeeService
 
 <h1>CSS Vars</h1>
 
@@ -14,7 +14,7 @@
 <div class="row">
     <div class="col">
 
-        <SmGrid @ref=grid Data="forecasts"
+        <SmGrid @ref=grid Data="employees"
                 CssClass="table-bordered table-sm table-striped"
                 PaginationCssClass="pagination-sm"
                 FilterMode=GridFilterMode.FilterRow
@@ -26,39 +26,33 @@
                 @bind-SingleSelectedDataRow=@selectedRow
                 Height="600px">
             <Columns>
-                <Column Field="@nameof(WeatherForecast.Summary)" />
-                <Column Field="@nameof(WeatherForecast.Date)" />
-                <Column Field="@nameof(WeatherForecast.TemperatureC)" />
+                <Column Field="@nameof(Employee.FirstName)" />
+                <Column Field="@nameof(Employee.LastName)" />
+                <Column Field="@nameof(Employee.Department)" />
+                <Column Field="@nameof(Employee.HireDate)" />
+                <Column Field="@nameof(Employee.Salary)" />
                 <CommandColumn EditButtonVisible=true DeleteButtonVisible=true NewButtonVisible=true Width="150px" />
             </Columns>
             <DetailRowTemplate Context="mydata">
                 @{
                     if (mydata is not null)
                     {
-                        WeatherForecast data = mydata as WeatherForecast;
+                        Employee data = mydata as Employee;
                         <div class="form-group row mb-2">
-                            <label class="col-2 col-form-label">Date</label>
-                            <div class="col-10">
-                                @($"{data.Date:yyyy-MM-dd}")
-                            </div>
+                            <label class="col-2 col-form-label">Email</label>
+                            <div class="col-10">@data.Email</div>
                         </div>
                         <div class="form-group row mb-2">
-                            <label class="col-2 col-form-label">Temp.C</label>
-                            <div class="col-10">
-                                @data.TemperatureC
-                            </div>
+                            <label class="col-2 col-form-label">Job Title</label>
+                            <div class="col-10">@data.JobTitle</div>
                         </div>
                         <div class="form-group row mb-2">
-                            <label class="col-2 col-form-label">Temp.F</label>
-                            <div class="col-10">
-                                @data.TemperatureF
-                            </div>
+                            <label class="col-2 col-form-label">Phone</label>
+                            <div class="col-10">@data.Phone</div>
                         </div>
                         <div class="form-group row mb-2">
-                            <label class="col-2 col-form-label">Summary</label>
-                            <div class="col-10">
-                                @data.Summary
-                            </div>
+                            <label class="col-2 col-form-label">Active</label>
+                            <div class="col-10">@data.IsActive</div>
                         </div>
                     }
                 }
@@ -68,12 +62,12 @@
 </div>
 
 @code {
-    private List<WeatherForecast>? forecasts;
-    SmGrid<WeatherForecast?>? grid;
-    WeatherForecast? selectedRow;
+    private List<Employee>? employees;
+    SmGrid<Employee?>? grid;
+    Employee? selectedRow;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
+        employees = (await EmployeeService.GetEmployeesAsync()).ToList();
     }
 }

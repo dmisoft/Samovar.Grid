@@ -1,23 +1,24 @@
 @page "/virtual"
 
-@inject WeatherForecastService ForecastService
+@inject EmployeeService EmployeeService
 
 <h1>Virtual</h1>
 
-<SmGrid Data=forecasts DataNavigationMode=NavigationMode.Virtual>
+<SmGrid Data=employees DataNavigationMode=NavigationMode.Virtual>
     <Columns>
-        <Column Field="@nameof(WeatherForecast.Position)" />
-        <Column Field="@nameof(WeatherForecast.Date)" />
-        <Column Field="@nameof(WeatherForecast.Summary)" />
-        <Column Field="@nameof(WeatherForecast.TemperatureC)" />
+        <Column Field="@nameof(Employee.Id)" />
+        <Column Field="@nameof(Employee.FirstName)" />
+        <Column Field="@nameof(Employee.LastName)" />
+        <Column Field="@nameof(Employee.Department)" />
+        <Column Field="@nameof(Employee.Salary)" />
     </Columns>
 </SmGrid>
 
 @code {
-    private List<WeatherForecast>? forecasts;
+    private List<Employee>? employees;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
+        employees = (await EmployeeService.GetEmployeesAsync()).ToList();
     }
 }

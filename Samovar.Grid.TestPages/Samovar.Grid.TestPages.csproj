@@ -4,4 +4,8 @@
     <ProjectReference Include="..\Samovar.Grid\Samovar.Grid.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Bogus" />
+  </ItemGroup>
+
 </Project>

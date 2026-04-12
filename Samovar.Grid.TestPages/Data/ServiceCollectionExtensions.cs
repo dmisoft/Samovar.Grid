@@ -6,7 +6,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddGridTestPages(this IServiceCollection services)
     {
-        services.AddSingleton<WeatherForecastService>();
+        services.AddSingleton<EmployeeService>();
         return services;
     }
 }

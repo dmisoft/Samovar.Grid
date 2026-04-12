@@ -2,7 +2,7 @@
 
 @using System.ComponentModel.DataAnnotations
 
-@inject WeatherForecastService ForecastService
+@inject EmployeeService EmployeeService
 
 <h1>Insert / Edit Templates</h1>
 
@@ -20,23 +20,23 @@
         <div class="col">
 
 <SmGrid @ref=grid
-        Data="forecasts"
+        Data="employees"
         FilterMode=GridFilterMode.FilterRow
         Height="600px"
-        RowEditBegin="@((WeatherForecast data) => RowEditBeginHandler(data))"
+        RowEditBegin="@((Employee data) => RowEditBeginHandler(data))"
         RowInsertBegin=@RowInsertBeginHandler
         EditMode=@gridEditMode
         DataNavigationMode=NavigationMode.Paging
         SelectionMode=RowSelectionMode.Multiple>
     <Columns>
         <CommandColumn EditButtonVisible=true NewButtonVisible=true DeleteButtonVisible=false Width="150px" />
-        <Column Title="Summary" Field="@nameof(WeatherForecast.Summary)">
+        <Column Title="First Name" Field="@nameof(Employee.FirstName)">
             <CellShowTemplate>
                 @{
-                    WeatherForecast? data = context as WeatherForecast;
+                    Employee? data = context as Employee;
                     if (data is not null)
                     {
-                        <div style="white-space:break-spaces">@($"Summary: {data.Summary}")</div>
+                        <div style="white-space:break-spaces">@($"{data.FirstName} {data.LastName}")</div>
                     }
                     else
                     {
@@ -45,23 +45,29 @@
                 }
             </CellShowTemplate>
         </Column>
-        <Column Title="Date" Field="@nameof(WeatherForecast.Date)" />
-        <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" />
-        <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" />
+        <Column Title="Job Title" Field="@nameof(Employee.JobTitle)" />
+        <Column Title="Department" Field="@nameof(Employee.Department)" />
+        <Column Title="Salary" Field="@nameof(Employee.Salary)" />
     </Columns>
     <EditFormTemplate>
         <EditForm Model="@EditContext" Context="EditFormContext" OnValidSubmit=HandleValidCustomEditSubmit>
             <DataAnnotationsValidator />
             <div class="form-group row mb-2">
-                <label class="col-2 col-form-label" for="temperatureC">Temp.C</label>
+                <label class="col-2 col-form-label" for="firstName">First Name</label>
                 <div class="col-10">
-                    <InputNumber class="form-control" id="temperatureC" TValue="int?" @bind-Value="EditContext!.TemperatureC" />
+                    <InputText class="form-control" id="firstName" @bind-Value="EditContext!.FirstName" />
                 </div>
             </div>
             <div class="form-group row mb-2">
-                <label class="col-2 col-form-label" for="summary">Summary</label>
+                <label class="col-2 col-form-label" for="lastName">Last Name</label>
                 <div class="col-10">
-                    <InputText class="form-control" id="summary" @bind-Value="EditContext.Summary" />
+                    <InputText class="form-control" id="lastName" @bind-Value="EditContext.LastName" />
+                </div>
+            </div>
+            <div class="form-group row mb-2">
+                <label class="col-2 col-form-label" for="salary">Salary</label>
+                <div class="col-10">
+                    <InputNumber class="form-control" id="salary" TValue="decimal" @bind-Value="EditContext.Salary" />
                 </div>
             </div>
             <div class="row mb-2">
@@ -77,18 +83,23 @@
     </EditFormTemplate>
     <InsertFormTemplate>
         <EditForm Model="@InsertContext" Context="EditFormContext" OnValidSubmit=HandleValidInsertingSubmit>
-
             <DataAnnotationsValidator />
             <div class="form-group row mb-2">
-                <label class="col-2 col-form-label" for="temperatureC">Temp.C</label>
+                <label class="col-2 col-form-label" for="firstName">First Name</label>
                 <div class="col-10">
-                    <InputNumber class="form-control" id="temperatureC" TValue="int?" @bind-Value="InsertContext!.TemperatureC" />
+                    <InputText class="form-control" id="firstName" @bind-Value="InsertContext!.FirstName" />
                 </div>
             </div>
             <div class="form-group row mb-2">
-                <label class="col-2 col-form-label" for="summary">Summary</label>
+                <label class="col-2 col-form-label" for="lastName">Last Name</label>
                 <div class="col-10">
-                    <InputText class="form-control" id="summary" @bind-Value="InsertContext.Summary" />
+                    <InputText class="form-control" id="lastName" @bind-Value="InsertContext.LastName" />
+                </div>
+            </div>
+            <div class="form-group row mb-2">
+                <label class="col-2 col-form-label" for="salary">Salary</label>
+                <div class="col-10">
+                    <InputNumber class="form-control" id="salary" TValue="decimal" @bind-Value="InsertContext.Salary" />
                 </div>
             </div>
             <div class="form-row">
@@ -107,19 +118,19 @@
     </div>
 
 @code {
-    private List<WeatherForecast>? forecasts;
+    private List<Employee>? employees;
     FormEditContext? EditContext = null;
     FormInsertContext? InsertContext = null;
-    SmGrid<WeatherForecast>? grid;
+    SmGrid<Employee>? grid;
 
     GridEditMode gridEditMode = GridEditMode.Form;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
+        employees = (await EmployeeService.GetEmployeesAsync(1000)).ToList();
     }
 
-    void RowEditBeginHandler(WeatherForecast item)
+    void RowEditBeginHandler(Employee item)
     {
         EditContext = new FormEditContext(item);
     }
@@ -131,21 +142,23 @@
 
     async Task HandleValidCustomEditSubmit()
     {
-        EditContext!.DataItem.TemperatureC = EditContext.TemperatureC;
-        EditContext!.DataItem.Summary = EditContext.Summary;
+        EditContext!.DataItem.FirstName = EditContext.FirstName;
+        EditContext!.DataItem.LastName = EditContext.LastName;
+        EditContext!.DataItem.Salary = EditContext.Salary;
         await grid!.CommitCustomRowEdit(EditContext.DataItem);
     }
 
     async Task HandleValidInsertingSubmit()
     {
-        var newItem = new WeatherForecast
+        var newItem = new Employee
             {
-                Summary = InsertContext!.Summary,
-                Date = DateTime.Now,
-                TemperatureC = InsertContext.TemperatureC
+                FirstName = InsertContext!.FirstName,
+                LastName = InsertContext.LastName,
+                Salary = InsertContext.Salary,
+                HireDate = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, 1)
             };
 
-        forecasts = ((new WeatherForecast[] { newItem }).Concat(forecasts!)).ToList();
+        employees = ((new Employee[] { newItem }).Concat(employees!)).ToList();
         await grid!.CancelRowInsert();
         StateHasChanged();
     }
@@ -164,34 +177,45 @@
 
     class FormEditContext
     {
-        public FormEditContext(WeatherForecast dataItem)
+        public FormEditContext(Employee dataItem)
         {
             DataItem = dataItem;
-            TemperatureC = dataItem.TemperatureC;
-            Summary = dataItem.Summary;
+            FirstName = dataItem.FirstName;
+            LastName = dataItem.LastName;
+            Salary = dataItem.Salary;
         }
 
-        public WeatherForecast DataItem { get; set; }
+        public Employee DataItem { get; set; }
 
         [Required]
-        [StringLength(maximumLength: 32, MinimumLength = 4, ErrorMessage = "The description should be 4 to 32 characters.")]
-        public string Summary { get; set; }
+        [StringLength(maximumLength: 50, MinimumLength = 2, ErrorMessage = "First name should be 2 to 50 characters.")]
+        public string FirstName { get; set; }
 
-        public int? TemperatureC { get; set; }
+        [Required]
+        [StringLength(maximumLength: 50, MinimumLength = 2, ErrorMessage = "Last name should be 2 to 50 characters.")]
+        public string LastName { get; set; }
+
+        [Range(0, 10_000_000, ErrorMessage = "Salary must be a positive value.")]
+        public decimal Salary { get; set; }
     }
 
     internal class FormInsertContext
     {
         internal FormInsertContext()
         {
-            Summary = "[init summary value}";
+            FirstName = string.Empty;
+            LastName = string.Empty;
         }
 
         [Required]
-        public int? TemperatureC { get; set; }
+        [StringLength(maximumLength: 50, MinimumLength = 2, ErrorMessage = "First name should be 2 to 50 characters.")]
+        public string FirstName { get; set; }
 
         [Required]
-        [StringLength(maximumLength: 32, MinimumLength = 4, ErrorMessage = "The description should be 4 to 32 characters.")]
-        public string Summary { get; set; }
+        [StringLength(maximumLength: 50, MinimumLength = 2, ErrorMessage = "Last name should be 2 to 50 characters.")]
+        public string LastName { get; set; }
+
+        [Range(0, 10_000_000, ErrorMessage = "Salary must be a positive value.")]
+        public decimal Salary { get; set; }
     }
 }

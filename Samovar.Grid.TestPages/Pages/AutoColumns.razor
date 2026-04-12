@@ -1,11 +1,11 @@
 @page "/auto-columns"
 
-@inject WeatherForecastService ForecastService
+@inject EmployeeService EmployeeService
 @inject IJSRuntime JS
 
 <h1>Auto-Generated Columns</h1>
 
-<SmGrid Data=forecasts AutoGenerateColumns=true />
+<SmGrid Data=employees AutoGenerateColumns=true SizeMode="GridSizeMode.Small" />
 
 <div class="card mt-4">
     <div class="card-body">
@@ -35,20 +35,20 @@ public class MyModel
     [DisplayName("Full Name")]
     public string Name { get; set; }              // column title: "Full Name"
 
-    [Display(Name = "Temperature (C)")]
-    public int TemperatureC { get; set; }         // column title: "Temperature (C)"
+    [Display(Name = "Annual Salary")]
+    public decimal Salary { get; set; }           // column title: "Annual Salary"
 
-    public string Summary { get; set; }           // column title: "Summary" (property name)
+    public string Department { get; set; }        // column title: "Department" (property name)
 }</code></pre>
     </div>
 </div>
 
 @code {
-    private List<WeatherForecast>? forecasts;
+    private List<Employee>? employees;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = (await ForecastService.GetForecastAsync(DateTime.Now)).ToList();
+        employees = (await EmployeeService.GetEmployeesAsync()).ToList();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

@@ -1,13 +1,13 @@
 @page "/"
 
-@inject WeatherForecastService ForecastService
+@inject EmployeeService EmployeeService
 
 <h1>Common tests</h1>
     <div class="row">
         <div class="col-9">
             <SmGrid @ref=@grid
                     ShowColumnHeader="false"
-                    Data=@forecasts
+                    Data=@employees
                     SizeMode=@gridSizeMode
                     Height=@gridHeight
                     Width=@gridWidth
@@ -19,45 +19,38 @@
                     ColumnResizeMode=@columnResizeMode
                     @bind-SingleSelectedDataRow=@selectedRow
                     @bind-MultipleSelectedDataRows=@selectedRows
-                    RowEditBegin="@((WeatherForecast data) => RowEditBeginHandler(data))"
-                    RowInserting="@((WeatherForecast data) => RowInsertingHandler(data))"
-                    RowsRemoving="@((List<WeatherForecast> args) => RowsRemovingHandler(args))">
+                    RowEditBegin="@((Employee data) => RowEditBeginHandler(data))"
+                    RowInserting="@((Employee data) => RowInsertingHandler(data))"
+                    RowsRemoving="@((List<Employee> args) => RowsRemovingHandler(args))">
                 <Columns>
-                    <Column Title="Date" Field="@nameof(WeatherForecast.Date)" Width="100px"  />
-                    <Column Title="TemperatureC" Field="@nameof(WeatherForecast.TemperatureC)" Width="200px" TextAlign="@dateAlign" />
-                    <Column Title="TemperatureF" Field="@nameof(WeatherForecast.TemperatureF)" Width="200px" TextAlign="GridTextAlign.Right" />
-                    <Column Field="@nameof(WeatherForecast.Summary)" Width="1*" TextAlign="GridTextAlign.Center"/>
+                    <Column Title="Hire Date" Field="@nameof(Employee.HireDate)" Width="120px" />
+                    <Column Title="First Name" Field="@nameof(Employee.FirstName)" Width="130px" TextAlign="@nameAlign" />
+                    <Column Title="Last Name" Field="@nameof(Employee.LastName)" Width="130px" TextAlign="@nameAlign" />
+                    <Column Title="Job Title" Field="@nameof(Employee.JobTitle)" Width="1*" />
+                    <Column Title="Salary" Field="@nameof(Employee.Salary)" Width="110px" TextAlign="GridTextAlign.Right" />
                     <CommandColumn EditButtonVisible=true DeleteButtonVisible=true NewButtonVisible=true Width="150px" />
                 </Columns>
-                
+
                 <DetailRowTemplate Context="mydata">
                     @{
                         if (mydata is not null)
                         {
-                            WeatherForecast data = mydata as WeatherForecast;
+                            Employee data = mydata as Employee;
                             <div class="form-group row mb-2">
-                                <label class="col-2 col-form-label">Date</label>
-                                <div class="col-10">
-                                    @($"{data.Date:yyyy-MM-dd}")
-                                </div>
+                                <label class="col-2 col-form-label">Name</label>
+                                <div class="col-10">@($"{data.FirstName} {data.LastName}")</div>
                             </div>
                             <div class="form-group row mb-2">
-                                <label class="col-2 col-form-label">Temp.C</label>
-                                <div class="col-10">
-                                    @data.TemperatureC
-                                </div>
+                                <label class="col-2 col-form-label">Email</label>
+                                <div class="col-10">@data.Email</div>
                             </div>
                             <div class="form-group row mb-2">
-                                <label class="col-2 col-form-label">Temp.F</label>
-                                <div class="col-10">
-                                    @data.TemperatureF
-                                </div>
+                                <label class="col-2 col-form-label">Department</label>
+                                <div class="col-10">@data.Department</div>
                             </div>
                             <div class="form-group row mb-2">
-                                <label class="col-2 col-form-label">Summary</label>
-                                <div class="col-10">
-                                    @data.Summary
-                                </div>
+                                <label class="col-2 col-form-label">Phone</label>
+                                <div class="col-10">@data.Phone</div>
                             </div>
                         }
                     }
@@ -74,8 +67,8 @@
                 <input type="text" class="form-control" id="columnWidth" @bind=columnWidth />
             </div>
             <div class="mb-3">
-                <label for="dateAlign" class="form-label">Date column align</label>
-                <select id="dateAlign" class="form-select form-select-lg" @bind=dateAlign>
+                <label for="nameAlign" class="form-label">Name column align</label>
+                <select id="nameAlign" class="form-select form-select-lg" @bind=nameAlign>
                     <option value=@GridTextAlign.Left>Left</option>
                     <option value=@GridTextAlign.Center>Center</option>
                     <option value=@GridTextAlign.Right>Right</option>
@@ -146,7 +139,7 @@
             @if (selectedRow is not null)
             {
                 <div class="mb-3 row">
-                    <div class="col-8">@($"{selectedRow.Summary} Temp. {selectedRow.TemperatureC} C")</div>
+                    <div class="col-8">@($"{selectedRow.FirstName} {selectedRow.LastName} — {selectedRow.JobTitle}")</div>
                     <div class="col-4">
                         <button class="btn btn-danger mb-3" @onclick="deselectSingleSelectedItem">deselect</button>
                     </div>
@@ -158,8 +151,7 @@
                 @foreach (var item in selectedRows)
                 {
                     <div class="mb-3 row">
-                        <div class="col-8">@($"{item.Summary} Temp. {item.TemperatureC} C")</div>
-
+                        <div class="col-8">@($"{item.FirstName} {item.LastName} — {item.JobTitle}")</div>
                         <div class="col-4">
                             <button class="btn btn-danger mb-3" @onclick=@(()=>{selectedRows = selectedRows.Except([item]);})>deselect</button>
                         </div>
@@ -170,9 +162,9 @@
 </div>
 
 @code {
-    SmGrid<WeatherForecast?>? grid;
+    SmGrid<Employee?>? grid;
 
-    WeatherForecast? selectedRow = null;
+    Employee? selectedRow = null;
     uint pageSize = 10;
     string gridWidth = "1100px";
     string gridHeight = "600px";
@@ -181,27 +173,27 @@
     GridEditMode gridEditMode = GridEditMode.Form;
     GridSizeMode gridSizeMode = GridSizeMode.Small;
     GridColumnResizeMode columnResizeMode = GridColumnResizeMode.Sliding;
-    IEnumerable<WeatherForecast> selectedRows = [];
+    IEnumerable<Employee> selectedRows = [];
     bool showDetailRow = true;
     bool showCommandBar = true;
-    GridTextAlign dateAlign = GridTextAlign.Left;
+    GridTextAlign nameAlign = GridTextAlign.Left;
 
-    Task RowEditBeginHandler(WeatherForecast item)
+    Task RowEditBeginHandler(Employee item)
     {
         return Task.CompletedTask;
     }
 
-    Task RowInsertingHandler(WeatherForecast item)
+    Task RowInsertingHandler(Employee item)
     {
-        forecasts ??= new List<WeatherForecast>();
-        forecasts = ((new WeatherForecast[] { item }).Concat(forecasts)).ToList();
+        employees ??= new List<Employee>();
+        employees = ((new Employee[] { item }).Concat(employees)).ToList();
         return Task.CompletedTask;
     }
 
-    Task RowsRemovingHandler(List<WeatherForecast> items)
+    Task RowsRemovingHandler(List<Employee> items)
     {
-        if (forecasts is not null)
-            forecasts = forecasts.Except(items).ToList();
+        if (employees is not null)
+            employees = employees.Except(items).ToList();
 
         return Task.CompletedTask;
     }
@@ -214,10 +206,10 @@
 
     async Task collapseAllDetailRows() => await grid!.CollapseAllDetailRows();
 
-    private List<WeatherForecast> forecasts = [];
+    private List<Employee> employees = [];
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = (await ForecastService.GetForecastAsync(DateTime.Now)).Take(55).ToList();
+        employees = (await EmployeeService.GetEmployeesAsync(55)).ToList();
     }
 }
