@@ -16,106 +16,110 @@
         </select>
     </div>
 </div>
-    <div class="row">
-        <div class="col">
+<div class="row">
+    <div class="col">
 
-<SmGrid @ref=grid
-        Data="employees"
-        FilterMode=GridFilterMode.FilterRow
-        Height="600px"
-        RowEditBegin="@((Employee data) => RowEditBeginHandler(data))"
-        RowInsertBegin=@RowInsertBeginHandler
-        EditMode=@gridEditMode
-        DataNavigationMode=NavigationMode.Paging
-        SelectionMode=RowSelectionMode.Multiple>
-    <Columns>
-        <CommandColumn EditButtonVisible=true NewButtonVisible=true DeleteButtonVisible=false Width="150px" />
-        <Column Title="First Name" Field="@nameof(Employee.FirstName)">
-            <CellShowTemplate>
+        <SmGrid @ref=grid Data="employees" FilterMode=GridFilterMode.FilterRow Height="600px"
+                RowEditBegin="@((Employee data) => RowEditBeginHandler(data))" RowInsertBegin=@RowInsertBeginHandler
+                EditMode=@gridEditMode DataNavigationMode=NavigationMode.Paging SelectionMode=RowSelectionMode.Multiple>
+            <Columns>
+                <CommandColumn EditButtonVisible=true NewButtonVisible=true DeleteButtonVisible=false Width="150px" />
+                <Column Title="First Name" Field="@nameof(Employee.FirstName)">
+                    <CellShowTemplate>
+                        @{
+                            Employee? data = context as Employee;
+                            if (data is not null)
+                            {
+                                <div style="white-space:break-spaces">@($"{data.FirstName} {data.LastName}")</div>
+                            }
+                            else
+                            {
+                                <div></div>
+                            }
+                        }
+                    </CellShowTemplate>
+                </Column>
+                <Column Title="Job Title" Field="@nameof(Employee.JobTitle)" />
+                <Column Title="Department" Field="@nameof(Employee.Department)" />
+                <Column Title="Salary" Field="@nameof(Employee.Salary)" />
+            </Columns>
+            <EditPopupTitleTemplate Context="context">
                 @{
-                    Employee? data = context as Employee;
-                    if (data is not null)
-                    {
-                        <div style="white-space:break-spaces">@($"{data.FirstName} {data.LastName}")</div>
-                    }
-                    else
-                    {
-                        <div></div>
-                    }
+                    Employee data = context as Employee;
+                    <div>@($"Edit employee: {data!.LastName}")</div>
                 }
-            </CellShowTemplate>
-        </Column>
-        <Column Title="Job Title" Field="@nameof(Employee.JobTitle)" />
-        <Column Title="Department" Field="@nameof(Employee.Department)" />
-        <Column Title="Salary" Field="@nameof(Employee.Salary)" />
-    </Columns>
-    <EditFormTemplate>
-        <EditForm Model="@EditContext" Context="EditFormContext" OnValidSubmit=HandleValidCustomEditSubmit>
-            <DataAnnotationsValidator />
-            <div class="form-group row mb-2">
-                <label class="col-2 col-form-label" for="firstName">First Name</label>
-                <div class="col-10">
-                    <InputText class="form-control" id="firstName" @bind-Value="EditContext!.FirstName" />
-                </div>
-            </div>
-            <div class="form-group row mb-2">
-                <label class="col-2 col-form-label" for="lastName">Last Name</label>
-                <div class="col-10">
-                    <InputText class="form-control" id="lastName" @bind-Value="EditContext.LastName" />
-                </div>
-            </div>
-            <div class="form-group row mb-2">
-                <label class="col-2 col-form-label" for="salary">Salary</label>
-                <div class="col-10">
-                    <InputNumber class="form-control" id="salary" TValue="decimal" @bind-Value="EditContext.Salary" />
-                </div>
-            </div>
-            <div class="row mb-2">
-                <ValidationSummary />
-            </div>
-            <div class="row">
-                <div class="col s-flex justify-content-end">
-                    <button type="submit" class="btn btn-outline-primary mx-1">update</button>
-                    <button type="button" class="btn btn-outline-secondary mx-1" @onclick="HandleCancelCustomEdit">cancel</button>
-                </div>
-            </div>
-        </EditForm>
-    </EditFormTemplate>
-    <InsertFormTemplate>
-        <EditForm Model="@InsertContext" Context="EditFormContext" OnValidSubmit=HandleValidInsertingSubmit>
-            <DataAnnotationsValidator />
-            <div class="form-group row mb-2">
-                <label class="col-2 col-form-label" for="firstName">First Name</label>
-                <div class="col-10">
-                    <InputText class="form-control" id="firstName" @bind-Value="InsertContext!.FirstName" />
-                </div>
-            </div>
-            <div class="form-group row mb-2">
-                <label class="col-2 col-form-label" for="lastName">Last Name</label>
-                <div class="col-10">
-                    <InputText class="form-control" id="lastName" @bind-Value="InsertContext.LastName" />
-                </div>
-            </div>
-            <div class="form-group row mb-2">
-                <label class="col-2 col-form-label" for="salary">Salary</label>
-                <div class="col-10">
-                    <InputNumber class="form-control" id="salary" TValue="decimal" @bind-Value="InsertContext.Salary" />
-                </div>
-            </div>
-            <div class="form-row">
-                <ValidationSummary />
-            </div>
-            <div class="row">
-                <div class="col s-flex justify-content-end">
-                    <button type="submit" class="btn btn-outline-primary mx-1">add</button>
-                    <button type="button" class="btn btn-outline-secondary mx-1" @onclick="OnCancelInsertingButtonClick">cancel</button>
-                </div>
-            </div>
-        </EditForm>
-    </InsertFormTemplate>
-</SmGrid>
-</div>
+            </EditPopupTitleTemplate>
+            <EditFormTemplate>
+                <EditForm Model="@EditContext" Context="EditFormContext" OnValidSubmit=HandleValidCustomEditSubmit>
+                    <DataAnnotationsValidator />
+                    <div class="form-group row mb-2">
+                        <label class="col-2 col-form-label" for="firstName">First Name</label>
+                        <div class="col-10">
+                            <InputText class="form-control" id="firstName" @bind-Value="EditContext!.FirstName" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label class="col-2 col-form-label" for="lastName">Last Name</label>
+                        <div class="col-10">
+                            <InputText class="form-control" id="lastName" @bind-Value="EditContext.LastName" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label class="col-2 col-form-label" for="salary">Salary</label>
+                        <div class="col-10">
+                            <InputNumber class="form-control" id="salary" TValue="decimal"
+                                         @bind-Value="EditContext.Salary" />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <ValidationSummary />
+                    </div>
+                    <div class="row">
+                        <div class="col s-flex justify-content-end">
+                            <button type="submit" class="btn btn-outline-primary mx-1">update</button>
+                            <button type="button" class="btn btn-outline-secondary mx-1"
+                                    @onclick="HandleCancelCustomEdit">cancel</button>
+                        </div>
+                    </div>
+                </EditForm>
+            </EditFormTemplate>
+            <InsertFormTemplate>
+                <EditForm Model="@InsertContext" Context="EditFormContext" OnValidSubmit=HandleValidInsertingSubmit>
+                    <DataAnnotationsValidator />
+                    <div class="form-group row mb-2">
+                        <label class="col-2 col-form-label" for="firstName">First Name</label>
+                        <div class="col-10">
+                            <InputText class="form-control" id="firstName" @bind-Value="InsertContext!.FirstName" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label class="col-2 col-form-label" for="lastName">Last Name</label>
+                        <div class="col-10">
+                            <InputText class="form-control" id="lastName" @bind-Value="InsertContext.LastName" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label class="col-2 col-form-label" for="salary">Salary</label>
+                        <div class="col-10">
+                            <InputNumber class="form-control" id="salary" TValue="decimal"
+                                         @bind-Value="InsertContext.Salary" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <ValidationSummary />
+                    </div>
+                    <div class="row">
+                        <div class="col s-flex justify-content-end">
+                            <button type="submit" class="btn btn-outline-primary mx-1">add</button>
+                            <button type="button" class="btn btn-outline-secondary mx-1"
+                                    @onclick="OnCancelInsertingButtonClick">cancel</button>
+                        </div>
+                    </div>
+                </EditForm>
+            </InsertFormTemplate>
+        </SmGrid>
     </div>
+</div>
 
 @code {
     private List<Employee>? employees;
@@ -151,12 +155,12 @@
     async Task HandleValidInsertingSubmit()
     {
         var newItem = new Employee
-            {
-                FirstName = InsertContext!.FirstName,
-                LastName = InsertContext.LastName,
-                Salary = InsertContext.Salary,
-                HireDate = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, 1)
-            };
+        {
+            FirstName = InsertContext!.FirstName,
+            LastName = InsertContext.LastName,
+            Salary = InsertContext.Salary,
+            HireDate = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, 1)
+        };
 
         employees = ((new Employee[] { newItem }).Concat(employees!)).ToList();
         await grid!.CancelRowInsert();
