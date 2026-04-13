@@ -28,7 +28,7 @@ public partial class PagingFooter
         });
         LayoutService.SizeMode.Subscribe(mode => {
             _paginationSizeClass = mode switch { GridSizeMode.Small => "pagination-sm", GridSizeMode.Large => "pagination-lg", _ => "" };
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
     }
 

@@ -27,7 +27,7 @@ public partial class GridRowEditing_Form<TItem>
         LayoutService.SizeMode.Subscribe(mode =>
         {
             _btnSizeClass = mode switch { GridSizeMode.Small => "btn-sm small", GridSizeMode.Large => "btn-lg", _ => "" };
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
         return base.OnInitializedAsync();
     }

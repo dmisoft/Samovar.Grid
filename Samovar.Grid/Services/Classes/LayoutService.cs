@@ -68,7 +68,7 @@ public class LayoutService
 
     private void DataGridInitializerCallback(bool obj)
     {
-        Task.Run(async () => await HeightWidthChanged(height: Height.Value, width: Width.Value));
+        _ = HeightWidthChanged(height: Height.Value, width: Width.Value);
     }
 
     public event Func<GridStyleInfo, Task>? DataGridInnerCssStyleChanged = null;

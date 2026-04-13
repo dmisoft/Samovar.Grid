@@ -44,7 +44,7 @@ public partial class GridRowEditing_Popup<TItem>
         {
             _btnSizeClass   = mode switch { GridSizeMode.Small => "btn-sm small", GridSizeMode.Large => "btn-lg", _ => "" };
             _titleSizeClass = mode switch { GridSizeMode.Small => "small",        GridSizeMode.Large => "fs-4",   _ => "" };
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
         return base.OnInitializedAsync();
     }

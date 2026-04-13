@@ -37,7 +37,7 @@ public partial class GridEditCellDateOnly
         LayoutService.SizeMode.Subscribe(mode =>
         {
             _formControlSizeClass = mode switch { GridSizeMode.Small => "form-control-sm", GridSizeMode.Large => "form-control-lg", _ => "" };
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
         return base.OnInitializedAsync();
     }

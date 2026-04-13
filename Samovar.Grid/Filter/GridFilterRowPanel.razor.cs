@@ -15,8 +15,11 @@ public partial class GridFilterRowPanel<T>
     {
         GridLayoutService.DataGridInnerStyle.Subscribe(async style =>
         {
-            Style = await style;
-            StateHasChanged();
+            await InvokeAsync(async () =>
+            {
+                Style = await style;
+                StateHasChanged();
+            });
         });
         base.OnInitialized();
     }

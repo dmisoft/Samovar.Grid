@@ -31,7 +31,7 @@ public partial class GridHiddenHeaderCell
         ColumnModel.WidthStyle.Subscribe(w =>
         {
             WidthStyle = w;
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
         return base.OnInitializedAsync();
     }

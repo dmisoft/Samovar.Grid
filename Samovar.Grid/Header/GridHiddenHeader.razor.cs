@@ -11,7 +11,7 @@ public partial class GridHiddenHeader
 
     protected override Task OnInitializedAsync()
     {
-        GridLayoutService.ShowRowSelectionColumn.Subscribe(_ => StateHasChanged());
+        GridLayoutService.ShowRowSelectionColumn.Subscribe(showCol => _ = InvokeAsync(StateHasChanged));
         return base.OnInitializedAsync();
     }
 

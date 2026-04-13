@@ -97,7 +97,7 @@ public partial class PagingGrid<T>
         LayoutService.SizeMode.Subscribe(mode =>
         {
             _tableSizeClass = mode switch { GridSizeMode.Small => "table-sm small", GridSizeMode.Large => "sm-table-lg", _ => "" };
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
 
         StateService.DataSourceState.Subscribe(async (stateTask) =>
@@ -110,43 +110,46 @@ public partial class PagingGrid<T>
         });
         LayoutService.DataGridInnerStyle.Subscribe(async style =>
         {
-            Style = await style;
-            StateHasChanged();
+            await InvokeAsync(async () =>
+            {
+                Style = await style;
+                StateHasChanged();
+            });
         });
 
         //Popup editing
-        EditingService.ShowEditingPopupDelegate = (GridRowModel<T> model) => { EditingPopup = ComponentBuilderService.GetEditingPopup(model); StateHasChanged(); return Task.CompletedTask; };
-        EditingService.CloseEditingPopupDelegate = () => { EditingPopup = null; StateHasChanged(); return Task.CompletedTask; };
+        EditingService.ShowEditingPopupDelegate = async (GridRowModel<T> model) => { await InvokeAsync(() => { EditingPopup = ComponentBuilderService.GetEditingPopup(model); StateHasChanged(); }); };
+        EditingService.CloseEditingPopupDelegate = async () => { await InvokeAsync(() => { EditingPopup = null; StateHasChanged(); }); };
 
         //Popup inserting
-        EditingService.ShowInsertingPopupDelegate = (GridRowModel<T> model) => { InsertingPopup = ComponentBuilderService.GetInsertingPopup<T>(model); StateHasChanged(); return Task.CompletedTask; };
-        EditingService.CloseInsertingPopupDelegate = () => { InsertingPopup = null; StateHasChanged(); return Task.CompletedTask; };
+        EditingService.ShowInsertingPopupDelegate = async (GridRowModel<T> model) => { await InvokeAsync(() => { InsertingPopup = ComponentBuilderService.GetInsertingPopup<T>(model); StateHasChanged(); }); };
+        EditingService.CloseInsertingPopupDelegate = async () => { await InvokeAsync(() => { InsertingPopup = null; StateHasChanged(); }); };
 
         //Inline inserting form
-        EditingService.ShowInsertingFormDelegate = (GridRowModel<T> model) => { InsertingForm = ComponentBuilderService.GetInsertingForm(model); StateHasChanged(); return Task.CompletedTask; };
-        EditingService.CloseInsertingFormDelegate = () => { InsertingForm = null; StateHasChanged(); return Task.CompletedTask; };
+        EditingService.ShowInsertingFormDelegate = async (GridRowModel<T> model) => { await InvokeAsync(() => { InsertingForm = ComponentBuilderService.GetInsertingForm(model); StateHasChanged(); }); };
+        EditingService.CloseInsertingFormDelegate = async () => { await InvokeAsync(() => { InsertingForm = null; StateHasChanged(); }); };
 
         //Data processing panels
 
         //Data panel
-        StateService.ShowDataPanelDelegate = () => { DataPanel = ComponentBuilderService.GetDataPanel<T>(); StateHasChanged(); return Task.CompletedTask; };
-        StateService.CloseDataPanelDelegate = () => { DataPanel = null; StateHasChanged(); return Task.CompletedTask; };
+        StateService.ShowDataPanelDelegate = async () => { await InvokeAsync(() => { DataPanel = ComponentBuilderService.GetDataPanel<T>(); StateHasChanged(); }); };
+        StateService.CloseDataPanelDelegate = async () => { await InvokeAsync(() => { DataPanel = null; StateHasChanged(); }); };
 
         //No data panel
-        StateService.ShowNoDataPanelDelegate = () => { NoDataPanel = ComponentBuilderService.GetNoDataPanel(); StateHasChanged(); return Task.CompletedTask; };
-        StateService.CloseNoDataPanelDelegate = () => { NoDataPanel = null; StateHasChanged(); return Task.CompletedTask; };
+        StateService.ShowNoDataPanelDelegate = async () => { await InvokeAsync(() => { NoDataPanel = ComponentBuilderService.GetNoDataPanel(); StateHasChanged(); }); };
+        StateService.CloseNoDataPanelDelegate = async () => { await InvokeAsync(() => { NoDataPanel = null; StateHasChanged(); }); };
 
         //No data found panel
-        StateService.ShowNoDataFoundPanelDelegate = () => { NoDataFoundPanel = ComponentBuilderService.GetNoDataFoundPanel(); StateHasChanged(); return Task.CompletedTask; };
-        StateService.CloseNoDataFoundPanelDelegate = () => { NoDataFoundPanel = null; StateHasChanged(); return Task.CompletedTask; };
+        StateService.ShowNoDataFoundPanelDelegate = async () => { await InvokeAsync(() => { NoDataFoundPanel = ComponentBuilderService.GetNoDataFoundPanel(); StateHasChanged(); }); };
+        StateService.CloseNoDataFoundPanelDelegate = async () => { await InvokeAsync(() => { NoDataFoundPanel = null; StateHasChanged(); }); };
 
         //Processing data panel
-        StateService.ShowProcessingDataPanelDelegate = () => { DataProcessingPanel = ComponentBuilderService.GetProcessingDataPanel(); StateHasChanged(); return Task.CompletedTask; };
-        StateService.CloseProcessingDataPanelDelegate = () => { DataProcessingPanel = null; StateHasChanged(); return Task.CompletedTask; };
+        StateService.ShowProcessingDataPanelDelegate = async () => { await InvokeAsync(() => { DataProcessingPanel = ComponentBuilderService.GetProcessingDataPanel(); StateHasChanged(); }); };
+        StateService.CloseProcessingDataPanelDelegate = async () => { await InvokeAsync(() => { DataProcessingPanel = null; StateHasChanged(); }); };
 
         //Paging footer
-        StateService.ShowPagingPanelDelegate = () => { PagingPanel = ComponentBuilderService.GetPagingPanel<T>(); StateHasChanged(); return Task.CompletedTask; };
-        StateService.HidePagingPanelDelegate = () => { PagingPanel = null; StateHasChanged(); return Task.CompletedTask; };
+        StateService.ShowPagingPanelDelegate = async () => { await InvokeAsync(() => { PagingPanel = ComponentBuilderService.GetPagingPanel<T>(); StateHasChanged(); }); };
+        StateService.HidePagingPanelDelegate = async () => { await InvokeAsync(() => { PagingPanel = null; StateHasChanged(); }); };
 
         base.OnInitializedAsync();
 

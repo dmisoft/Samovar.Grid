@@ -15,7 +15,7 @@ public partial class GridHiddenHeaderCheckboxCell : DesignComponentBase, IAsyncD
         ColumnService.RowSelectionColumnModel.WidthStyle.Subscribe(w =>
         {
             WidthStyle = w;
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
         return base.OnInitializedAsync();
     }

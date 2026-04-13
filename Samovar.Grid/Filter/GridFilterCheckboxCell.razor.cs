@@ -15,7 +15,7 @@ public partial class GridFilterCheckboxCell : DesignComponentBase, IAsyncDisposa
         ColumnService.RowSelectionColumnModel.WidthStyle.Subscribe(w =>
         {
             WidthStyle = w;
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
         return base.OnInitializedAsync();
     }

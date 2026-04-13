@@ -20,7 +20,7 @@ public partial class GridRowEditing_Body<TItem>
         {
             _labelSizeClass       = mode switch { GridSizeMode.Small => "small", GridSizeMode.Large => "fs-5", _ => "" };
             _formControlSizeClass = mode switch { GridSizeMode.Small => "form-control-sm", GridSizeMode.Large => "form-control-lg", _ => "" };
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
         return base.OnInitializedAsync();
     }

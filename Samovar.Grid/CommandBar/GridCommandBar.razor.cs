@@ -18,14 +18,14 @@ public partial class GridCommandBar<T> : DesignComponentBase
         LayoutService.SizeMode.Subscribe(mode =>
         {
             _btnSizeClass = mode switch { GridSizeMode.Small => "btn-sm small", GridSizeMode.Large => "btn-lg", _ => "" };
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
         GridSelectionService.MultipleSelectedDataRows.Subscribe(rows =>
         {
             _hasSelection = rows?.Any() == true;
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
-        GridSelectionService.SelectionMode.Subscribe(_ => StateHasChanged());
+        GridSelectionService.SelectionMode.Subscribe(mode => _ = InvokeAsync(StateHasChanged));
     }
 
     [SmInject]

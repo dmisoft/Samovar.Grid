@@ -31,11 +31,11 @@ public partial class GridHeader<T>
     {
         await base.OnInitializedAsync();
         LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
-        LayoutService.ShowRowSelectionColumn.Subscribe(_ => StateHasChanged());
+        LayoutService.ShowRowSelectionColumn.Subscribe(showCol => _ = InvokeAsync(StateHasChanged));
         LayoutService.SizeMode.Subscribe(mode =>
         {
             _tableSizeClass = mode switch { GridSizeMode.Small => "table-sm small", GridSizeMode.Large => "sm-table-lg", _ => "" };
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
     }
 

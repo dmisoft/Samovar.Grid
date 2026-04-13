@@ -32,8 +32,7 @@ public partial class GridFilterDetailExpanderCell
         ColumnModel.WidthStyle.Subscribe(w =>
         {
             WidthStyle = w;
-            StateHasChanged();
-
+            _ = InvokeAsync(StateHasChanged);
         });
         return base.OnInitializedAsync();
     }

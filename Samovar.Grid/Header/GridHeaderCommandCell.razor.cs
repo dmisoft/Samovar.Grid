@@ -39,12 +39,12 @@ public partial class GridHeaderCommandCell<T>
         ColumnModel.WidthStyle.Subscribe(w =>
         {
             WidthStyle = w;
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
         LayoutService.SizeMode.Subscribe(mode =>
         {
             _btnSizeClass = mode switch { GridSizeMode.Small => "btn-sm small", GridSizeMode.Large => "btn-lg", _ => "" };
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
         return base.OnInitializedAsync();
     }

@@ -119,7 +119,7 @@ public partial class GridColumnFilterMenuPanel<TItem>
             _inputGroupSizeClass  = mode switch { GridSizeMode.Small => "input-group-sm", GridSizeMode.Large => "input-group-lg", _ => "" };
             _formControlSizeClass = mode switch { GridSizeMode.Small => "form-control-sm", GridSizeMode.Large => "form-control-lg", _ => "" };
             _listItemSizeClass    = mode switch { GridSizeMode.Small => "small", GridSizeMode.Large => "fs-5", _ => "" };
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
 
         return base.OnInitializedAsync();
@@ -146,7 +146,7 @@ public partial class GridColumnFilterMenuPanel<TItem>
     {
         foreach (var node in _rootNodes)
             node.SetCheckedRecursive(true);
-        StateHasChanged();
+        _ = InvokeAsync(StateHasChanged);
         return Task.CompletedTask;
     }
 

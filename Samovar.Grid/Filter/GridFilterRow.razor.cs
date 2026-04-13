@@ -21,7 +21,7 @@ public partial class GridFilterRow<TItem>
     {
         await base.OnInitializedAsync();
         LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
-        LayoutService.ShowRowSelectionColumn.Subscribe(_ => StateHasChanged());
+        LayoutService.ShowRowSelectionColumn.Subscribe(showCol => _ = InvokeAsync(StateHasChanged));
     }
 
     protected readonly List<Type> Numeric_Types_For_Constant_Expression = new List<Type>

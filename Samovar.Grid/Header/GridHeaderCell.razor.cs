@@ -49,19 +49,19 @@ public partial class GridHeaderCell<TItem>
         ColumnModel.WidthStyle.Subscribe(w =>
         {
             WidthStyle = w;
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
         _filterInfoUnsubscriber = FilterService.FilterInfo.Subscribe(filters =>
         {
             _filterActive = filters.Any(f => f.ColumnModel is not null && f.ColumnModel.Equals(ColumnModel));
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
         _activeFilterMenuUnsubscriber = FilterService.ActiveFilterMenuColumnId.Subscribe(activeId =>
         {
             if (_filterMenuOpen && activeId != ColumnModel.Id)
             {
                 _filterMenuOpen = false;
-                StateHasChanged();
+                _ = InvokeAsync(StateHasChanged);
             }
         });
         return base.OnInitializedAsync();
@@ -82,7 +82,7 @@ public partial class GridHeaderCell<TItem>
             SortDirection = SortDir.None;
         }
 
-        StateHasChanged();
+        _ = InvokeAsync(StateHasChanged);
     }
 
     private bool IsLastColumn => ColumnService.AllColumnModels[^1].Id == ColumnModel.Id;

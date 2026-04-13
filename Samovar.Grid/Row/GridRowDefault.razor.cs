@@ -92,7 +92,7 @@ public partial class GridRowDefault<T>
         LayoutService.SizeMode.Subscribe(mode =>
         {
             _btnSizeClass = mode switch { GridSizeMode.Small => "btn-sm small", GridSizeMode.Large => "btn-lg", _ => "" };
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
 
         return base.OnInitializedAsync();
@@ -100,20 +100,20 @@ public partial class GridRowDefault<T>
 
     private Task EditingService_RowEditingEnded()
     {
-        StateHasChanged();
+        _ = InvokeAsync(StateHasChanged);
         return Task.CompletedTask;
     }
 
     private void MultipleSelectedDataRowsChanged(IEnumerable<T>? arg)
     {
         RowModel.IsRowSelected = arg is not null && arg.Any(a => a!.Equals(RowModel.DataItem));
-        StateHasChanged();
+        _ = InvokeAsync(StateHasChanged);
     }
 
     private void SingleSelectedDataRowsChanged(T? arg)
     {
         RowModel.IsRowSelected = arg is not null && arg.Equals(RowModel.DataItem);
-        StateHasChanged();
+        _ = InvokeAsync(StateHasChanged);
     }
 
     public ValueTask DisposeAsync()

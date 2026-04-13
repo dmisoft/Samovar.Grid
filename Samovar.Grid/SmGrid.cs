@@ -299,8 +299,6 @@ public class SmGrid<T>
 
     protected override Task OnInitializedAsync()
     {
-        JsService.InitJsModule(JsRuntime, ConstantService.DataGridId, LayoutService.DataGridDotNetRef, LayoutService);
-
         GridSelectionService.SingleSelectedRowCallback = async () => { await SingleSelectedDataRowChanged.InvokeAsync(GridSelectionService.SingleSelectedDataRow.Value); };
         GridSelectionService.MultipleSelectedRowsCallback = async () => { await MultipleSelectedDataRowsChanged.InvokeAsync(GridSelectionService.MultipleSelectedDataRows.Value); };
 
@@ -312,6 +310,7 @@ public class SmGrid<T>
 
         if (firstRender)
         {
+            await JsService.InitJsModule(JsRuntime, ConstantService.DataGridId, LayoutService.DataGridDotNetRef, LayoutService);
             await JsService.AttachWindowResizeEvent(ConstantService.DataGridId, LayoutService.DataGridDotNetRef);
             await LayoutService.InitHeader();
             InitService.IsInitialized.OnNext(true);

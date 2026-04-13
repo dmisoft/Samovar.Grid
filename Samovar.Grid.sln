@@ -22,10 +22,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samovar.Grid.WebAppWasmTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samovar.Grid.WebAppWasmTest.Client", "Samovar.Grid.WebAppWasmTest\Samovar.Grid.WebAppWasmTest.Client\Samovar.Grid.WebAppWasmTest.Client.csproj", "{B0A602AC-BDF1-4727-BF52-AEBB224AE259}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samovar.Grid.WebAppAutoTest", "Samovar.Grid.WebAppAutoTest\Samovar.Grid.WebAppAutoTest\Samovar.Grid.WebAppAutoTest.csproj", "{96857DFC-64E1-4614-AF9D-07893CD51711}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samovar.Grid.WebAppAutoTest.Client", "Samovar.Grid.WebAppAutoTest\Samovar.Grid.WebAppAutoTest.Client\Samovar.Grid.WebAppAutoTest.Client.csproj", "{8DC4D6FD-4575-4267-99A1-296FAED20E3C}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{D8CC962C-3169-4CFC-BC9C-BED12C8936E0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wasm", "Wasm", "{1732ADE3-A78F-435E-A7F5-48E1C64D7EA3}"

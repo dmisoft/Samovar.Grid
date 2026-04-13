@@ -60,7 +60,7 @@ public partial class GridEditCellBoolean
         LayoutService.SizeMode.Subscribe(mode =>
         {
             _formSelectSizeClass = mode switch { GridSizeMode.Small => "form-select-sm", GridSizeMode.Large => "form-select-lg", _ => "" };
-            StateHasChanged();
+            _ = InvokeAsync(StateHasChanged);
         });
         if (InnerValue)
         {
