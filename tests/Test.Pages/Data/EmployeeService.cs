@@ -1,6 +1,6 @@
 using Bogus;
 
-namespace Samovar.Grid.TestPages.Data;
+namespace Test.Pages.Data;
 
 public class EmployeeService
 {

@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace Samovar.Grid.TestPages.Data;
+namespace Test.Pages.Data;
 
 public class Employee
 {

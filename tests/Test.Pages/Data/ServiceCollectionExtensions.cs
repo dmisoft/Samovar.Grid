@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Samovar.Grid.TestPages.Data;
+namespace Test.Pages.Data;
 
 public static class ServiceCollectionExtensions
 {

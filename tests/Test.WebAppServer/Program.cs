@@ -1,7 +1,8 @@
-using Samovar.Grid.TestPages.Data;
-using Samovar.Grid.WebAppServerTest.Components;
+using Test.Pages.Data;
+using Test.WebAppServer.Components;
+using Samovar.Grid;
 
-namespace Samovar.Grid.WebAppServerTest;
+namespace Test.WebAppServer;
 
 public class Program
 {
@@ -29,7 +30,7 @@ public class Program
         app.MapStaticAssets();
         app.MapRazorComponents<App>()
             .AddInteractiveServerRenderMode()
-            .AddAdditionalAssemblies(typeof(Samovar.Grid.TestPages.Pages.Home).Assembly);
+            .AddAdditionalAssemblies(typeof(Test.Pages.Pages.Home).Assembly);
 
         app.Run();
     }
