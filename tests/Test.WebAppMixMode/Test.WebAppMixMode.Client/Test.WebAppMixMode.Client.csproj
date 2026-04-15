@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Samovar.Grid\Samovar.Grid.csproj" />
+    <ProjectReference Include="..\..\..\src\Samovar.Grid\Samovar.Grid.csproj" />
   </ItemGroup>
 
 </Project>

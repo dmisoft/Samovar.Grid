@@ -1,10 +1,10 @@
-﻿@page "/weather"
-@attribute [StreamRendering]
-@rendermode InteractiveServer
+﻿@page "/interactive-web-assembly"
+@using Samovar.Grid
+@rendermode InteractiveWebAssembly
 
-<PageTitle>Weather</PageTitle>
+<PageTitle>Rendermode InteractiveWebAssembly</PageTitle>
 
-<h1>Rendermode InteractiveServer</h1>
+<h2>Rendermode InteractiveWebAssembly</h2>
 
 @if (forecasts == null)
 {
@@ -12,7 +12,6 @@
 }
 else
 {
-    <p>Rendermode InteractiveServer</p>
     <SmGrid Data="forecasts" AutoGenerateColumns="true"></SmGrid>
 }
 

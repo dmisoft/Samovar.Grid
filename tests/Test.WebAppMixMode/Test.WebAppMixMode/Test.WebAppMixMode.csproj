@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Samovar.Grid\Samovar.Grid.csproj" />
+    <ProjectReference Include="..\..\..\src\Samovar.Grid\Samovar.Grid.csproj" />
     <ProjectReference Include="..\Test.WebAppMixMode.Client\Test.WebAppMixMode.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" />
   </ItemGroup>
