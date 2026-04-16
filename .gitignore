@@ -332,3 +332,6 @@ ASALocalRun/
 # claude code
 .claude/
 CLAUDE.md
+
+# vs code
+.vscode/
