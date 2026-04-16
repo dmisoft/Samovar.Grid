@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Samovar.Grid;
-using Samovar.Grid.TestPages.Data;
+using Test.Pages.Data;
 using Test.WasmStandalone;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);

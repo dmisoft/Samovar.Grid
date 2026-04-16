@@ -4,12 +4,12 @@
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
 		<PackageId>SamovarGrid</PackageId>
-		<Authors>Dimi</Authors>
+		<Authors>Dimitri Michel</Authors>
 		<Company>DmiSoft</Company>
 		<PackageIcon>SamovarGrid_Logo.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>10.0.0</Version>
+		<Version>10.1.0</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageOutputPath>$(MSBuildThisFileDirectory)..\artifacts</PackageOutputPath>
 		<Product>SamovarGrid</Product>
