@@ -5,7 +5,6 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<PackageId>SamovarGrid</PackageId>
 		<Authors>Dimitri Michel</Authors>
-		<Company>DmiSoft</Company>
 		<PackageIcon>SamovarGrid_Logo.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
