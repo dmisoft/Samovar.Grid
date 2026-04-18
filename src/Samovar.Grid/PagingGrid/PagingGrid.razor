@@ -4,6 +4,7 @@
 @inherits DesignComponentBase
 
 <div id="@ConstantService.OuterGridId" @ref="@LayoutService.GridOuterRef" class="sm-grid-outer d-flex flex-column"
+     dir="@(CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")"
      style="@Style.CssStyle" @onkeydown:stopPropagation="true">
 
     @if (ShowCommandBar)

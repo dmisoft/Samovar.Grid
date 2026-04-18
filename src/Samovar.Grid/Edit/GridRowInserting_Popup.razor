@@ -5,8 +5,8 @@
 	<div class="modal-dialog">
 		<div class="modal-content"  style="resize:both;overflow: auto;">
 			<div class="modal-header" id=@($"{Id}header") style="cursor: move;">
-				<h5 class="modal-title" id="staticBackdropLabel">New</h5>
-				<button type="button" class="btn-close" aria-label="Close" @onclick=@(() => EditingService.RowInsertCancel())></button>
+				<h5 class="modal-title" id="staticBackdropLabel">@L10n[LocalizationKeys.EditPopupTitleNew]</h5>
+				<button type="button" class="btn-close" aria-label="@L10n[LocalizationKeys.EditCloseAriaLabel]" @onclick=@(() => EditingService.RowInsertCancel())></button>
 			</div>
 			<div class="modal-body">
 				<GridRowEditing_Body RowModel=RowModel />
@@ -14,8 +14,8 @@
 			@if (RowModel.EditingDataItem is not null)
 			{
 				<div class="modal-footer">
-					<button class="btn btn-outline-primary mx-1" @onclick=@(() => EditingService.RowInsertCommit(RowModel.EditingDataItem))>add</button>
-					<button class="btn btn-outline-secondary mx-1" @onclick=@(() => EditingService.RowInsertCancel())>cancel</button>
+					<button class="btn btn-outline-primary mx-1" @onclick=@(() => EditingService.RowInsertCommit(RowModel.EditingDataItem))>@L10n[LocalizationKeys.EditAdd]</button>
+					<button class="btn btn-outline-secondary mx-1" @onclick=@(() => EditingService.RowInsertCancel())>@L10n[LocalizationKeys.EditCancel]</button>
 				</div>
 			}
 		</div>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Grid.Edit.Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Grid.Edit.Update" xml:space="preserve"><value>Update</value></data>
+  <data name="Grid.Edit.Add" xml:space="preserve"><value>Add</value></data>
+  <data name="Grid.Edit.PopupTitle.Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="Grid.Edit.PopupTitle.New" xml:space="preserve"><value>New</value></data>
+  <data name="Grid.Edit.Close.AriaLabel" xml:space="preserve"><value>Close</value></data>
+  <data name="Grid.Pager.PageOf" xml:space="preserve"><value>Page {0} of {1}</value></data>
+  <data name="Grid.Pager.PreviousGlyph" xml:space="preserve"><value>&#8249;</value></data>
+  <data name="Grid.Pager.NextGlyph" xml:space="preserve"><value>&#8250;</value></data>
+  <data name="Grid.Filter.Values.Title" xml:space="preserve"><value>Filter Values</value></data>
+  <data name="Grid.Filter.Search.Placeholder" xml:space="preserve"><value>Enter text to search...</value></data>
+  <data name="Grid.Filter.SelectAll" xml:space="preserve"><value>Select All</value></data>
+  <data name="Grid.Filter.Blank" xml:space="preserve"><value>(blank)</value></data>
+  <data name="Grid.Filter.Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Grid.Filter.Apply" xml:space="preserve"><value>Apply</value></data>
+  <data name="Grid.Common.NoData" xml:space="preserve"><value>no data</value></data>
+  <data name="Grid.CommandBar.SelectCurrentPage" xml:space="preserve"><value>Select current page</value></data>
+  <data name="Grid.CommandBar.SelectAllFiltered" xml:space="preserve"><value>Select all filtered rows</value></data>
+  <data name="Grid.CommandBar.DeselectAll" xml:space="preserve"><value>Deselect all</value></data>
+  <data name="Grid.CommandBar.DeleteSelected" xml:space="preserve"><value>Delete selected</value></data>
+  <data name="Grid.CommandBar.ExportExcelAll" xml:space="preserve"><value>Excel (All)</value></data>
+  <data name="Grid.CommandBar.ExportExcelSelected" xml:space="preserve"><value>Excel (Selected)</value></data>
+  <data name="Grid.CommandBar.ExportCsvAll" xml:space="preserve"><value>CSV (All)</value></data>
+  <data name="Grid.CommandBar.ExportCsvSelected" xml:space="preserve"><value>CSV (Selected)</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Toolbar" xml:space="preserve"><value>Rows selection command bar</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Rows selection</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Selected rows delete</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Rows export</value></data>
+</root>

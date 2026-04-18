@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Grid.Edit.Cancel" xml:space="preserve"><value>Avbryt</value></data>
+  <data name="Grid.Edit.Update" xml:space="preserve"><value>Oppdater</value></data>
+  <data name="Grid.Edit.Add" xml:space="preserve"><value>Legg til</value></data>
+  <data name="Grid.Edit.PopupTitle.Edit" xml:space="preserve"><value>Rediger</value></data>
+  <data name="Grid.Edit.PopupTitle.New" xml:space="preserve"><value>Ny</value></data>
+  <data name="Grid.Edit.Close.AriaLabel" xml:space="preserve"><value>Lukk</value></data>
+  <data name="Grid.Pager.PageOf" xml:space="preserve"><value>Side {0} av {1}</value></data>
+  <data name="Grid.Pager.PreviousGlyph" xml:space="preserve"><value>&#8249;</value></data>
+  <data name="Grid.Pager.NextGlyph" xml:space="preserve"><value>&#8250;</value></data>
+  <data name="Grid.Filter.Values.Title" xml:space="preserve"><value>Filterverdier</value></data>
+  <data name="Grid.Filter.Search.Placeholder" xml:space="preserve"><value>Skriv inn tekst for å søke...</value></data>
+  <data name="Grid.Filter.SelectAll" xml:space="preserve"><value>Velg alle</value></data>
+  <data name="Grid.Filter.Blank" xml:space="preserve"><value>(tom)</value></data>
+  <data name="Grid.Filter.Cancel" xml:space="preserve"><value>Avbryt</value></data>
+  <data name="Grid.Filter.Apply" xml:space="preserve"><value>Bruk</value></data>
+  <data name="Grid.Common.NoData" xml:space="preserve"><value>ingen data</value></data>
+  <data name="Grid.CommandBar.SelectCurrentPage" xml:space="preserve"><value>Velg gjeldende side</value></data>
+  <data name="Grid.CommandBar.SelectAllFiltered" xml:space="preserve"><value>Velg alle filtrerte rader</value></data>
+  <data name="Grid.CommandBar.DeselectAll" xml:space="preserve"><value>Fjern alle valg</value></data>
+  <data name="Grid.CommandBar.DeleteSelected" xml:space="preserve"><value>Slett valgte</value></data>
+  <data name="Grid.CommandBar.ExportExcelAll" xml:space="preserve"><value>Excel (Alle)</value></data>
+  <data name="Grid.CommandBar.ExportExcelSelected" xml:space="preserve"><value>Excel (Valgte)</value></data>
+  <data name="Grid.CommandBar.ExportCsvAll" xml:space="preserve"><value>CSV (Alle)</value></data>
+  <data name="Grid.CommandBar.ExportCsvSelected" xml:space="preserve"><value>CSV (Valgte)</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Toolbar" xml:space="preserve"><value>Kommandolinje for radvalg</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Radvalg</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Slett valgte rader</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Eksporter rader</value></data>
+</root>

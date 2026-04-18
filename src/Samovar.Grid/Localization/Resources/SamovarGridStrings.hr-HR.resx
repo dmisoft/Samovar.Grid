@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Grid.Edit.Cancel" xml:space="preserve"><value>Odustani</value></data>
+  <data name="Grid.Edit.Update" xml:space="preserve"><value>Ažuriraj</value></data>
+  <data name="Grid.Edit.Add" xml:space="preserve"><value>Dodaj</value></data>
+  <data name="Grid.Edit.PopupTitle.Edit" xml:space="preserve"><value>Uredi</value></data>
+  <data name="Grid.Edit.PopupTitle.New" xml:space="preserve"><value>Novo</value></data>
+  <data name="Grid.Edit.Close.AriaLabel" xml:space="preserve"><value>Zatvori</value></data>
+  <data name="Grid.Pager.PageOf" xml:space="preserve"><value>Stranica {0} od {1}</value></data>
+  <data name="Grid.Pager.PreviousGlyph" xml:space="preserve"><value>&#8249;</value></data>
+  <data name="Grid.Pager.NextGlyph" xml:space="preserve"><value>&#8250;</value></data>
+  <data name="Grid.Filter.Values.Title" xml:space="preserve"><value>Vrijednosti filtra</value></data>
+  <data name="Grid.Filter.Search.Placeholder" xml:space="preserve"><value>Unesite tekst za pretraživanje...</value></data>
+  <data name="Grid.Filter.SelectAll" xml:space="preserve"><value>Odaberi sve</value></data>
+  <data name="Grid.Filter.Blank" xml:space="preserve"><value>(prazno)</value></data>
+  <data name="Grid.Filter.Cancel" xml:space="preserve"><value>Odustani</value></data>
+  <data name="Grid.Filter.Apply" xml:space="preserve"><value>Primijeni</value></data>
+  <data name="Grid.Common.NoData" xml:space="preserve"><value>nema podataka</value></data>
+  <data name="Grid.CommandBar.SelectCurrentPage" xml:space="preserve"><value>Odaberi trenutnu stranicu</value></data>
+  <data name="Grid.CommandBar.SelectAllFiltered" xml:space="preserve"><value>Odaberi sve filtrirane retke</value></data>
+  <data name="Grid.CommandBar.DeselectAll" xml:space="preserve"><value>Poništi odabir svega</value></data>
+  <data name="Grid.CommandBar.DeleteSelected" xml:space="preserve"><value>Izbriši odabrane</value></data>
+  <data name="Grid.CommandBar.ExportExcelAll" xml:space="preserve"><value>Excel (Sve)</value></data>
+  <data name="Grid.CommandBar.ExportExcelSelected" xml:space="preserve"><value>Excel (Odabrani)</value></data>
+  <data name="Grid.CommandBar.ExportCsvAll" xml:space="preserve"><value>CSV (Sve)</value></data>
+  <data name="Grid.CommandBar.ExportCsvSelected" xml:space="preserve"><value>CSV (Odabrani)</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Toolbar" xml:space="preserve"><value>Traka naredbi za odabir redaka</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Odabir redaka</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Brisanje odabranih redaka</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Izvoz redaka</value></data>
+</root>

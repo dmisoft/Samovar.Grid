@@ -31,6 +31,8 @@ public partial class GridRowEditing_Popup<TItem>
     protected string _btnSizeClass = "";
     protected string _titleSizeClass = "";
 
+    private IDisposable? _cultureSubscription;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -46,11 +48,14 @@ public partial class GridRowEditing_Popup<TItem>
             _titleSizeClass = mode switch { GridSizeMode.Small => "small",        GridSizeMode.Large => "fs-4",   _ => "" };
             _ = InvokeAsync(StateHasChanged);
         });
+        _cultureSubscription = L10n.CultureChanged.Subscribe(u => InvokeAsync(StateHasChanged));
         return base.OnInitializedAsync();
     }
 
     public ValueTask DisposeAsync()
     {
+        _cultureSubscription?.Dispose();
+        _cultureSubscription = null;
         return ValueTask.CompletedTask;
     }
 }

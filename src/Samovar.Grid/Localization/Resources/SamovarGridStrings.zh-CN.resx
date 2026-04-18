@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Grid.Edit.Cancel" xml:space="preserve"><value>取消</value></data>
+  <data name="Grid.Edit.Update" xml:space="preserve"><value>更新</value></data>
+  <data name="Grid.Edit.Add" xml:space="preserve"><value>添加</value></data>
+  <data name="Grid.Edit.PopupTitle.Edit" xml:space="preserve"><value>编辑</value></data>
+  <data name="Grid.Edit.PopupTitle.New" xml:space="preserve"><value>新建</value></data>
+  <data name="Grid.Edit.Close.AriaLabel" xml:space="preserve"><value>关闭</value></data>
+  <data name="Grid.Pager.PageOf" xml:space="preserve"><value>第 {0} 页，共 {1} 页</value></data>
+  <data name="Grid.Pager.PreviousGlyph" xml:space="preserve"><value>&#8249;</value></data>
+  <data name="Grid.Pager.NextGlyph" xml:space="preserve"><value>&#8250;</value></data>
+  <data name="Grid.Filter.Values.Title" xml:space="preserve"><value>筛选器值</value></data>
+  <data name="Grid.Filter.Search.Placeholder" xml:space="preserve"><value>输入要搜索的文本...</value></data>
+  <data name="Grid.Filter.SelectAll" xml:space="preserve"><value>全选</value></data>
+  <data name="Grid.Filter.Blank" xml:space="preserve"><value>(空白)</value></data>
+  <data name="Grid.Filter.Cancel" xml:space="preserve"><value>取消</value></data>
+  <data name="Grid.Filter.Apply" xml:space="preserve"><value>应用</value></data>
+  <data name="Grid.Common.NoData" xml:space="preserve"><value>无数据</value></data>
+  <data name="Grid.CommandBar.SelectCurrentPage" xml:space="preserve"><value>选择当前页</value></data>
+  <data name="Grid.CommandBar.SelectAllFiltered" xml:space="preserve"><value>选择所有已筛选的行</value></data>
+  <data name="Grid.CommandBar.DeselectAll" xml:space="preserve"><value>取消全选</value></data>
+  <data name="Grid.CommandBar.DeleteSelected" xml:space="preserve"><value>删除所选</value></data>
+  <data name="Grid.CommandBar.ExportExcelAll" xml:space="preserve"><value>Excel (全部)</value></data>
+  <data name="Grid.CommandBar.ExportExcelSelected" xml:space="preserve"><value>Excel (所选)</value></data>
+  <data name="Grid.CommandBar.ExportCsvAll" xml:space="preserve"><value>CSV (全部)</value></data>
+  <data name="Grid.CommandBar.ExportCsvSelected" xml:space="preserve"><value>CSV (所选)</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Toolbar" xml:space="preserve"><value>行选择命令栏</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>行选择</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>删除所选行</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>导出行</value></data>
+</root>

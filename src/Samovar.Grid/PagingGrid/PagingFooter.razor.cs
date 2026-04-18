@@ -17,6 +17,8 @@ public partial class PagingFooter
     protected string PaginationCssClass = "pagination";
     protected string _paginationSizeClass = "";
 
+    private IDisposable? _cultureSubscription;
+
     protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -30,6 +32,7 @@ public partial class PagingFooter
             _paginationSizeClass = mode switch { GridSizeMode.Small => "pagination-sm", GridSizeMode.Large => "pagination-lg", _ => "" };
             _ = InvokeAsync(StateHasChanged);
         });
+        _cultureSubscription = L10n.CultureChanged.Subscribe(u => InvokeAsync(StateHasChanged));
     }
 
     public void OnCompleted()
@@ -49,6 +52,8 @@ public partial class PagingFooter
 
     public ValueTask DisposeAsync()
     {
+        _cultureSubscription?.Dispose();
+        _cultureSubscription = null;
         return new ValueTask();
     }
 }
