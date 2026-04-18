@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Grid.Edit.Cancel" xml:space="preserve"><value>Скасувати</value></data>
+  <data name="Grid.Edit.Update" xml:space="preserve"><value>Оновити</value></data>
+  <data name="Grid.Edit.Add" xml:space="preserve"><value>Додати</value></data>
+  <data name="Grid.Edit.PopupTitle.Edit" xml:space="preserve"><value>Редагувати</value></data>
+  <data name="Grid.Edit.PopupTitle.New" xml:space="preserve"><value>Новий</value></data>
+  <data name="Grid.Edit.Close.AriaLabel" xml:space="preserve"><value>Закрити</value></data>
+  <data name="Grid.Pager.PageOf" xml:space="preserve"><value>Сторінка {0} з {1}</value></data>
+  <data name="Grid.Pager.PreviousGlyph" xml:space="preserve"><value>&#8249;</value></data>
+  <data name="Grid.Pager.NextGlyph" xml:space="preserve"><value>&#8250;</value></data>
+  <data name="Grid.Filter.Values.Title" xml:space="preserve"><value>Значення фільтра</value></data>
+  <data name="Grid.Filter.Search.Placeholder" xml:space="preserve"><value>Введіть текст для пошуку...</value></data>
+  <data name="Grid.Filter.SelectAll" xml:space="preserve"><value>Вибрати все</value></data>
+  <data name="Grid.Filter.Blank" xml:space="preserve"><value>(порожньо)</value></data>
+  <data name="Grid.Filter.Cancel" xml:space="preserve"><value>Скасувати</value></data>
+  <data name="Grid.Filter.Apply" xml:space="preserve"><value>Застосувати</value></data>
+  <data name="Grid.Common.NoData" xml:space="preserve"><value>немає даних</value></data>
+  <data name="Grid.CommandBar.SelectCurrentPage" xml:space="preserve"><value>Вибрати поточну сторінку</value></data>
+  <data name="Grid.CommandBar.SelectAllFiltered" xml:space="preserve"><value>Вибрати всі відфільтровані рядки</value></data>
+  <data name="Grid.CommandBar.DeselectAll" xml:space="preserve"><value>Зняти вибір</value></data>
+  <data name="Grid.CommandBar.DeleteSelected" xml:space="preserve"><value>Видалити вибрані</value></data>
+  <data name="Grid.CommandBar.ExportExcelAll" xml:space="preserve"><value>Excel (Всі)</value></data>
+  <data name="Grid.CommandBar.ExportExcelSelected" xml:space="preserve"><value>Excel (Вибрані)</value></data>
+  <data name="Grid.CommandBar.ExportCsvAll" xml:space="preserve"><value>CSV (Всі)</value></data>
+  <data name="Grid.CommandBar.ExportCsvSelected" xml:space="preserve"><value>CSV (Вибрані)</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Toolbar" xml:space="preserve"><value>Панель команд вибору рядків</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Вибір рядків</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Видалення вибраних рядків</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Експорт рядків</value></data>
+</root>

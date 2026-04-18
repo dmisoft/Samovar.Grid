@@ -1,5 +1,6 @@
 ﻿@page "/interactive-web-assembly"
 @using Samovar.Grid
+@using System.Globalization
 @rendermode InteractiveWebAssembly
 
 <PageTitle>Rendermode InteractiveWebAssembly</PageTitle>
@@ -12,10 +13,13 @@
 }
 else
 {
-    <SmGrid Data="forecasts" AutoGenerateColumns="true"></SmGrid>
+    <button class="btn btn-primary" type="button" @onclick="changeCulture">change culture</button>
+    <SmGrid @ref=@grid Data="forecasts" AutoGenerateColumns="true"></SmGrid>
 }
 
 @code {
+    SmGrid<WeatherForecast>? grid;
+
     private WeatherForecast[]? forecasts;
 
     protected override async Task OnInitializedAsync()
@@ -39,5 +43,15 @@ else
         public int TemperatureC { get; set; }
         public string? Summary { get; set; }
         public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    }
+
+    private Task changeCulture()
+    {
+        var culture = new CultureInfo("es-ES");
+        CultureInfo.DefaultThreadCurrentCulture = culture;
+        CultureInfo.DefaultThreadCurrentUICulture = culture;
+        grid?.L10n.SetCulture(culture);
+
+        return Task.CompletedTask;
     }
 }

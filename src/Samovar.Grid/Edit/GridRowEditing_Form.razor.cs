@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 
 namespace Samovar.Grid.Edit;
 
@@ -22,6 +22,8 @@ public partial class GridRowEditing_Form<TItem>
 
     protected string _btnSizeClass = "";
 
+    private IDisposable? _cultureSubscription;
+
     protected override Task OnInitializedAsync()
     {
         LayoutService.SizeMode.Subscribe(mode =>
@@ -29,11 +31,14 @@ public partial class GridRowEditing_Form<TItem>
             _btnSizeClass = mode switch { GridSizeMode.Small => "btn-sm small", GridSizeMode.Large => "btn-lg", _ => "" };
             _ = InvokeAsync(StateHasChanged);
         });
+        _cultureSubscription = L10n.CultureChanged.Subscribe(u => InvokeAsync(StateHasChanged));
         return base.OnInitializedAsync();
     }
 
     public ValueTask DisposeAsync()
     {
+        _cultureSubscription?.Dispose();
+        _cultureSubscription = null;
         return ValueTask.CompletedTask;
     }
 }

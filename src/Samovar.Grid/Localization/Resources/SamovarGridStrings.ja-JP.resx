@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Grid.Edit.Cancel" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="Grid.Edit.Update" xml:space="preserve"><value>更新</value></data>
+  <data name="Grid.Edit.Add" xml:space="preserve"><value>追加</value></data>
+  <data name="Grid.Edit.PopupTitle.Edit" xml:space="preserve"><value>編集</value></data>
+  <data name="Grid.Edit.PopupTitle.New" xml:space="preserve"><value>新規</value></data>
+  <data name="Grid.Edit.Close.AriaLabel" xml:space="preserve"><value>閉じる</value></data>
+  <data name="Grid.Pager.PageOf" xml:space="preserve"><value>{1} ページ中 {0} ページ</value></data>
+  <data name="Grid.Pager.PreviousGlyph" xml:space="preserve"><value>&#8249;</value></data>
+  <data name="Grid.Pager.NextGlyph" xml:space="preserve"><value>&#8250;</value></data>
+  <data name="Grid.Filter.Values.Title" xml:space="preserve"><value>フィルター値</value></data>
+  <data name="Grid.Filter.Search.Placeholder" xml:space="preserve"><value>検索テキストを入力...</value></data>
+  <data name="Grid.Filter.SelectAll" xml:space="preserve"><value>すべて選択</value></data>
+  <data name="Grid.Filter.Blank" xml:space="preserve"><value>(空白)</value></data>
+  <data name="Grid.Filter.Cancel" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="Grid.Filter.Apply" xml:space="preserve"><value>適用</value></data>
+  <data name="Grid.Common.NoData" xml:space="preserve"><value>データなし</value></data>
+  <data name="Grid.CommandBar.SelectCurrentPage" xml:space="preserve"><value>現在のページを選択</value></data>
+  <data name="Grid.CommandBar.SelectAllFiltered" xml:space="preserve"><value>フィルター済みのすべての行を選択</value></data>
+  <data name="Grid.CommandBar.DeselectAll" xml:space="preserve"><value>すべての選択を解除</value></data>
+  <data name="Grid.CommandBar.DeleteSelected" xml:space="preserve"><value>選択を削除</value></data>
+  <data name="Grid.CommandBar.ExportExcelAll" xml:space="preserve"><value>Excel (すべて)</value></data>
+  <data name="Grid.CommandBar.ExportExcelSelected" xml:space="preserve"><value>Excel (選択)</value></data>
+  <data name="Grid.CommandBar.ExportCsvAll" xml:space="preserve"><value>CSV (すべて)</value></data>
+  <data name="Grid.CommandBar.ExportCsvSelected" xml:space="preserve"><value>CSV (選択)</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Toolbar" xml:space="preserve"><value>行選択コマンドバー</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>行選択</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>選択した行を削除</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>行エクスポート</value></data>
+</root>

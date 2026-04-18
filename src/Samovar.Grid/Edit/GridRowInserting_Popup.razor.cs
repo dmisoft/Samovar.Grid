@@ -19,14 +19,24 @@ public partial class GridRowInserting_Popup<T>
 
     protected ElementReference ElementReference { get; set; }
 
+    private IDisposable? _cultureSubscription;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
             await (await JsService.JsModule()).InvokeVoidAsync("dragElement", ElementReference);
     }
 
+    protected override Task OnInitializedAsync()
+    {
+        _cultureSubscription = L10n.CultureChanged.Subscribe(u => InvokeAsync(StateHasChanged));
+        return base.OnInitializedAsync();
+    }
+
     public ValueTask DisposeAsync()
     {
+        _cultureSubscription?.Dispose();
+        _cultureSubscription = null;
         return ValueTask.CompletedTask;
     }
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Grid.Edit.Cancel" xml:space="preserve"><value>İptal</value></data>
+  <data name="Grid.Edit.Update" xml:space="preserve"><value>Güncelle</value></data>
+  <data name="Grid.Edit.Add" xml:space="preserve"><value>Ekle</value></data>
+  <data name="Grid.Edit.PopupTitle.Edit" xml:space="preserve"><value>Düzenle</value></data>
+  <data name="Grid.Edit.PopupTitle.New" xml:space="preserve"><value>Yeni</value></data>
+  <data name="Grid.Edit.Close.AriaLabel" xml:space="preserve"><value>Kapat</value></data>
+  <data name="Grid.Pager.PageOf" xml:space="preserve"><value>Sayfa {0} / {1}</value></data>
+  <data name="Grid.Pager.PreviousGlyph" xml:space="preserve"><value>&#8249;</value></data>
+  <data name="Grid.Pager.NextGlyph" xml:space="preserve"><value>&#8250;</value></data>
+  <data name="Grid.Filter.Values.Title" xml:space="preserve"><value>Filtre Değerleri</value></data>
+  <data name="Grid.Filter.Search.Placeholder" xml:space="preserve"><value>Aramak için metin girin...</value></data>
+  <data name="Grid.Filter.SelectAll" xml:space="preserve"><value>Tümünü Seç</value></data>
+  <data name="Grid.Filter.Blank" xml:space="preserve"><value>(boş)</value></data>
+  <data name="Grid.Filter.Cancel" xml:space="preserve"><value>İptal</value></data>
+  <data name="Grid.Filter.Apply" xml:space="preserve"><value>Uygula</value></data>
+  <data name="Grid.Common.NoData" xml:space="preserve"><value>veri yok</value></data>
+  <data name="Grid.CommandBar.SelectCurrentPage" xml:space="preserve"><value>Geçerli sayfayı seç</value></data>
+  <data name="Grid.CommandBar.SelectAllFiltered" xml:space="preserve"><value>Filtrelenmiş tüm satırları seç</value></data>
+  <data name="Grid.CommandBar.DeselectAll" xml:space="preserve"><value>Tümünü kaldır</value></data>
+  <data name="Grid.CommandBar.DeleteSelected" xml:space="preserve"><value>Seçilenleri sil</value></data>
+  <data name="Grid.CommandBar.ExportExcelAll" xml:space="preserve"><value>Excel (Tümü)</value></data>
+  <data name="Grid.CommandBar.ExportExcelSelected" xml:space="preserve"><value>Excel (Seçilenler)</value></data>
+  <data name="Grid.CommandBar.ExportCsvAll" xml:space="preserve"><value>CSV (Tümü)</value></data>
+  <data name="Grid.CommandBar.ExportCsvSelected" xml:space="preserve"><value>CSV (Seçilenler)</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Toolbar" xml:space="preserve"><value>Satır seçimi komut çubuğu</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Satır seçimi</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Seçili satırları sil</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Satırları dışa aktar</value></data>
+</root>

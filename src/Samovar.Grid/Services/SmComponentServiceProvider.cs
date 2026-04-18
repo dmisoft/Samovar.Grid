@@ -6,12 +6,13 @@ public class SmComponentServiceProvider
 {
     IServiceScope? _scope;
 
-    public void InitServices<T>()
+    public void InitServices<T>(ISamovarGridLocalizationService l10n)
     {
         ServiceCollection _services;
         ServiceProvider _serviceProvider;
 
         _services = new ServiceCollection();
+        _services.AddSingleton(l10n);
         _services.AddScoped<IColumnService, ColumnService>();
         _services.AddScoped<IRepositoryService<T>, RepositoryService<T>>();
         _services.AddScoped<INavigationService, NavigationService>();

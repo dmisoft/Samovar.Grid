@@ -52,11 +52,11 @@
                     var salary = (context as Employee)!.Salary;
                     if (salary >= 100_000)
                     {
-                        <div class="high-salary-style">@($"{salary:C0}")</div>
+                        <div class="high-salary-style">@($"{salary:C2}")</div>
                     }
                     else
                     {
-                        <div class="low-salary-style">@($"{salary:C0}")</div>
+                        <div class="low-salary-style">@($"{salary:C2}")</div>
                     }
                 }
             </CellShowTemplate>

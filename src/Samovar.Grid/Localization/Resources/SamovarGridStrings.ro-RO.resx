@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Grid.Edit.Cancel" xml:space="preserve"><value>Anulare</value></data>
+  <data name="Grid.Edit.Update" xml:space="preserve"><value>Actualizare</value></data>
+  <data name="Grid.Edit.Add" xml:space="preserve"><value>Adăugare</value></data>
+  <data name="Grid.Edit.PopupTitle.Edit" xml:space="preserve"><value>Editare</value></data>
+  <data name="Grid.Edit.PopupTitle.New" xml:space="preserve"><value>Nou</value></data>
+  <data name="Grid.Edit.Close.AriaLabel" xml:space="preserve"><value>Închidere</value></data>
+  <data name="Grid.Pager.PageOf" xml:space="preserve"><value>Pagina {0} din {1}</value></data>
+  <data name="Grid.Pager.PreviousGlyph" xml:space="preserve"><value>&#8249;</value></data>
+  <data name="Grid.Pager.NextGlyph" xml:space="preserve"><value>&#8250;</value></data>
+  <data name="Grid.Filter.Values.Title" xml:space="preserve"><value>Valori filtru</value></data>
+  <data name="Grid.Filter.Search.Placeholder" xml:space="preserve"><value>Introduceți text pentru căutare...</value></data>
+  <data name="Grid.Filter.SelectAll" xml:space="preserve"><value>Selectați tot</value></data>
+  <data name="Grid.Filter.Blank" xml:space="preserve"><value>(gol)</value></data>
+  <data name="Grid.Filter.Cancel" xml:space="preserve"><value>Anulare</value></data>
+  <data name="Grid.Filter.Apply" xml:space="preserve"><value>Aplicare</value></data>
+  <data name="Grid.Common.NoData" xml:space="preserve"><value>fără date</value></data>
+  <data name="Grid.CommandBar.SelectCurrentPage" xml:space="preserve"><value>Selectați pagina curentă</value></data>
+  <data name="Grid.CommandBar.SelectAllFiltered" xml:space="preserve"><value>Selectați toate rândurile filtrate</value></data>
+  <data name="Grid.CommandBar.DeselectAll" xml:space="preserve"><value>Deselectați tot</value></data>
+  <data name="Grid.CommandBar.DeleteSelected" xml:space="preserve"><value>Ștergeți selectate</value></data>
+  <data name="Grid.CommandBar.ExportExcelAll" xml:space="preserve"><value>Excel (Toate)</value></data>
+  <data name="Grid.CommandBar.ExportExcelSelected" xml:space="preserve"><value>Excel (Selectate)</value></data>
+  <data name="Grid.CommandBar.ExportCsvAll" xml:space="preserve"><value>CSV (Toate)</value></data>
+  <data name="Grid.CommandBar.ExportCsvSelected" xml:space="preserve"><value>CSV (Selectate)</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Toolbar" xml:space="preserve"><value>Bara de comenzi pentru selectarea rândurilor</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Selectare rânduri</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Ștergere rânduri selectate</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Exportare rânduri</value></data>
+</root>

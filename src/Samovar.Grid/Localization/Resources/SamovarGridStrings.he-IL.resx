@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Grid.Edit.Cancel" xml:space="preserve"><value>ביטול</value></data>
+  <data name="Grid.Edit.Update" xml:space="preserve"><value>עדכון</value></data>
+  <data name="Grid.Edit.Add" xml:space="preserve"><value>הוספה</value></data>
+  <data name="Grid.Edit.PopupTitle.Edit" xml:space="preserve"><value>עריכה</value></data>
+  <data name="Grid.Edit.PopupTitle.New" xml:space="preserve"><value>חדש</value></data>
+  <data name="Grid.Edit.Close.AriaLabel" xml:space="preserve"><value>סגירה</value></data>
+  <data name="Grid.Pager.PageOf" xml:space="preserve"><value>עמוד {0} מתוך {1}</value></data>
+  <data name="Grid.Pager.PreviousGlyph" xml:space="preserve"><value>&#8250;</value></data>
+  <data name="Grid.Pager.NextGlyph" xml:space="preserve"><value>&#8249;</value></data>
+  <data name="Grid.Filter.Values.Title" xml:space="preserve"><value>ערכי סינון</value></data>
+  <data name="Grid.Filter.Search.Placeholder" xml:space="preserve"><value>הזן טקסט לחיפוש...</value></data>
+  <data name="Grid.Filter.SelectAll" xml:space="preserve"><value>בחר הכל</value></data>
+  <data name="Grid.Filter.Blank" xml:space="preserve"><value>(ריק)</value></data>
+  <data name="Grid.Filter.Cancel" xml:space="preserve"><value>ביטול</value></data>
+  <data name="Grid.Filter.Apply" xml:space="preserve"><value>החל</value></data>
+  <data name="Grid.Common.NoData" xml:space="preserve"><value>אין נתונים</value></data>
+  <data name="Grid.CommandBar.SelectCurrentPage" xml:space="preserve"><value>בחר עמוד נוכחי</value></data>
+  <data name="Grid.CommandBar.SelectAllFiltered" xml:space="preserve"><value>בחר את כל השורות המסוננות</value></data>
+  <data name="Grid.CommandBar.DeselectAll" xml:space="preserve"><value>בטל את כל הבחירות</value></data>
+  <data name="Grid.CommandBar.DeleteSelected" xml:space="preserve"><value>מחק נבחרים</value></data>
+  <data name="Grid.CommandBar.ExportExcelAll" xml:space="preserve"><value>Excel (הכל)</value></data>
+  <data name="Grid.CommandBar.ExportExcelSelected" xml:space="preserve"><value>Excel (נבחרים)</value></data>
+  <data name="Grid.CommandBar.ExportCsvAll" xml:space="preserve"><value>CSV (הכל)</value></data>
+  <data name="Grid.CommandBar.ExportCsvSelected" xml:space="preserve"><value>CSV (נבחרים)</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Toolbar" xml:space="preserve"><value>סרגל פקודות לבחירת שורות</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>בחירת שורות</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>מחיקת שורות נבחרות</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>ייצוא שורות</value></data>
+</root>

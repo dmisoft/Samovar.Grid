@@ -36,6 +36,7 @@ public partial class GridHeaderCell<TItem>
     private bool _filterActive = false;
     private double _filterMenuTop = 0;
     private double _filterMenuLeft = 0;
+    private double _filterMenuRight = 0;
     private ElementReference _filterButtonRef;
     IDisposable? _filterInfoUnsubscriber = null;
     IDisposable? _activeFilterMenuUnsubscriber = null;
@@ -146,6 +147,7 @@ public partial class GridHeaderCell<TItem>
             var rect = await JsService.GetElementBoundingRect(_filterButtonRef);
             _filterMenuTop = rect.Top + rect.Height;
             _filterMenuLeft = rect.Left;
+            _filterMenuRight = rect.Left + rect.Width;
             FilterService.ActiveFilterMenuColumnId.OnNext(ColumnModel.Id);
         }
         else

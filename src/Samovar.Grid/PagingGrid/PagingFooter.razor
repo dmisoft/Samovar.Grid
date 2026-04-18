@@ -12,7 +12,7 @@
 						<nav>
 							<ul class="@PaginationCssClass @_paginationSizeClass" style="margin:8px">
 								<li class="page-item user-select-none" style="cursor: pointer;" @onclick=@(async ()=>await
-																																																																				 																   PagingNavigationStrategy.NavigateToPreviousPage())><a class="page-link">&lsaquo;</a>
+																																																																				 																   PagingNavigationStrategy.NavigateToPreviousPage())><a class="page-link">@((MarkupString)L10n[LocalizationKeys.PagerPreviousGlyph])</a>
 								</li>
 								@for (uint i = PagingNavigationStrategy.PagerInfo.Value.StartPage; i <=
 																																																							PagingNavigationStrategy.PagerInfo.Value.EndPage; i++)
@@ -24,12 +24,11 @@
 										class="page-link">@currentPage</a></li>
 									}
 									<li class="page-item user-select-none" style="cursor: pointer;" @onclick=@(async ()=> await
-																																																																				   																	PagingNavigationStrategy.NavigateToNextPage())><a class="page-link">&rsaquo;</a></li>
+																																																																				   																	PagingNavigationStrategy.NavigateToNextPage())><a class="page-link">@((MarkupString)L10n[LocalizationKeys.PagerNextGlyph])</a></li>
 							</ul>
 						</nav>
 						<div style="margin: 8px;">
-							<span>Page @PagingNavigationStrategy.PagerInfo.Value.CurrentPage of
-								@PagingNavigationStrategy.PagerInfo.Value.TotalPages</span>
+							<span>@L10n.Get(LocalizationKeys.PagerPageOf, PagingNavigationStrategy.PagerInfo.Value.CurrentPage, PagingNavigationStrategy.PagerInfo.Value.TotalPages)</span>
 							</div>
 						</div>
 					</td>

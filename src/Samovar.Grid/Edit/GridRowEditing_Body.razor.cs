@@ -14,6 +14,8 @@ public partial class GridRowEditing_Body<TItem>
     protected string _labelSizeClass = "";
     protected string _formControlSizeClass = "";
 
+    private IDisposable? _cultureSubscription;
+
     protected override Task OnInitializedAsync()
     {
         LayoutService.SizeMode.Subscribe(mode =>
@@ -22,11 +24,14 @@ public partial class GridRowEditing_Body<TItem>
             _formControlSizeClass = mode switch { GridSizeMode.Small => "form-control-sm", GridSizeMode.Large => "form-control-lg", _ => "" };
             _ = InvokeAsync(StateHasChanged);
         });
+        _cultureSubscription = L10n.CultureChanged.Subscribe(u => InvokeAsync(StateHasChanged));
         return base.OnInitializedAsync();
     }
 
     public ValueTask DisposeAsync()
     {
+        _cultureSubscription?.Dispose();
+        _cultureSubscription = null;
         return new ValueTask(Task.CompletedTask);
     }
 }

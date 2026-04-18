@@ -16,6 +16,7 @@
 		<PackageTags>DataGrid, Blazor, BlazorGrid, BlazorDataGrid, Blazor-Component, Virtual scrolling, Filter, Cell template, Edit form template</PackageTags>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<RepositoryUrl>https://github.com/dmisoft/Samovar.Grid</RepositoryUrl>
+		<NeutralLanguage>en-US</NeutralLanguage>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -45,6 +46,7 @@
 	<ItemGroup>
 		<PackageReference Include="ClosedXML" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" />
+		<PackageReference Include="Microsoft.Extensions.Localization" />
 		<PackageReference Include="System.Reactive" />
 	</ItemGroup>
 

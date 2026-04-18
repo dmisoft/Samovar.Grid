@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Grid.Edit.Cancel" xml:space="preserve"><value>Atcelt</value></data>
+  <data name="Grid.Edit.Update" xml:space="preserve"><value>Atjaunināt</value></data>
+  <data name="Grid.Edit.Add" xml:space="preserve"><value>Pievienot</value></data>
+  <data name="Grid.Edit.PopupTitle.Edit" xml:space="preserve"><value>Rediģēt</value></data>
+  <data name="Grid.Edit.PopupTitle.New" xml:space="preserve"><value>Jauns</value></data>
+  <data name="Grid.Edit.Close.AriaLabel" xml:space="preserve"><value>Aizvērt</value></data>
+  <data name="Grid.Pager.PageOf" xml:space="preserve"><value>Lapa {0} no {1}</value></data>
+  <data name="Grid.Pager.PreviousGlyph" xml:space="preserve"><value>&#8249;</value></data>
+  <data name="Grid.Pager.NextGlyph" xml:space="preserve"><value>&#8250;</value></data>
+  <data name="Grid.Filter.Values.Title" xml:space="preserve"><value>Filtra vērtības</value></data>
+  <data name="Grid.Filter.Search.Placeholder" xml:space="preserve"><value>Ievadiet tekstu meklēšanai...</value></data>
+  <data name="Grid.Filter.SelectAll" xml:space="preserve"><value>Atlasīt visu</value></data>
+  <data name="Grid.Filter.Blank" xml:space="preserve"><value>(tukšs)</value></data>
+  <data name="Grid.Filter.Cancel" xml:space="preserve"><value>Atcelt</value></data>
+  <data name="Grid.Filter.Apply" xml:space="preserve"><value>Lietot</value></data>
+  <data name="Grid.Common.NoData" xml:space="preserve"><value>nav datu</value></data>
+  <data name="Grid.CommandBar.SelectCurrentPage" xml:space="preserve"><value>Atlasīt pašreizējo lapu</value></data>
+  <data name="Grid.CommandBar.SelectAllFiltered" xml:space="preserve"><value>Atlasīt visas filtrētās rindas</value></data>
+  <data name="Grid.CommandBar.DeselectAll" xml:space="preserve"><value>Noņemt atlasi no visiem</value></data>
+  <data name="Grid.CommandBar.DeleteSelected" xml:space="preserve"><value>Dzēst atlasītos</value></data>
+  <data name="Grid.CommandBar.ExportExcelAll" xml:space="preserve"><value>Excel (Visi)</value></data>
+  <data name="Grid.CommandBar.ExportExcelSelected" xml:space="preserve"><value>Excel (Atlasītie)</value></data>
+  <data name="Grid.CommandBar.ExportCsvAll" xml:space="preserve"><value>CSV (Visi)</value></data>
+  <data name="Grid.CommandBar.ExportCsvSelected" xml:space="preserve"><value>CSV (Atlasītie)</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Toolbar" xml:space="preserve"><value>Rindu atlases komandu josla</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Rindu atlase</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Atlasīto rindu dzēšana</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Rindu eksports</value></data>
+</root>

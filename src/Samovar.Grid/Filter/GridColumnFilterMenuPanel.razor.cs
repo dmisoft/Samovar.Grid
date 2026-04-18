@@ -21,6 +21,21 @@ public partial class GridColumnFilterMenuPanel<TItem>
     [Parameter]
     public double Left { get; set; }
 
+    [Parameter]
+    public double Right { get; set; }
+
+    private string PositionStyle
+    {
+        get
+        {
+            var inv = CultureInfo.InvariantCulture;
+            var top = Top.ToString(inv);
+            if (CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft)
+                return $"top:{top}px;right:calc(100vw - {Right.ToString(inv)}px);";
+            return $"top:{top}px;left:{Left.ToString(inv)}px;";
+        }
+    }
+
     [SmInject]
     public required IDataSourceService<TItem> DataSourceService { get; set; }
 
@@ -48,6 +63,8 @@ public partial class GridColumnFilterMenuPanel<TItem>
     private List<FilterMenuTreeNode> _rootNodes = new();
     private string _searchText = "";
     private bool _isDateColumn;
+
+    private IDisposable? _cultureSubscription;
 
     private static readonly HashSet<Type> DateTypes = new()
     {
@@ -122,6 +139,8 @@ public partial class GridColumnFilterMenuPanel<TItem>
             _ = InvokeAsync(StateHasChanged);
         });
 
+        _cultureSubscription = L10n.CultureChanged.Subscribe(u => InvokeAsync(StateHasChanged));
+
         return base.OnInitializedAsync();
     }
 
@@ -150,12 +169,13 @@ public partial class GridColumnFilterMenuPanel<TItem>
         return Task.CompletedTask;
     }
 
-    private static List<FilterMenuTreeNode> BuildFlatList(IEnumerable<object?> values)
+    private List<FilterMenuTreeNode> BuildFlatList(IEnumerable<object?> values)
     {
+        var blank = L10n[LocalizationKeys.FilterBlank];
         return values
             .Select(v => new FilterMenuTreeNode
             {
-                Label = v?.ToString() ?? "(blank)",
+                Label = v?.ToString() ?? blank,
                 RawValue = v
             })
             .ToList();
@@ -226,12 +246,13 @@ public partial class GridColumnFilterMenuPanel<TItem>
     private static string FormatBucketBound(decimal value, Type propType) =>
         IntegralTypes.Contains(propType) ? ((long)value).ToString() : value.ToString("G");
 
-    private static List<FilterMenuTreeNode> BuildNumericHierarchy(IEnumerable<object?> values, Type propType)
+    private List<FilterMenuTreeNode> BuildNumericHierarchy(IEnumerable<object?> values, Type propType)
     {
+        var blank = L10n[LocalizationKeys.FilterBlank];
         var materialised = values.ToList();
         var nullNodes = materialised
             .Where(v => v is null)
-            .Select(_ => new FilterMenuTreeNode { Label = "(blank)", RawValue = null })
+            .Select(_ => new FilterMenuTreeNode { Label = blank, RawValue = null })
             .ToList();
 
         List<(object raw, decimal asDecimal)> numericValues;
@@ -424,5 +445,7 @@ public partial class GridColumnFilterMenuPanel<TItem>
         if (_handlersRegistered)
             await JsService.RemoveFilterMenuDismissHandlers();
         _dotNetRef?.Dispose();
+        _cultureSubscription?.Dispose();
+        _cultureSubscription = null;
     }
 }

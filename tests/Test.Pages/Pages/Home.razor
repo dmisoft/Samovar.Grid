@@ -27,7 +27,7 @@
                     <Column Title="First Name" Field="@nameof(Employee.FirstName)" Width="130px" TextAlign="@nameAlign" />
                     <Column Title="Last Name" Field="@nameof(Employee.LastName)" Width="130px" TextAlign="@nameAlign" />
                     <Column Title="Job Title" Field="@nameof(Employee.JobTitle)" Width="1*" />
-                    <Column Title="Salary" Field="@nameof(Employee.Salary)" Width="110px" TextAlign="GridTextAlign.Right" />
+                    <Column Title="Salary" Field="@nameof(Employee.Salary)" Width="110px" TextAlign="GridTextAlign.Right" Format="@salaryFormat" />
                     <CommandColumn EditButtonVisible=true DeleteButtonVisible=true NewButtonVisible=true Width="150px" />
                 </Columns>
 
@@ -65,6 +65,10 @@
             <div class="mb-3">
                 <label for="columnWidth">Column width</label>
                 <input type="text" class="form-control" id="columnWidth" @bind=columnWidth />
+            </div>
+            <div class="mb-3">
+                <label for="salaryFormat" class="form-label">Salary format</label>
+                <input type="text" class="form-control" id="salaryFormat" @bind=salaryFormat />
             </div>
             <div class="mb-3">
                 <label for="nameAlign" class="form-label">Name column align</label>
@@ -177,6 +181,7 @@
     bool showDetailRow = true;
     bool showCommandBar = true;
     GridTextAlign nameAlign = GridTextAlign.Left;
+    string salaryFormat = "C2";
 
     Task RowEditBeginHandler(Employee item)
     {

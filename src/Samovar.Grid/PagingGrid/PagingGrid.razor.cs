@@ -62,6 +62,8 @@ public partial class PagingGrid<T>
     private double _savedScrollLeft;
     private bool _restoreScrollLeft;
 
+    private IDisposable? _cultureSubscription;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -151,6 +153,8 @@ public partial class PagingGrid<T>
         StateService.ShowPagingPanelDelegate = async () => { await InvokeAsync(() => { PagingPanel = ComponentBuilderService.GetPagingPanel<T>(); StateHasChanged(); }); };
         StateService.HidePagingPanelDelegate = async () => { await InvokeAsync(() => { PagingPanel = null; StateHasChanged(); }); };
 
+        _cultureSubscription = L10n.CultureChanged.Subscribe(u => InvokeAsync(StateHasChanged));
+
         base.OnInitializedAsync();
 
         return Task.CompletedTask;
@@ -183,5 +187,7 @@ public partial class PagingGrid<T>
             }
             catch (JSDisconnectedException) { }
         }
+        _cultureSubscription?.Dispose();
+        _cultureSubscription = null;
     }
 }

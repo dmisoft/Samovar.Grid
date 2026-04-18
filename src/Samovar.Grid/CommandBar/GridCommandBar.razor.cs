@@ -1,6 +1,6 @@
 namespace Samovar.Grid.CommandBar;
 
-public partial class GridCommandBar<T> : DesignComponentBase
+public partial class GridCommandBar<T> : DesignComponentBase, IAsyncDisposable
 {
     [SmInject]
     public required ILayoutService LayoutService { get; set; }
@@ -10,6 +10,8 @@ public partial class GridCommandBar<T> : DesignComponentBase
 
     protected string CssClass = "";
     protected string _btnSizeClass = "";
+
+    private IDisposable? _cultureSubscription;
 
     protected async override Task OnInitializedAsync()
     {
@@ -26,6 +28,14 @@ public partial class GridCommandBar<T> : DesignComponentBase
             _ = InvokeAsync(StateHasChanged);
         });
         GridSelectionService.SelectionMode.Subscribe(mode => _ = InvokeAsync(StateHasChanged));
+        _cultureSubscription = L10n.CultureChanged.Subscribe(u => InvokeAsync(StateHasChanged));
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        _cultureSubscription?.Dispose();
+        _cultureSubscription = null;
+        return ValueTask.CompletedTask;
     }
 
     [SmInject]

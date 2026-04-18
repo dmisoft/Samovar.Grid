@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Grid.Edit.Cancel" xml:space="preserve"><value>Peruuta</value></data>
+  <data name="Grid.Edit.Update" xml:space="preserve"><value>Päivitä</value></data>
+  <data name="Grid.Edit.Add" xml:space="preserve"><value>Lisää</value></data>
+  <data name="Grid.Edit.PopupTitle.Edit" xml:space="preserve"><value>Muokkaa</value></data>
+  <data name="Grid.Edit.PopupTitle.New" xml:space="preserve"><value>Uusi</value></data>
+  <data name="Grid.Edit.Close.AriaLabel" xml:space="preserve"><value>Sulje</value></data>
+  <data name="Grid.Pager.PageOf" xml:space="preserve"><value>Sivu {0} / {1}</value></data>
+  <data name="Grid.Pager.PreviousGlyph" xml:space="preserve"><value>&#8249;</value></data>
+  <data name="Grid.Pager.NextGlyph" xml:space="preserve"><value>&#8250;</value></data>
+  <data name="Grid.Filter.Values.Title" xml:space="preserve"><value>Suodatusarvot</value></data>
+  <data name="Grid.Filter.Search.Placeholder" xml:space="preserve"><value>Anna hakuteksti...</value></data>
+  <data name="Grid.Filter.SelectAll" xml:space="preserve"><value>Valitse kaikki</value></data>
+  <data name="Grid.Filter.Blank" xml:space="preserve"><value>(tyhjä)</value></data>
+  <data name="Grid.Filter.Cancel" xml:space="preserve"><value>Peruuta</value></data>
+  <data name="Grid.Filter.Apply" xml:space="preserve"><value>Käytä</value></data>
+  <data name="Grid.Common.NoData" xml:space="preserve"><value>ei tietoja</value></data>
+  <data name="Grid.CommandBar.SelectCurrentPage" xml:space="preserve"><value>Valitse nykyinen sivu</value></data>
+  <data name="Grid.CommandBar.SelectAllFiltered" xml:space="preserve"><value>Valitse kaikki suodatetut rivit</value></data>
+  <data name="Grid.CommandBar.DeselectAll" xml:space="preserve"><value>Poista kaikkien valinnat</value></data>
+  <data name="Grid.CommandBar.DeleteSelected" xml:space="preserve"><value>Poista valitut</value></data>
+  <data name="Grid.CommandBar.ExportExcelAll" xml:space="preserve"><value>Excel (Kaikki)</value></data>
+  <data name="Grid.CommandBar.ExportExcelSelected" xml:space="preserve"><value>Excel (Valitut)</value></data>
+  <data name="Grid.CommandBar.ExportCsvAll" xml:space="preserve"><value>CSV (Kaikki)</value></data>
+  <data name="Grid.CommandBar.ExportCsvSelected" xml:space="preserve"><value>CSV (Valitut)</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Toolbar" xml:space="preserve"><value>Rivivalinnan komentopalkki</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Rivivalinta</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Poista valitut rivit</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Vie rivit</value></data>
+</root>

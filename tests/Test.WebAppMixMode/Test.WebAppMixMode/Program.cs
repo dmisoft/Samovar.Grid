@@ -1,6 +1,8 @@
 using Test.WebAppMixMode.Client.Pages;
 using Test.WebAppMixMode.Components;
 using Samovar.Grid;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +13,25 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddSamovarGrid(options => options.InjectCss = true);
 
+
 var app = builder.Build();
+
+//Localization
+var uiCultures = new[] { "en-US", "fr-FR" };
+
+var formattingCultures = CultureInfo
+    .GetCultures(CultureTypes.SpecificCultures)
+    .Select(c => c.Name)
+    .ToArray();
+
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture(uiCultures[1])
+    .AddSupportedCultures(formattingCultures)
+    .AddSupportedUICultures(uiCultures);
+localizationOptions.RequestCultureProviders.Clear();
+
+app.UseRequestLocalization(localizationOptions);
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

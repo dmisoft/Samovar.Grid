@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Grid.Edit.Cancel" xml:space="preserve"><value>Batal</value></data>
+  <data name="Grid.Edit.Update" xml:space="preserve"><value>Kemas kini</value></data>
+  <data name="Grid.Edit.Add" xml:space="preserve"><value>Tambah</value></data>
+  <data name="Grid.Edit.PopupTitle.Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="Grid.Edit.PopupTitle.New" xml:space="preserve"><value>Baharu</value></data>
+  <data name="Grid.Edit.Close.AriaLabel" xml:space="preserve"><value>Tutup</value></data>
+  <data name="Grid.Pager.PageOf" xml:space="preserve"><value>Halaman {0} daripada {1}</value></data>
+  <data name="Grid.Pager.PreviousGlyph" xml:space="preserve"><value>&#8249;</value></data>
+  <data name="Grid.Pager.NextGlyph" xml:space="preserve"><value>&#8250;</value></data>
+  <data name="Grid.Filter.Values.Title" xml:space="preserve"><value>Nilai Penapis</value></data>
+  <data name="Grid.Filter.Search.Placeholder" xml:space="preserve"><value>Masukkan teks untuk carian...</value></data>
+  <data name="Grid.Filter.SelectAll" xml:space="preserve"><value>Pilih Semua</value></data>
+  <data name="Grid.Filter.Blank" xml:space="preserve"><value>(kosong)</value></data>
+  <data name="Grid.Filter.Cancel" xml:space="preserve"><value>Batal</value></data>
+  <data name="Grid.Filter.Apply" xml:space="preserve"><value>Guna</value></data>
+  <data name="Grid.Common.NoData" xml:space="preserve"><value>tiada data</value></data>
+  <data name="Grid.CommandBar.SelectCurrentPage" xml:space="preserve"><value>Pilih halaman semasa</value></data>
+  <data name="Grid.CommandBar.SelectAllFiltered" xml:space="preserve"><value>Pilih semua baris yang ditapis</value></data>
+  <data name="Grid.CommandBar.DeselectAll" xml:space="preserve"><value>Nyahpilih semua</value></data>
+  <data name="Grid.CommandBar.DeleteSelected" xml:space="preserve"><value>Padam yang dipilih</value></data>
+  <data name="Grid.CommandBar.ExportExcelAll" xml:space="preserve"><value>Excel (Semua)</value></data>
+  <data name="Grid.CommandBar.ExportExcelSelected" xml:space="preserve"><value>Excel (Dipilih)</value></data>
+  <data name="Grid.CommandBar.ExportCsvAll" xml:space="preserve"><value>CSV (Semua)</value></data>
+  <data name="Grid.CommandBar.ExportCsvSelected" xml:space="preserve"><value>CSV (Dipilih)</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Toolbar" xml:space="preserve"><value>Bar arahan pemilihan baris</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Pemilihan baris</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Padam baris terpilih</value></data>
+  <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Eksport baris</value></data>
+</root>
