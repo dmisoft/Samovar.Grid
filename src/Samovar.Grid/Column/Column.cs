@@ -26,6 +26,9 @@ public class Column
     [Parameter]
     public GridTextAlign TextAlign { get; set; } = GridTextAlign.Left;
 
+    [Parameter]
+    public string? Format { get; set; }
+
     public override void DependenciesInitialized()
     {
         ColumnService.RegisterColumn(Model);
@@ -57,5 +60,8 @@ public class Column
             Model.CellShowTemplate.OnNext(cellShowTemplate);
 
         Model.TextAlign.OnNext(TextAlign);
+
+        var format = parameters.GetValueOrDefault<string>(nameof(Format));
+        Model.Format.OnNext(format);
     }
 }

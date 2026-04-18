@@ -12,11 +12,25 @@ public class DataGridRowCellModel<T>(T? rowData, PropertyInfo pi, IDataColumnMod
     {
         if (rowData is null)
             return string.Empty;
+        
         var value = Pi.GetValue(rowData);
         if (value is null)
             return string.Empty;
+        
+        var format = ColumnMetadata.Format.Value;
+        
         if (value is IFormattable formattable)
-            return formattable.ToString(null, CultureInfo.CurrentCulture);
+        {
+            try
+            {
+                return formattable.ToString(format, CultureInfo.CurrentCulture);
+            }
+            catch (FormatException)
+            {
+                return value.ToString() ?? string.Empty;
+            }
+        }
+        
         return value.ToString() ?? string.Empty;
     }
 }

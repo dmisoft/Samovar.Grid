@@ -23,7 +23,7 @@ public class Program
         var app = builder.Build();
 
         //Localization
-        var uiCultures = new[] { "en-US", "es-ES" };
+        var uiCultures = new[] { "en-US", "de-DE" };
 
         var formattingCultures = CultureInfo
             .GetCultures(CultureTypes.SpecificCultures)
@@ -31,7 +31,7 @@ public class Program
             .ToArray();
 
         var localizationOptions = new RequestLocalizationOptions()
-            .SetDefaultCulture(uiCultures[1])
+            .SetDefaultCulture(uiCultures[0])
             .AddSupportedCultures(formattingCultures)
             .AddSupportedUICultures(uiCultures);
         localizationOptions.RequestCultureProviders.Clear();

@@ -13,4 +13,6 @@ public partial class DataColumnModel
     public BehaviorSubject<string> Field { get; } = new BehaviorSubject<string>("");
 
     public BehaviorSubject<GridTextAlign> TextAlign { get; } = new BehaviorSubject<GridTextAlign>(GridTextAlign.Left);
+
+    public BehaviorSubject<string?> Format { get; } = new BehaviorSubject<string?>(null);
 }

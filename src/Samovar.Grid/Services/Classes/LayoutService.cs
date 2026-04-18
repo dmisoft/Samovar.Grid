@@ -119,7 +119,7 @@ public class LayoutService
 
     private async Task CaculateHeader()
     {
-        double gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule()) - 1;
+        double gridInnerWidth = await GridInnerRef.GetElementWidthByRef(await _jsService.JsModule());
         var tBodyWidth = await GridOuterRef.GetElementWidthByRef(await _jsService.JsModule());
 
         // Sum absolute columns (clamped to MinWidth)
