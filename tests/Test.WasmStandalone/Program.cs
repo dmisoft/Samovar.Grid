@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Samovar.Grid;
+using System.Globalization;
 using Test.Pages.Data;
 using Test.WasmStandalone;
 
@@ -11,5 +12,9 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddGridTestPages();
 builder.Services.AddSamovarGrid();
+
+var defaultCulture = new CultureInfo("es-ES");
+CultureInfo.DefaultThreadCurrentCulture = defaultCulture;
+CultureInfo.DefaultThreadCurrentUICulture = defaultCulture;
 
 await builder.Build().RunAsync();

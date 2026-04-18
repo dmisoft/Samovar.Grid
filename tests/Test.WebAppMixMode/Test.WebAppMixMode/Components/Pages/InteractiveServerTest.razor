@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using System.Globalization
 @attribute [StreamRendering]
 @rendermode InteractiveServer
 
@@ -12,10 +13,13 @@
 }
 else
 {
-    <SmGrid Data="forecasts" AutoGenerateColumns="true"></SmGrid>
+    <button class="btn btn-primary" type="button" @onclick="changeCulture">change culture</button>
+    <SmGrid @ref=@grid Data="forecasts" AutoGenerateColumns="true"></SmGrid>
 }
 
 @code {
+    SmGrid<WeatherForecast>? grid;
+
     private WeatherForecast[]? forecasts;
 
     protected override async Task OnInitializedAsync()
@@ -24,7 +28,8 @@ else
         await Task.Delay(500);
 
         var startDate = DateOnly.FromDateTime(DateTime.Now);
-        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
+        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering",
+"Scorching" };
         forecasts = Enumerable.Range(1, 500).Select(index => new WeatherForecast
         {
             Date = startDate.AddDays(index),
@@ -39,5 +44,15 @@ else
         public int TemperatureC { get; set; }
         public string? Summary { get; set; }
         public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    }
+
+    private Task changeCulture()
+    {
+        var culture = new CultureInfo("es-ES");
+        CultureInfo.DefaultThreadCurrentCulture = culture;
+        CultureInfo.DefaultThreadCurrentUICulture = culture;
+        grid?.L10n.SetCulture(culture);
+
+        return Task.CompletedTask;
     }
 }

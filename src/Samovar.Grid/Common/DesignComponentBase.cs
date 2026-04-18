@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using System.Reflection;
 
 namespace Samovar.Grid;
@@ -8,6 +8,9 @@ public class DesignComponentBase
 {
     [CascadingParameter(Name = "ServiceProvider")]
     IComponentServiceProvider? ServiceProvider { get; set; }
+
+    [SmInject]
+    protected ISamovarGridLocalizationService L10n { get; set; } = default!;
 
     private bool _dependenciesInitialized;
 

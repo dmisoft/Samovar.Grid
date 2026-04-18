@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using System.Globalization
+@inherits LayoutComponentBase
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -6,6 +7,7 @@
 
     <main>
         <div class="top-row px-4">
+            <button class="btn btn-primary" type="button" @onclick="changeCulture">change culture</button>
             <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
         </div>
 
@@ -14,3 +16,12 @@
         </article>
     </main>
 </div>
+@code {
+    private Task changeCulture()
+    {
+        var culture = new CultureInfo("en-US");
+        CultureInfo.DefaultThreadCurrentCulture = culture;
+        CultureInfo.DefaultThreadCurrentUICulture = culture;
+        return Task.CompletedTask;
+    }
+}

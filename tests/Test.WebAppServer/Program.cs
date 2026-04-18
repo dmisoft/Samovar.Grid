@@ -1,6 +1,7 @@
 using Test.Pages.Data;
 using Test.WebAppServer.Components;
 using Samovar.Grid;
+using System.Globalization;
 
 namespace Test.WebAppServer;
 
@@ -17,7 +18,25 @@ public class Program
         builder.Services.AddGridTestPages();
         builder.Services.AddSamovarGrid(options => options.InjectCss = true);
 
+        //builder.Services.AddLocalization();
+
         var app = builder.Build();
+
+        //Localization
+        var uiCultures = new[] { "en-US", "es-ES" };
+
+        var formattingCultures = CultureInfo
+            .GetCultures(CultureTypes.SpecificCultures)
+            .Select(c => c.Name)
+            .ToArray();
+
+        var localizationOptions = new RequestLocalizationOptions()
+            .SetDefaultCulture(uiCultures[1])
+            .AddSupportedCultures(formattingCultures)
+            .AddSupportedUICultures(uiCultures);
+        localizationOptions.RequestCultureProviders.Clear();
+
+        app.UseRequestLocalization(localizationOptions);
 
         if (!app.Environment.IsDevelopment())
         {
