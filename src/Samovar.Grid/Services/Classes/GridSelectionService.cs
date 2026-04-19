@@ -9,7 +9,7 @@ public class GridSelectionService<T>
     , IObserver<IEnumerable<T>>
     , IObserver<RowSelectionMode>
 {
-    private IEnumerable<GridRowModel<T>> ViewCollection = new List<GridRowModel<T>>();
+    private IEnumerable<GridRowModel<T>> ViewCollection = [];
 
     public BehaviorSubject<RowSelectionMode> SelectionMode { get; } = new BehaviorSubject<RowSelectionMode>(RowSelectionMode.None);
 

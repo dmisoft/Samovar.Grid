@@ -5,22 +5,15 @@ using Microsoft.Extensions.Localization;
 
 namespace Samovar.Grid;
 
-internal sealed class SamovarGridLocalizationService : ISamovarGridLocalizationService
+internal sealed class SamovarGridLocalizationService(
+    IStringLocalizer<SamovarGridStrings> localizer,
+    SamovarGridOptions options) : ISamovarGridLocalizationService
 {
-    private readonly IStringLocalizer<SamovarGridStrings> _localizer;
-    private readonly IReadOnlyDictionary<CultureInfo, IReadOnlyDictionary<string, string>> _customLanguages;
+    private readonly IReadOnlyDictionary<CultureInfo, IReadOnlyDictionary<string, string>> _customLanguages = options.CustomLanguages
+        .ToDictionary(
+            kvp => kvp.Key,
+            kvp => (IReadOnlyDictionary<string, string>)new Dictionary<string, string>(kvp.Value));
     private readonly Subject<Unit> _cultureChanged = new();
-
-    public SamovarGridLocalizationService(
-        IStringLocalizer<SamovarGridStrings> localizer,
-        SamovarGridOptions options)
-    {
-        _localizer = localizer;
-        _customLanguages = options.CustomLanguages
-            .ToDictionary(
-                kvp => kvp.Key,
-                kvp => (IReadOnlyDictionary<string, string>)new Dictionary<string, string>(kvp.Value));
-    }
 
     public IObservable<Unit> CultureChanged => _cultureChanged;
 
@@ -63,7 +56,7 @@ internal sealed class SamovarGridLocalizationService : ISamovarGridLocalizationS
         }
 
         // 2) Built-in satellite resources via IStringLocalizer
-        var localized = _localizer[key];
+        var localized = localizer[key];
         if (!localized.ResourceNotFound)
             return localized.Value;
 

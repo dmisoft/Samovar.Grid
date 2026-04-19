@@ -4,7 +4,7 @@ public class FilterMenuTreeNode
 {
     public string Label { get; set; } = "";
     public object? RawValue { get; set; }
-    public List<FilterMenuTreeNode> Children { get; set; } = new();
+    public List<FilterMenuTreeNode> Children { get; set; } = [];
     public bool IsExpanded { get; set; } = true;
     public bool IsChecked { get; set; } = false;
 

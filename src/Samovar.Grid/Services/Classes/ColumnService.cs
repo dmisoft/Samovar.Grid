@@ -11,7 +11,7 @@ public class ColumnService
     public IColumnModel EmptyColumnModel { get; } = new EmptyColumnModel();
     public IDeclarativeColumnModel DetailExpanderColumnModel { get; } = new DetailExpanderColumnModel();
     public IDeclarativeColumnModel RowSelectionColumnModel { get; } = new SelectionColumnModel();
-    public List<IColumnModel> AllColumnModels { get; } = new List<IColumnModel>();
+    public List<IColumnModel> AllColumnModels { get; } = [];
     public IEnumerable<IDataColumnModel> DataColumnModels => AllColumnModels.OfType<IDataColumnModel>();
     public Subject<IColumnModel> ColumnResizingEndedObservable { get; } = new();
     public IEnumerable<IDeclarativeColumnModel> DeclarativeColumnModels => AllColumnModels.OfType<IDeclarativeColumnModel>();
