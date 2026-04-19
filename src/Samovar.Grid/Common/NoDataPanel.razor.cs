@@ -3,17 +3,7 @@
 public partial class NoDataPanel
     : DesignComponentBase, IAsyncDisposable
 {
-    protected double ContainerHeight = 0;
-
     private IDisposable? _cultureSubscription;
-
-    protected override Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-            ContainerHeight = 330;
-
-        return base.OnAfterRenderAsync(firstRender);
-    }
 
     protected override Task OnInitializedAsync()
     {
