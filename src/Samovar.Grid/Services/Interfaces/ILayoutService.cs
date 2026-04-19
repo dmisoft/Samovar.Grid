@@ -12,6 +12,7 @@ public interface ILayoutService
     BehaviorSubject<double> MinGridWidth { get; }
     BehaviorSubject<bool> ShowDetailRow { get; }
     BehaviorSubject<bool> ShowRowSelectionColumn { get; }
+    BehaviorSubject<bool> HeaderReady { get; }
     BehaviorSubject<GridFilterMode> FilterMode { get; }
     BehaviorSubject<string> Height { get; }
     BehaviorSubject<string> Width { get; }

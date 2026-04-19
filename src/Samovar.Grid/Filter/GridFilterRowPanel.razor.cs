@@ -21,6 +21,7 @@ public partial class GridFilterRowPanel<T>
                 StateHasChanged();
             });
         });
+        GridLayoutService.HeaderReady.Subscribe(_ => InvokeAsync(StateHasChanged));
         base.OnInitialized();
     }
 
