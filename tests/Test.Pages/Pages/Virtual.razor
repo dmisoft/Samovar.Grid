@@ -11,6 +11,8 @@
         <Column Field="@nameof(Employee.LastName)" />
         <Column Field="@nameof(Employee.Department)" />
         <Column Field="@nameof(Employee.Salary)" />
+        <ExpressionColumn Title="Annual" Formula="[Salary] * 12" Width="130px" Format="C2" />
+        <ExpressionColumn Title="Free calc" Formula="365 * 2" Width="130px" Format="C2" />
     </Columns>
 </SmGrid>
 

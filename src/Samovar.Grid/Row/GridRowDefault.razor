@@ -19,6 +19,7 @@
         switch (colModel.ColumnType)
         {
             case ColumnType.Data:
+            case ColumnType.Expression:
                 var cellModel = RowModel.GridCellModels.SingleOrDefault(x => x.ColumnMetadata.Equals(colModel));
                 if (cellModel != null)
                 {
@@ -88,7 +89,7 @@
             <div class="d-flex flex-row align-content-center justify-content-center">
             </div>
         </td>
-        <td colspan="@ColumnService.AllColumnModels.Where(c => c.ColumnType == ColumnType.Data || c.ColumnType == ColumnType.Command).Count()">
+        <td colspan="@ColumnService.AllColumnModels.Where(c => c.ColumnType == ColumnType.Data || c.ColumnType == ColumnType.Command || c.ColumnType == ColumnType.Expression).Count()">
             @TemplateService.DetailRowTemplate.Value(RowModel.DataItem)
         </td>
     </tr>

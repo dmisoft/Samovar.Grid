@@ -30,7 +30,7 @@
 			</svg>
 			</div>
 		}
-		@if (LayoutService.FilterMode.Value == GridFilterMode.FilterMenu)
+		@if (LayoutService.FilterMode.Value == GridFilterMode.FilterMenu && ColumnModel.ColumnType != ColumnType.Expression)
 		{
 			<button @ref="_filterButtonRef"
 					class="btn btn-sm p-0 ms-1 @(_filterActive ? "text-primary" : "text-secondary")"

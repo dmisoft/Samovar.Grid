@@ -39,6 +39,7 @@ public class SmComponentServiceProvider
 
         _services.AddTransient<IDataColumnModel, DataColumnModel>();
         _services.AddTransient<ICommandColumnModel, CommandColumnModel>();
+        _services.AddTransient<IExpressionColumnModel, ExpressionColumnModel>();
 
         _serviceProvider = _services.BuildServiceProvider(validateScopes: true);
         _scope = _serviceProvider.CreateScope();
