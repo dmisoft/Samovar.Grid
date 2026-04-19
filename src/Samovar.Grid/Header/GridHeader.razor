@@ -23,6 +23,7 @@
                                 switch (columnModel.ColumnType)
                                 {
                                     case ColumnType.Data:
+                                    case ColumnType.Expression:
                                         <GridHeaderCell TItem="T" ColumnModel=@((IDataColumnModel)columnModel) />
                                         break;
                                     case ColumnType.Command:

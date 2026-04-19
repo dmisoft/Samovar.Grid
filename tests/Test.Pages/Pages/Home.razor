@@ -28,6 +28,8 @@
                     <Column Title="Last Name" Field="@nameof(Employee.LastName)" Width="130px" TextAlign="@nameAlign" />
                     <Column Title="Job Title" Field="@nameof(Employee.JobTitle)" Width="1*" />
                     <Column Title="Salary" Field="@nameof(Employee.Salary)" Width="110px" TextAlign="GridTextAlign.Right" Format="@salaryFormat" />
+                    <ExpressionColumn Title="Annual" Formula="[Salary] * 12" Width="130px" Format="C2" />
+                    <ExpressionColumn Title="Net" Formula="([Salary] - 500) / 2" Width="120px" Format="C2" />                    
                     <CommandColumn EditButtonVisible=true DeleteButtonVisible=true NewButtonVisible=true Width="150px" />
                 </Columns>
 

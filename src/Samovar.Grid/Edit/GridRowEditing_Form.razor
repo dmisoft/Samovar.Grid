@@ -8,7 +8,10 @@
             <div class="d-flex flex-row align-content-center justify-content-center"></div>
         </td>
     }
-    <td style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;" colspan="@(ColumnService.AllColumnModels.Where(c => c.ColumnType == ColumnType.Data || c.ColumnType == ColumnType.Command).Count())">
+    <td 
+    style="text-overflow:ellipsis !important;overflow: hidden !important;white-space: nowrap !important;" 
+    colspan="@(ColumnService.AllColumnModels.Where(c => c.ColumnType == ColumnType.Data || c.ColumnType == ColumnType.Command|| c.ColumnType == ColumnType.Expression).Count()+(LayoutService.ShowRowSelectionColumn.Value?1:0))"
+    class="p-3">
         <div>
             <GridRowEditing_Body RowModel=RowModel />
         </div>

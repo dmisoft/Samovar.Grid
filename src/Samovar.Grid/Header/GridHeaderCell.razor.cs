@@ -89,7 +89,12 @@ public partial class GridHeaderCell<TItem>
     private bool IsLastColumn => ColumnService.AllColumnModels[^1].Id == ColumnModel.Id;
 
     protected string ColumnCellDraggable = "false";
-    internal Task ColumnCellClick() => SortingService.OnColumnClick(ColumnModel);
+    internal Task ColumnCellClick()
+    {
+        if (ColumnModel.ColumnType == ColumnType.Expression)
+            return Task.CompletedTask;
+        return SortingService.OnColumnClick(ColumnModel);
+    }
 
     protected async Task OnMouseDown(MouseEventArgs args, IDataColumnModel triggerColumnModel)
     {

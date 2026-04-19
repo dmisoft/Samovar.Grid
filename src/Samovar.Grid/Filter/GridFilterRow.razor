@@ -79,6 +79,9 @@
                     case ColumnType.Command:
                         <GridFilterCommandCell ColumnModel="(ICommandColumnModel)colMeta" />
                         break;
+                    case ColumnType.Expression:
+                        <GridFilterExpressionCell ColumnModel="(IDataColumnModel)colMeta" />
+                        break;
                 }
             }
             <GridFilterEmptyCell ColumnModel=@ColumnService.EmptyColumnModel />

@@ -86,35 +86,37 @@
             <InsertFormTemplate>
                 <EditForm Model="@InsertContext" Context="EditFormContext" OnValidSubmit=HandleValidInsertingSubmit>
                     <DataAnnotationsValidator />
-                    <div class="form-group row mb-2">
-                        <label class="col-2 col-form-label" for="firstName">First Name</label>
-                        <div class="col-10">
-                            <InputText class="form-control" id="firstName" @bind-Value="InsertContext!.FirstName" />
+                    <div class="row">
+                        <div class="form-group row mb-2">
+                            <label class="col-3 col-form-label" for="firstName">First Name</label>
+                            <div class="col-9">
+                                <InputText class="form-control" id="firstName" @bind-Value="InsertContext!.FirstName" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group row mb-2">
-                        <label class="col-2 col-form-label" for="lastName">Last Name</label>
-                        <div class="col-10">
-                            <InputText class="form-control" id="lastName" @bind-Value="InsertContext.LastName" />
+                        <div class="form-group row mb-2">
+                            <label class="col-3 col-form-label" for="lastName">Last Name</label>
+                            <div class="col-9">
+                                <InputText class="form-control" id="lastName" @bind-Value="InsertContext.LastName" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group row mb-2">
-                        <label class="col-2 col-form-label" for="salary">Salary</label>
-                        <div class="col-10">
-                            <InputNumber class="form-control" id="salary" TValue="decimal"
-                                         @bind-Value="InsertContext.Salary" />
+                        <div class="form-group row mb-2">
+                            <label class="col-3 col-form-label" for="salary">Salary</label>
+                            <div class="col-9">
+                                <InputNumber class="form-control" id="salary" TValue="decimal"
+                                             @bind-Value="InsertContext.Salary" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <ValidationSummary />
+                        <div class="form-row">
+                            <ValidationSummary />
+                        </div>
                     </div>
                     <div class="row">
-                        <div class="col s-flex justify-content-end">
-                            <button type="submit" class="btn btn-outline-primary mx-1">add</button>
-                            <button type="button" class="btn btn-outline-secondary mx-1"
-                                    @onclick="OnCancelInsertingButtonClick">cancel</button>
+                            <div class="col s-flex justify-content-end">
+                                <button type="submit" class="btn btn-outline-primary mx-1">add</button>
+                                <button type="button" class="btn btn-outline-secondary mx-1"
+                                        @onclick="OnCancelInsertingButtonClick">cancel</button>
+                            </div>
                         </div>
-                    </div>
                 </EditForm>
             </InsertFormTemplate>
         </SmGrid>

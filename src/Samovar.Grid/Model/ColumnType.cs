@@ -6,5 +6,6 @@ public enum ColumnType
     Command,
     DetailExpanderColumn,
     SelectionColumn,
-    EmptyColumn
+    EmptyColumn,
+    Expression
 }

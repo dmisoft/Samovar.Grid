@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Samovar.Grid.Formulas;
+using System.Diagnostics;
 using System.Reactive.Subjects;
 using System.Reflection;
 
@@ -47,25 +48,44 @@ public class GridRowModel<T>
 
     internal List<DataGridRowCellModel<T>> CreateGridRowCellModelCollection(IEnumerable<IDataColumnModel> columnMetadata, T dataItem)//, CancellationToken token)
     {
-        List<DataGridRowCellModel<T>> gridCellModelCollection = new List<DataGridRowCellModel<T>>();
+        List<DataGridRowCellModel<T>> gridCellModelCollection = [];
 
         foreach (var cm in columnMetadata.Where(c => c.ColumnType == ColumnType.Data))
         {
-            gridCellModelCollection.Add(new DataGridRowCellModel<T>(dataItem, PropDict[cm.Field.Value], cm));
+            gridCellModelCollection.Add(BuildCellModel(dataItem, cm));
         }
         return gridCellModelCollection;
     }
 
     internal List<DataGridRowCellModel<T>> CreateGridRowCellModelCollection2(T dataItem)
     {
-        List<DataGridRowCellModel<T>> gridCellModelCollection = new List<DataGridRowCellModel<T>>();
+        List<DataGridRowCellModel<T>> gridCellModelCollection = [];
 
         foreach (var cm in ColumnMetadata)
         {
-            gridCellModelCollection.Add(new DataGridRowCellModel<T>(dataItem, PropDict[cm.Field.Value], cm));
+            gridCellModelCollection.Add(BuildCellModel(dataItem, cm));
         }
 
         return gridCellModelCollection;
+    }
+
+    private DataGridRowCellModel<T> BuildCellModel(T dataItem, IDataColumnModel cm)
+    {
+        if (cm is IExpressionColumnModel expr)
+        {
+            var getter = (Func<T, decimal?>?)expr.CompiledGetter;
+            if (getter is null)
+            {
+                getter = expr.Ast is null
+                    ? _ => null
+                    : FormulaCompiler.Compile<T>(expr.Ast, PropDict);
+                expr.CompiledGetter = getter;
+            }
+            var capturedGetter = getter;
+            return new DataGridRowCellModel<T>(dataItem, r => r is null ? null : capturedGetter(r), cm);
+        }
+
+        return new DataGridRowCellModel<T>(dataItem, PropDict[cm.Field.Value], cm);
     }
 
     internal void CreateEditingModel()
