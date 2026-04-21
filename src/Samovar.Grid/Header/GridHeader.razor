@@ -2,7 +2,7 @@
 @typeparam T
 @inherits DesignComponentBase
 
-<div style="position:relative;display:flex;flex-direction:row;">
+<div style="position:relative;display:flex;flex-direction:row;@(LayoutService.HeaderReady.Value ? "" : "visibility:hidden;")">
     <div style="overflow:hidden;position:relative;flex-grow:1;" id="@ConstantService.GridHeaderContainerId">
         <div style="position:relative;" class="user-select-none">
             <table style="margin:0;padding:0;table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")" class="@CssClass @_tableSizeClass">

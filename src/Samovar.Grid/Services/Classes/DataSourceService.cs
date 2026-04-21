@@ -20,35 +20,35 @@ public class DataSourceService<T>
 
     public BehaviorSubject<Func<T, bool>?> CustomFilter { get; } = new BehaviorSubject<Func<T, bool>?>(null);
 
-    readonly List<Type> numericTypeList = new List<Type>
-            {
-                typeof(byte),
-                typeof(sbyte),
-                typeof(int),
-                typeof(uint),
-                typeof(short),
-                typeof(ushort),
-                typeof(long),
-                typeof(ulong),
-                typeof(float),
-                typeof(double),
-                typeof(decimal),
-                typeof(DateTime),
-                typeof(DateTime?),
-                typeof(DateOnly),
-                typeof(DateOnly?),
-                typeof(byte?),
-                typeof(sbyte?),
-                typeof(int?),
-                typeof(uint?),
-                typeof(short?),
-                typeof(ushort?),
-                typeof(long?),
-                typeof(ulong?),
-                typeof(float?),
-                typeof(double?),
-                typeof(decimal?)
-        };
+    readonly List<Type> numericTypeList =
+        [
+            typeof(byte),
+            typeof(sbyte),
+            typeof(int),
+            typeof(uint),
+            typeof(short),
+            typeof(ushort),
+            typeof(long),
+            typeof(ulong),
+            typeof(float),
+            typeof(double),
+            typeof(decimal),
+            typeof(DateTime),
+            typeof(DateTime?),
+            typeof(DateOnly),
+            typeof(DateOnly?),
+            typeof(byte?),
+            typeof(sbyte?),
+            typeof(int?),
+            typeof(uint?),
+            typeof(short?),
+            typeof(ushort?),
+            typeof(long?),
+            typeof(ulong?),
+            typeof(float?),
+            typeof(double?),
+            typeof(decimal?)
+        ];
 
     public DataSourceService(
           IFilterService filterService
@@ -122,7 +122,7 @@ public class DataSourceService<T>
         Type t = typeof(T);
         ParameterExpression obj = Expression.Parameter(typeof(T));
 
-        List<Expression> lambdaList = new List<Expression>();
+        List<Expression> lambdaList = [];
 
         ConditionalExpression? isNullExpression = null;
 

@@ -60,22 +60,22 @@ public partial class GridColumnFilterMenuPanel<TItem>
     private DotNetObjectReference<GridColumnFilterMenuPanel<TItem>>? _dotNetRef;
     private bool _handlersRegistered = false;
 
-    private List<FilterMenuTreeNode> _rootNodes = new();
+    private List<FilterMenuTreeNode> _rootNodes = [];
     private string _searchText = "";
     private bool _isDateColumn;
 
     private IDisposable? _cultureSubscription;
 
-    private static readonly HashSet<Type> DateTypes = new()
-    {
+    private static readonly HashSet<Type> DateTypes =
+    [
         typeof(DateTime), typeof(DateTime?),
         typeof(DateOnly), typeof(DateOnly?)
-    };
+    ];
 
     private const int NumericGroupingThreshold = 20;
 
-    private static readonly HashSet<Type> IntegralTypes = new()
-    {
+    private static readonly HashSet<Type> IntegralTypes =
+    [
         typeof(byte),    typeof(byte?),
         typeof(sbyte),   typeof(sbyte?),
         typeof(short),   typeof(short?),
@@ -84,10 +84,10 @@ public partial class GridColumnFilterMenuPanel<TItem>
         typeof(uint),    typeof(uint?),
         typeof(long),    typeof(long?),
         typeof(ulong),   typeof(ulong?),
-    };
+    ];
 
-    private static readonly HashSet<Type> NumericGroupableTypes = new()
-    {
+    private static readonly HashSet<Type> NumericGroupableTypes =
+    [
         typeof(byte),    typeof(byte?),
         typeof(sbyte),   typeof(sbyte?),
         typeof(short),   typeof(short?),
@@ -99,7 +99,7 @@ public partial class GridColumnFilterMenuPanel<TItem>
         typeof(float),   typeof(float?),
         typeof(double),  typeof(double?),
         typeof(decimal), typeof(decimal?),
-    };
+    ];
 
     protected override Task OnInitializedAsync()
     {
@@ -291,7 +291,7 @@ public partial class GridColumnFilterMenuPanel<TItem>
         {
             decimal bucketStart = Math.Floor((asDecimal - bucketFloor) / bucketSize) * bucketSize + bucketFloor;
             if (!buckets.ContainsKey(bucketStart))
-                buckets[bucketStart] = new();
+                buckets[bucketStart] = [];
             buckets[bucketStart].Add((raw, asDecimal));
         }
 

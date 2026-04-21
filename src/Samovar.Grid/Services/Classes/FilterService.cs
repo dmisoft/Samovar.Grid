@@ -7,8 +7,8 @@ namespace Samovar.Grid;
 public class FilterService
     : IFilterService, IAsyncDisposable
 {
-    public ObservableCollection<GridFilterCellInfo> ColumnFilters { get; } = new ObservableCollection<GridFilterCellInfo>();
-    public BehaviorSubject<IEnumerable<GridFilterCellInfo>> FilterInfo { get; } = new BehaviorSubject<IEnumerable<GridFilterCellInfo>>(new List<GridFilterCellInfo>());
+    public ObservableCollection<GridFilterCellInfo> ColumnFilters { get; } = [];
+    public BehaviorSubject<IEnumerable<GridFilterCellInfo>> FilterInfo { get; } = new BehaviorSubject<IEnumerable<GridFilterCellInfo>>([]);
     public BehaviorSubject<string?> ActiveFilterMenuColumnId { get; } = new BehaviorSubject<string?>(null);
 
     public FilterService()

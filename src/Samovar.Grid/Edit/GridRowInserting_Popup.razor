@@ -14,8 +14,8 @@
 			@if (RowModel.EditingDataItem is not null)
 			{
 				<div class="modal-footer">
-					<button class="btn btn-outline-primary mx-1" @onclick=@(() => EditingService.RowInsertCommit(RowModel.EditingDataItem))>@L10n[LocalizationKeys.EditAdd]</button>
-					<button class="btn btn-outline-secondary mx-1" @onclick=@(() => EditingService.RowInsertCancel())>@L10n[LocalizationKeys.EditCancel]</button>
+					<button class="btn btn-outline-primary mx-1 @_btnSizeClass" @onclick=@(() => EditingService.RowInsertCommit(RowModel.EditingDataItem))>@L10n[LocalizationKeys.EditAdd]</button>
+					<button class="btn btn-outline-secondary mx-1 @_btnSizeClass" @onclick=@(() => EditingService.RowInsertCancel())>@L10n[LocalizationKeys.EditCancel]</button>
 				</div>
 			}
 		</div>

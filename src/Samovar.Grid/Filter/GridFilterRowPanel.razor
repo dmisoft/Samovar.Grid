@@ -2,7 +2,7 @@
 @typeparam T
 @inherits DesignComponentBase
 
-<div style="position:relative;display:flex;flex-direction:row;">
+<div style="position:relative;display:flex;flex-direction:row;@(GridLayoutService.HeaderReady.Value ? "" : "visibility:hidden;")">
 	<div style="position:relative;overflow:hidden;flex-grow:1;" id="@ConstantService.GridFilterContainerId">
 		<div style="position:relative;">
 			<GridFilterRow TItem=T />

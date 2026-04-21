@@ -18,6 +18,7 @@ public class LayoutService
     public BehaviorSubject<double> MinGridWidth { get; } = new BehaviorSubject<double>(0d);
     public BehaviorSubject<bool> ShowDetailRow { get; } = new BehaviorSubject<bool>(false);
     public BehaviorSubject<bool> ShowRowSelectionColumn { get; } = new BehaviorSubject<bool>(false);
+    public BehaviorSubject<bool> HeaderReady { get; } = new BehaviorSubject<bool>(false);
     public BehaviorSubject<GridFilterMode> FilterMode { get; } = new BehaviorSubject<GridFilterMode>(GridFilterMode.None);
     public ElementReference GridFilterRef { get; set; }
     public ElementReference GridOuterRef { get; set; }
@@ -206,6 +207,9 @@ public class LayoutService
         {
             _columnService.RowSelectionColumnModel.Width.OnNext(_columnService.RowSelectionColumnModel.DeclaratedWidth);
         }
+
+        if (!HeaderReady.Value)
+            HeaderReady.OnNext(true);
     }
 
     internal async Task OnDataGridInnerCssStyleChanged()

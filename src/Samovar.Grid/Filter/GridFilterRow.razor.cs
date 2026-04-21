@@ -24,32 +24,31 @@ public partial class GridFilterRow<TItem>
         LayoutService.ShowRowSelectionColumn.Subscribe(showCol => _ = InvokeAsync(StateHasChanged));
     }
 
-    protected readonly List<Type> Numeric_Types_For_Constant_Expression = new List<Type>
-
-            {
-                typeof(byte),
-                typeof(byte?),
-                typeof(sbyte),
-                typeof(sbyte?),
-                typeof(short),
-                typeof(short?),
-                typeof(ushort),
-                typeof(ushort?),
-                typeof(int),
-                typeof(int?),
-                typeof(uint),
-                typeof(uint?),
-                typeof(long),
-                typeof(long?),
-                typeof(ulong),
-                typeof(ulong?),
-                typeof(float),
-                typeof(float?),
-                typeof(double),
-                typeof(double?),
-                typeof(decimal),
-                typeof(decimal?),
-        };
+    protected readonly List<Type> Numeric_Types_For_Constant_Expression =
+        [
+            typeof(byte),
+            typeof(byte?),
+            typeof(sbyte),
+            typeof(sbyte?),
+            typeof(short),
+            typeof(short?),
+            typeof(ushort),
+            typeof(ushort?),
+            typeof(int),
+            typeof(int?),
+            typeof(uint),
+            typeof(uint?),
+            typeof(long),
+            typeof(long?),
+            typeof(ulong),
+            typeof(ulong?),
+            typeof(float),
+            typeof(float?),
+            typeof(double),
+            typeof(double?),
+            typeof(decimal),
+            typeof(decimal?),
+        ];
 
     public ValueTask DisposeAsync()
     {

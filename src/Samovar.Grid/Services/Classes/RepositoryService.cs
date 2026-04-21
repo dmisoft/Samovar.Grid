@@ -13,10 +13,10 @@ public class RepositoryService<T>
     private readonly IDetailRowService<T> _rowDetailService;
     private readonly IGridStateService _stateService;
 
-    public Dictionary<string, PropertyInfo> PropInfo { get; } = new Dictionary<string, PropertyInfo>();
-    public static ConcurrentDictionary<string, Func<T, int>> PropInfoDelegateInt { get; } = new ConcurrentDictionary<string, Func<T, int>>();
-    public static ConcurrentDictionary<string, Func<T, string>> PropInfoDelegateString { get; } = new ConcurrentDictionary<string, Func<T, string>>();
-    public static ConcurrentDictionary<string, Func<T, DateTime>> PropInfoDelegateDate { get; } = new ConcurrentDictionary<string, Func<T, DateTime>>();
+    public Dictionary<string, PropertyInfo> PropInfo { get; } = [];
+    public static ConcurrentDictionary<string, Func<T, int>> PropInfoDelegateInt { get; } = new();
+    public static ConcurrentDictionary<string, Func<T, string>> PropInfoDelegateString { get; } = new();
+    public static ConcurrentDictionary<string, Func<T, DateTime>> PropInfoDelegateDate { get; } = new();
     public IObservable<Task<IEnumerable<GridRowModel<T>>>> ViewCollectionObservableTask { get; set; }
 
     public RepositoryService(

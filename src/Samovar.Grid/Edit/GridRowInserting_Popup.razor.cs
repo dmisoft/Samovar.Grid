@@ -7,6 +7,9 @@ public partial class GridRowInserting_Popup<T>
     : DesignComponentBase, IAsyncDisposable
 {
     [SmInject]
+    public required ILayoutService LayoutService { get; set; }
+
+    [SmInject]
     public required IEditingService<T> EditingService { get; set; }
 
     [SmInject]
@@ -19,6 +22,8 @@ public partial class GridRowInserting_Popup<T>
 
     protected ElementReference ElementReference { get; set; }
 
+    protected string _btnSizeClass = "";
+    
     private IDisposable? _cultureSubscription;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -29,6 +34,11 @@ public partial class GridRowInserting_Popup<T>
 
     protected override Task OnInitializedAsync()
     {
+        LayoutService.SizeMode.Subscribe(mode =>
+        {
+            _btnSizeClass = mode switch { GridSizeMode.Small => "btn-sm small", GridSizeMode.Large => "btn-lg", _ => "" };
+            _ = InvokeAsync(StateHasChanged);
+        });
         _cultureSubscription = L10n.CultureChanged.Subscribe(u => InvokeAsync(StateHasChanged));
         return base.OnInitializedAsync();
     }
