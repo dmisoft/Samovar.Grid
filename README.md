@@ -20,6 +20,10 @@ A full-featured data grid component for Blazor (.NET 10).
 - Command bar with bulk selection, delete, and data export (Excel / CSV)
 - Cell content alignment (left, center, right)
 - Grid size modes (default, small, large)
+- Column display format (standard .NET format strings)
+- Expression columns (calculated values from field expressions)
+- Globalization — 39 built-in languages, culture-reactive UI
+- Custom localization — add languages or override individual strings
 - CSS customization via Bootstrap classes and CSS custom properties
 - Works with Interactive Server, WebAssembly, and Auto render modes
 
@@ -398,6 +402,124 @@ Override these CSS variables to customize the grid appearance:
 
 ---
 
+### Column Display Format
+
+Use the `Format` parameter to apply any standard .NET format string to `IFormattable` column values (numbers, dates, etc.). The format is culture-aware and respects `CultureInfo.CurrentCulture`.
+
+```razor
+<Column Field="@nameof(Employee.Salary)"   Format="C2"         TextAlign="GridTextAlign.Right" />
+<Column Field="@nameof(Employee.HireDate)" Format="yyyy-MM-dd" />
+<Column Field="@nameof(Employee.Score)"    Format="N2"         TextAlign="GridTextAlign.Right" />
+```
+
+---
+
+### Expression Columns
+
+`ExpressionColumn` computes a value from a formula referencing other fields using bracket notation. Use it for calculated columns without adding a property to your model.
+
+```razor
+<SmGrid Data=employees Height="600px">
+    <Columns>
+        <Column Field="@nameof(Employee.FirstName)" />
+        <Column Field="@nameof(Employee.Salary)" Format="C2" TextAlign="GridTextAlign.Right" />
+        <ExpressionColumn Title="Annual"    Formula="[Salary] * 12"          Width="130px" Format="C2" />
+        <ExpressionColumn Title="Daily"     Formula="[Salary] / 30"          Width="130px" Format="C2" />
+        <ExpressionColumn Title="Adjusted"  Formula="([Salary] - 500) / 2"   Width="130px" Format="C2" />
+    </Columns>
+</SmGrid>
+```
+
+Supported operators: `+`, `-`, `*`, `/`, `(` `)`. Field references must match the exact property name wrapped in brackets (e.g., `[Salary]`). Constant expressions are also valid (e.g., `365 * 2`).
+
+---
+
+### Globalization and Localization
+
+The grid UI (buttons, labels, filter menus, pager, etc.) is fully localized. 39 languages are built in — the grid automatically picks the language from `CultureInfo.CurrentCulture`.
+
+**Built-in languages include:** English, German, French, Spanish, Italian, Portuguese (BR/PT), Dutch, Russian, Ukrainian, Polish, Czech, Japanese, Chinese (Simplified/Traditional), Arabic, Hebrew, and many more.
+
+To switch the grid language programmatically, inject `ISamovarGridLocalizationService` and call `SetCulture`:
+
+```csharp
+@inject ISamovarGridLocalizationService L10n
+
+void SwitchToGerman()
+{
+    L10n.SetCulture(new CultureInfo("de-DE"));
+}
+```
+
+#### Custom Localization
+
+**Add a new language** (full dictionary):
+
+```csharp
+// Program.cs
+builder.Services.AddSamovarGrid(options =>
+    options.AddLanguage(
+        new CultureInfo("pt-BR"),
+        new Dictionary<string, string>
+        {
+            ["Grid.Edit.Cancel"]        = "Cancelar",
+            ["Grid.Edit.Update"]        = "Atualizar",
+            ["Grid.Edit.Add"]           = "Adicionar",
+            ["Grid.Filter.Apply"]       = "Aplicar",
+            ["Grid.Filter.Cancel"]      = "Cancelar",
+            ["Grid.Common.NoData"]      = "Sem dados",
+            // ... remaining keys
+        }
+    )
+);
+```
+
+**Override individual strings** in an existing language:
+
+```csharp
+builder.Services.AddSamovarGrid(options =>
+{
+    options.OverrideString(new CultureInfo("en-GB"), "Grid.Common.NoData", "No records found");
+    options.OverrideString(new CultureInfo("de-DE"), "Grid.Edit.Cancel",   "Abbrechen");
+});
+```
+
+Custom strings take precedence over built-in resources. Partial overrides are supported — missing keys fall back to built-in translations.
+
+<details>
+<summary>All localization key names</summary>
+
+| Key | Default (en-GB) |
+|-----|-----------------|
+| `Grid.Edit.Cancel` | Cancel |
+| `Grid.Edit.Update` | Update |
+| `Grid.Edit.Add` | Add |
+| `Grid.Edit.PopupTitle.Edit` | Edit |
+| `Grid.Edit.PopupTitle.New` | New |
+| `Grid.Edit.Close.AriaLabel` | Close |
+| `Grid.Pager.PageOf` | Page {0} of {1} |
+| `Grid.Pager.PreviousGlyph` | ‹ |
+| `Grid.Pager.NextGlyph` | › |
+| `Grid.Filter.Values.Title` | Filter |
+| `Grid.Filter.Search.Placeholder` | Search… |
+| `Grid.Filter.SelectAll` | Select all |
+| `Grid.Filter.Blank` | (Blank) |
+| `Grid.Filter.Cancel` | Cancel |
+| `Grid.Filter.Apply` | Apply |
+| `Grid.Common.NoData` | No data |
+| `Grid.CommandBar.SelectCurrentPage` | Select current page |
+| `Grid.CommandBar.SelectAllFiltered` | Select all filtered |
+| `Grid.CommandBar.DeselectAll` | Deselect all |
+| `Grid.CommandBar.DeleteSelected` | Delete selected |
+| `Grid.CommandBar.ExportExcelAll` | Export Excel (all) |
+| `Grid.CommandBar.ExportExcelSelected` | Export Excel (selected) |
+| `Grid.CommandBar.ExportCsvAll` | Export CSV (all) |
+| `Grid.CommandBar.ExportCsvSelected` | Export CSV (selected) |
+
+</details>
+
+---
+
 ### SmGrid Parameters Reference
 
 | Parameter | Type | Default | Description |
@@ -430,6 +552,19 @@ Override these CSS variables to customize the grid appearance:
 | `Title` | `string?` | Field name | Column header text |
 | `Width` | `string?` | — | Column width (px, %, or flex like `"1*"`) |
 | `TextAlign` | `GridTextAlign` | `Left` | Cell content alignment |
+| `Format` | `string?` | — | .NET format string for `IFormattable` values (e.g. `"C2"`, `"yyyy-MM-dd"`) |
+| `Resizable` | `bool` | `true` | Allow user resizing |
+| `MinWidth` | `double` | `50` | Minimum column width in px |
+
+### ExpressionColumn Parameters Reference
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `Formula` | `string` | — | Expression string (e.g. `"[Salary] * 12"`) |
+| `Title` | `string?` | — | Column header text |
+| `Width` | `string?` | — | Column width (px, %, or flex like `"1*"`) |
+| `TextAlign` | `GridTextAlign` | `Right` | Cell content alignment |
+| `Format` | `string?` | — | .NET format string (e.g. `"C2"`) |
 | `Resizable` | `bool` | `true` | Allow user resizing |
 | `MinWidth` | `double` | `50` | Minimum column width in px |
 
