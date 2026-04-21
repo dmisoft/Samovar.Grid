@@ -13,7 +13,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddGridTestPages();
 builder.Services.AddSamovarGrid();
 
-var defaultCulture = new CultureInfo("es-ES");
+var defaultCulture = new CultureInfo("de-DE");
 CultureInfo.DefaultThreadCurrentCulture = defaultCulture;
 CultureInfo.DefaultThreadCurrentUICulture = defaultCulture;
 

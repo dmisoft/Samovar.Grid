@@ -7,7 +7,6 @@
 
     <main>
         <div class="top-row px-4">
-            <button class="btn btn-primary" type="button" @onclick="changeCulture">change culture</button>
             <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
         </div>
 
@@ -17,11 +16,5 @@
     </main>
 </div>
 @code {
-    private Task changeCulture()
-    {
-        var culture = new CultureInfo("en-US");
-        CultureInfo.DefaultThreadCurrentCulture = culture;
-        CultureInfo.DefaultThreadCurrentUICulture = culture;
-        return Task.CompletedTask;
-    }
+
 }
