@@ -82,9 +82,33 @@
     background-repeat: no-repeat;
 }
 
-/* No-data panel text color */
+/* No-data panel */
+.sm-no-data-panel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 200px;
+    overflow: hidden;
+}
+
+.sm-no-data-logo {
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    opacity: 0.2;
+    pointer-events: none;
+    user-select: none;
+}
+
 .sm-no-data-text {
+    position: relative;
     color: var(--sm-no-data-color);
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
 }
 
 /* Column separator grip — always visible between header cells when resizing is enabled */
