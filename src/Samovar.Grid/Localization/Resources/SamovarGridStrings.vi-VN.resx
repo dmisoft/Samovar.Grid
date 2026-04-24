@@ -32,4 +32,9 @@
   <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Chọn hàng</value></data>
   <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Xóa hàng đã chọn</value></data>
   <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Xuất hàng</value></data>
+  <data name="Grid.Summary.Sum" xml:space="preserve"><value>Tổng:</value></data>
+  <data name="Grid.Summary.Avg" xml:space="preserve"><value>Trung bình:</value></data>
+  <data name="Grid.Summary.Count" xml:space="preserve"><value>Số lượng:</value></data>
+  <data name="Grid.Summary.Min" xml:space="preserve"><value>Tối thiểu:</value></data>
+  <data name="Grid.Summary.Max" xml:space="preserve"><value>Tối đa:</value></data>
 </root>

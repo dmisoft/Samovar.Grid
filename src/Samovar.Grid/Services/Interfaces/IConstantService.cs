@@ -11,6 +11,8 @@ public interface IConstantService
 
     string GridFilterContainerId { get; }
 
+    string SummaryFooterContainerId { get; }
+
     string InnerGridBodyTableId { get; }
 
     string InnerGridBodyId { get; }

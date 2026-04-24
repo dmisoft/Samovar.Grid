@@ -38,6 +38,7 @@ public class LayoutService
     private readonly IConstantService _constantService;
     private readonly IJsService _jsService;
     private readonly IColumnService _columnService;
+    private readonly IServiceProvider _serviceProvider;
 
     public DotNetObjectReference<ILayoutService> DataGridDotNetRef { get; }
 
@@ -45,11 +46,13 @@ public class LayoutService
           IConstantService constantService
         , IJsService jsService
         , IInitService initService
-        , IColumnService columnService)
+        , IColumnService columnService
+        , IServiceProvider serviceProvider)
     {
         _constantService = constantService;
         _jsService = jsService;
         _columnService = columnService;
+        _serviceProvider = serviceProvider;
 
         initService.IsInitialized.Subscribe(DataGridInitializerCallback);
 
@@ -114,6 +117,8 @@ public class LayoutService
         await GridInnerRef.SynchronizeGridHeaderScroll(await _jsService.JsModule(), _constantService.GridHeaderContainerId);
         if (FilterMode.Value == GridFilterMode.FilterRow)
             await GridInnerRef.SynchronizeGridHeaderScroll(await _jsService.JsModule(), _constantService.GridFilterContainerId);
+        
+        await GridInnerRef.SynchronizeGridHeaderScroll(await _jsService.JsModule(), _constantService.SummaryFooterContainerId);
 
         await CaculateHeader();
     }

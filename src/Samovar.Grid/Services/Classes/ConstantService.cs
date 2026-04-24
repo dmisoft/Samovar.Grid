@@ -13,6 +13,8 @@ public class ConstantService
 
     public string GridFilterContainerId { get; } = $"gridfiltercontainer{Guid.NewGuid().ToString().Replace("-", "")}";
 
+    public string SummaryFooterContainerId { get; } = $"summaryfootercontainer{Guid.NewGuid().ToString().Replace("-", "")}";
+
     public string InnerGridBodyTableId { get; } = $"innergridbodytable{Guid.NewGuid().ToString().Replace("-", "")}";
 
     public string InnerGridBodyId { get; } = $"innergridbody{Guid.NewGuid().ToString().Replace("-", "")}";

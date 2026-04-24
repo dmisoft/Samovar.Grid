@@ -35,6 +35,7 @@ public class SmComponentServiceProvider
         _services.AddScoped<IComponentBuilderService, ComponentBuilderService<T>>();
         _services.AddScoped<IDetailRowService<T>, DetailRowService<T>>();
         _services.AddScoped<IDataSourceService<T>, DataSourceService<T>>();
+        _services.AddScoped<ISummaryFooterService, SummaryFooterService<T>>();
         _services.AddScoped<IExportService<T>, ExportService<T>>();
 
         _services.AddTransient<IDataColumnModel, DataColumnModel>();

@@ -32,4 +32,9 @@
   <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Výber riadkov</value></data>
   <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Odstrániť vybrané riadky</value></data>
   <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Exportovať riadky</value></data>
+  <data name="Grid.Summary.Sum" xml:space="preserve"><value>Súčet:</value></data>
+  <data name="Grid.Summary.Avg" xml:space="preserve"><value>Priemer:</value></data>
+  <data name="Grid.Summary.Count" xml:space="preserve"><value>Počet:</value></data>
+  <data name="Grid.Summary.Min" xml:space="preserve"><value>Min:</value></data>
+  <data name="Grid.Summary.Max" xml:space="preserve"><value>Max:</value></data>
 </root>

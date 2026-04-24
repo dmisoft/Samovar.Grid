@@ -32,4 +32,9 @@
   <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>पंक्ति चयन</value></data>
   <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>चयनित पंक्तियाँ हटाएं</value></data>
   <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>पंक्तियाँ निर्यात करें</value></data>
+  <data name="Grid.Summary.Sum" xml:space="preserve"><value>योग:</value></data>
+  <data name="Grid.Summary.Avg" xml:space="preserve"><value>औसत:</value></data>
+  <data name="Grid.Summary.Count" xml:space="preserve"><value>गिनती:</value></data>
+  <data name="Grid.Summary.Min" xml:space="preserve"><value>न्यून:</value></data>
+  <data name="Grid.Summary.Max" xml:space="preserve"><value>अधि:</value></data>
 </root>

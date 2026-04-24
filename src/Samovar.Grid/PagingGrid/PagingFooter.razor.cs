@@ -16,6 +16,7 @@ public partial class PagingFooter
     protected string CssClass = "";
     protected string PaginationCssClass = "pagination";
     protected string _paginationSizeClass = "";
+    protected string _pageInfoSizeClass = "";
 
     private IDisposable? _cultureSubscription;
 
@@ -30,6 +31,7 @@ public partial class PagingFooter
         });
         LayoutService.SizeMode.Subscribe(mode => {
             _paginationSizeClass = mode switch { GridSizeMode.Small => "pagination-sm", GridSizeMode.Large => "pagination-lg", _ => "" };
+            _pageInfoSizeClass = mode switch { GridSizeMode.Small => "small", GridSizeMode.Large => "fs-5", _ => "" };
             _ = InvokeAsync(StateHasChanged);
         });
         _cultureSubscription = L10n.CultureChanged.Subscribe(u => InvokeAsync(StateHasChanged));

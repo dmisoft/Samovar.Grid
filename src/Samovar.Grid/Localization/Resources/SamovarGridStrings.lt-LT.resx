@@ -32,4 +32,9 @@
   <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Eilučių pasirinkimas</value></data>
   <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Pasirinktų eilučių ištrynimas</value></data>
   <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Eilučių eksportavimas</value></data>
+  <data name="Grid.Summary.Sum" xml:space="preserve"><value>Suma:</value></data>
+  <data name="Grid.Summary.Avg" xml:space="preserve"><value>Vidurkis:</value></data>
+  <data name="Grid.Summary.Count" xml:space="preserve"><value>Kiekis:</value></data>
+  <data name="Grid.Summary.Min" xml:space="preserve"><value>Min:</value></data>
+  <data name="Grid.Summary.Max" xml:space="preserve"><value>Maks:</value></data>
 </root>

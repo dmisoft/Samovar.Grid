@@ -32,4 +32,9 @@
   <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Selezione righe</value></data>
   <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Eliminazione righe selezionate</value></data>
   <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Esportazione righe</value></data>
+  <data name="Grid.Summary.Sum" xml:space="preserve"><value>Somma:</value></data>
+  <data name="Grid.Summary.Avg" xml:space="preserve"><value>Media:</value></data>
+  <data name="Grid.Summary.Count" xml:space="preserve"><value>Conteggio:</value></data>
+  <data name="Grid.Summary.Min" xml:space="preserve"><value>Min:</value></data>
+  <data name="Grid.Summary.Max" xml:space="preserve"><value>Max:</value></data>
 </root>

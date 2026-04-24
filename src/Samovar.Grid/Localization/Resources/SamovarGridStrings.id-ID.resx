@@ -32,4 +32,9 @@
   <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Pemilihan baris</value></data>
   <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Hapus baris terpilih</value></data>
   <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Ekspor baris</value></data>
+  <data name="Grid.Summary.Sum" xml:space="preserve"><value>Jumlah:</value></data>
+  <data name="Grid.Summary.Avg" xml:space="preserve"><value>Rata-rata:</value></data>
+  <data name="Grid.Summary.Count" xml:space="preserve"><value>Hitung:</value></data>
+  <data name="Grid.Summary.Min" xml:space="preserve"><value>Min:</value></data>
+  <data name="Grid.Summary.Max" xml:space="preserve"><value>Maks:</value></data>
 </root>

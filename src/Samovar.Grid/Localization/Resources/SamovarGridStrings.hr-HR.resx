@@ -32,4 +32,9 @@
   <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Odabir redaka</value></data>
   <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Brisanje odabranih redaka</value></data>
   <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Izvoz redaka</value></data>
+  <data name="Grid.Summary.Sum" xml:space="preserve"><value>Zbroj:</value></data>
+  <data name="Grid.Summary.Avg" xml:space="preserve"><value>Prosjek:</value></data>
+  <data name="Grid.Summary.Count" xml:space="preserve"><value>Broj:</value></data>
+  <data name="Grid.Summary.Min" xml:space="preserve"><value>Min:</value></data>
+  <data name="Grid.Summary.Max" xml:space="preserve"><value>Maks:</value></data>
 </root>

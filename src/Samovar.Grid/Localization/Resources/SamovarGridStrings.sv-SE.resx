@@ -32,4 +32,9 @@
   <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Radmarkering</value></data>
   <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Ta bort markerade rader</value></data>
   <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Radexport</value></data>
+  <data name="Grid.Summary.Sum" xml:space="preserve"><value>Summa:</value></data>
+  <data name="Grid.Summary.Avg" xml:space="preserve"><value>Medel:</value></data>
+  <data name="Grid.Summary.Count" xml:space="preserve"><value>Antal:</value></data>
+  <data name="Grid.Summary.Min" xml:space="preserve"><value>Min:</value></data>
+  <data name="Grid.Summary.Max" xml:space="preserve"><value>Max:</value></data>
 </root>

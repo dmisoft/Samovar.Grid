@@ -32,4 +32,9 @@
   <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>행 선택</value></data>
   <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>선택한 행 삭제</value></data>
   <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>행 내보내기</value></data>
+  <data name="Grid.Summary.Sum" xml:space="preserve"><value>합계:</value></data>
+  <data name="Grid.Summary.Avg" xml:space="preserve"><value>평균:</value></data>
+  <data name="Grid.Summary.Count" xml:space="preserve"><value>개수:</value></data>
+  <data name="Grid.Summary.Min" xml:space="preserve"><value>최소:</value></data>
+  <data name="Grid.Summary.Max" xml:space="preserve"><value>최대:</value></data>
 </root>

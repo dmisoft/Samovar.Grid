@@ -9,6 +9,9 @@ public class ExpressionColumn
     public required string Formula { get; set; }
 
     [Parameter]
+    public string? Field { get; set; }
+
+    [Parameter]
     public string? Title { get; set; }
 
     [Parameter]
@@ -39,6 +42,10 @@ public class ExpressionColumn
         if (formula is null)
             throw new InvalidOperationException("ExpressionColumn requires a Formula parameter.");
         Model.Formula.OnNext(formula);
+
+        var field = parameters.GetValueOrDefault<string>(nameof(Field));
+        if (!string.IsNullOrWhiteSpace(field))
+            Model.Field.OnNext(field);
 
         var title = parameters.GetValueOrDefault<string>(nameof(Title)) ?? string.Empty;
         Model.Title.OnNext(title);

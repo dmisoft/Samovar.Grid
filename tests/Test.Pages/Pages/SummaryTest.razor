@@ -1,0 +1,51 @@
+@page "/summary-test"
+
+@inject EmployeeService EmployeeService
+@inject IJSRuntime JS
+
+<h1>Summary footer</h1>
+
+<SmGrid Data=employees ColumnResizeMode="GridColumnResizeMode.Sliding" Height="700px" SizeMode="GridSizeMode.Small">
+    <Columns>
+        <Column Title="First Name" Field="@nameof(Employee.FirstName)" Width="130px"/>
+        <Column Title="Last Name" Field="@nameof(Employee.LastName)" Width="130px" />
+        <Column Title="Hire Date" Field="@nameof(Employee.HireDate)" Width="120px" />
+        <Column Title="Job Title" Field="@nameof(Employee.JobTitle)" Width="1*" />
+        <Column Title="Salary" Field="@nameof(Employee.Salary)" Width="200px" TextAlign="GridTextAlign.Left"
+                Format="C2" />
+        <ExpressionColumn Field="Annual" Title="Annual" Formula="[Salary] * 12" Width="130px" Format="C2" />
+    </Columns>
+    <!--<TotalSummary>-->
+    <!--<SummaryItem>-->
+    <!---->
+    <!--
+    <SummaryGroup>
+        <SummaryItem />
+        <SummaryItem />
+        <SummaryItem />
+    </SummayGroup>
+    -->
+    <SummaryFooter>
+        <Summary Field="@nameof(Employee.FirstName)" Aggregate="GridSummaryAggregate.Count" />
+        <Summary Field="@nameof(Employee.Salary)" Aggregate="GridSummaryAggregate.Sum" />
+        <Summary Field="@nameof(Employee.Salary)" Aggregate="GridSummaryAggregate.Average" />
+        <Summary Field="Annual" Aggregate="GridSummaryAggregate.Sum" />
+    </SummaryFooter>
+</SmGrid>
+
+@code {
+    private List<Employee>? employees;
+
+    protected override async Task OnInitializedAsync()
+    {
+        employees = (await EmployeeService.GetEmployeesAsync()).ToList();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("hljs.highlightAll");
+        }
+    }
+}

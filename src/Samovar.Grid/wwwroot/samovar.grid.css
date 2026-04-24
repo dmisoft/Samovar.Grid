@@ -346,3 +346,33 @@
 .sm-filter-cell-wrapper--select .form-select.form-select-lg {
     padding-right: 4rem;
 }
+
+.sm-summary-footer {
+    margin: 0;
+    border-top: 1px solid var(--bs-border-color);
+    background-color: var(--bs-tertiary-bg);
+}
+
+.sm-summary-cell {
+    padding: 0.5rem 0.5rem;
+    border: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sm-summary-aggregate-row {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.5rem;
+    line-height: 2;
+}
+
+.sm-summary-aggregate-label {
+    color: var(--bs-secondary-color);
+}
+
+.sm-summary-aggregate-value {
+    font-weight: 600;
+}

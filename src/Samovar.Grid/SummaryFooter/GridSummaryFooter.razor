@@ -1,0 +1,43 @@
+@namespace Samovar.Grid
+@using System.Globalization
+@typeparam T
+@inherits DesignComponentBase
+
+@if (SummaryFooterService.HasAny)
+{
+    <div style="position:relative;display:flex;flex-direction:row;">
+        <div style="overflow:hidden;position:relative;flex-grow:1;" id="@ConstantService.SummaryFooterContainerId">
+            <div style="position:relative;" class="user-select-none">
+                <table style="margin:0;padding:0;table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")"
+                       class="sm-summary-footer @CssClass @_tableSizeClass">
+                    <tbody>
+                        <tr>
+                            @if (LayoutService.ShowRowSelectionColumn.Value)
+                            {
+                                <GridSummaryRowSelectionCell />
+                            }
+                            @if (LayoutService.ShowDetailRow.Value)
+                            {
+                                <GridSummaryDetailExpanderCell />
+                            }
+                            @foreach (var columnModel in ColumnService.AllColumnModels)
+                            {
+                                switch (columnModel.ColumnType)
+                                {
+                                    case ColumnType.Data:
+                                    case ColumnType.Expression:
+                                        <GridSummaryCell ColumnModel=@((IDataColumnModel)columnModel) />
+                                        break;
+                                    case ColumnType.Command:
+                                        <GridSummaryCommandCell ColumnModel=@columnModel />
+                                        break;
+                                }
+                            }
+                            <GridSummaryEmptyCell />
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
