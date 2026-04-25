@@ -44,7 +44,7 @@ public class SmGrid<T>
     public RenderFragment? Columns { get; set; }
 
     [Parameter]
-    public RenderFragment? SummaryFooter { get; set; }
+    public RenderFragment? Summary { get; set; }
 
     [Parameter]
     public bool AutoGenerateColumns { get; set; }
@@ -272,7 +272,7 @@ public class SmGrid<T>
                 del = delegate (RenderTreeBuilder builder2)
                 {
                     Columns?.Invoke(builder2);
-                    SummaryFooter?.Invoke(builder2);
+                    Summary?.Invoke(builder2);
 
                     builder2.OpenComponent<PagingGrid<T>>(5);
                     builder2.AddAttribute(6, nameof(ShowCommandBar), ShowCommandBar);
@@ -283,7 +283,7 @@ public class SmGrid<T>
                 del = delegate (RenderTreeBuilder builder2)
                 {
                     Columns?.Invoke(builder2);
-                    SummaryFooter?.Invoke(builder2);
+                    Summary?.Invoke(builder2);
 
                     builder2.OpenComponent<VirtualGrid<T>>(5);
                     builder2.AddAttribute(6, nameof(ShowCommandBar), ShowCommandBar);

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Rendering;
 
 namespace Samovar.Grid;
 
-public class SummaryFooter
+public class Summary
     : ComponentBase
 {
     [Parameter]

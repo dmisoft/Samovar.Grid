@@ -370,6 +370,7 @@
 }
 
 .sm-summary-aggregate-label {
+    font-weight: 600;
     color: var(--bs-secondary-color);
 }
 
