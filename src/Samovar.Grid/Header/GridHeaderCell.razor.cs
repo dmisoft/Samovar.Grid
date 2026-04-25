@@ -119,6 +119,7 @@ public partial class GridHeaderCell<TItem>
             triggerColumnModel.HeaderCellId.ToString(),
             triggerColumnModel.HiddenHeaderCellId.ToString(),
             triggerColumnModel.FilterCellId.ToString(),
+            triggerColumnModel.SummaryCellId.ToString(),
 
             emptyHeaderColumnModel.HeaderCellId.ToString(),
             emptyHeaderColumnModel.HiddenHeaderCellId.ToString(),
@@ -134,6 +135,7 @@ public partial class GridHeaderCell<TItem>
             rightSideColumn?.Width.Value,
             rightSideColumn?.FilterCellId,
             rightSideColumn?.HiddenHeaderCellId,
+            rightSideColumn?.SummaryCellId,
             ConstantService.OuterGridId,
             triggerColumnModel.MinWidth,
             (rightSideColumn as IDeclarativeColumnModel)?.MinWidth ?? 50d

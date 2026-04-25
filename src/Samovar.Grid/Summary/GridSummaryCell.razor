@@ -2,7 +2,7 @@
 @using System.Globalization
 @inherits DesignComponentBase
 
-<td class="sm-summary-cell"
+<td id="@ColumnModel.SummaryCellId" class="sm-summary-cell"
     style="@(WidthStyle + "min-width:" + ColumnModel.MinWidth.ToString(CultureInfo.InvariantCulture) + "px;vertical-align:middle;")">
     @foreach (var descriptor in Descriptors)
     {

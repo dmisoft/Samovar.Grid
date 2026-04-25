@@ -14,6 +14,7 @@ public abstract class ColumnModel
     public string HeaderCellId { get; } = $"visiblecolcell{Guid.NewGuid().ToString().Replace("-", "")}";
     public string FilterCellId { get; } = $"filtercolcell{Guid.NewGuid().ToString().Replace("-", "")}";
     public string HiddenHeaderCellId { get; } = $"hiddencolcell{Guid.NewGuid().ToString().Replace("-", "")}";
+    public string SummaryCellId { get; } = $"summarycell{Guid.NewGuid().ToString().Replace("-", "")}";
 
     public IObservable<string> WidthStyle { get; }
 

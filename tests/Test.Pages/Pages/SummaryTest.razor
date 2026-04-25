@@ -3,9 +3,9 @@
 @inject EmployeeService EmployeeService
 @inject IJSRuntime JS
 
-<h1>Summary footer</h1>
+<h1>Summary</h1>
 
-<SmGrid Data=employees ColumnResizeMode="GridColumnResizeMode.Sliding" Height="700px" SizeMode="GridSizeMode.Small">
+<SmGrid Data=employees ColumnResizeMode="GridColumnResizeMode.Sliding" Height="700px" SizeMode="GridSizeMode.Small" CssClass="table-bordered table-sm table-striped">
     <Columns>
         <Column Title="First Name" Field="@nameof(Employee.FirstName)" Width="130px"/>
         <Column Title="Last Name" Field="@nameof(Employee.LastName)" Width="130px" />
@@ -13,23 +13,23 @@
         <Column Title="Job Title" Field="@nameof(Employee.JobTitle)" Width="1*" />
         <Column Title="Salary" Field="@nameof(Employee.Salary)" Width="200px" TextAlign="GridTextAlign.Left"
                 Format="C2" />
-        <ExpressionColumn Field="Annual" Title="Annual" Formula="[Salary] * 12" Width="130px" Format="C2" />
+        <ExpressionColumn Field="Annual" Title="Annual" Formula="[Salary] * 12" Width="1*" Format="C2" />
     </Columns>
     <!--<TotalSummary>-->
     <!--<SummaryItem>-->
     <!---->
     <!--
-    <SummaryGroup>
+    <GroupSummary>
         <SummaryItem />
         <SummaryItem />
         <SummaryItem />
-    </SummayGroup>
+    </GroupSummary>
     -->
     <SummaryFooter>
-        <Summary Field="@nameof(Employee.FirstName)" Aggregate="GridSummaryAggregate.Count" />
-        <Summary Field="@nameof(Employee.Salary)" Aggregate="GridSummaryAggregate.Sum" />
-        <Summary Field="@nameof(Employee.Salary)" Aggregate="GridSummaryAggregate.Average" />
-        <Summary Field="Annual" Aggregate="GridSummaryAggregate.Sum" />
+        <SummaryItem Field="@nameof(Employee.FirstName)" Aggregate="GridSummaryAggregate.Count" Format="N0" Label="Employees:" />
+        <SummaryItem Field="@nameof(Employee.Salary)" Aggregate="GridSummaryAggregate.Sum" />
+        <SummaryItem Field="@nameof(Employee.Salary)" Aggregate="GridSummaryAggregate.Average" />
+        <SummaryItem Field="Annual" Aggregate="GridSummaryAggregate.Sum" />
     </SummaryFooter>
 </SmGrid>
 

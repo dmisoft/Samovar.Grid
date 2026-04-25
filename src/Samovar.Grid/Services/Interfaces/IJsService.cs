@@ -34,6 +34,7 @@ public interface IJsService
         string VisibleGridColumnCellId,
         string HiddenGridColumnCellId,
         string FilterGridColumnCellId,
+        string SummaryGridColumnCellId,
         string VisibleEmptyColumnId,
         string HiddenEmptyColumnId,
         string FilterEmptyColumnId,
@@ -47,6 +48,7 @@ public interface IJsService
         double? RightSideColumnWidth,
         string? RightSideFilterCellId,
         string? RightSideHiddenCellId,
+        string? RightSideSummaryCellId,
         string OuterGridId,
         double triggerColumnMinWidth,
         double rightSideColumnMinWidth);

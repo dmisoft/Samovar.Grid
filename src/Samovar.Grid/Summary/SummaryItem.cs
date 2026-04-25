@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Samovar.Grid;
 
-public class Summary
+public class SummaryItem
     : DesignComponentBase
 {
     [SmInject]
