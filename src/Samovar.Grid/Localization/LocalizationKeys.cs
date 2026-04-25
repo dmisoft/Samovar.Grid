@@ -34,4 +34,10 @@ public static class LocalizationKeys
     public const string CommandBarAriaLabelSelection = "Grid.CommandBar.AriaLabel.Selection";
     public const string CommandBarAriaLabelDelete = "Grid.CommandBar.AriaLabel.Delete";
     public const string CommandBarAriaLabelExport = "Grid.CommandBar.AriaLabel.Export";
+
+    public const string SummarySum = "Grid.Summary.Sum";
+    public const string SummaryAverage = "Grid.Summary.Avg";
+    public const string SummaryCount = "Grid.Summary.Count";
+    public const string SummaryMin = "Grid.Summary.Min";
+    public const string SummaryMax = "Grid.Summary.Max";
 }

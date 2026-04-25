@@ -32,4 +32,9 @@
   <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Rindu atlase</value></data>
   <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Atlasīto rindu dzēšana</value></data>
   <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Rindu eksports</value></data>
+  <data name="Grid.Summary.Sum" xml:space="preserve"><value>Summa:</value></data>
+  <data name="Grid.Summary.Avg" xml:space="preserve"><value>Vidējais:</value></data>
+  <data name="Grid.Summary.Count" xml:space="preserve"><value>Skaits:</value></data>
+  <data name="Grid.Summary.Min" xml:space="preserve"><value>Min:</value></data>
+  <data name="Grid.Summary.Max" xml:space="preserve"><value>Maks:</value></data>
 </root>

@@ -32,4 +32,9 @@
   <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Выбор строк</value></data>
   <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Удаление выбранных строк</value></data>
   <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Экспорт строк</value></data>
+  <data name="Grid.Summary.Sum" xml:space="preserve"><value>Сумма:</value></data>
+  <data name="Grid.Summary.Avg" xml:space="preserve"><value>Среднее:</value></data>
+  <data name="Grid.Summary.Count" xml:space="preserve"><value>Количество:</value></data>
+  <data name="Grid.Summary.Min" xml:space="preserve"><value>Мин:</value></data>
+  <data name="Grid.Summary.Max" xml:space="preserve"><value>Макс:</value></data>
 </root>

@@ -12,6 +12,7 @@ public interface IColumnModel
     public string HeaderCellId { get; }
     public string FilterCellId { get; }
     public string HiddenHeaderCellId { get; }
+    public string SummaryCellId { get; }
     public IObservable<string> WidthStyle { get; }
 
 }

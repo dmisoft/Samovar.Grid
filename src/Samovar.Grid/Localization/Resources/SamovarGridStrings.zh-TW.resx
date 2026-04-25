@@ -32,4 +32,9 @@
   <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>列選取</value></data>
   <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>刪除選取的列</value></data>
   <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>匯出列</value></data>
+  <data name="Grid.Summary.Sum" xml:space="preserve"><value>總和:</value></data>
+  <data name="Grid.Summary.Avg" xml:space="preserve"><value>平均:</value></data>
+  <data name="Grid.Summary.Count" xml:space="preserve"><value>計數:</value></data>
+  <data name="Grid.Summary.Min" xml:space="preserve"><value>最小:</value></data>
+  <data name="Grid.Summary.Max" xml:space="preserve"><value>最大:</value></data>
 </root>

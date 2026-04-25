@@ -32,4 +32,9 @@
   <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>Sorválasztás</value></data>
   <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>Kijelölt sorok törlése</value></data>
   <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>Sorok exportálása</value></data>
+  <data name="Grid.Summary.Sum" xml:space="preserve"><value>Összeg:</value></data>
+  <data name="Grid.Summary.Avg" xml:space="preserve"><value>Átlag:</value></data>
+  <data name="Grid.Summary.Count" xml:space="preserve"><value>Darab:</value></data>
+  <data name="Grid.Summary.Min" xml:space="preserve"><value>Min:</value></data>
+  <data name="Grid.Summary.Max" xml:space="preserve"><value>Max:</value></data>
 </root>

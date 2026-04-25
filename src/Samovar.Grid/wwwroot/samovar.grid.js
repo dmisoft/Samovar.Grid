@@ -12,6 +12,7 @@ export const gridStateVars =
     visibleGridColumnCellId: '',
     hiddenGridColumnCellId: '',
     filterGridColumnCellId: '',
+    summaryGridColumnCellId: '',
     filterMenuId: '',
 
     visibleHeaderEmptyColumnId: '',
@@ -33,6 +34,7 @@ export const gridStateVars =
     rightSideCellId: null,
     rightSideFilterCellId: null,
     rightSideHiddenCellId: null,
+    rightSideSummaryCellId: null,
     oldRightSideColumnWidth: 0,
     newRightSideColumnWidth: 0
 }
@@ -90,7 +92,7 @@ export function synchronizeGridHeaderScroll(elementRef, gridHeaderContainerId) {
     });
 }
 
-export function startColumnWidthChangeMode(_gridDotNetRef, _gridColWidthSum, _colMetaId, _innerGridId, _innerGridBodyTableId, _visibleGridColumnCellId, _hiddenGridColumnCellId, _filterGridColumnCellId, _visibleEmptyColumnId, _hiddenEmptyColumnId, _filterEmptyColumnId, _emptyColumnDictId, _startMouseMoveX, _oldAbsoluteVisibleWidthValue, _fitColumnsToTableWidth, _oldAbsoluteEmptyColVisibleWidthValue, _rightSideColumnId, _rightSideCellId, _rightSideColumnWidth, _rightSideFilterCellId, _rightSideHiddenCellId, _outerGridId, _triggerColumnMinWidth, _rightSideColumnMinWidth) {
+export function startColumnWidthChangeMode(_gridDotNetRef, _gridColWidthSum, _colMetaId, _innerGridId, _innerGridBodyTableId, _visibleGridColumnCellId, _hiddenGridColumnCellId, _filterGridColumnCellId, _summaryGridColumnCellId, _visibleEmptyColumnId, _hiddenEmptyColumnId, _filterEmptyColumnId, _emptyColumnDictId, _startMouseMoveX, _oldAbsoluteVisibleWidthValue, _fitColumnsToTableWidth, _oldAbsoluteEmptyColVisibleWidthValue, _rightSideColumnId, _rightSideCellId, _rightSideColumnWidth, _rightSideFilterCellId, _rightSideHiddenCellId, _rightSideSummaryCellId, _outerGridId, _triggerColumnMinWidth, _rightSideColumnMinWidth) {
     gridStateVars.gridDotNetRef = _gridDotNetRef;
     gridStateVars.isMouseDown = true;
     gridStateVars.gridColWidthSum = _gridColWidthSum;
@@ -101,6 +103,7 @@ export function startColumnWidthChangeMode(_gridDotNetRef, _gridColWidthSum, _co
     gridStateVars.visibleGridColumnCellId = _visibleGridColumnCellId;
     gridStateVars.hiddenGridColumnCellId = _hiddenGridColumnCellId;
     gridStateVars.filterGridColumnCellId = _filterGridColumnCellId;
+    gridStateVars.summaryGridColumnCellId = _summaryGridColumnCellId;
 
     gridStateVars.visibleHeaderEmptyColumnId = _visibleEmptyColumnId;
     gridStateVars.hiddenHeaderEmptyColumnId = _hiddenEmptyColumnId;
@@ -126,6 +129,7 @@ export function startColumnWidthChangeMode(_gridDotNetRef, _gridColWidthSum, _co
     gridStateVars.newRightSideColumnWidth = gridStateVars.oldRightSideColumnWidth;
     gridStateVars.rightSideFilterCellId = _rightSideFilterCellId;
     gridStateVars.rightSideHiddenCellId = _rightSideHiddenCellId;
+    gridStateVars.rightSideSummaryCellId = _rightSideSummaryCellId;
 
     gridStateVars.triggerColumnMinWidth = _triggerColumnMinWidth;
     gridStateVars.rightSideColumnMinWidth = _rightSideColumnMinWidth;
@@ -142,6 +146,7 @@ export function stopColumnWidthChangeMode(dotNetRef) {
     gridStateVars.visibleGridColumnCellId = '';
     gridStateVars.hiddenGridColumnCellId = '';
     gridStateVars.filterGridColumnCellId = '';
+    gridStateVars.summaryGridColumnCellId = '';
 
     gridStateVars.visibleHeaderEmptyColumnId = '';
     gridStateVars.hiddenHeaderEmptyColumnId = '';
@@ -166,6 +171,7 @@ export function stopColumnWidthChangeMode(dotNetRef) {
     gridStateVars.newRightSideColumnWidth = 0;
     gridStateVars.rightSideFilterCellId = '';
     gridStateVars.rightSideHiddenCellId = '';
+    gridStateVars.rightSideSummaryCellId = '';
 
     gridStateVars.triggerColumnMinWidth = 50;
     gridStateVars.rightSideColumnMinWidth = 50;
@@ -239,6 +245,8 @@ export function onWindowMouseMove(event) {
             var rightSideFilterCell = document.getElementById(gridStateVars.rightSideFilterCellId);
             if (rightSideFilterCell) rightSideFilterCell.style.width = gridStateVars.newRightSideColumnWidth + 'px';
             document.getElementById(gridStateVars.rightSideHiddenCellId).style.width = gridStateVars.newRightSideColumnWidth + 'px';
+            var rightSideSummaryCell = document.getElementById(gridStateVars.rightSideSummaryCellId);
+            if (rightSideSummaryCell) rightSideSummaryCell.style.width = gridStateVars.newRightSideColumnWidth + 'px';
         }
 
         gridStateVars.newVisibleAbsoluteWidthValue = newTriggerColumnWidth;
@@ -255,6 +263,8 @@ export function onWindowMouseMove(event) {
         document.getElementById(gridStateVars.hiddenGridColumnCellId).style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
         var triggerFilterCell = document.getElementById(gridStateVars.filterGridColumnCellId);
         if (triggerFilterCell) triggerFilterCell.style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
+        var triggerSummaryCell = document.getElementById(gridStateVars.summaryGridColumnCellId);
+        if (triggerSummaryCell) triggerSummaryCell.style.width = gridStateVars.newVisibleAbsoluteWidthValue + 'px';
 
         var visibleHeaderEmptyColumn = document.getElementById(gridStateVars.visibleHeaderEmptyColumnId);
         var filterHeaderEmptyColumn = document.getElementById(gridStateVars.filterHeaderEmptyColumnId);

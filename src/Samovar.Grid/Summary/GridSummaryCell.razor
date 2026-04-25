@@ -1,0 +1,14 @@
+@namespace Samovar.Grid
+@using System.Globalization
+@inherits DesignComponentBase
+
+<td id="@ColumnModel.SummaryCellId" class="sm-summary-cell"
+    style="@(WidthStyle + "min-width:" + ColumnModel.MinWidth.ToString(CultureInfo.InvariantCulture) + "px;vertical-align:middle;")">
+    @foreach (var descriptor in Descriptors)
+    {
+        <div class="sm-summary-aggregate-row" style="@TextAlignStyle">
+            <span class="sm-summary-aggregate-label">@LabelFor(descriptor)</span>
+            <span class="sm-summary-aggregate-value">@FormatValue(descriptor)</span>
+        </div>
+    }
+</td>

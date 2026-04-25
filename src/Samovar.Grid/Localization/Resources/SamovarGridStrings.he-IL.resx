@@ -32,4 +32,9 @@
   <data name="Grid.CommandBar.AriaLabel.Selection" xml:space="preserve"><value>בחירת שורות</value></data>
   <data name="Grid.CommandBar.AriaLabel.Delete" xml:space="preserve"><value>מחיקת שורות נבחרות</value></data>
   <data name="Grid.CommandBar.AriaLabel.Export" xml:space="preserve"><value>ייצוא שורות</value></data>
+  <data name="Grid.Summary.Sum" xml:space="preserve"><value>סכום:</value></data>
+  <data name="Grid.Summary.Avg" xml:space="preserve"><value>ממוצע:</value></data>
+  <data name="Grid.Summary.Count" xml:space="preserve"><value>מספר:</value></data>
+  <data name="Grid.Summary.Min" xml:space="preserve"><value>מינ:</value></data>
+  <data name="Grid.Summary.Max" xml:space="preserve"><value>מקס:</value></data>
 </root>
