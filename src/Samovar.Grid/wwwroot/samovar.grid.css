@@ -377,3 +377,65 @@
 .sm-summary-aggregate-value {
     font-weight: 600;
 }
+
+/* ===== Data Grouping ===== */
+
+:root {
+    --sm-group-indent-width: 24px;
+    --sm-group-row-bg: rgba(0, 0, 0, 0.04);
+    --sm-group-panel-bg: var(--bs-light-bg-subtle, #f8f9fa);
+    --sm-group-panel-border: var(--bs-border-color, #dee2e6);
+}
+
+.sm-group-panel {
+    background: var(--sm-group-panel-bg);
+    border: 1px solid var(--sm-group-panel-border);
+    border-radius: 4px;
+    min-height: 38px;
+    margin-bottom: 4px;
+}
+
+.sm-group-panel-hint {
+    font-size: 0.875rem;
+}
+
+.sm-group-row {
+    background: var(--sm-group-row-bg);
+    font-weight: 500;
+}
+
+.sm-group-row:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.sm-group-header-cell {
+    vertical-align: middle;
+    padding-left: 4px;
+}
+
+.sm-group-indent {
+    width: var(--sm-group-indent-width);
+    min-width: var(--sm-group-indent-width);
+    max-width: var(--sm-group-indent-width);
+    padding: 0 !important;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.sm-group-indent-header {
+    width: var(--sm-group-indent-width);
+    min-width: var(--sm-group-indent-width);
+    max-width: var(--sm-group-indent-width);
+    padding: 0 !important;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.sm-group-badge {
+    font-size: 0.875rem;
+    padding: 0.35em 0.65em;
+}
+
+.sm-group-badge-close {
+    font-size: 0.6em;
+}

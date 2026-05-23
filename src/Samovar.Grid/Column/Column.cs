@@ -29,6 +29,9 @@ public class Column
     [Parameter]
     public string? Format { get; set; }
 
+    [Parameter]
+    public int? GroupIndex { get; set; }
+
     public override void DependenciesInitialized()
     {
         ColumnService.RegisterColumn(Model);
@@ -63,5 +66,8 @@ public class Column
 
         var format = parameters.GetValueOrDefault<string>(nameof(Format));
         Model.Format.OnNext(format);
+
+        var groupIndex = parameters.GetValueOrDefault<int?>(nameof(GroupIndex));
+        Model.GroupIndex.OnNext(groupIndex);
     }
 }

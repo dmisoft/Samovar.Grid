@@ -40,4 +40,6 @@ public static class LocalizationKeys
     public const string SummaryCount = "Grid.Summary.Count";
     public const string SummaryMin = "Grid.Summary.Min";
     public const string SummaryMax = "Grid.Summary.Max";
+
+    public const string GroupPanelHint = "Grid.Group.Panel.Hint";
 }

@@ -13,4 +13,6 @@ public interface IDataColumnModel
     public BehaviorSubject<GridTextAlign> TextAlign { get; }
 
     public BehaviorSubject<string?> Format { get; }
+
+    public BehaviorSubject<int?> GroupIndex { get; }
 }

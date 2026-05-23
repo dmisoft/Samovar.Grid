@@ -35,6 +35,12 @@ public partial class PagingGrid<T>
     [SmInject]
     public required IJsService JsService { get; set; }
 
+    [SmInject]
+    public required IGroupingService<T> GroupingService { get; set; }
+
+    protected IEnumerable<GridViewRow<T>> GroupedView { get; set; } = [];
+    protected bool IsGroupingActive { get; set; }
+
     public RenderFragment? EditingPopup { get; set; }
 
     public RenderFragment? InsertingPopup { get; set; }
@@ -94,6 +100,17 @@ public partial class PagingGrid<T>
     protected override Task OnInitializedAsync()
     {
         SubscribeViewCollectionChange();
+
+        GroupingService.IsGroupingActive.Subscribe(active =>
+        {
+            IsGroupingActive = active;
+            _ = InvokeAsync(StateHasChanged);
+        });
+        GroupingService.GroupedView.Subscribe(rows =>
+        {
+            GroupedView = rows;
+            _ = InvokeAsync(StateHasChanged);
+        });
 
         LayoutService.CssClass.Subscribe(_ => { CssClass = _; });
         LayoutService.SizeMode.Subscribe(mode =>

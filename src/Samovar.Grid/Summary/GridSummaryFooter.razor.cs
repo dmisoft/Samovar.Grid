@@ -25,6 +25,7 @@ public partial class GridSummaryFooter<T>
     private IDisposable? _showDetailRowSub;
     private IDisposable? _valuesSub;
     private IDisposable? _cultureSub;
+    private IDisposable? _activeGroupCountSub;
 
     protected override Task OnInitializedAsync()
     {
@@ -44,6 +45,7 @@ public partial class GridSummaryFooter<T>
         _showDetailRowSub = LayoutService.ShowDetailRow.Subscribe(_ => InvokeAsync(StateHasChanged));
         _valuesSub = SummaryFooterService.Values.Subscribe(_ => InvokeAsync(StateHasChanged));
         _cultureSub = L10n.CultureChanged.Subscribe(_ => InvokeAsync(StateHasChanged));
+        _activeGroupCountSub = LayoutService.ActiveGroupCount.Subscribe(_ => InvokeAsync(StateHasChanged));
         return base.OnInitializedAsync();
     }
 
@@ -56,6 +58,7 @@ public partial class GridSummaryFooter<T>
         _showDetailRowSub?.Dispose();
         _valuesSub?.Dispose();
         _cultureSub?.Dispose();
+        _activeGroupCountSub?.Dispose();
         return ValueTask.CompletedTask;
     }
 }

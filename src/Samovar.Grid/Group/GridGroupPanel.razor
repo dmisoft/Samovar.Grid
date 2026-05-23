@@ -1,0 +1,22 @@
+@namespace Samovar.Grid
+@typeparam T
+@inherits DesignComponentBase
+
+@if (IsVisible)
+{
+    <div class="sm-group-panel d-flex flex-row flex-wrap align-items-center gap-1 p-2">
+        @if (!HasGroups)
+        {
+            <span class="sm-group-panel-hint text-muted small">
+                @L10n[LocalizationKeys.GroupPanelHint]
+            </span>
+        }
+        else
+        {
+            @foreach (var g in Groups)
+            {
+                <GridGroupBadge Field="@g.Field" Title="@g.Title" OnRemove="RemoveGroup" />
+            }
+        }
+    </div>
+}

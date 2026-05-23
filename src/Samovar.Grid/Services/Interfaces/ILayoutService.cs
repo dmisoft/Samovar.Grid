@@ -26,7 +26,9 @@ public interface ILayoutService
     ElementReference TableBodyInnerRef { get; set; }
 
     BehaviorSubject<bool> ShowColumnHeader { get; }
-    
+    BehaviorSubject<bool> ShowGroupPanel { get; }
+    BehaviorSubject<int>  ActiveGroupCount { get; }
+
     Task InitHeader();
 
     IObservable<Task<GridStyleInfo>> DataGridInnerStyle { get; }

@@ -40,6 +40,9 @@ public class SmGrid<T>
     [SmInject]
     public required IColumnService ColumnService { get; set; }
 
+    [SmInject]
+    public required IGroupingService<T> GroupingService { get; set; }
+
     [Parameter]
     public RenderFragment? Columns { get; set; }
 
@@ -128,10 +131,16 @@ public class SmGrid<T>
     public EventCallback<IEnumerable<T>?> MultipleSelectedDataRowsChanged { get; set; }
 
     [Parameter]
-    public bool ShowCommandBar { get; set; } 
+    public bool ShowCommandBar { get; set; }
 
     [Parameter]
     public EventCallback<List<T>> RowsRemoving { get; set; }
+
+    [Parameter]
+    public bool ShowGroupPanel { get; set; }
+
+    [Parameter]
+    public GroupCollapseBehavior GroupCollapseBehavior { get; set; } = GroupCollapseBehavior.AllExpanded;
 
     public override async Task SetParametersAsync(ParameterView parameters)
     {
@@ -261,7 +270,17 @@ public class SmGrid<T>
             GridSelectionService.SingleSelectedDataRow.OnNext(default);
             GridSelectionService.MultipleSelectedDataRows.OnNext(default);
         }
+
+        bool showGroupPanel = parameters.GetValueOrDefault<bool>(nameof(ShowGroupPanel));
+        LayoutService.ShowGroupPanel.OnNext(showGroupPanel);
+
+        GroupCollapseBehavior gcb = parameters.GetValueOrDefault<GroupCollapseBehavior>(nameof(GroupCollapseBehavior));
+        GroupingService.DefaultCollapseBehavior = gcb;
     }
+
+    public void CollapseAllGroups() => GroupingService.CollapseAll();
+
+    public void ExpandAllGroups() => GroupingService.ExpandAll();
 
     protected override void BuildRenderTree(RenderTreeBuilder builder)
     {

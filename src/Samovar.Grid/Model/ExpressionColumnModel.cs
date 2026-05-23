@@ -17,6 +17,8 @@ public partial class ExpressionColumnModel
 
     public BehaviorSubject<string?> Format { get; } = new(null);
 
+    public BehaviorSubject<int?> GroupIndex { get; } = new(null);
+
     public BehaviorSubject<string> Formula { get; } = new(string.Empty);
 
     public FormulaNode? Ast { get; private set; }

@@ -15,4 +15,6 @@ public partial class DataColumnModel
     public BehaviorSubject<GridTextAlign> TextAlign { get; } = new BehaviorSubject<GridTextAlign>(GridTextAlign.Left);
 
     public BehaviorSubject<string?> Format { get; } = new BehaviorSubject<string?>(null);
+
+    public BehaviorSubject<int?> GroupIndex { get; } = new BehaviorSubject<int?>(null);
 }

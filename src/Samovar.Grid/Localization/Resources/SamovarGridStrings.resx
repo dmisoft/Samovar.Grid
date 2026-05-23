@@ -37,4 +37,5 @@
   <data name="Grid.Summary.Count" xml:space="preserve"><value>Count:</value></data>
   <data name="Grid.Summary.Min" xml:space="preserve"><value>Min:</value></data>
   <data name="Grid.Summary.Max" xml:space="preserve"><value>Max:</value></data>
+  <data name="Grid.Group.Panel.Hint" xml:space="preserve"><value>Drag a column here to group the data by that column</value></data>
 </root>

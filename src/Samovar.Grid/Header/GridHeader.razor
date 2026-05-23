@@ -17,6 +17,10 @@
                             {
                                 <GridHeaderDetailExpanderCell />
                             }
+                            @for (int i = 0; i < LayoutService.ActiveGroupCount.Value; i++)
+                            {
+                                <GridGroupIndentHeaderCell />
+                            }
 
                             foreach (var columnModel in GridColumnService.AllColumnModels)
                             {
@@ -24,7 +28,10 @@
                                 {
                                     case ColumnType.Data:
                                     case ColumnType.Expression:
-                                        <GridHeaderCell TItem="T" ColumnModel=@((IDataColumnModel)columnModel) />
+                                        var dataCol = (IDataColumnModel)columnModel;
+                                        if (dataCol.GroupIndex.Value.HasValue)
+                                            break; // grouped columns are hidden from the header
+                                        <GridHeaderCell TItem="T" ColumnModel=@dataCol />
                                         break;
                                     case ColumnType.Command:
                                         <GridHeaderCommandCell ColumnModel=@((ICommandColumnModel)columnModel) T="T" />

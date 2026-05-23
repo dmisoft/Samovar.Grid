@@ -1,0 +1,80 @@
+@page "/grouping-test"
+
+@inject EmployeeService EmployeeService
+
+<h1>Grouping</h1>
+
+<div class="row mb-3 g-2 align-items-center">
+    <div class="col-auto">
+        <label class="col-form-label">Navigation mode</label>
+    </div>
+    <div class="col-auto">
+        <select class="form-select form-select-sm" @onchange="OnNavigationModeChanged">
+            <option value="@NavigationMode.Paging" selected="@(navigationMode == NavigationMode.Paging)">Paging</option>
+            <option value="@NavigationMode.Virtual" selected="@(navigationMode == NavigationMode.Virtual)">Virtual</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <label class="col-form-label">Default collapse</label>
+    </div>
+    <div class="col-auto">
+        <select class="form-select form-select-sm" @onchange="OnCollapseBehaviorChanged">
+            <option value="@GroupCollapseBehavior.AllExpanded" selected="@(collapseBehavior == GroupCollapseBehavior.AllExpanded)">All expanded</option>
+            <option value="@GroupCollapseBehavior.AllCollapsed" selected="@(collapseBehavior == GroupCollapseBehavior.AllCollapsed)">All collapsed</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-sm btn-outline-secondary" @onclick="() => grid?.CollapseAllGroups()">Collapse all</button>
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-sm btn-outline-secondary" @onclick="() => grid?.ExpandAllGroups()">Expand all</button>
+    </div>
+</div>
+
+<SmGrid @ref="grid"
+        Data="employees"
+        ShowGroupPanel="true"
+        GroupCollapseBehavior="@collapseBehavior"
+        DataNavigationMode="@navigationMode"
+        Height="700px"
+        SizeMode="GridSizeMode.Small"
+        CssClass="table-bordered table-sm table-striped">
+    <Columns>
+        <Samovar.Grid.Column Title="Department" Field="@nameof(Employee.Department)" Width="160px" GroupIndex="0" />
+        <Samovar.Grid.Column Title="Job Title"  Field="@nameof(Employee.JobTitle)"   Width="200px" GroupIndex="1" />
+        <Samovar.Grid.Column Title="First Name" Field="@nameof(Employee.FirstName)"  Width="130px" />
+        <Samovar.Grid.Column Title="Last Name"  Field="@nameof(Employee.LastName)"   Width="130px" />
+        <Samovar.Grid.Column Title="Hire Date"  Field="@nameof(Employee.HireDate)"   Width="120px" />
+        <Samovar.Grid.Column Title="Salary"     Field="@nameof(Employee.Salary)"     Width="150px" Format="C2" TextAlign="GridTextAlign.Right" />
+        <Samovar.Grid.Column Title="Active"     Field="@nameof(Employee.IsActive)"   Width="80px"  />
+    </Columns>
+    <Summary>
+        <SummaryItem Field="@nameof(Employee.FirstName)" Aggregate="GridSummaryAggregate.Count" Label="Count:" Format="N0" />
+        <SummaryItem Field="@nameof(Employee.Salary)"    Aggregate="GridSummaryAggregate.Sum"   Format="C2" />
+        <SummaryItem Field="@nameof(Employee.Salary)"    Aggregate="GridSummaryAggregate.Average" Format="C2" />
+    </Summary>
+</SmGrid>
+
+@code {
+    private SmGrid<Employee>? grid;
+    private Employee[]? employees;
+    private NavigationMode navigationMode = NavigationMode.Paging;
+    private GroupCollapseBehavior collapseBehavior = GroupCollapseBehavior.AllExpanded;
+
+    protected override async Task OnInitializedAsync()
+    {
+        employees = await EmployeeService.GetEmployeesAsync();
+    }
+
+    private void OnNavigationModeChanged(ChangeEventArgs e)
+    {
+        if (Enum.TryParse<NavigationMode>(e.Value?.ToString(), out var mode))
+            navigationMode = mode;
+    }
+
+    private void OnCollapseBehaviorChanged(ChangeEventArgs e)
+    {
+        if (Enum.TryParse<GroupCollapseBehavior>(e.Value?.ToString(), out var behavior))
+            collapseBehavior = behavior;
+    }
+}

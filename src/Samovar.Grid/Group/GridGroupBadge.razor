@@ -1,0 +1,11 @@
+@namespace Samovar.Grid
+
+<span class="badge bg-secondary sm-group-badge d-inline-flex align-items-center gap-1">
+    @Title
+    <button type="button"
+            class="btn-close btn-close-white sm-group-badge-close"
+            aria-label="Remove group"
+            @onclick="RemoveClicked"
+            @onclick:stopPropagation="true">
+    </button>
+</span>

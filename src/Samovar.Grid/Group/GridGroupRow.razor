@@ -1,0 +1,34 @@
+@namespace Samovar.Grid
+@typeparam T
+@inherits DesignComponentBase
+
+<tr class="sm-group-row">
+    @{
+        @* Selection column spacer *@
+        @if (LayoutService.ShowRowSelectionColumn.Value)
+        {
+            <td class="sm-group-indent"></td>
+        }
+        @* Detail expander spacer *@
+        @if (LayoutService.ShowDetailRow.Value)
+        {
+            <td class="sm-group-indent"></td>
+        }
+        @* Ancestor level indent cells (no expand button) *@
+        for (int i = 0; i < GroupModel.GroupLevel; i++)
+        {
+            <td class="sm-group-indent"></td>
+        }
+        @* Expand/collapse cell at current level *@
+        <td class="sm-group-indent" @onclick="ToggleExpand" style="cursor:pointer;">
+            <div class="d-flex flex-row justify-content-center">
+                <span class="@(GroupModel.IsExpanded ? "sm-detail-row-expanded" : "sm-detail-row-collapsed")"></span>
+            </div>
+        </td>
+        @* Group header cell spanning visible columns + empty col *@
+        <td colspan="@ColSpan" class="sm-group-header-cell">
+            <strong>@GroupModel.Title: </strong>@GroupModel.GroupValue
+            <span class="ms-2 text-muted small">(@RowCount)</span>
+        </td>
+    }
+</tr>

@@ -20,13 +20,19 @@
                             {
                                 <GridSummaryDetailExpanderCell />
                             }
+                            @for (int i = 0; i < LayoutService.ActiveGroupCount.Value; i++)
+                            {
+                                <td style="width:@(ColumnService.GroupIndentColumnModel.Width.Value.ToString(CultureInfo.InvariantCulture))px;" class="sm-group-indent p-0"></td>
+                            }
                             @foreach (var columnModel in ColumnService.AllColumnModels)
                             {
                                 switch (columnModel.ColumnType)
                                 {
                                     case ColumnType.Data:
                                     case ColumnType.Expression:
-                                        <GridSummaryCell ColumnModel=@((IDataColumnModel)columnModel) />
+                                        var dataCol = (IDataColumnModel)columnModel;
+                                        if (dataCol.GroupIndex.Value.HasValue) break; // hidden grouped col
+                                        <GridSummaryCell ColumnModel=@dataCol />
                                         break;
                                     case ColumnType.Command:
                                         <GridSummaryCommandCell ColumnModel=@columnModel />

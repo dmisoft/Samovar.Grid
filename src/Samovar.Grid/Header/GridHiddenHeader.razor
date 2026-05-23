@@ -12,9 +12,15 @@
 			{
 				<GridHiddenHeaderDetailExpanderCell />
 			}
+			@for (int i = 0; i < GridLayoutService.ActiveGroupCount.Value; i++)
+			{
+				<GridHiddenGroupIndentCell />
+			}
 
 			foreach (var colMeta in GridColumnService.AllColumnModels)
 			{
+				if (colMeta is IDataColumnModel dc && dc.GroupIndex.Value.HasValue)
+					continue; // grouped columns are hidden
 				<GridHiddenHeaderCell ColumnModel=@colMeta />
 			}
 

@@ -14,6 +14,7 @@
     {
         <GridCommandBar T=T />
     }
+    <GridGroupPanel T="T" />
     <div style="display:flex;flex-direction:column;">
         <GridHeader T=T />
         @if (LayoutService.FilterMode.Value == GridFilterMode.FilterRow)
@@ -43,9 +44,26 @@
                                style="table-layout:fixed;@(LayoutService.MinGridWidth.Value > 0 ? "min-width:" + LayoutService.MinGridWidth.Value.ToString(CultureInfo.InvariantCulture) + "px;" : "")">
                             <GridHiddenHeader />
                             <tbody @ref="GridBodyRef" tabindex="0" id="@ConstantService.GridBodyId">
-                                <Virtualize Items="@View.ToList()" Context="rowModel" SpacerElement="tr" @ref="virtualizeComponent">
-                                    <GridRow RowModel="rowModel" />
-                                </Virtualize>
+                                @if (IsGroupingActive)
+                                {
+                                    @foreach (var viewRow in GroupedView)
+                                    {
+                                        @if (viewRow is GridGroupViewRow<T> groupRow)
+                                        {
+                                            <GridGroupRow T="T" GroupModel="groupRow.GroupModel" />
+                                        }
+                                        else if (viewRow is GridDataViewRow<T> dataRow)
+                                        {
+                                            <GridRow RowModel="dataRow.RowModel" />
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <Virtualize Items="@View.ToList()" Context="rowModel" SpacerElement="tr" @ref="virtualizeComponent">
+                                        <GridRow RowModel="rowModel" />
+                                    </Virtualize>
+                                }
                             </tbody>
                         </table>
                     </div>

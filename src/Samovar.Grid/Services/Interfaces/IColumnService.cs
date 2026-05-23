@@ -10,6 +10,7 @@ public interface IColumnService
     public IColumnModel EmptyColumnModel { get; }
     public IDeclarativeColumnModel DetailExpanderColumnModel { get; }
     public IDeclarativeColumnModel RowSelectionColumnModel { get; }
+    public IDeclarativeColumnModel GroupIndentColumnModel { get; }
     public void RegisterColumn(IColumnModel columntModel);
     public void AutoGenerateColumns<T>();
     Subject<IColumnModel> ColumnResizingEndedObservable { get; }

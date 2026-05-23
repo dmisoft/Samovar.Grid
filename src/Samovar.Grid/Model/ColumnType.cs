@@ -7,5 +7,6 @@ public enum ColumnType
     DetailExpanderColumn,
     SelectionColumn,
     EmptyColumn,
-    Expression
+    Expression,
+    GroupIndent
 }

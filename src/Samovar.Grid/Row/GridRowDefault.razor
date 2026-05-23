@@ -20,6 +20,8 @@
         {
             case ColumnType.Data:
             case ColumnType.Expression:
+                if (((IDataColumnModel)colModel).GroupIndex.Value.HasValue)
+                    break; // grouped columns are hidden from data rows
                 var cellModel = RowModel.GridCellModels.SingleOrDefault(x => x.ColumnMetadata.Equals(colModel));
                 if (cellModel != null)
                 {

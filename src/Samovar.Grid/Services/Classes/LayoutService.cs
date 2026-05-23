@@ -31,7 +31,8 @@ public class LayoutService
         {
             return _columnService.AllColumnModels.Sum(c => c.Width.Value) +
                     (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.Width.Value : 0d) +
-                    (ShowRowSelectionColumn.Value ? _columnService.RowSelectionColumnModel.Width.Value : 0d);
+                    (ShowRowSelectionColumn.Value ? _columnService.RowSelectionColumnModel.Width.Value : 0d) +
+                    ActiveGroupCount.Value * _columnService.GroupIndentColumnModel.Width.Value;
         }
     }
 
@@ -86,6 +87,8 @@ public class LayoutService
     public BehaviorSubject<string> Width { get; } = new BehaviorSubject<string>("1200px");
 
     public BehaviorSubject<bool> ShowColumnHeader { get; } = new BehaviorSubject<bool>(true);
+    public BehaviorSubject<bool> ShowGroupPanel   { get; } = new BehaviorSubject<bool>(false);
+    public BehaviorSubject<int>  ActiveGroupCount { get; } = new BehaviorSubject<int>(0);
 
     public IObservable<Task<GridStyleInfo>> DataGridInnerStyle { get; }
     public bool ColumnsWidthTouchedByUser { get; set; } = false;
@@ -136,9 +139,11 @@ public class LayoutService
             .Where(cmt => cmt.DeclaratedWidthMode == DeclarativeColumnWidthMode.Relative)
             .ToList();
 
+        int groupCount = ActiveGroupCount.Value;
         var absoluteSum = absoluteColumns.Sum(cmt => Math.Max(cmt.DeclaratedWidth, cmt.MinWidth))
             + (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.DeclaratedWidth : 0d)
-            + (ShowRowSelectionColumn.Value ? _columnService.RowSelectionColumnModel.DeclaratedWidth : 0d);
+            + (ShowRowSelectionColumn.Value ? _columnService.RowSelectionColumnModel.DeclaratedWidth : 0d)
+            + groupCount * _columnService.GroupIndentColumnModel.DeclaratedWidth;
 
         var relativePortionSum = relativeColumns.Sum(cmt => cmt.DeclaratedWidth);
 
@@ -149,7 +154,8 @@ public class LayoutService
             // Edge Case A: sum of all min-widths exceeds container
             var totalMinWidthSum = _columnService.DeclarativeColumnModels.Sum(cmt => cmt.MinWidth)
                 + (ShowDetailRow.Value ? _columnService.DetailExpanderColumnModel.MinWidth : 0d)
-                + (ShowRowSelectionColumn.Value ? _columnService.RowSelectionColumnModel.MinWidth : 0d);
+                + (ShowRowSelectionColumn.Value ? _columnService.RowSelectionColumnModel.MinWidth : 0d)
+                + groupCount * _columnService.GroupIndentColumnModel.MinWidth;
 
             if (totalMinWidthSum > gridInnerWidth)
             {
@@ -211,6 +217,11 @@ public class LayoutService
         if (ShowRowSelectionColumn.Value)
         {
             _columnService.RowSelectionColumnModel.Width.OnNext(_columnService.RowSelectionColumnModel.DeclaratedWidth);
+        }
+
+        if (groupCount > 0)
+        {
+            _columnService.GroupIndentColumnModel.Width.OnNext(_columnService.GroupIndentColumnModel.DeclaratedWidth);
         }
 
         if (!HeaderReady.Value)
