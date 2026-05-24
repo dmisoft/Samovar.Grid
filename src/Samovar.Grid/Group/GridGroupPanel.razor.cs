@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Components.Web;
+
 namespace Samovar.Grid;
 
 public partial class GridGroupPanel<T> : DesignComponentBase, IAsyncDisposable
@@ -35,6 +37,24 @@ public partial class GridGroupPanel<T> : DesignComponentBase, IAsyncDisposable
     }
 
     protected void RemoveGroup(string field) => GroupingService.RemoveGroup(field);
+
+    protected void HandleDrop(DragEventArgs e)
+    {
+        var field = GroupingService.DraggedColumnField;
+        var title = GroupingService.DraggedColumnTitle;
+        GroupingService.DraggedColumnField = null;
+        GroupingService.DraggedColumnTitle = null;
+
+        if (string.IsNullOrEmpty(field)) return;
+
+        int nextIndex = GroupingService.GroupDescriptors.Value.Count;
+        GroupingService.AddGroup(new GroupDescriptor
+        {
+            Field      = field,
+            Title      = title ?? field,
+            GroupIndex = nextIndex
+        });
+    }
 
     public ValueTask DisposeAsync()
     {

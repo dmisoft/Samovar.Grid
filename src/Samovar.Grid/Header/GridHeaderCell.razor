@@ -7,6 +7,7 @@
 	data-toggle="tooltip" data-placement="top" title="@(ColumnModel.Title.Value)">
 	<div class="d-flex" style="margin:0 0 0 4px;padding:0px;position:relative;">
 		<div @onmouseup=ColumnCellMouseUp @onmousedown=ColumnCellMouseDown @onclick=ColumnCellClick
+			 @ondragstart="HandleDragStart"
 			 style="flex-grow:1;text-overflow:ellipsis;overflow:hidden;white-space: nowrap;cursor:pointer;display:block;"
 			 dropzone="DropZoneGridHeader" draggable=@ColumnCellDraggable ondragover="event.preventDefault()">
 			@(ColumnModel.Title.Value)

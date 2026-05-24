@@ -10,6 +10,10 @@ public interface IGroupingService<T>
 
     GroupCollapseBehavior DefaultCollapseBehavior { get; set; }
 
+    string? DraggedColumnField { get; set; }
+    string? DraggedColumnTitle { get; set; }
+
+    void InitializeFromColumns();
     void AddGroup(GroupDescriptor descriptor);
     void RemoveGroup(string field);
     void ClearGroups();

@@ -4,7 +4,9 @@
 
 @if (IsVisible)
 {
-    <div class="sm-group-panel d-flex flex-row flex-wrap align-items-center gap-1 p-2">
+    <div class="sm-group-panel d-flex flex-row flex-wrap align-items-center gap-1 p-2"
+         @ondragover:preventDefault="true"
+         @ondrop="HandleDrop">
         @if (!HasGroups)
         {
             <span class="sm-group-panel-hint text-muted small">

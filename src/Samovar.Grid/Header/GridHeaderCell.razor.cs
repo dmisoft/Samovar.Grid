@@ -32,6 +32,9 @@ public partial class GridHeaderCell<TItem>
     [SmInject]
     public required IFilterService FilterService { get; set; }
 
+    [SmInject]
+    public required IGroupingService<TItem> GroupingService { get; set; }
+
     private bool _filterMenuOpen = false;
     private bool _filterActive = false;
     private double _filterMenuTop = 0;
@@ -145,6 +148,12 @@ public partial class GridHeaderCell<TItem>
     private void ColumnCellMouseDown(MouseEventArgs e) => ColumnCellDraggable = "true";
 
     private void ColumnCellMouseUp(MouseEventArgs e) => ColumnCellDraggable = "false";
+
+    private void HandleDragStart(DragEventArgs e)
+    {
+        GroupingService.DraggedColumnField = ColumnModel.Field.Value;
+        GroupingService.DraggedColumnTitle = ColumnModel.Title.Value;
+    }
 
     private async Task ToggleFilterMenu()
     {

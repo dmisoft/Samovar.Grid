@@ -24,6 +24,9 @@ public class GroupingService<T>
 
     public GroupCollapseBehavior DefaultCollapseBehavior { get; set; } = GroupCollapseBehavior.AllExpanded;
 
+    public string? DraggedColumnField { get; set; }
+    public string? DraggedColumnTitle { get; set; }
+
     public GroupingService(
           IDataSourceService<T> dataSourceService
         , IColumnService columnService
@@ -39,11 +42,9 @@ public class GroupingService<T>
         _dataQuerySubscription = _dataSourceService.DataQuery
             .Subscribe(_ => RebuildIfActive());
 
-        // Also re-scan column GroupIndex values on initialization
-        ScanColumnGroupIndexes();
     }
 
-    private void ScanColumnGroupIndexes()
+    public void InitializeFromColumns()
     {
         var grouped = _columnService.DataColumnModels
             .Where(c => c.GroupIndex.Value.HasValue)
@@ -106,7 +107,7 @@ public class GroupingService<T>
 
     public void ClearGroups()
     {
-        GroupDescriptors.OnNext(Array.Empty<GroupDescriptor>());
+        GroupDescriptors.OnNext([]);
         IsGroupingActive.OnNext(false);
         _layoutService.ActiveGroupCount.OnNext(0);
         _currentTree.Clear();

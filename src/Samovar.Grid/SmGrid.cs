@@ -338,6 +338,7 @@ public class SmGrid<T>
             await JsService.AttachWindowResizeEvent(ConstantService.DataGridId, LayoutService.DataGridDotNetRef);
             await LayoutService.InitHeader();
             InitService.IsInitialized.OnNext(true);
+            GroupingService.InitializeFromColumns();
         }
     }
 
