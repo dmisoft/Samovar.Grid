@@ -50,6 +50,15 @@ public class DataSourceService<T>
             typeof(decimal?)
         ];
 
+    // String filter MethodInfo lookups, resolved once instead of on every filter emission
+    // (AttachFilter previously re-ran typeof(string).GetMethod(...) on every keystroke).
+    private static readonly MethodInfo StringToLowerMethod = typeof(string).GetMethod(nameof(string.ToLower), Type.EmptyTypes)!;
+    private static readonly MethodInfo StringContainsMethod = typeof(string).GetMethod(nameof(string.Contains), new[] { typeof(string) })!;
+    private static readonly MethodInfo StringStartsWithMethod = typeof(string).GetMethod(nameof(string.StartsWith), new[] { typeof(string) })!;
+    private static readonly MethodInfo StringEndsWithMethod = typeof(string).GetMethod(nameof(string.EndsWith), new[] { typeof(string) })!;
+    private static readonly MethodInfo StringIsNullOrEmptyMethod = typeof(string).GetMethod(nameof(string.IsNullOrEmpty), new[] { typeof(string) })!;
+    private static readonly MethodInfo StringListContainsMethod = typeof(List<string>).GetMethod(nameof(List<string>.Contains), new[] { typeof(string) })!;
+
     public DataSourceService(
           IFilterService filterService
         , ISortingService orderService
@@ -84,12 +93,9 @@ public class DataSourceService<T>
             query = AttachFilter(query, tuple.Item1);
 
         if (tuple.Item2 != null && !tuple.Item2.Equals(ColumnOrderInfo.Empty))
-        {
-            var pr = typeof(T).GetProperty(tuple.Item2.Field);
-            if (pr is not null)
-                query = tuple.Item2.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
-        }
-        DataQuery.OnNext(query);
+            query = SortKeySelectorFactory<T>.ApplyOrdering(query, tuple.Item2.Field, tuple.Item2.Asc);
+
+        DataQuery.OnNext(Materialize(query));
     }
 
     private void ApplyCustomFilterAndSort(Tuple<Func<T, bool>?, ColumnOrderInfo, IEnumerable<T>> tuple)
@@ -109,13 +115,18 @@ public class DataSourceService<T>
         }
 
         if (tuple.Item2 != null && !tuple.Item2.Equals(ColumnOrderInfo.Empty))
-        {
-            var pr = typeof(T).GetProperty(tuple.Item2.Field);
-            if (pr is not null)
-                query = tuple.Item2.Asc ? query.OrderBy(p => pr.GetValue(p)) : query.OrderByDescending(p => pr.GetValue(p));
-        }
-        DataQuery.OnNext(query);
+            query = SortKeySelectorFactory<T>.ApplyOrdering(query, tuple.Item2.Field, tuple.Item2.Asc);
+
+        DataQuery.OnNext(Materialize(query));
     }
+
+    /// <summary>
+    /// Evaluates the filtered + sorted query once into an in-memory buffer so that downstream
+    /// paging (Skip/Take in <see cref="RepositoryService{T}"/>) and repeated navigation changes
+    /// do not re-run the filter/sort passes on every emission. Preserves <c>IQueryable&lt;T&gt;</c>
+    /// so the rest of the pipeline is unchanged.
+    /// </summary>
+    private static IQueryable<T> Materialize(IQueryable<T> query) => query.ToArray().AsQueryable();
 
     private IQueryable<T> AttachFilter(IQueryable<T> data, IEnumerable<GridFilterCellInfo> filterInfo)
     {
@@ -140,20 +151,13 @@ public class DataSourceService<T>
             switch (prop.PropertyType)
             {
                 case var tt when tt == typeof(string):
-                    MethodInfo? propertyToLowerMethod = typeof(string).GetMethod("ToLower", Type.EmptyTypes);
-                    if (propertyToLowerMethod is null)
-                        break;
-
                     if (pair.FilterCellMode == FilterCellModeConstants.InList)
                     {
                         var selectedStrings = ((IEnumerable<object>)filterCellInfo.FilterCellValue!)
                             .Select(v => v?.ToString()?.ToLower() ?? "").ToList();
                         var listConst = Expression.Constant(selectedStrings, typeof(List<string>));
-                        MethodInfo? listContainsMethod = typeof(List<string>).GetMethod("Contains", new[] { typeof(string) });
-                        if (listContainsMethod is null)
-                            break;
-                        var lowerMemberExp = Expression.Call(memberExp, propertyToLowerMethod);
-                        lambdaList.Add(Expression.Call(listConst, listContainsMethod, lowerMemberExp));
+                        var lowerMemberExp = Expression.Call(memberExp, StringToLowerMethod);
+                        lambdaList.Add(Expression.Call(listConst, StringListContainsMethod, lowerMemberExp));
                         break;
                     }
 
@@ -161,40 +165,24 @@ public class DataSourceService<T>
                     filterCellValue = filterCellValue.ToLower();
                     ConstantExpression valueExp = Expression.Constant(filterCellValue);
 
-                    MethodInfo? IsNullOrEmptyMethod = typeof(string).GetMethod("IsNullOrEmpty", new[] { typeof(string) });
-                    if (IsNullOrEmptyMethod is null)
-                        break;
-
                     var nullValueSubstExpression = Expression.Assign(memberExp, Expression.Constant(""));
-                    isNullExpression = Expression.IfThen(Expression.Call(IsNullOrEmptyMethod, memberExp), nullValueSubstExpression);
+                    isNullExpression = Expression.IfThen(Expression.Call(StringIsNullOrEmptyMethod, memberExp), nullValueSubstExpression);
 
-                    var callExp = Expression.Call(memberExp, propertyToLowerMethod);
+                    var callExp = Expression.Call(memberExp, StringToLowerMethod);
 
                     switch (pair.FilterCellMode)
                     {
                         case 0: //*A*
-                            MethodInfo? containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
-                            if (containsMethod is null)
-                                break;
-                            var containsMethodExp = Expression.Call(callExp, containsMethod, valueExp);
-                            lambdaList.Add(containsMethodExp);
+                            lambdaList.Add(Expression.Call(callExp, StringContainsMethod, valueExp));
                             break;
                         case 1: //=
                             lambdaList.Add(Expression.Equal(callExp, valueExp));
                             break;
                         case 2: //A*
-                            MethodInfo? startsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) });
-                            if (startsWithMethod is null)
-                                break;
-                            var startsWithMethodExp = Expression.Call(callExp, startsWithMethod, valueExp);
-                            lambdaList.Add(startsWithMethodExp);
+                            lambdaList.Add(Expression.Call(callExp, StringStartsWithMethod, valueExp));
                             break;
                         case 3: //*A
-                            MethodInfo? endsWithMethod = typeof(string).GetMethod("EndsWith", new[] { typeof(string) });
-                            if (endsWithMethod is null)
-                                break;
-                            var endsWithMethodExp = Expression.Call(callExp, endsWithMethod, valueExp);
-                            lambdaList.Add(endsWithMethodExp);
+                            lambdaList.Add(Expression.Call(callExp, StringEndsWithMethod, valueExp));
                             break;
                     }
                     break;
