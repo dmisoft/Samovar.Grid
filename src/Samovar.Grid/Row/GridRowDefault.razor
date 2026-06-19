@@ -14,6 +14,10 @@
     {
         <GridRowDetailCell T="T" RowModel="RowModel" />
     }
+    @for (int i = 0; i < LayoutService.ActiveGroupCount.Value; i++)
+    {
+        <td class="sm-group-indent"></td>
+    }
     @foreach (IColumnModel colModel in ColumnService.AllColumnModels)
     {
         switch (colModel.ColumnType)

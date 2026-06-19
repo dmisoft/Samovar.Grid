@@ -33,8 +33,8 @@ public partial class GridRowDefault<T>
     public required GridRowModel<T> RowModel { get; set; }
 
     IDisposable? SingleSelectedDataRowsSubscription = null;
-
     IDisposable? MultipleSelectedDataRowsSubscription = null;
+    IDisposable? _activeGroupCountSubscription = null;
 
     protected string _btnSizeClass = "";
 
@@ -88,6 +88,7 @@ public partial class GridRowDefault<T>
     {
         SingleSelectedDataRowsSubscription = GridSelectionService.SingleSelectedDataRow.Subscribe(SingleSelectedDataRowsChanged);
         MultipleSelectedDataRowsSubscription = GridSelectionService.MultipleSelectedDataRows.Subscribe(MultipleSelectedDataRowsChanged);
+        _activeGroupCountSubscription = LayoutService.ActiveGroupCount.Subscribe(_ => { InvokeAsync(StateHasChanged); });
         EditingService.RowEditingEnded += EditingService_RowEditingEnded;
         LayoutService.SizeMode.Subscribe(mode =>
         {
@@ -120,6 +121,7 @@ public partial class GridRowDefault<T>
     {
         SingleSelectedDataRowsSubscription?.Dispose();
         MultipleSelectedDataRowsSubscription?.Dispose();
+        _activeGroupCountSubscription?.Dispose();
         EditingService.RowEditingEnded -= EditingService_RowEditingEnded;
         return ValueTask.CompletedTask;
     }
